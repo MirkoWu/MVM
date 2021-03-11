@@ -1,0 +1,66 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.recyclerview:recyclerview:1.1.0'
+    api 'androidx.viewpager2:viewpager2:1.0.0'
+    api 'androidx.cardview:cardview:1.0.0'
+
+    //屏幕适配
+    api "me.jessyan:autosize:1.2.1"
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50"
+    //smartRefresh核心必须依赖 + 经典刷新头 + 经典加载
+    api "com.scwang.smart:refresh-layout-kernel:2.0.1"
+    api "com.scwang.smart:refresh-header-classics:2.0.1"
+    api "com.scwang.smart:refresh-footer-classics:2.0.1"
+
+
+    api 'com.orhanobut:logger:2.2.0'
+//    //图片加载
+//    api "com.github.bumptech.glide:glide:$rootProject.ext.third_party_key.glide"
+//    //eventBus
+//    api "org.greenrobot:eventbus:$rootProject.ext.third_party_key.eventbus"
+//    //权限库
+//    api "com.hjq:xxpermissions:$rootProject.ext.third_party_key.xxpermissions"
+//    //文件下载
+//    api "com.liulishuo.filedownloader:library:1.7.7"
+
+    //    RxJava自动解绑
+//    api 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
+    api 'com.uber.autodispose2:autodispose-androidx-lifecycle:2.0.0'
+
+    // RxJava3
+    api "io.reactivex.rxjava3:rxjava:3.0.11"
+    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    // ViewModel
+    api "androidx.lifecycle:lifecycle-viewmodel:2.3.0"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
+    // LiveData
+    api "androidx.lifecycle:lifecycle-livedata:2.3.0"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+}
