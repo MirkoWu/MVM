@@ -23,7 +23,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
     TextView tvTime;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_m_v_v_m;
     }
 

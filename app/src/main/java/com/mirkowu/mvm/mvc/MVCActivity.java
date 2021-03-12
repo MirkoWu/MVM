@@ -31,7 +31,7 @@ public class MVCActivity extends BaseActivity {
     TextView tvTime;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_m_v_c;
     }
 
@@ -62,6 +62,6 @@ public class MVCActivity extends BaseActivity {
 
     @Override
     protected void createMediator() {
-//        super.createMediator();
+//        super.createMediator();//不写中间层就不要创建了
     }
 }

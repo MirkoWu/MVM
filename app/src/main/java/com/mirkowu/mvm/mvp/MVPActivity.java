@@ -19,7 +19,7 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
     TextView tvTime;
 
     @Override
-    protected int setLayoutId() {
+    protected int getLayoutId() {
         return R.layout.activity_m_v_p;
     }
 

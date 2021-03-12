@@ -38,11 +38,11 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(setLayoutId(), container, false);
+        View mView = inflater.inflate(getLayoutId(), container, false);
         return mView;
     }
 
-    protected abstract int setLayoutId();
+    protected abstract int getLayoutId();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -158,6 +158,6 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
      * 懒加载
      */
     protected void onLazyLoad() {
-
+        //override do something...
     }
 }

@@ -137,8 +137,8 @@ public class TimerTextView extends AppCompatTextView {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         cancel();
+        super.onDetachedFromWindow();
     }
 
 

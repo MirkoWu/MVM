@@ -41,7 +41,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     }
 
     protected void bindContentView() {
-        setContentView(setLayoutId());
+        setContentView(getLayoutId());
     }
 
     protected void initStatusBar() {
@@ -66,11 +66,15 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     @Override
     protected void onDestroy() {
+        detachMediator();
+        super.onDestroy();
+    }
+
+    private void detachMediator() {
         if (mediator != null) {
             mediator.detachView();
-            mediator=null;
+            mediator = null;
         }
-        super.onDestroy();
     }
 
 //    protected abstract void bindObserver();
@@ -110,7 +114,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         return Lifecycle.Event.ON_DESTROY;
     }
 
-    protected abstract int setLayoutId();
+    protected abstract int getLayoutId();
 
     protected abstract void initialize();
 
