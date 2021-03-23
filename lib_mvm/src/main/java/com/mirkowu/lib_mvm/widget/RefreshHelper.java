@@ -1,10 +1,8 @@
-package com.mirkowu.lib_mvm.base;
+package com.mirkowu.lib_mvm.widget;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.mirkowu.lib_mvm.core.BaseMVMActivity;
-import com.mirkowu.lib_mvm.core.BaseMediator;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -12,14 +10,38 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.List;
 
-public abstract class BaseRefreshActivity<M extends BaseMediator> extends BaseMVMActivity<M>
-        implements OnRefreshListener, OnRefreshLoadMoreListener {
+public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListener {
 
     protected SmartRefreshLayout mInnerRefreshLayout;
     private RecyclerView mInnerRecyclerView;
-    protected int FIRST_PAGE = 0;
-    protected int mPage = FIRST_PAGE;
-    protected int PAGE_COUNT = 10;
+    private OnRefreshListener mOnRefreshListener;
+    protected int FIRST_PAGE = 0;//起始页下标
+    protected int mPage = FIRST_PAGE;//当前页
+    protected int PAGE_COUNT = 10;//每页请求数量
+
+    public RefreshHelper(RecyclerView mInnerRecyclerView, OnRefreshListener onRefreshListener) {
+        this(null, mInnerRecyclerView, onRefreshListener);
+    }
+
+    public RefreshHelper(SmartRefreshLayout mInnerRefreshLayout, RecyclerView mInnerRecyclerView, OnRefreshListener onRefreshListener) {
+        this.mInnerRefreshLayout = mInnerRefreshLayout;
+        this.mInnerRecyclerView = mInnerRecyclerView;
+        this.mOnRefreshListener = onRefreshListener;
+
+        if (mInnerRefreshLayout != null) {
+            mInnerRefreshLayout.setOnRefreshListener(this);
+            mInnerRefreshLayout.setEnableLoadMore(false);
+        }
+    }
+
+    public void setFirstPageIndex(int firstIndex) {
+        FIRST_PAGE = firstIndex;
+    }
+
+    public void setPageCount(int pageCount) {
+        PAGE_COUNT = pageCount;
+    }
+
 
     /**
      * 必须调用 初始化
@@ -29,15 +51,15 @@ public abstract class BaseRefreshActivity<M extends BaseMediator> extends BaseMV
 //    public void initRefresh(SmartRefreshLayout refreshLayout ) {
 //       initRefresh(refreshLayout,null);
 //    }
-    public void initRefresh(SmartRefreshLayout refreshLayout, RecyclerView recyclerView) {
-        this.mInnerRefreshLayout = refreshLayout;
-        this.mInnerRecyclerView = recyclerView;
-
-        if (mInnerRefreshLayout != null) {
-            mInnerRefreshLayout.setOnRefreshListener(this);
-            mInnerRefreshLayout.setEnableLoadMore(false);
-        }
-    }
+//    public void initRefresh(SmartRefreshLayout refreshLayout, RecyclerView recyclerView) {
+//        this.mInnerRefreshLayout = refreshLayout;
+//        this.mInnerRecyclerView = recyclerView;
+//
+//        if (mInnerRefreshLayout != null) {
+//            mInnerRefreshLayout.setOnRefreshListener(this);
+//            mInnerRefreshLayout.setEnableLoadMore(false);
+//        }
+//    }
 
     /**
      * 当前界面只有下拉刷新 没有上拉加载功能 用这个
@@ -65,7 +87,10 @@ public abstract class BaseRefreshActivity<M extends BaseMediator> extends BaseMV
 
         if (mPage == FIRST_PAGE) {
             adapter.setNewData(list);
-            setEmptyView(list == null || list.isEmpty());
+
+            if (mOnRefreshListener != null) {
+                mOnRefreshListener.onEmptyChange(list == null || list.isEmpty());
+            }
         } else {
             if (list != null && !list.isEmpty()) {
                 adapter.addData(list);
@@ -81,6 +106,10 @@ public abstract class BaseRefreshActivity<M extends BaseMediator> extends BaseMV
             } else {
                 mInnerRefreshLayout.finishLoadMore();
                 mInnerRefreshLayout.setEnableLoadMore(false);
+
+                if (mOnRefreshListener != null) {
+                    mOnRefreshListener.onLoadNoMore();
+                }
             }
         }
     }
@@ -118,14 +147,32 @@ public abstract class BaseRefreshActivity<M extends BaseMediator> extends BaseMV
         }
     }
 
-    protected abstract void loadData();
+    public void loadData() {
+        if (mOnRefreshListener != null) {
+            mOnRefreshListener.onLoadData(mPage);
+        }
+    }
 
-    /**
-     * 设置当数据为空的提示
-     *
-     * @param isEmpty
-     */
-    protected abstract void setEmptyView(boolean isEmpty);
 
+    public static interface OnRefreshListener {
+        /**
+         * 刷新 或者 加载
+         *
+         * @param page
+         */
+        void onLoadData(int page);
+
+        /**
+         * 加载结束
+         */
+        void onLoadNoMore();
+
+        /**
+         * 设置当数据为空的提示
+         *
+         * @param isEmpty
+         */
+        void onEmptyChange(boolean isEmpty);
+    }
 
 }
