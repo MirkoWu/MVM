@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+def ext = rootProject.ext
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.cardview:cardview:1.0.0'
+    api 'androidx.viewpager2:viewpager2:1.0.0'
+    api 'androidx.recyclerview:recyclerview:1.2.0'
+    api 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+
+    //屏幕适配
+    api "me.jessyan:autosize:1.2.1"
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50"
+    //smartRefresh核心必须依赖 + 经典刷新头 + 经典加载
+    api "com.scwang.smart:refresh-layout-kernel:$ext.refresh_version"
+    api "com.scwang.smart:refresh-header-classics:$ext.refresh_version"
+    api "com.scwang.smart:refresh-footer-classics:$ext.refresh_version"
+
+
+    api 'com.orhanobut:logger:2.2.0'
+//    //图片加载
+//    api "com.github.bumptech.glide:glide:$rootProject.ext.third_party_key.glide"
+//    //eventBus
+//    api "org.greenrobot:eventbus:$rootProject.ext.third_party_key.eventbus"
+//    //权限库
+//    api "com.hjq:xxpermissions:$rootProject.ext.third_party_key.xxpermissions"
+//    //文件下载
+//    api "com.liulishuo.filedownloader:library:1.7.7"
+
+    //    RxJava自动解绑
+//    api 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
+    api "com.uber.autodispose2:autodispose-androidx-lifecycle:$ext.autodispose_version"
+
+    // RxJava3
+    api "io.reactivex.rxjava3:rxjava:$ext.rxjava3_version"
+    api "io.reactivex.rxjava3:rxandroid:$ext.rxandroid3_version"
+
+    // ViewModel
+    api "androidx.lifecycle:lifecycle-viewmodel:$ext.lifecycle_version"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$ext.lifecycle_version"
+    // LiveData
+    api "androidx.lifecycle:lifecycle-livedata:$ext.lifecycle_version"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:$ext.lifecycle_version"
+}

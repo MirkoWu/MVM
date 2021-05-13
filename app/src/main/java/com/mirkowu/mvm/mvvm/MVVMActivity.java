@@ -8,11 +8,11 @@ import android.widget.TextView;
 import androidx.lifecycle.Observer;
 
 
-import com.mirkowu.lib_mvm.core.InstanceFactory;
+import com.mirkowu.lib_core.util.InstanceFactory;
 import com.mirkowu.mvm.R;
-import com.mirkowu.mvm.base.BaseActivity;
+import com.mirkowu.mvm.base.BaseBindingActivity;
 
-public class MVVMActivity extends BaseActivity<MVVMMediator> {
+public class MVVMActivity extends BaseBindingActivity<MVVMMediator, com.mirkowu.mvm.databinding.ActivityMVVMBinding> {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, MVVMActivity.class);
@@ -21,6 +21,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
     }
 
     TextView tvTime;
+
 
     @Override
     protected int getLayoutId() {
@@ -54,4 +55,5 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
         //请求数据
         mediator.getData();
     }
+
 }

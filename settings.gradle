@@ -1,3 +1,3 @@
-include ':lib_mvm'
+include ':lib_core'
 include ':app'
 rootProject.name = "MVM"

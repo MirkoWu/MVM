@@ -1,8 +1,8 @@
 package com.mirkowu.mvm.mvp;
 
-import com.mirkowu.lib_mvm.core.BaseMediator;
-import com.mirkowu.lib_mvm.util.LogUtil;
-import com.mirkowu.lib_mvm.util.RxLife;
+import com.mirkowu.lib_core.mediator.BaseMediator;
+import com.mirkowu.lib_core.util.LogUtil;
+import com.mirkowu.lib_core.util.RxLife;
 import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.network.RxObserver;
 

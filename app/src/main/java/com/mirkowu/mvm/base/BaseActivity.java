@@ -1,7 +1,7 @@
 package com.mirkowu.mvm.base;
 
-import com.mirkowu.lib_mvm.core.BaseMVMActivity;
-import com.mirkowu.lib_mvm.core.BaseMediator;
+import com.mirkowu.lib_core.activity.BaseMVMActivity;
+import com.mirkowu.lib_core.mediator.BaseMediator;
 
 public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivity<M> {
 

@@ -1,6 +1,6 @@
 package com.mirkowu.mvm.mvp;
 
-import com.mirkowu.lib_mvm.core.IBaseView;
+import com.mirkowu.lib_core.view.IBaseView;
 
 public interface IMVPView extends IBaseView {
 

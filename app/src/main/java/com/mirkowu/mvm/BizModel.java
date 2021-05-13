@@ -1,8 +1,8 @@
 package com.mirkowu.mvm;
 
 
-import com.mirkowu.lib_mvm.core.BaseModel;
-import com.mirkowu.lib_mvm.util.RxScheduler;
+import com.mirkowu.lib_core.model.BaseModel;
+import com.mirkowu.lib_core.util.RxScheduler;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
