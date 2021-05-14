@@ -18,6 +18,8 @@ class DataBindingActivity : BaseActivity<MVVMMediator>() {
 
     //    val binding: ActivityDataBindingBinding by inflate()
     val binding by binding(ActivityDataBindingBinding::inflate)
+//    val binding= binding<ActivityDataBindingBinding>()
+
     override fun bindContentView() {
 //        super.bindContentView()
     }
@@ -25,7 +27,6 @@ class DataBindingActivity : BaseActivity<MVVMMediator>() {
     override fun getLayoutId() = 0
 
     override fun initialize() {
-
         binding.btnTest.text = "sssss"
     }
 }

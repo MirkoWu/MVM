@@ -7,18 +7,29 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mirkowu.mvm.base.BaseActivity;
+import com.mirkowu.mvm.databinding.ActivityMainBinding;
 import com.mirkowu.mvm.mvc.MVCActivity;
 import com.mirkowu.mvm.mvp.MVPActivity;
 import com.mirkowu.mvm.mvvm.MVVMActivity;
+import com.mirkowu.mvm.viewbinding.ViewBindingByReflectKt;
+import com.mirkowu.mvm.viewbinding.ViewBindingKt;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void createMediator() {
+//        super.createMediator();//不写中间层就不要创建了
+    }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
+    @Override
+    protected void initialize() {
     }
 
     public void mvcClick(View view) {
