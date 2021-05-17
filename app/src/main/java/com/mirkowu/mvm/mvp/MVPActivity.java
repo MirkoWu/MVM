@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
+import com.mirkowu.mvm.databinding.ActivityMVPBinding;
 
 public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
 
@@ -16,17 +17,21 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
         context.startActivity(starter);
     }
 
-    TextView tvTime;
-
+//    TextView tvTime;
+private  ActivityMVPBinding binding;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_m_v_p;
     }
-
+    @Override
+    protected void bindContentView() {
+        binding =  ActivityMVPBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+    }
 
     @Override
     protected void initialize() {
-        tvTime = findViewById(R.id.tvTime);
+//        tvTime = findViewById(R.id.tvTime);
 
         mediator.getData();
     }
@@ -38,7 +43,7 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
 
     @Override
     public void onLoadDataSuccess(Object o) {
-        tvTime.setText(o.toString());
+        binding.tvTime.setText(o.toString());
     }
 
     @Override

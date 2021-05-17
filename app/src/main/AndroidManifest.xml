@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DataBindingActivity"></activity>
+        <activity android:name=".viewbinding.DataBindingActivity"></activity>
         <activity android:name=".mvc.MVCActivity" />
         <activity android:name=".mvp.MVPActivity" />
         <activity android:name=".mvvm.MVVMActivity" />

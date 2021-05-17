@@ -32,7 +32,7 @@ public class InstanceFactory {
      */
     public static <T> T newViewModel(ViewModelStoreOwner owner, Class superClass) {
         Class cls = getGenericClass(superClass, 0);
-        return (T) new ViewModelProvider(owner).get(cls);
+        return (T) new ViewModelProvider(owner).get(cls);//
     }
 
     /**

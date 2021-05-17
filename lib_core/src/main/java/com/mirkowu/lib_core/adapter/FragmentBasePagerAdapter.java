@@ -84,8 +84,8 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         return super.getPageTitle(position);
     }
 
-    public void setTitle(String[] orderMenu) {
-        this.titles = orderMenu;
+    public void setTitle(String[] titles) {
+        this.titles = titles;
     }
 
 }

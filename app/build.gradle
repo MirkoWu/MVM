@@ -24,7 +24,7 @@ android {
     //4.0及以上
     buildFeatures {
         viewBinding = true
-        dataBinding = true
+//        dataBinding = true
     }
     //4.0以下
 //    viewBinding {

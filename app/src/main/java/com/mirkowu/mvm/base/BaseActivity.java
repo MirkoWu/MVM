@@ -15,4 +15,6 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
 
     }
 
+
+
 }
