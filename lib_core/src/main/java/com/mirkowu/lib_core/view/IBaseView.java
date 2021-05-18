@@ -10,6 +10,7 @@ public interface IBaseView extends ILifecycleBinder /*, IAutoAdapt*/ {
 
     Activity getActivity();
 
+    void showLoading();
     void showLoading(String msg);
 
     void hideLoading();

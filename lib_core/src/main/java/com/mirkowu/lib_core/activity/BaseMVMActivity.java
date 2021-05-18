@@ -15,7 +15,7 @@ import com.mirkowu.lib_core.util.InstanceFactory;
 
 
 public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatActivity implements IBaseView {
-    protected M mediator;
+    protected M mMediator;
 //    private LoadingDialog mLoadingDialog;
 
     @Override
@@ -54,25 +54,25 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     /*** 创建中间件 */
     protected void createMediator() {
-        if (mediator == null) {
-            mediator = InstanceFactory.newMediator(this, getClass());
+        if (mMediator == null) {
+            mMediator = InstanceFactory.newMediator(this, getClass());
         }
     }
 
     /*** 绑定中间件 */
     protected void bindMediator() {
-        if (mediator != null) {
-            mediator.attachView(this);
+        if (mMediator != null) {
+            mMediator.attachView(this);
             //让Mediator拥有View的生命周期感应
-            getLifecycle().addObserver(mediator);
+            getLifecycle().addObserver(mMediator);
         }
     }
 
     /*** 解绑中间件 */
     private void detachMediator() {
-        if (mediator != null) {
-            mediator.detachView();
-            mediator = null;
+        if (mMediator != null) {
+            mMediator.detachView();
+            mMediator = null;
         }
     }
 

@@ -18,7 +18,7 @@ import com.mirkowu.lib_core.util.InstanceFactory;
 
 
 public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment implements IBaseView {
-    protected M mediator;
+    protected M mMediator;
 
     private int position;
     private CharSequence title;
@@ -84,25 +84,25 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
 
 
     protected void createMediator() {
-        if (mediator == null) {
-            mediator = InstanceFactory.newMediator(this, getClass());
+        if (mMediator == null) {
+            mMediator = InstanceFactory.newMediator(this, getClass());
         }
     }
 
     private void bindMediator() {
-        if (mediator != null) {
-            mediator.attachView(this);
+        if (mMediator != null) {
+            mMediator.attachView(this);
             //让Mediator拥有View的生命周期感应
-            getLifecycle().addObserver(mediator);
+            getLifecycle().addObserver(mMediator);
         }
 
     }
 
     @Override
     public void onDestroyView() {
-        if (mediator != null) {
-            mediator.detachView();
-            mediator = null;
+        if (mMediator != null) {
+            mMediator.detachView();
+            mMediator = null;
         }
         super.onDestroyView();
     }

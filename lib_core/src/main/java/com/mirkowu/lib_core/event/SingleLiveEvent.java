@@ -1,4 +1,4 @@
-package com.mirkowu.lib_core.util;
+package com.mirkowu.lib_core.event;
 
 
 import android.util.Log;

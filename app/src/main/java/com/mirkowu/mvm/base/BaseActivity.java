@@ -4,6 +4,10 @@ import com.mirkowu.lib_core.activity.BaseMVMActivity;
 import com.mirkowu.lib_core.mediator.BaseMediator;
 
 public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivity<M> {
+    @Override
+    public void showLoading() {
+        showLoading("");
+    }
 
     @Override
     public void showLoading(String msg) {
@@ -14,7 +18,6 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
     public void hideLoading() {
 
     }
-
 
 
 }
