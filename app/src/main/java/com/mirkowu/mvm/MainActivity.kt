@@ -2,8 +2,8 @@ package com.mirkowu.mvm
 
 import android.content.Intent
 import android.view.View
-import com.mirkowu.lib_core.adapter.FragmentBasePagerAdapter
-import com.mirkowu.lib_core.mediator.EmptyMediator
+import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
+import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvc.MVCActivity
@@ -15,8 +15,10 @@ import com.mirkowu.mvm.viewbinding.binding
 
 class MainActivity : BaseActivity<EmptyMediator>() {
     val binding by binding(ActivityMainBinding::inflate)
-    override fun createMediator() {
-//        super.createMediator();//不写中间层就不要创建了
+
+
+    override fun initMediator(): EmptyMediator {
+        return super.initMediator()
     }
 
     override fun getLayoutId() = R.layout.activity_main

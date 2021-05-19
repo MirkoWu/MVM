@@ -35,4 +35,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTime"
         app:layout_constraintVertical_bias="0.825" />
+
+    <com.mirkowu.lib_widget.stateview.StateView
+        android:layout_width="match_parent"
+        android:id="@+id/stateview"
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

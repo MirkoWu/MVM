@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 
 
-import com.mirkowu.lib_core.util.InstanceFactory;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
@@ -26,7 +24,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
         context.startActivity(starter);
     }
 
-  //  TextView tvTime;
+    //  TextView tvTime;
 
     private ActivityMVVMBinding binding;
 
@@ -45,12 +43,13 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
     protected void initialize() {
 
 
-
-      //  tvTime = findViewById(R.id.tvTime);
+        //  tvTime = findViewById(R.id.tvTime);
         //数据监听变化
-        mediator.mLiveData.observe(this, new Observer<Object>() {
+        mMediator.mLiveData.observe(this, new Observer<Object>() {
             @Override
             public void onChanged(Object o) {
+                hideLoadingDialog();
+                binding.stateview.setGoneState();
                 binding.tvTime.setText(o.toString());
             }
         });
@@ -61,21 +60,22 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
                 return null;
             }
         });
-
+        binding.stateview.setLoadingState(R.mipmap.ic_launcher, "加载中");
         //请求数据
-        mediator.getData();
+        mMediator.getData();
     }
 
-    @Override
-    protected void createMediator() {
-        if (mediator == null) {
-            mediator = InstanceFactory.newViewModel(this, getClass());
-        }
-    }
+//    @Override
+//    protected MVVMMediator initMediator() {
+//        return new MVVMMediator();
+//    }
+
 
     public void getTimeClick(View view) {
+        showLoadingDialog();
         //请求数据
-        mediator.getData();
+       // mMediator.getData();
+        mMediator.loadImage();
     }
 
 }

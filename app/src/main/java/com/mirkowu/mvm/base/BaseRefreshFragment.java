@@ -3,9 +3,9 @@ package com.mirkowu.mvm.base;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.mirkowu.lib_core.fragment.BaseMVMFragment;
-import com.mirkowu.lib_core.mediator.BaseMediator;
-import com.mirkowu.lib_core.widget.RefreshHelper;
+import com.mirkowu.lib_base.fragment.BaseMVMFragment;
+import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_base.widget.RefreshHelper;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.util.List;

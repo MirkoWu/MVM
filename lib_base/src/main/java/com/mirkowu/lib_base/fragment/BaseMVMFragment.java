@@ -1,0 +1,155 @@
+package com.mirkowu.lib_base.fragment;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+
+import com.mirkowu.lib_base.activity.BaseMVMActivity;
+import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_base.view.IBaseView;
+import com.mirkowu.lib_base.util.InstanceFactory;
+
+
+public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment implements IBaseView {
+    protected M mMediator;
+
+    private int position;
+    private CharSequence title;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public CharSequence getTitle() {
+        return title;
+    }
+
+    public void setTitle(CharSequence title) {
+        this.title = title;
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View mView = inflater.inflate(getLayoutId(), container, false);
+        return mView;
+    }
+
+    protected abstract int getLayoutId();
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        bindMediator();
+        initialize();
+    }
+
+
+    protected abstract void initialize();
+
+    protected abstract M initMediator();
+
+
+    private void bindMediator() {
+        //实现方式交给子类
+        mMediator = initMediator();
+
+        if (mMediator != null) {
+            mMediator.attachView(this);
+            //让Mediator拥有View的生命周期感应
+            getLifecycle().addObserver(mMediator);
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        if (mMediator != null) {
+            mMediator.detachView();
+            mMediator = null;
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public LifecycleOwner getLifecycleOwner() {
+        return this;
+    }
+
+    @Override
+    public Lifecycle.Event bindLifecycleUntil() {
+        return Lifecycle.Event.ON_DESTROY;
+    }
+
+
+    @Override
+    public void showLoadingDialog() {
+        if (getActivity() instanceof BaseMVMActivity) {
+            ((BaseMVMActivity) getActivity()).showLoadingDialog();
+        }
+    }
+
+    @Override
+    public void showLoadingDialog(final String msg) {
+        if (getActivity() instanceof BaseMVMActivity) {
+            ((BaseMVMActivity) getActivity()).showLoadingDialog(msg);
+        }
+    }
+
+    @Override
+    public void hideLoadingDialog() {
+        if (getActivity() instanceof BaseMVMActivity) {
+            ((BaseMVMActivity) getActivity()).hideLoadingDialog();
+        }
+    }
+
+    /*** >>>>>>>>>>>>>>>>>>>> 懒加载 >>>>>>>>>>>>>>>>>>>> */
+
+    protected boolean isFirstLoad = true;//是否第一次加载
+    private boolean isSupportLazyLoad = true;//是否支持懒加载
+
+    public boolean isSupportLazyLoad() {
+        return isSupportLazyLoad;
+    }
+
+    public void setSupportLazyLoad(boolean supportLazyLoad) {
+        isSupportLazyLoad = supportLazyLoad;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        doOnLazyLoad();
+    }
+
+    private void doOnLazyLoad() {
+        if (isSupportLazyLoad) {
+            if (isFirstLoad) {
+                isFirstLoad = false;
+                onLazyLoad();
+            }
+        }
+    }
+
+    /**
+     * 懒加载 需要时可重写
+     */
+    public void onLazyLoad() {
+        //override do something...
+    }
+
+    /*** <<<<<<<<<<<<<<<<<<<<<< 懒加载 <<<<<<<<<<<<<<<<<<<<<< */
+}

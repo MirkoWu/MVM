@@ -23,14 +23,19 @@ public abstract class RxObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(@NonNull Throwable e) {
+        onFinish();
         onFailure(e);
     }
 
     @Override
     public void onComplete() {
-
+        onFinish();
     }
 
+
+    public void onFinish() {
+        //只可能来自onComplete/onError二者之一
+    }
 
     /**
      * 数据请求成功

@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mirkowu.lib_core.util.RxLife;
+import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_base.util.RxLife;
 import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
@@ -20,6 +21,11 @@ public class MVCActivity extends BaseActivity {
         Intent starter = new Intent(context, MVCActivity.class);
 //    starter.putExtra();
         context.startActivity(starter);
+    }
+
+    @Override
+    protected BaseMediator initMediator() {
+        return null;
     }
 
     TextView tvTime;
@@ -54,8 +60,5 @@ public class MVCActivity extends BaseActivity {
                 });
     }
 
-    @Override
-    protected void createMediator() {
-//        super.createMediator();//不写中间层就不要创建了
-    }
+
 }

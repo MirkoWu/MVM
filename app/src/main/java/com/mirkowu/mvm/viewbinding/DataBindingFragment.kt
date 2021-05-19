@@ -38,6 +38,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnText.setOnClickListener {
             binding.btnText.text = "点击了${System.currentTimeMillis()}"
             DataBindingDialog(context!!).show()
+            showLoadingDialog("Toast测试")
         }
         val list = mutableListOf("", "", "", "", "", "", "", "", "", "")
         val listAdapter = DataBindingAdapter(list)

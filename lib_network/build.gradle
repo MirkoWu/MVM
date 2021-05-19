@@ -1,0 +1,70 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+def ext = rootProject.ext
+android {
+    compileSdkVersion ext.compileSdkVersion
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion ext.minSdkVersion
+        targetSdkVersion ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //资源前缀
+    resourcePrefix "network_"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation project(':lib_util')
+
+    //    RxJava自动解绑
+    //api 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
+    api "com.uber.autodispose2:autodispose-androidx-lifecycle:$ext.autodispose_version"
+
+    // RxJava3
+    api "io.reactivex.rxjava3:rxjava:$ext.rxjava3_version"
+    api "io.reactivex.rxjava3:rxandroid:$ext.rxandroid3_version"
+
+    //gson
+    api 'com.google.code.gson:gson:2.8.6'
+
+    //okhttp
+    api 'com.squareup.okio:okio:2.2.2'
+    api "com.squareup.okhttp3:okhttp:$ext.okhttp_version"
+    api "com.squareup.okhttp3:logging-interceptor:$ext.okhttp_version"
+
+    //retrofit
+    api "com.squareup.retrofit2:retrofit:$ext.retrofit_version"
+    api "com.squareup.retrofit2:converter-gson:$ext.retrofit_version"
+//    api "com.squareup.retrofit2:adapter-rxjava2:$ext.retrofit_version"
+    api "com.squareup.retrofit2:adapter-rxjava3:$ext.retrofit_version"
+
+
+
+}

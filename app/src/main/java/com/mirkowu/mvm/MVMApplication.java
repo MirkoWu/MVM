@@ -3,6 +3,7 @@ package com.mirkowu.mvm;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 
+import com.mirkowu.lib_util.LogUtil;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -14,6 +15,7 @@ public class MVMApplication extends Application {
         super.onCreate();
        // LeakCanary.INSTANCE(this);
 
-        Logger.addLogAdapter(new AndroidLogAdapter());
+
+        LogUtil.init(BuildConfig.DEBUG);
     }
 }

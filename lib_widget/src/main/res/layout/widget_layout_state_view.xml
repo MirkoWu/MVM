@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mRootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivLoading"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:scaleType="center" />
+
+
+    <ImageView
+        android:id="@+id/ivHint"
+        android:layout_width="263dp"
+        android:layout_height="170dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#B3B3B3"
+        android:textSize="13dp"
+        android:visibility="gone" />
+
+
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="136dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/widget_refresh_bg"
+        android:gravity="center"
+        android:maxLength="18"
+        android:singleLine="true"
+        android:stateListAnimator="@null"
+        android:text="@string/widget_refresh"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="14dp"
+        android:visibility="gone" />
+
+</LinearLayout>

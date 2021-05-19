@@ -42,8 +42,14 @@ task clean(type: Delete) {
 }
 
 ext {
+    minSdkVersion = 21
+    targetSdkVersion = 29
+    compileSdkVersion = 30
+
     lifecycle_version = '2.3.1'
     rxjava3_version = '3.0.11'
+    retrofit_version = '2.9.0'
+    okhttp_version = '3.14.2'
     rxandroid3_version = '3.0.0'
     autodispose_version = '2.0.0'
     refresh_version = '2.0.1'

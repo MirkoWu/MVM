@@ -1,23 +1,47 @@
 package com.mirkowu.mvm.base;
 
-import com.mirkowu.lib_core.activity.BaseMVMActivity;
-import com.mirkowu.lib_core.mediator.BaseMediator;
+
+import com.mirkowu.lib_base.activity.BaseMVMActivity;
+import com.mirkowu.lib_base.event.StateBean;
+import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_base.util.InstanceFactory;
 
 public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivity<M> {
+
     @Override
-    public void showLoading() {
-        showLoading("");
+    protected M initMediator() {
+        //自己决定是用反射 还是new手动创建
+        if (mMediator == null) {
+            mMediator = InstanceFactory.newMediator(this, getClass());
+        }
+        return mMediator;
     }
 
     @Override
-    public void showLoading(String msg) {
+    public void showStateView(StateBean bean) {
 
     }
 
     @Override
-    public void hideLoading() {
+    public void hideStateView() {
 
     }
 
+    @Override
+    public void onFailure() {
 
+    }
+
+    /**
+     * 也可以放在Base中
+     */
+    //protected VB mBinding;
+//
+//    @Override
+//    protected void bindContentView() {
+////        super.bindContentView();
+//        this.mBinding = (VB) DataBindingUtil.setContentView(this,  getLayoutId());
+//        setContentView(mBinding.getRoot());
+//
+//    }
 }

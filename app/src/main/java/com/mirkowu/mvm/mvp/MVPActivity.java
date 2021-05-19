@@ -17,15 +17,17 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
         context.startActivity(starter);
     }
 
-//    TextView tvTime;
-private  ActivityMVPBinding binding;
+    //    TextView tvTime;
+    private ActivityMVPBinding binding;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_m_v_p;
     }
+
     @Override
     protected void bindContentView() {
-        binding =  ActivityMVPBinding.inflate(getLayoutInflater());
+        binding = ActivityMVPBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 
@@ -33,12 +35,12 @@ private  ActivityMVPBinding binding;
     protected void initialize() {
 //        tvTime = findViewById(R.id.tvTime);
 
-        mediator.getData();
+        mMediator.getData();
     }
 
     public void getTimeClick(View view) {
         //请求数据
-        mediator.getData();
+        mMediator.getData();
     }
 
     @Override
