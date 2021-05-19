@@ -2,6 +2,7 @@ package com.mirkowu.mvm.mvvm;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_util.LogUtil;
@@ -13,6 +14,8 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
 
     MutableLiveData<Object> mLiveData = new MutableLiveData<>();
     MutableLiveData<Throwable> mError = new MutableLiveData<>();
+    MutableLiveData<Object> mRequestImageListData = new MutableLiveData<>();
+    MutableLiveData<ErrorBean> mRequestImageListError = new MutableLiveData<>();
 
     public void loadImage() {
         mModel.loadImage()
@@ -21,12 +24,14 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                 .subscribe(new RxObserver<Object>() {
                     @Override
                     public void onSuccess(Object data) {
-                        mLiveData.setValue(data);
+                        mRequestImageListData.setValue(data);
                     }
 
                     @Override
-                    public void onFailure(Throwable e) {
-                        mError.setValue(e);
+                    public void onFailure(int errorType, int code, String msg) {
+
+
+                        mRequestImageListError.setValue(new ErrorBean(errorType,code, msg));
                     }
                 });
     }
@@ -42,9 +47,13 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(Throwable e) {
-                        mError.setValue(e);
+                    public void onFailure(int errorType, int code, String msg) {
+
+
+//                        mError.setValue(e);
                     }
+
+
                 });
     }
 }

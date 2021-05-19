@@ -27,8 +27,8 @@ public class MVPMediator extends BaseMediator<IMVPView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(Throwable e) {
-                        mView.onLoadDataError(e);
+                    public void onFailure(int errorType, int code, String msg) {
+
                     }
                 });
     }

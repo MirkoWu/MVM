@@ -55,8 +55,11 @@ public class MVCActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Throwable e) {
+                    public void onFailure(int errorType, int code, String msg) {
+
                     }
+
+
                 });
     }
 

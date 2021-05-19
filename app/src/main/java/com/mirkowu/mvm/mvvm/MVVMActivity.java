@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 
 
+import com.mirkowu.lib_network.ErrorBean;
+import com.mirkowu.lib_network.ErrorType;
+import com.mirkowu.lib_widget.stateview.OnRefreshListener;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
@@ -44,6 +48,26 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
 
 
         //  tvTime = findViewById(R.id.tvTime);
+
+        mMediator.mRequestImageListData.observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(Object o) {
+                hideLoadingDialog();
+                binding.stateview.setGoneState();
+                binding.tvTime.setText(o.toString());
+            }
+        });
+        mMediator.mRequestImageListError.observe(this, errorBean -> {
+            hideLoadingDialog();
+            if (errorBean.isNetError()) {
+                binding.stateview.setShowState(R.mipmap.ic_launcher, errorBean.msg(), true);
+            } else if (errorBean.isBizError()) {
+                Toast.makeText(this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //数据监听变化
         mMediator.mLiveData.observe(this, new Observer<Object>() {
             @Override
@@ -53,6 +77,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
                 binding.tvTime.setText(o.toString());
             }
         });
+
         ViewUtilKt.click(binding.btnTest, new Function1<View, Unit>() {
             @Override
             public Unit invoke(View view) {
@@ -61,6 +86,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
             }
         });
         binding.stateview.setLoadingState(R.mipmap.ic_launcher, "加载中");
+        binding.stateview.setOnRefreshListener(() -> getTimeClick(null));
         //请求数据
         mMediator.getData();
     }
@@ -74,7 +100,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
     public void getTimeClick(View view) {
         showLoadingDialog();
         //请求数据
-       // mMediator.getData();
+        // mMediator.getData();
         mMediator.loadImage();
     }
 

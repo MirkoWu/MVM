@@ -1,53 +1,15 @@
 package com.mirkowu.mvm.network;
 
+import com.mirkowu.lib_network.AbsRxObserver;
+import com.mirkowu.lib_network.ApiException;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.observers.DisposableObserver;
+import retrofit2.HttpException;
 
-public abstract class RxObserver<T> extends DisposableObserver<T> {
-    @Override
-    protected void onStart() {
-    }
+public abstract class RxObserver<T> extends AbsRxObserver<T> {
 
-    @Override
-    public void onNext(T o) {
-        doOnSuccess(o);
-    }
-
-    private void doOnSuccess(T o) {
-        try {
-            onSuccess(o);
-        } catch (Throwable t) {
-            onFailure(t);
-        }
-    }
-
-    @Override
-    public void onError(@NonNull Throwable e) {
-        onFinish();
-        onFailure(e);
-    }
-
-    @Override
-    public void onComplete() {
-        onFinish();
-    }
-
-
-    public void onFinish() {
-        //只可能来自onComplete/onError二者之一
-    }
-
-    /**
-     * 数据请求成功
-     *
-     * @param data
-     */
-    public abstract void onSuccess(T data);
-
-    /**
-     * 请求失败
-     *
-     * @param e
-     */
-    public abstract void onFailure(Throwable e);
 }

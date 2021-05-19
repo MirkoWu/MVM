@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface MainService {
+public interface GankApi {
     @GET("api/data/福利/{pageSize}/{page})")
     Observable<Object> loadImage(@Path("pageSize") int pageSize, @Path("page") int page);
 }

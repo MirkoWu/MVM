@@ -3,7 +3,7 @@ package com.mirkowu.mvm;
 
 import com.mirkowu.lib_base.model.BaseModel;
 import com.mirkowu.lib_base.util.RxScheduler;
-import com.mirkowu.mvm.network.MainService;
+import com.mirkowu.mvm.network.GankApi;
 import com.mirkowu.mvm.network.RetrofitClient;
 
 import java.util.Calendar;
@@ -17,7 +17,7 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 public class BizModel extends BaseModel {
 
     public Observable<Object> loadImage() {
-        return RetrofitClient.getAPIService(MainService.class)
+        return RetrofitClient.getAPIService(GankApi.class)
                 .loadImage(10, 1)
                 .compose(RxScheduler.ioToMain());
     }

@@ -46,6 +46,12 @@ public class LogUtil {
         }
     }
 
+    public static void e(Throwable t, String msg) {
+        if (isDebug) {
+            Logger.e(t, msg);
+        }
+    }
+
     public static void i(String tag, String msg) {
         if (isDebug) {
             Log.i(tag, msg);
