@@ -2,4 +2,7 @@
 <resources>
     <string name="widget_refresh">刷新一下</string>
     <string name="widget_loading">加载中...</string>
+    <string name="widget_timer_hint_text">获取验证码</string>
+    <string name="widget_timer_finish_text">获取验证码</string>
+    <string name="widget_timer_count_format_text">获取验证码(%d)</string>
 </resources>

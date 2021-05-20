@@ -2,8 +2,6 @@ package com.mirkowu.lib_base.adapter;
 
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -59,16 +57,6 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         }
 
         return fragment;
-    }
-
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
-    }
-
-    @Override
-    public void setPrimaryItem(View container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
     }
 
     @Override

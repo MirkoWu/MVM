@@ -2,25 +2,20 @@ package com.mirkowu.mvm.mvvm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-
-import com.mirkowu.lib_network.ErrorBean;
-import com.mirkowu.lib_network.ErrorType;
-import com.mirkowu.lib_widget.stateview.OnRefreshListener;
+import com.mirkowu.lib_base.widget.RefreshHelper;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
+import com.mirkowu.mvm.bean.GankImageBean;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
-import com.mirkowu.mvm.viewbinding.ViewUtilKt;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
+import java.util.List;
 
-public class MVVMActivity extends BaseActivity<MVVMMediator> {
+public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshHelper.OnRefreshListener {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, MVVMActivity.class);
@@ -28,9 +23,9 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
         context.startActivity(starter);
     }
 
-    //  TextView tvTime;
-
     private ActivityMVVMBinding binding;
+    private RefreshHelper refreshHelper;
+    private ImageAdapter imageAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -45,16 +40,17 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
 
     @Override
     protected void initialize() {
+        refreshHelper = new RefreshHelper(binding.mRefresh, binding.rvImage, this);
 
+        imageAdapter = new ImageAdapter();
+        binding.rvImage.setAdapter(imageAdapter);
+        binding.rvImage.setLayoutManager(new LinearLayoutManager(this));
 
-        //  tvTime = findViewById(R.id.tvTime);
-
-        mMediator.mRequestImageListData.observe(this, new Observer<Object>() {
+        mMediator.mRequestImageListData.observe(this, new Observer<List<GankImageBean>>() {
             @Override
-            public void onChanged(Object o) {
+            public void onChanged(List<GankImageBean> gankImageBeans) {
                 hideLoadingDialog();
-                binding.stateview.setGoneState();
-                binding.tvTime.setText(o.toString());
+                refreshHelper.setLoadMore(imageAdapter, gankImageBeans);
             }
         });
         mMediator.mRequestImageListError.observe(this, errorBean -> {
@@ -68,40 +64,30 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> {
             }
         });
 
-        //数据监听变化
-        mMediator.mLiveData.observe(this, new Observer<Object>() {
-            @Override
-            public void onChanged(Object o) {
-                hideLoadingDialog();
-                binding.stateview.setGoneState();
-                binding.tvTime.setText(o.toString());
-            }
-        });
 
-        ViewUtilKt.click(binding.btnTest, new Function1<View, Unit>() {
-            @Override
-            public Unit invoke(View view) {
-                Log.d("TAG", "invoke: ");
-                return null;
-            }
-        });
         binding.stateview.setLoadingState(R.mipmap.ic_launcher, "加载中");
-        binding.stateview.setOnRefreshListener(() -> getTimeClick(null));
-        //请求数据
-        mMediator.getData();
+        binding.stateview.setOnRefreshListener(() -> refreshHelper.autoRefresh());
+
+        refreshHelper.loadData();
     }
 
-//    @Override
-//    protected MVVMMediator initMediator() {
-//        return new MVVMMediator();
-//    }
-
-
-    public void getTimeClick(View view) {
-        showLoadingDialog();
-        //请求数据
-        // mMediator.getData();
-        mMediator.loadImage();
+    @Override
+    public void onLoadData(int page) {
+        //showLoadingDialog();
+        mMediator.loadImage(page, refreshHelper.PAGE_COUNT);
     }
 
+    @Override
+    public void onLoadNoMore() {
+
+    }
+
+    @Override
+    public void onEmptyChange(boolean isEmpty) {
+        if (isEmpty) {
+            binding.stateview.setShowState(R.mipmap.ic_launcher, "暂无数据");
+        } else {
+            binding.stateview.setGoneState();
+        }
+    }
 }

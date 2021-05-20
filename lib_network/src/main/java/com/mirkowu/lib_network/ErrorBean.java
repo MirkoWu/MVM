@@ -26,9 +26,9 @@ public class ErrorBean {
     }
 
     public boolean isNetError() {
-        return errorType == ErrorType.ERROR_HTTP ||
-                errorType == ErrorType.ERROR_NET_CONNECT ||
-                errorType == ErrorType.ERROR_NET_TIMEOUT;
+        return errorType == ErrorType.ERROR_HTTP
+                || errorType == ErrorType.ERROR_NET_CONNECT
+                || errorType == ErrorType.ERROR_NET_TIMEOUT;
     }
 
     public boolean isBizError() {

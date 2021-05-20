@@ -4,6 +4,7 @@ import com.mirkowu.lib_base.view.IBaseView;
 
 public interface IMVPView extends IBaseView {
 
-      void onLoadDataSuccess(Object o);
-      void onLoadDataError(Throwable t);
+    void onLoadDataSuccess(Object o);
+
+    void onLoadDataError(Throwable t);
 }

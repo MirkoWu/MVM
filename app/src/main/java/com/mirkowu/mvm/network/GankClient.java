@@ -7,17 +7,17 @@ import java.util.List;
 
 import okhttp3.Interceptor;
 
-public class RetrofitClient extends AbsRetrofitClient {
+public class GankClient extends AbsRetrofitClient {
 
     private static class Singleton {
-        private static final RetrofitClient INSTANCE = new RetrofitClient();
+        private static final GankClient INSTANCE = new GankClient();
     }
 
-    private static RetrofitClient getInstance() {
+    public static GankClient getInstance() {
         return Singleton.INSTANCE;
     }
 
-    private RetrofitClient() {
+    private GankClient() {
     }
 
     @Override
@@ -31,14 +31,23 @@ public class RetrofitClient extends AbsRetrofitClient {
     }
 
     @Override
+    protected boolean isUseSSLVerifier() {
+        return super.isUseSSLVerifier();
+    }
+
+    @Override
     protected List<Interceptor> getInterceptor() {
         List<Interceptor> list = new ArrayList<>();
         return list;
     }
 
-    public static <T> T getAPIService(Class<T> service) {
-        return getInstance().getRetrofit().create(service);
+
+    private static <T> T getAPIService(Class<T> service) {
+        return getInstance().getService(service);
     }
 
+    public static GankApi getGankApi() {
+        return getAPIService(GankApi.class);
+    }
 
 }

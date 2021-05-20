@@ -42,7 +42,8 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         } else if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
             onFailure(ErrorType.ERROR_HTTP, httpException.code(), httpException.message());
-        } else if (e instanceof ApiException) {//api 异常
+        } else if (e instanceof ApiException) {
+            //api 异常
             ApiException apiException = (ApiException) e;
             onFailure(ErrorType.ERROR_API, apiException.code(), apiException.msg());
         } else {

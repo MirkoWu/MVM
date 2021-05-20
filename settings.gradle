@@ -1,3 +1,4 @@
+include ':lib_image'
 include ':lib_network'
 include ':lib_util'
 include ':lib_widget'

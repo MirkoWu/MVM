@@ -27,6 +27,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * 如果有多个Client 或者 Host 实现多个子类即可
+ * 注意：这些配置只在第一次创建Retrofit时生效，如果想修改配置，需要先清除缓存{@link #clearAllClient()}
+ */
 public abstract class AbsRetrofitClient {
     private static Map<String, Retrofit> sRetrofitMap = new ArrayMap();
 
@@ -36,9 +40,23 @@ public abstract class AbsRetrofitClient {
 
     protected abstract List<Interceptor> getInterceptor();
 
+    protected boolean isUseSSLVerifier() {
+        return false;
+    }
+
+    /**
+     * 清除缓存
+     */
+    public void clearAllClient() {
+        sRetrofitMap.clear();
+    }
+
+    public <T> T getService(Class<T> service) {
+        return getRetrofit().create(service);
+    }
 
     public Retrofit getRetrofit() {
-        String baseUrl = getHost();
+        final String baseUrl = getHost();
         if (sRetrofitMap.containsKey(baseUrl)) {
             return sRetrofitMap.get(baseUrl);
         } else {
@@ -82,8 +100,10 @@ public abstract class AbsRetrofitClient {
         }
         OkHttpClient client = builder.build();
 
-        //解决https
-        //  handleSSLVerifier(client);
+        //解决https认证
+        if (isUseSSLVerifier()) {
+            handleSSLVerifier(client);
+        }
 
         return client;
     }
@@ -111,6 +131,11 @@ public abstract class AbsRetrofitClient {
     }
 
 
+    /**
+     * 解决Https证书认证问题
+     *
+     * @param okHttpClient
+     */
     private void handleSSLVerifier(OkHttpClient okHttpClient) {
         OkHttpClient sClient = okHttpClient;
         SSLContext sc = null;

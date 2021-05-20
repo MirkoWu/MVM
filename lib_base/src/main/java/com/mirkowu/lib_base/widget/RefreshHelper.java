@@ -2,7 +2,7 @@ package com.mirkowu.lib_base.widget;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.mirkowu.lib_base.adapter.BaseAdapter;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -15,9 +15,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
     protected SmartRefreshLayout mInnerRefreshLayout;
     private RecyclerView mInnerRecyclerView;
     private OnRefreshListener mOnRefreshListener;
-    protected int FIRST_PAGE = 0;//起始页下标
+    public int PAGE_COUNT = 10;//每页请求数量
+    private int FIRST_PAGE = 0;//起始页下标
     protected int mPage = FIRST_PAGE;//当前页
-    protected int PAGE_COUNT = 10;//每页请求数量
 
     public RefreshHelper(RecyclerView mInnerRecyclerView, OnRefreshListener onRefreshListener) {
         this(null, mInnerRecyclerView, onRefreshListener);
@@ -67,9 +67,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      * @param adapter
      * @param list
      */
-    public void setLoadData(BaseQuickAdapter adapter, List<?> list) {
+    public void setLoadData(BaseAdapter adapter, List<?> list) {
         if (mInnerRefreshLayout != null) mInnerRefreshLayout.finishRefresh();
-        adapter.setNewData(list);
+        adapter.setData(list);
     }
 
     /**
@@ -78,15 +78,15 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      * @param adapter
      * @param list
      */
-    public void setLoadMore(BaseQuickAdapter adapter, List<?> list) {
+    public void setLoadMore(BaseAdapter adapter, List<?> list) {
         setLoadMore(adapter, list, list != null && list.size() >= PAGE_COUNT);
     }
 
-    public void setLoadMore(BaseQuickAdapter adapter, List<?> list, boolean hasMore) {
+    public void setLoadMore(BaseAdapter adapter, List<?> list, boolean hasMore) {
         if (mInnerRefreshLayout != null) mInnerRefreshLayout.finishRefresh();
 
         if (mPage == FIRST_PAGE) {
-            adapter.setNewData(list);
+            adapter.setData(list);
 
             if (mOnRefreshListener != null) {
                 mOnRefreshListener.onEmptyChange(list == null || list.isEmpty());

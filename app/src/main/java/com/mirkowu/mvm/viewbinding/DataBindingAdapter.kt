@@ -3,7 +3,6 @@ package com.mirkowu.mvm.viewbinding
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.mirkowu.mvm.databinding.ItemBindingListBinding
 
 class DataBindingAdapter<T>(private val mData: MutableList<T>?) : RecyclerView.Adapter<DataBindingAdapter.BindingViewHolder>() {
@@ -21,6 +20,7 @@ class DataBindingAdapter<T>(private val mData: MutableList<T>?) : RecyclerView.A
             tvTitle.text = "标题${position}"
             tvContent.text = "。。。。。。"
         }
+        holder.binding.tvContent
     }
 
     override fun getItemCount(): Int {
@@ -28,12 +28,20 @@ class DataBindingAdapter<T>(private val mData: MutableList<T>?) : RecyclerView.A
     }
 
 
-    //    class BindingViewHolder(val binding: ItemBindingListBinding) : RecyclerView.ViewHolder(binding.root) {
-//
-//    }
     class BindingViewHolder(val binding: ItemBindingListBinding) : RecyclerView.ViewHolder(binding.root) {
+
+//    }
+//    class BindingViewHolder(val binding: ItemBindingListBinding) : RecyclerView.ViewHolder(binding.root) {
 //        constructor(parent: ViewGroup, inflate: (LayoutInflater, ViewGroup, Boolean) -> ItemBindingListBinding)
 //                : this(inflate(LayoutInflater.from(parent.context), parent, false))
+//
+//    }
+//    class BindingViewHolder(parent: ViewGroup, inflate: (LayoutInflater, ViewGroup, Boolean) -> ItemBindingListBinding)
+//        : RecyclerView.ViewHolder(inflate(LayoutInflater.from(parent.context), parent, false).root) {
+//    }
 
+//    class BindingViewHolder(val binding: ItemBindingListBinding) : BaseViewHolder<ItemBindingListBinding>(binding) {
+//
+//    }
     }
 }

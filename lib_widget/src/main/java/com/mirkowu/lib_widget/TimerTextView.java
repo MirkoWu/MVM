@@ -17,9 +17,9 @@ import androidx.appcompat.widget.AppCompatTextView;
 public class TimerTextView extends AppCompatTextView {
     private int COUNT_DOWN_TIME = 60;
     private CountDownTimer downTimer;
-    private String hintText = "获取验证码";
-    private String formatText = "获取验证码(%d)";
-    private String finishText = "获取验证码";
+    private String hintText;
+    private String formatText;
+    private String finishText;
     private boolean isEnableWhenCount = false;
 
 
@@ -37,16 +37,20 @@ public class TimerTextView extends AppCompatTextView {
     }
 
     private void initView(Context context) {
+        hintText = context.getString(R.string.widget_timer_hint_text);
+        formatText = context.getString(R.string.widget_timer_count_format_text);
+        finishText = context.getString(R.string.widget_timer_finish_text);
+
         setText(hintText);
         setGravity(Gravity.CENTER);
     }
 
     private void createTimer() {
-        downTimer = new CountDownTimer(COUNT_DOWN_TIME * 1000, 1000) {
+        downTimer = new CountDownTimer(COUNT_DOWN_TIME * 1000L, 1000L) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //四舍五入 优化系统误差
-                setText(String.format(formatText, Math.round((double) millisUntilFinished / 1000)));
+                setText(String.format(formatText, Math.round((double) millisUntilFinished / 1000L)));
             }
 
             @Override

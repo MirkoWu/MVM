@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+
 def ext = rootProject.ext
 android {
     compileSdkVersion 30

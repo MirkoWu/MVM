@@ -17,11 +17,8 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
     public static final String TAG = BaseMediator.class.getSimpleName();
     @NonNull
     protected M mModel;
-    //    protected WeakReference<IBaseView> view;
     @NonNull
     protected V mView;
-    //    public SingleLiveEvent<ApiException> mCommonError = new SingleLiveEvent<>();//通用错误，一般Toast
-//    public SingleLiveEvent<ApiException> mStateEvent = new SingleLiveEvent<>();//状态界面
     private UiChangeEvent mUiStatusChangeLiveData;
 
     public BaseMediator() {
@@ -35,7 +32,6 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
 
     @Override
     public void attachView(V baseView) {
-//        view=new WeakReference<>(baseView);
         mView = baseView;
         //绑定view时也注册事件
         getUiEventChangeLiveData().registerEvent(mView.getLifecycleOwner(), mView);
@@ -43,28 +39,9 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
 
     @Override
     public void detachView() {
-//        view.clear();
         mView = null;
     }
 
-//    @Override
-//    public IBaseView getView() {
-//        return view.get();
-//    }
-
-
-    //    protected void sendError(int code, String msg) {
-//        sendError(false, code, msg);
-//    }
-//
-//    protected void sendError(boolean showState, int code, String msg) {
-//        ApiException api = new ApiException(code, msg);
-//        if (showState) {
-//            mStateEvent.setValue(api);
-//        } else {
-//            mCommonError.setValue(api);
-//        }
-//    }
     public UiChangeEvent getUiEventChangeLiveData() {
         if (this.mUiStatusChangeLiveData == null) {
             this.mUiStatusChangeLiveData = new UiChangeEvent();
@@ -80,9 +57,6 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
     public void hideLoadingDialog() {
         this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
     }
-//    public void hideLoadingDialog() {
-//        this.mUiStatusChangeLiveData.getStateViewEvent().setValue(false);
-//    }
 
     public void jumpPage(@NonNull String path) {
         if (!TextUtils.isEmpty(path)) {

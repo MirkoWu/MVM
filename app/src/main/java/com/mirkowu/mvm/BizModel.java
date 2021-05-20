@@ -3,10 +3,13 @@ package com.mirkowu.mvm;
 
 import com.mirkowu.lib_base.model.BaseModel;
 import com.mirkowu.lib_base.util.RxScheduler;
-import com.mirkowu.mvm.network.GankApi;
-import com.mirkowu.mvm.network.RetrofitClient;
+import com.mirkowu.mvm.bean.GankBaseBean;
+import com.mirkowu.mvm.bean.GankImageBean;
+import com.mirkowu.mvm.network.ImageClient;
+import com.mirkowu.mvm.network.GankClient;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -16,9 +19,15 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
 public class BizModel extends BaseModel {
 
-    public Observable<Object> loadImage() {
-        return RetrofitClient.getAPIService(GankApi.class)
-                .loadImage(10, 1)
+    public Observable<GankBaseBean<List<GankImageBean>>> loadImage(int pageSize,int page) {
+        return GankClient.getGankApi()
+                .loadImage(pageSize, page)
+                .compose(RxScheduler.ioToMain());
+    }
+
+    public Observable<Object> loadImage2() {
+        return ImageClient.getImageApi()
+                .getRandomImage()
                 .compose(RxScheduler.ioToMain());
     }
 
