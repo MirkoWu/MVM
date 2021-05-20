@@ -51,8 +51,7 @@ dependencies {
     api "io.reactivex.rxjava3:rxjava:$ext.rxjava3_version"
     api "io.reactivex.rxjava3:rxandroid:$ext.rxandroid3_version"
 
-    //gson
-    api 'com.google.code.gson:gson:2.8.6'
+
 
     //okhttp
     api 'com.squareup.okio:okio:2.2.2'

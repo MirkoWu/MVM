@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:textColor="@color/colorTitle"
+        android:textColor="#333333"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -21,30 +21,30 @@
         android:id="@+id/ivIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10" />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:lineSpacingExtra="@dimen/dp_6"
-        android:minHeight="@dimen/dp_48"
-        android:textColor="@color/colorTitle"
-        android:textSize="@dimen/sp_14" />
+        android:lineSpacingExtra="6dp"
+        android:minHeight="48dp"
+        android:textColor="#666666"
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorLine" />
+        android:background="#eeeeee" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48"
-        android:divider="@drawable/shape_line_ver"
+        android:layout_height="48dp"
+        android:divider="@drawable/widget_shape_line_ver"
         android:showDividers="middle">
 
         <TextView
@@ -54,8 +54,8 @@
             android:layout_weight="1"
             android:background="?selectableItemBackground"
             android:gravity="center"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/sp_14" />
+            android:textColor="#999999"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvPositive"
@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:background="?selectableItemBackground"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp_14" />
+            android:textColor="#03A9F4"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

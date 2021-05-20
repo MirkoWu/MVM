@@ -18,7 +18,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.mirkowu.lib_util.ScreenUtil;
 import com.mirkowu.lib_widget.R;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class CommonHintDialog extends DialogFragment implements View.OnClickListener {
     protected ImageView ivIcon;
@@ -42,7 +46,7 @@ public class CommonHintDialog extends DialogFragment implements View.OnClickList
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.widget_dialog_common_hint,container,false);
+        return inflater.inflate(R.layout.widget_dialog_common_hint, container, false);
     }
 
     @Override
@@ -60,7 +64,6 @@ public class CommonHintDialog extends DialogFragment implements View.OnClickList
         int width = (int) (ScreenUtil.getScreenWidth(getContext()) * 0.75);//设定宽度为屏幕宽度的0.75
         getDialog().getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
-
 
 
     protected void initialize() {
@@ -189,12 +192,6 @@ public class CommonHintDialog extends DialogFragment implements View.OnClickList
     public void show(AppCompatActivity activity) {
         this.show(activity.getSupportFragmentManager(), getClass().getName());
     }
-
-    @Override
-    public void show(FragmentManager manager) {
-        super.show(manager);
-    }
-
 
     public interface OnButtonClickListener {
 
