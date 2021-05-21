@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_webview.WebViewActivity
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
@@ -39,6 +40,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             binding.btnText.text = "点击了${System.currentTimeMillis()}"
             DataBindingDialog(context!!).show()
             showLoadingDialog("Toast测试")
+            WebViewActivity.start(context, "ces", "http://www.baidu.com/")
         }
         val list = mutableListOf("", "", "", "", "", "", "", "", "", "")
         val listAdapter = DataBindingAdapter(list)
@@ -46,7 +48,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             adapter = listAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
+        binding.tvBold.setBoldStyle()
+        binding.tvBoldMid.setMediumStyle()
+        binding.tvBoldDefault.setBoldWith(1.5f)
+        binding.tvNormal.apply { paint.isFakeBoldText = true }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +101,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         Log.d(TAG, "onStop: $position")
         super.onStop()
     }
+
     override fun onDestroyView() {
         Log.d(TAG, "onDestroyView: $position")
 //        _binding = null

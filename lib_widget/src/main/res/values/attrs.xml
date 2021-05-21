@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <declare-styleable name="BoldTextView">
+        <attr name="boldStyle" format="enum|float">
+            <enum name="medium" value="1" />
+            <enum name="bold" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

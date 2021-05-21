@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.mirkowu.lib_util.ScreenUtil;
 import com.mirkowu.lib_widget.R;
@@ -99,8 +98,8 @@ public class CommonHintDialog extends DialogFragment implements View.OnClickList
             if (negativeTextColor != 0)
                 tvNegative.setTextColor(ContextCompat.getColor(getContext(), negativeTextColor));
         } else {
-            tvPositive.setText("确定");
-            tvNegative.setText("取消");
+            tvPositive.setText(R.string.widget_btn_confirm);
+            tvNegative.setText(R.string.widget_btn_cancel);
         }
 
         setCancelable(cancelable);

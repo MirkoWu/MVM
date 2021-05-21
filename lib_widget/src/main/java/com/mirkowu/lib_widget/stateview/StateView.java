@@ -26,7 +26,8 @@ public class StateView extends LinearLayout {
     private OnRefreshListener onRefreshListener;
 
     private CharSequence hintText;
-    private int hintResId;
+    private Integer hintImgResId;
+    private Integer loadingImgResId;
     private boolean isShowRefresh;
     private AnimationDrawable animationDrawable;
 
@@ -84,8 +85,11 @@ public class StateView extends LinearLayout {
 
         switch (state) {
             case ViewState.LOADING:
-                ivLoading.setImageResource(hintResId);
-                ivLoading.setVisibility(VISIBLE);
+                if (loadingImgResId != 0) {
+                    ivLoading.setImageResource(loadingImgResId);
+                    ivLoading.setVisibility(VISIBLE);
+                }
+
                 if (animationDrawable != null && !animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
@@ -95,11 +99,14 @@ public class StateView extends LinearLayout {
                 }
                 break;
             case ViewState.SHOW:
-                ivHint.setImageResource(hintResId);
                 tvHint.setText(hintText);
-
-                ivHint.setVisibility(VISIBLE);
                 tvHint.setVisibility(VISIBLE);
+
+                if (hintImgResId != 0) {
+                    ivHint.setImageResource(hintImgResId);
+                    ivHint.setVisibility(VISIBLE);
+                }
+
                 btnRefresh.setVisibility(isShowRefresh ? VISIBLE : GONE);
 
                 break;
@@ -118,8 +125,8 @@ public class StateView extends LinearLayout {
         setLoadingState(0, hint);
     }
 
-    public void setLoadingState(@DrawableRes int imgResId, CharSequence hint) {
-        hintResId = imgResId;
+    public void setLoadingState(@DrawableRes Integer loadingResId, CharSequence hint) {
+        loadingImgResId = loadingResId;
         hintText = hint;
         setState(ViewState.LOADING);
     }
@@ -128,12 +135,12 @@ public class StateView extends LinearLayout {
         setState(ViewState.GONE);
     }
 
-    public void setShowState(@DrawableRes int imgResId, CharSequence hint) {
+    public void setShowState(@DrawableRes Integer imgResId, CharSequence hint) {
         setShowState(imgResId, hint, false);
     }
 
-    public void setShowState(@DrawableRes int imgResId, CharSequence hint, boolean showRefresh) {
-        hintResId = imgResId;
+    public void setShowState(@DrawableRes Integer imgResId, CharSequence hint, boolean showRefresh) {
+        hintImgResId = imgResId;
         hintText = hint;
         isShowRefresh = showRefresh;
         setState(ViewState.SHOW);

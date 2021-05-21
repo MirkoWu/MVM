@@ -52,6 +52,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.869" />
 
+
+    <com.mirkowu.lib_widget.BoldTextView
+        android:id="@+id/tv_bold_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加粗字体"
+        android:textColor="#333333" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加粗字体加粗字体加粗字体加粗字体"
+        android:textColor="#333333"
+        android:textStyle="bold" />
+
+    <com.mirkowu.lib_widget.BoldTextView
+        android:id="@+id/tv_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加粗字体"
+        android:textColor="#333333"
+        app:boldStyle="bold" />
+
+    <com.mirkowu.lib_widget.BoldTextView
+        android:id="@+id/tv_bold_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加粗字体"
+        app:boldStyle="medium"
+        android:textColor="#333333" />
+
+    <TextView
+        android:id="@+id/tv_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加粗字体"
+        android:textColor="#333333" />
+
     <Button
         android:id="@+id/btn_text"
         android:layout_width="wrap_content"
