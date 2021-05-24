@@ -114,9 +114,6 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
         final int bottomSpace = mEdgeSpace != 0 ? mEdgeSpace : mBottomSpace;
 
         if (orientation == LinearLayoutManager.VERTICAL) {
-            final int left = parent.getPaddingLeft();
-            final int right = parent.getWidth() - parent.getPaddingRight();
-
             final int childCount = parent.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 final View child = parent.getChildAt(i);
@@ -124,16 +121,19 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
                         .getLayoutParams();
                 int tx = Math.round(ViewCompat.getTranslationX(child));
                 int ty = Math.round(ViewCompat.getTranslationY(child));
+                final int left = parent.getPaddingLeft() + tx;
+                final int right = parent.getWidth() - parent.getPaddingRight() + tx;
 
                 final int top = child.getBottom() + params.bottomMargin + ty;
                 final int bottom = top + mSpace;
-                c.drawRect(left, top, right, bottom, mDividerPaint);
+                if (i != childCount - 1) {
+                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                }
 
                 //顶部和底部
                 if (i == 0) {
-
                     if (topSpace != 0) {
-                        final int firstBottom = child.getTop();
+                        final int firstBottom = child.getTop() - params.topMargin + ty;
                         final int firstTop = firstBottom - topSpace;
                         c.drawRect(left, firstTop, right, firstBottom, mDividerPaint);
                     }
@@ -147,8 +147,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
             }
 
         } else if (orientation == LinearLayoutManager.HORIZONTAL) {
-            final int top = parent.getPaddingTop();
-            final int bottom = parent.getHeight() - parent.getPaddingBottom();
+
             final int childCount = parent.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 final View child = parent.getChildAt(i);
@@ -156,23 +155,24 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
                         .getLayoutParams();
                 int tx = Math.round(ViewCompat.getTranslationX(child));
                 int ty = Math.round(ViewCompat.getTranslationY(child));
-
+                final int top = parent.getPaddingTop() + ty;
+                final int bottom = parent.getHeight() - parent.getPaddingBottom() + ty;
 
                 final int left = child.getRight() + params.rightMargin + tx;
                 final int right = left + mSpace;
-                c.drawRect(left, top, right, bottom, mDividerPaint);
-
+                if (i != childCount - 1) {
+                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                }
                 //顶部和底部
                 if (i == 0) {
                     if (topSpace != 0) {
-                        final int firstRight = child.getLeft();
+                        final int firstRight = child.getLeft() - params.leftMargin + tx;
                         final int firstLeft = firstRight - topSpace;
                         c.drawRect(firstLeft, top, firstRight, bottom, mDividerPaint);
                     }
                 } else if (i == childCount - 1) {
                     if (bottomSpace != 0) {
-                        final int lastLeft = child.getRight() + params.rightMargin +
-                                Math.round(ViewCompat.getTranslationX(child));
+                        final int lastLeft = child.getRight() + params.rightMargin + tx;
                         final int lastRight = lastLeft + bottomSpace;
                         c.drawRect(lastLeft, top, lastRight, bottom, mDividerPaint);
                     }

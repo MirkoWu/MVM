@@ -34,10 +34,10 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
         val list = mutableListOf("", "", "", "", "", "", "", "", "", "", "")
         val gridAdapter = GridAdapter()
         binding.rvGrid.apply {
-            layoutManager = LinearLayoutManager(context )
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = gridAdapter
-            addItemDecoration(LinearDecoration(context).setSpace(10f).setEdgeSpace(10f).setTopSpace(20f).setBottomSpace(50f).setSpaceColor(Color.parseColor("#90FF0000")))
+            addItemDecoration(LinearDecoration(context).setSpace(10f)/*.setEdgeSpace(10f)*/.setTopSpace(20f).setBottomSpace(50f).setSpaceColor(Color.parseColor("#90FF0000")))
         }
-        gridAdapter.data=list
+        gridAdapter.data = list
     }
 }
