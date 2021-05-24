@@ -9,6 +9,7 @@ import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
+import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
 import com.mirkowu.mvm.viewbinding.binding
@@ -24,7 +25,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     override fun getLayoutId() = R.layout.activity_main
 
     override fun initialize() {
-        val  pagerAdapter = FragmentBasePagerAdapter(supportFragmentManager,
+        val pagerAdapter = FragmentBasePagerAdapter(supportFragmentManager,
                 DataBindingFragment.newInstance(),
                 DataBindingFragment.newInstance(),
                 DataBindingFragment.newInstance(),
@@ -32,8 +33,8 @@ class MainActivity : BaseActivity<EmptyMediator>() {
         )
         binding.vpHome.apply {
             adapter = pagerAdapter
-            isScroll=true
-            offscreenPageLimit=pagerAdapter.count
+            isScroll = true
+            offscreenPageLimit = pagerAdapter.count
         }
 
     }
@@ -52,6 +53,10 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 
     fun bindingClick(view: View?) {
         startActivity(Intent(this, DataBindingActivity::class.java))
+    }
+
+    fun listClick(view: View?) {
+        GridListActivity.start(this)
     }
 
 }

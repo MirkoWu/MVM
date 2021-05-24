@@ -14,12 +14,16 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public BaseAdapter() {
     }
 
-    public BaseAdapter(List<T> mData) {
-        this.mData = mData;
+    public BaseAdapter(List<T> list) {
+        this.mData = list == null ? new ArrayList<>() : list;;
+    }
+
+    public List<T> getData() {
+        return this.mData;
     }
 
     public void setData(List<T> list) {
-        this.mData = list == null || list.isEmpty() ? new ArrayList<>() : list;
+        this.mData = list == null ? new ArrayList<>() : list;
         notifyDataSetChanged();
     }
 
@@ -41,6 +45,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public int getItemCount() {
         return this.mData.size();
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {

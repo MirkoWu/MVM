@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".viewbinding.DataBindingActivity"></activity>
+        <activity android:name=".recycelerview.GridListActivity"></activity>
+        <activity android:name=".viewbinding.DataBindingActivity" />
         <activity android:name=".mvc.MVCActivity" />
         <activity android:name=".mvp.MVPActivity" />
         <activity android:name=".mvvm.MVVMActivity" />
