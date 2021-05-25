@@ -1,5 +1,9 @@
 package com.mirkowu.lib_base.widget;
 
+import android.view.ViewGroup;
+import android.widget.ScrollView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_base.adapter.BaseAdapter;
@@ -12,54 +16,62 @@ import java.util.List;
 
 public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListener {
 
-    protected SmartRefreshLayout mInnerRefreshLayout;
-    private RecyclerView mInnerRecyclerView;
+    protected SmartRefreshLayout mRefreshLayout;
+    private ViewGroup mInnerContainer;
     private OnRefreshListener mOnRefreshListener;
-    public int PAGE_COUNT = 10;//每页请求数量
-    private int FIRST_PAGE = 0;//起始页下标
-    protected int mPage = FIRST_PAGE;//当前页
+    /*** 每页请求数量*/
+    private int PAGE_COUNT = 10;
+    /*** 起始页下标*/
+    private int FIRST_PAGE = 0;
+    /*** 当前页*/
+    protected int mPage = FIRST_PAGE;
 
-    public RefreshHelper(RecyclerView mInnerRecyclerView, OnRefreshListener onRefreshListener) {
-        this(null, mInnerRecyclerView, onRefreshListener);
+    public RefreshHelper(@NonNull RecyclerView mInnerContainer, OnRefreshListener onRefreshListener) {
+        this(null, mInnerContainer, onRefreshListener);
     }
 
-    public RefreshHelper(SmartRefreshLayout mInnerRefreshLayout, RecyclerView mInnerRecyclerView, OnRefreshListener onRefreshListener) {
-        this.mInnerRefreshLayout = mInnerRefreshLayout;
-        this.mInnerRecyclerView = mInnerRecyclerView;
+    public RefreshHelper(SmartRefreshLayout refreshLayout, @NonNull RecyclerView innerContainer, OnRefreshListener onRefreshListener) {
+        this(refreshLayout, (ViewGroup) innerContainer, onRefreshListener);
+    }
+
+    public RefreshHelper(SmartRefreshLayout refreshLayout, @NonNull ViewGroup innerContainer, OnRefreshListener onRefreshListener) {
+        this.mRefreshLayout = refreshLayout;
+        this.mInnerContainer = innerContainer;
         this.mOnRefreshListener = onRefreshListener;
 
-        if (mInnerRefreshLayout != null) {
-            mInnerRefreshLayout.setOnRefreshListener(this);
-            mInnerRefreshLayout.setEnableLoadMore(false);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setOnRefreshListener(this);
+            mRefreshLayout.setEnableLoadMore(false);
         }
     }
 
-    public void setFirstPageIndex(int firstIndex) {
+    /**
+     * 设置起始页下标
+     *
+     * @param firstIndex 从第几页开始 eg.从第1页开始
+     */
+    public RefreshHelper setFirstPageIndex(int firstIndex) {
         FIRST_PAGE = firstIndex;
+        return this;
     }
 
-    public void setPageCount(int pageCount) {
-        PAGE_COUNT = pageCount;
+    public int getFirstPageIndex() {
+        return FIRST_PAGE;
     }
-
 
     /**
-     * 必须调用 初始化
+     * 设置每页加载多少条数据
      *
-     * @param refreshLayout
+     * @param pageCount
      */
-//    public void initRefresh(SmartRefreshLayout refreshLayout ) {
-//       initRefresh(refreshLayout,null);
-//    }
-//    public void initRefresh(SmartRefreshLayout refreshLayout, RecyclerView recyclerView) {
-//        this.mInnerRefreshLayout = refreshLayout;
-//        this.mInnerRecyclerView = recyclerView;
-//
-//        if (mInnerRefreshLayout != null) {
-//            mInnerRefreshLayout.setOnRefreshListener(this);
-//            mInnerRefreshLayout.setEnableLoadMore(false);
-//        }
-//    }
+    public RefreshHelper setPageCount(int pageCount) {
+        PAGE_COUNT = pageCount;
+        return this;
+    }
+
+    public int getPageCount() {
+        return PAGE_COUNT;
+    }
 
     /**
      * 当前界面只有下拉刷新 没有上拉加载功能 用这个
@@ -68,7 +80,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      * @param list
      */
     public void setLoadData(BaseAdapter adapter, List<?> list) {
-        if (mInnerRefreshLayout != null) mInnerRefreshLayout.finishRefresh();
+        if (mRefreshLayout != null) {
+            mRefreshLayout.finishRefresh();
+        }
         adapter.setData(list);
     }
 
@@ -83,7 +97,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
     }
 
     public void setLoadMore(BaseAdapter adapter, List<?> list, boolean hasMore) {
-        if (mInnerRefreshLayout != null) mInnerRefreshLayout.finishRefresh();
+        if (mRefreshLayout != null) {
+            mRefreshLayout.finishRefresh();
+        }
 
         if (mPage == FIRST_PAGE) {
             adapter.setData(list);
@@ -96,16 +112,17 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
                 adapter.addData(list);
             }
         }
-        if (mInnerRefreshLayout != null) {
-            if (hasMore) {//开启加载更多
-                mInnerRefreshLayout.finishLoadMore();
-                mInnerRefreshLayout.setEnableLoadMore(true);
-                mInnerRefreshLayout.setOnRefreshLoadMoreListener(this);
-                mInnerRefreshLayout.setEnableLoadMoreWhenContentNotFull(true);
+        if (mRefreshLayout != null) {
+            if (hasMore) {
+                //开启加载更多
+                mRefreshLayout.finishLoadMore();
+                mRefreshLayout.setEnableLoadMore(true);
+                mRefreshLayout.setOnRefreshLoadMoreListener(this);
+                mRefreshLayout.setEnableLoadMoreWhenContentNotFull(true);
 
             } else {
-                mInnerRefreshLayout.finishLoadMore();
-                mInnerRefreshLayout.setEnableLoadMore(false);
+                mRefreshLayout.finishLoadMore();
+                mRefreshLayout.setEnableLoadMore(false);
 
                 if (mOnRefreshListener != null) {
                     mOnRefreshListener.onLoadNoMore();
@@ -114,6 +131,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
         }
     }
 
+    public void refresh() {
+        onRefresh(mRefreshLayout);
+    }
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
@@ -121,9 +141,6 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
         loadData();
     }
 
-    public void onRefresh() {
-        onRefresh(mInnerRefreshLayout);
-    }
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
@@ -131,28 +148,41 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
         loadData();
     }
 
-    public void finishLoad() {
-        if (mInnerRefreshLayout != null) {
-            mInnerRefreshLayout.finishRefresh();
-            mInnerRefreshLayout.finishLoadMore();
-        }
-    }
-
-    public void autoRefresh() {
-        if (mInnerRecyclerView != null) {
-            mInnerRecyclerView.scrollToPosition(0);
-        }
-        if (mInnerRefreshLayout != null && !mInnerRefreshLayout.isRefreshing()) {
-            mInnerRefreshLayout.autoRefresh();
-        }
-    }
-
+    /**
+     * 加载数据用于 首次加载
+     */
     public void loadData() {
         if (mOnRefreshListener != null) {
             mOnRefreshListener.onLoadData(mPage);
         }
     }
 
+    /**
+     * 自动刷新
+     */
+    public void autoRefresh() {
+        if (mInnerContainer != null) {
+            if (mInnerContainer instanceof RecyclerView) {
+                ((RecyclerView) mInnerContainer).scrollToPosition(0);
+            } else if (mInnerContainer instanceof ScrollView) {
+                mInnerContainer.scrollTo(0, 0);
+            }
+
+        }
+        if (mRefreshLayout != null && !mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.autoRefresh();
+        }
+    }
+
+    /**
+     * 结束加载 包括下拉刷新和上拉加载
+     */
+    public void finishLoad() {
+        if (mRefreshLayout != null) {
+            mRefreshLayout.finishRefresh();
+            mRefreshLayout.finishLoadMore();
+        }
+    }
 
     public static interface OnRefreshListener {
         /**

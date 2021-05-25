@@ -13,6 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * 仅对 GridLayoutManager 样式的列表显示分割线
+ */
 public class GridDecoration extends RecyclerView.ItemDecoration {
     private Paint mDividerPaint = new Paint();
     private DisplayMetrics mDisplayMetrics;
@@ -26,31 +29,59 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
         mDividerPaint.setColor(Color.TRANSPARENT);
     }
 
+    /**
+     * 设置间隔  （此间隔不包含 头、尾 二个分割线，如果需要可以单独）
+     *
+     * @param space 单位dp
+     * @return
+     */
     public GridDecoration setSpace(float space) {
         mSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space, mDisplayMetrics) + 0.5f);
         return this;
     }
 
-    public GridDecoration setEdgeSpace(float edgeSpace) {
-        mEdgeSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
-        return this;
-    }
-
-    public GridDecoration setTopSpace(float edgeSpace) {
-        mTopSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
-        return this;
-    }
-
-    public GridDecoration setBottomSpace(float edgeSpace) {
-        mBottomSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
-        return this;
-    }
-
+    /**
+     * 设置间隔颜色
+     *
+     * @param spaceColor 默认透明
+     * @return
+     */
     public GridDecoration setSpaceColor(int spaceColor) {
         mDividerPaint.setColor(spaceColor);
         return this;
     }
 
+    /**
+     * 设置头尾二端间隔 优先级EdgeSpace > TopSpace/BottomSpace 。一旦设置此属性则覆盖其他二端属性
+     *
+     * @param edgeSpace 间隔，单位dp
+     */
+    public GridDecoration setEdgeSpace(float edgeSpace) {
+        mEdgeSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        return this;
+    }
+
+    /**
+     * 设置起始端间隔
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
+    public GridDecoration setTopSpace(float edgeSpace) {
+        mTopSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        return this;
+    }
+
+    /**
+     * 设置尾端间隔
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
+    public GridDecoration setBottomSpace(float edgeSpace) {
+        mBottomSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        return this;
+    }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -171,18 +202,23 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                     c.drawRect(left, top, right, bottom, mDividerPaint);
                 }
 
+                //顶部和尾部
                 if (i == 0) {
-                    left = parent.getPaddingLeft() + tx;
-                    right = parent.getWidth() - parent.getPaddingRight() + tx;
-                    top = child.getTop() - params.topMargin + ty;
-                    bottom = top - topSpace;
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    if (topSpace != 0) {
+                        left = parent.getPaddingLeft() + tx;
+                        right = parent.getWidth() - parent.getPaddingRight() + tx;
+                        top = child.getTop() - params.topMargin + ty;
+                        bottom = top - topSpace;
+                        c.drawRect(left, top, right, bottom, mDividerPaint);
+                    }
                 } else if (i == childCount - 1) {
-                    left = parent.getPaddingLeft() + tx;
-                    right = parent.getWidth() - parent.getPaddingRight() + tx;
-                    top = child.getBottom() + params.bottomMargin + ty;
-                    bottom = top + bottomSpace;
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    if (bottomSpace != 0) {
+                        left = parent.getPaddingLeft() + tx;
+                        right = parent.getWidth() - parent.getPaddingRight() + tx;
+                        top = child.getBottom() + params.bottomMargin + ty;
+                        bottom = top + bottomSpace;
+                        c.drawRect(left, top, right, bottom, mDividerPaint);
+                    }
                 }
 
                 //竖线
@@ -214,18 +250,23 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                     c.drawRect(left, top, right, bottom, mDividerPaint);
                 }
 
+                //顶部和尾部
                 if (i == 0) {
-                    top = parent.getPaddingTop() + tx;
-                    bottom = parent.getHeight() - parent.getPaddingBottom() + tx;
-                    left = child.getLeft() - params.leftMargin + ty;
-                    right = left - topSpace;
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    if (topSpace != 0) {
+                        top = parent.getPaddingTop() + tx;
+                        bottom = parent.getHeight() - parent.getPaddingBottom() + tx;
+                        left = child.getLeft() - params.leftMargin + ty;
+                        right = left - topSpace;
+                        c.drawRect(left, top, right, bottom, mDividerPaint);
+                    }
                 } else if (i == childCount - 1) {
-                    top = parent.getPaddingTop() + tx;
-                    bottom = parent.getHeight() - parent.getPaddingBottom() + tx;
-                    left = child.getRight() + params.rightMargin + ty;
-                    right = left + bottomSpace;
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    if (bottomSpace != 0) {
+                        top = parent.getPaddingTop() + tx;
+                        bottom = parent.getHeight() - parent.getPaddingBottom() + tx;
+                        left = child.getRight() + params.rightMargin + ty;
+                        right = left + bottomSpace;
+                        c.drawRect(left, top, right, bottom, mDividerPaint);
+                    }
                 }
 
                 //横线

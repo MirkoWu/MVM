@@ -15,7 +15,8 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     public BaseAdapter(List<T> list) {
-        this.mData = list == null ? new ArrayList<>() : list;;
+        this.mData = list == null ? new ArrayList<>() : list;
+        ;
     }
 
     public List<T> getData() {
@@ -28,13 +29,44 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     public void addData(List<T> list) {
+        list = list == null ? new ArrayList<>() : list;
+        int size = this.mData.size();
         this.mData.addAll(list);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(size, list.size());
+        compatibilityDataSizeChanged(list.size());
     }
 
     public void addData(T item) {
+        int size = this.mData.size();
         this.mData.add(item);
-        notifyDataSetChanged();
+        notifyItemInserted(size);
+        compatibilityDataSizeChanged(1);
+    }
+
+    public void addData(int position, T item) {
+        this.mData.add(position, item);
+        notifyItemInserted(position);
+        compatibilityDataSizeChanged(1);
+    }
+
+
+    public void removeData(int position) {
+        this.mData.remove(position);
+        notifyItemRemoved(position);
+        compatibilityDataSizeChanged(0);
+    }
+
+    /**
+     * 防止未被刷新
+     *
+     * @param size 新加的数量
+     */
+    private void compatibilityDataSizeChanged(int size) {
+        int dataSize = this.mData == null ? 0 : this.mData.size();
+        if (dataSize == size) {
+            this.notifyDataSetChanged();
+        }
+
     }
 
     public T getItem(int position) {

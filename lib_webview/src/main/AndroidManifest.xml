@@ -2,11 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mirkowu.lib_webview">
 
+    <!--腾讯X5浏览器权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
+    <!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!--腾讯X5浏览器权限-->
+
     <application>
         <activity
             android:name=".WebViewActivity"
-            android:process=":webview"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+
+        <!-- 该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。-->
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt" />
+
+        <!--视频无法播放，提示视频播放源找不到？
+        由于默认情况下apache库已从 bootclasspath 中移除，只需要在AndroidManifest的application节点内添加以下配置即可-->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
     </application>
 
 </manifest>

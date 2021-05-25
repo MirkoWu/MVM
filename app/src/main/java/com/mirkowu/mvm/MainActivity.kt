@@ -1,12 +1,13 @@
 package com.mirkowu.mvm
 
+import android.Manifest
 import android.content.Intent
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_webview.WebViewActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityMainBinding
-import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
@@ -36,11 +37,19 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             isScroll = true
             offscreenPageLimit = pagerAdapter.count
         }
+        val PERMISSION_STORAGE = arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE
+        )
 
     }
 
     fun mvcClick(view: View?) {
-        MVCActivity.start(this)
+//        MVCActivity.start(this)
+        WebViewActivity.start(context, "ces", "http://www.baidu.com/")
+//        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
+
     }
 
     fun mvpClick(view: View?) {

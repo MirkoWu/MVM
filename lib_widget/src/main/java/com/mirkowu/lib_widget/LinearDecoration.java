@@ -13,6 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * 仅对 LinearLayoutManager 样式的列表显示分割线
+ */
 public class LinearDecoration extends RecyclerView.ItemDecoration {
     private Paint mDividerPaint = new Paint();
     private DisplayMetrics mDisplayMetrics;
@@ -27,7 +30,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 设置间隔
+     * 设置间隔  （此间隔不包含 头、尾 二个分割线，如果需要可以单独）
      *
      * @param space 单位dp
      * @return
@@ -49,23 +52,36 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 设置二端间隔 优先级EdgeSpace > TopSpace/BottomSpace 。一旦设置此属性则覆盖其他二端属性
+     * 设置头尾二端间隔 优先级EdgeSpace > TopSpace/BottomSpace 。一旦设置此属性则覆盖其他二端属性
+     *
+     * @param edgeSpace 间隔，单位dp
      */
     public LinearDecoration setEdgeSpace(float edgeSpace) {
         mEdgeSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
         return this;
     }
 
+    /**
+     * 设置起始端间隔
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
     public LinearDecoration setTopSpace(float edgeSpace) {
         mTopSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
         return this;
     }
 
+    /**
+     * 设置尾端间隔
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
     public LinearDecoration setBottomSpace(float edgeSpace) {
         mBottomSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
         return this;
     }
-
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {

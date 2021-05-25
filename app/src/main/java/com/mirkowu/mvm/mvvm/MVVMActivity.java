@@ -68,13 +68,13 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         binding.stateview.setLoadingState(R.mipmap.ic_launcher, "加载中");
         binding.stateview.setOnRefreshListener(() -> refreshHelper.autoRefresh());
 
-        refreshHelper.loadData();
+        refreshHelper.refresh();
     }
 
     @Override
     public void onLoadData(int page) {
         //showLoadingDialog();
-        mMediator.loadImage(page, refreshHelper.PAGE_COUNT);
+        mMediator.loadImage(page, refreshHelper.getPageCount());
     }
 
     @Override

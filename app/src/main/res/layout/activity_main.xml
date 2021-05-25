@@ -7,10 +7,13 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.mirkowu.lib_widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:backIcon="@mipmap/ic_launcher"
+        app:showLine="true"
+        app:title="@string/app_name" />
 
     <com.mirkowu.lib_widget.NoScrollViewPager
         android:id="@+id/vp_home"
