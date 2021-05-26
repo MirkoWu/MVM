@@ -7,19 +7,31 @@ import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_webview.callback.IWebViewCallBack;
-import com.mirkowu.lib_webview.jsbridge.JSCallNativeBridge;
+import com.mirkowu.lib_webview.jsbridge.BridgeHandler;
+import com.mirkowu.lib_webview.jsbridge.BridgeWebViewDelegate;
+import com.mirkowu.lib_webview.jsbridge.CallBackFunction;
+import com.mirkowu.lib_webview.jsbridge.WebViewJavascriptBridge;
+import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebView;
 
 import java.util.Map;
 
-public class CommonWebView extends WebView {
+
+/**
+ * 1.支持腾讯X5浏览器
+ * 2.支持jsBridge
+ */
+public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJavascriptBridge {
     private static final String TAG = CommonWebView.class.getSimpleName();
     private Map<String, String> mHeaders;
     private String[] mJsObjectNameArrays;
+    //BridgeWebView代理
+    private BridgeWebViewDelegate mBridgeWebViewDelegate;
 
     public CommonWebView(@NonNull Context context) {
         this(context, null);
@@ -35,6 +47,7 @@ public class CommonWebView extends WebView {
     }
 
     private void init(Context context) {
+        mBridgeWebViewDelegate = new BridgeWebViewDelegate(this);
     }
 
     /**
@@ -61,17 +74,27 @@ public class CommonWebView extends WebView {
      * @param callBack
      * @param jsObjectNameArrays
      */
-    public void addJavascriptInterface(@NonNull IWebViewCallBack callBack, @NonNull String... jsObjectNameArrays) {
-        if (callBack == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
-            return;
-        }
-        mJsObjectNameArrays = jsObjectNameArrays;
-        JSCallNativeBridge jsCallNativeBridge = new JSCallNativeBridge(callBack);
-
-        for (String jsObjectName : jsObjectNameArrays) {
-            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
-        }
-    }
+//    public void addJavascriptInterface(@NonNull IWebViewCallBack callBack, @NonNull String... jsObjectNameArrays) {
+//        if (callBack == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
+//            return;
+//        }
+//        mJsObjectNameArrays = jsObjectNameArrays;
+//        JSCallNativeBridge jsCallNativeBridge = new JSCallNativeBridge(callBack);
+//
+//        for (String jsObjectName : jsObjectNameArrays) {
+//            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
+//        }
+//    }
+//    public void addJavascriptInterface(@NonNull JSCallNativeBridge jsCallNativeBridge, @NonNull String... jsObjectNameArrays) {
+//        if (jsCallNativeBridge == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
+//            return;
+//        }
+//        mJsObjectNameArrays = jsObjectNameArrays;
+//
+//        for (String jsObjectName : jsObjectNameArrays) {
+//            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
+//        }
+//    }
 
     /**
      * 移除所有的Js注入
@@ -182,4 +205,88 @@ public class CommonWebView extends WebView {
         }
         return false;
     }
+
+    @Override
+    public void onAnyEvent(LifecycleOwner owner, Lifecycle.Event event) {
+
+    }
+
+    @Override
+    public void onCreateEvent() {
+    }
+
+    @Override
+    public void onStartEvent() {
+    }
+
+    @Override
+    public void onStopEvent() {
+    }
+
+    @Override
+    public void onResumeEvent() {
+        WebViewUtil.onResume(this);
+    }
+
+    @Override
+    public void onPauseEvent() {
+        WebViewUtil.onPause(this);
+    }
+
+    @Override
+    public void onDestroyEvent() {
+        WebViewUtil.clearWebView(this);
+    }
+
+    /*** >>>>>>>>>>>>>>>>>>> jsBridge 相关方法 >>>>>>>>>>>>>>>>>>> */
+    @Override
+    public void send(String data) {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.send(data);
+        }
+    }
+
+    @Override
+    public void send(String data, CallBackFunction responseCallback) {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.send(data, responseCallback);
+        }
+    }
+
+    @Override
+    public void registerHandler(String handlerName, BridgeHandler handler) {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.registerHandler(handlerName, handler);
+        }
+    }
+
+    @Override
+    public void callHandler(String handlerName, String data, CallBackFunction callBack) {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.callHandler(handlerName, data, callBack);
+        }
+    }
+
+    @Override
+    public void handlerReturnData(String url) {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.handlerReturnData(url);
+        }
+    }
+
+    @Override
+    public void flushMessageQueue() {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.flushMessageQueue();
+        }
+    }
+
+    @Override
+    public void loadLocalJS() {
+        if (mBridgeWebViewDelegate != null) {
+            mBridgeWebViewDelegate.loadLocalJS();
+        }
+    }
+
+    /*** <<<<<<<<<<<<<<<<<<<<<<< jsBridge 相关方法 <<<<<<<<<<<<<<<<<<<<<<< */
 }

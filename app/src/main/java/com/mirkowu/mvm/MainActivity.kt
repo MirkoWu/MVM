@@ -14,7 +14,6 @@ import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
 import com.mirkowu.mvm.viewbinding.binding
-
 class MainActivity : BaseActivity<EmptyMediator>() {
     val binding by binding(ActivityMainBinding::inflate)
 
@@ -47,8 +46,9 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 
     fun mvcClick(view: View?) {
 //        MVCActivity.start(this)
-        WebViewActivity.start(context, "ces", "http://www.baidu.com/")
+//        WebViewActivity.start(context, "ces", "http://www.baidu.com/")
 //        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
+        WebViewActivity.start(context, "ces", "file:///android_asset/test.html")
 
     }
 

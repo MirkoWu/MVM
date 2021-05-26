@@ -2,8 +2,10 @@ package com.mirkowu.lib_base.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
@@ -11,6 +13,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
+import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_widget.dialog.LoadingDialog;
 
 /**
@@ -106,6 +109,25 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
                 }
             }
         });
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

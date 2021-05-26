@@ -12,19 +12,21 @@ import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_webview.callback.DefaultWebViewFileChooser;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.client.BaseWebChromeClient;
 import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
 import com.mirkowu.lib_webview.setting.WebSettingUtil;
-import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.mirkowu.lib_widget.stateview.StateView;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 
+import me.jessyan.autosize.internal.CancelAdapt;
 
-public class WebViewActivity extends BaseMVMActivity {
+
+public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
 
 
     private static final String KEY_TITLE = "title";
@@ -45,6 +47,7 @@ public class WebViewActivity extends BaseMVMActivity {
     private CommonWebView mWebView;
     private ProgressBar mProgressBar;
     private IWebViewCallBack mWebViewCallBack;
+    private DefaultWebViewFileChooser mFileChooser;
 
     @Override
     protected BaseMediator initMediator() {
@@ -58,10 +61,8 @@ public class WebViewActivity extends BaseMVMActivity {
 
     @Override
     protected void initialize() {
-
         String title = getIntent().getStringExtra(KEY_TITLE);
         String url = getIntent().getStringExtra(KEY_URL);
-
 
 
         mToolbar = findViewById(R.id.mToolbar);
@@ -78,36 +79,58 @@ public class WebViewActivity extends BaseMVMActivity {
         WebConfig webConfig = getWebConfig();
         mWebViewCallBack = webConfig.getWebViewCallBack();
 
+        getLifecycle().addObserver(mWebView);
+
+        configWebSettings(webConfig);
+        mWebView.clearHistory();
+        mWebView.loadUrl(url);
+
+//
+//        mWebView.registerHandler("JSCallNative", new BridgeHandler() {
+//
+//            @Override
+//            public void handler(String data, CallBackFunction function) {
+//                System.out.println("registerHandler  handler = JSCallNative, data from web = " + data);
+//
+//                function.onCallBack("submitFromWeb exe, response data 中文 from Java");
+//            }
+//
+//        });
+//
+//        Message user = new Message();
+//        user.setData("我是Message");
+//
+//        mWebView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mWebView.callHandler("nativeCallJs", new Gson().toJson(user), new CallBackFunction() {
+//                    @Override
+//                    public void onCallBack(String data) {
+//                        System.out.println("nativeCallJs js回复 onCallBack = " + data);
+//                    }
+//                });
+//
+//                mWebView.send("hello");
+//            }
+//        }, 1000L);
+
+    }
+
+    protected void configWebSettings(WebConfig webConfig) {
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
-        mWebView.setWebChromeClient(new BaseWebChromeClient(mWebViewCallBack, mProgressBar));
-        mWebView.addJavascriptInterface(mWebViewCallBack, webConfig.getJsInjectionArrays());
 
-
-        mWebView.clearHistory();
-        mWebView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl(url);
-            }
-        }, 2000L);
-
-
-        mWebView.setVisibility(View.VISIBLE);
+        mFileChooser = new DefaultWebViewFileChooser(this);
+        mWebView.setWebChromeClient(new BaseWebChromeClient(mFileChooser, mProgressBar));
     }
 
 
     protected WebConfig getWebConfig() {
         return new WebConfig().setShowProgress(true)
                 .setShowBack(false)
-//                .setJsInjectionArrays(new String[]{BROWSER_ADD_JS, YI_ZHEN_JS_BRIDGE_ADD_JS})
+                .setJsInjectionArrays(new String[]{"android"})
                 .setCallBack(new IWebViewCallBack() {
-                    @Override
-                    public boolean onShowFileChooser(CommonWebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
-                        return false;
-                    }
-
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
 
@@ -133,30 +156,31 @@ public class WebViewActivity extends BaseMVMActivity {
                         return null;
                     }
 
-                    @Override
-                    public void onActivityResult(CommonWebView webView, int requestCode, int resultCode, Intent data) {
-
-                    }
                 });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        WebViewUtil.onResume(mWebView);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        WebViewUtil.onPause(mWebView);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        WebViewUtil.onResume(mWebView);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        WebViewUtil.onPause(mWebView);
+//    }
+//    @Override
+//    protected void onDestroy() {
+//        WebViewUtil.clearWebView(mWebView);
+//        super.onDestroy();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mWebViewCallBack != null) {
-            mWebViewCallBack.onActivityResult(mWebView, requestCode, resultCode, data);
+        if (mFileChooser != null) {
+            mFileChooser.onActivityResult(mWebView, requestCode, resultCode, data);
         }
     }
 
@@ -171,9 +195,5 @@ public class WebViewActivity extends BaseMVMActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onDestroy() {
-        WebViewUtil.clearWebView(mWebView);
-        super.onDestroy();
-    }
+
 }

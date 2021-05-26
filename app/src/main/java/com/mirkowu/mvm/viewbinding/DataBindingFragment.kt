@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mirkowu.lib_webview.WebViewActivity
+
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding

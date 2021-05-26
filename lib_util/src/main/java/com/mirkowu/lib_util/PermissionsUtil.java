@@ -29,6 +29,14 @@ public class PermissionsUtil {
     }
 
     /**
+     * 摄像头，文件存储
+     */
+    public static String[] PERMISSION_CAMERA = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+    /**
      * 文件存储
      */
     public static String[] PERMISSION_STORAGE = new String[]{

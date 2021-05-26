@@ -46,8 +46,8 @@ public class WebSettingUtil {
         mWebSettings.setBlockNetworkImage(false);  //是否阻塞加载网络图片  协议http or https
         mWebSettings.setSupportMultipleWindows(false); //WebView是否支持多个窗口
 
-        mWebSettings.setLoadWithOverviewMode(true); //设置WebView是否以概览模式加载页面，也就是说，缩放内容以适应屏幕的宽度
-        mWebSettings.setUseWideViewPort(true); //设置WebView是否应该启用支持“viewport”HTML元标签或应该使用一个宽的viewport
+//        mWebSettings.setLoadWithOverviewMode(true); //设置WebView是否以概览模式加载页面，也就是说，缩放内容以适应屏幕的宽度
+//        mWebSettings.setUseWideViewPort(true); //设置WebView是否应该启用支持“viewport”HTML元标签或应该使用一个宽的viewport
 
         mWebSettings.setDatabaseEnabled(true); //设置是否启用数据库存储API。
         mWebSettings.setAppCacheEnabled(true); //设置是否应该启用应用程序缓存API。

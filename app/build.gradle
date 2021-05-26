@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 
 def ext = rootProject.ext
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion ext.compileSdkVersion
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.mirkowu.mvm"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion ext.minSdkVersion
+        targetSdkVersion ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
 

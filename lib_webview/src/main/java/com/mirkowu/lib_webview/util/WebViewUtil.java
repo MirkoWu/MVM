@@ -120,5 +120,8 @@ public class WebViewUtil {
         webView.removeAllJavascriptInterface();
         webView.destroy();
         webView = null;
+
+        //请求回收
+        Runtime.getRuntime().gc();
     }
 }

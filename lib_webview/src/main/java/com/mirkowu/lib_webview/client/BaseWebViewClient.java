@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
+import com.mirkowu.lib_webview.jsbridge.BridgeWebViewClientDelegate;
 import com.tencent.smtt.export.external.interfaces.HttpAuthHandler;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
@@ -28,11 +29,12 @@ public class BaseWebViewClient extends WebViewClient {
     public static final String SCHEME_WEIXIN = "weixin://";
     private IWebViewCallBack mWebViewCallBack;
     private CommonWebView mWebView;
-
+    private BridgeWebViewClientDelegate mBridgeWebViewClientDelegate;
 
     public BaseWebViewClient(CommonWebView webView, IWebViewCallBack webViewCallBack) {
         this.mWebView = webView;
         this.mWebViewCallBack = webViewCallBack;
+        this.mBridgeWebViewClientDelegate = new BridgeWebViewClientDelegate(mWebView);
     }
 
 
@@ -43,6 +45,10 @@ public class BaseWebViewClient extends WebViewClient {
      */
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        if (mBridgeWebViewClientDelegate.shouldOverrideUrlLoading(url)) {
+            return true;
+        }
+
         LogUtil.e(TAG, "shouldOverrideUrlLoading url: " + url);
         return handleLinked(url);
     }
@@ -50,6 +56,10 @@ public class BaseWebViewClient extends WebViewClient {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        if (mBridgeWebViewClientDelegate.shouldOverrideUrlLoading(request.getUrl().toString())) {
+            return true;
+        }
+
         LogUtil.e(TAG, "shouldOverrideUrlLoading url: " + request.getUrl());
         // 控制页面中点开新的链接在当前webView中打开
         return handleLinked(request.getUrl().toString());
@@ -85,6 +95,9 @@ public class BaseWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         LogUtil.e(TAG, "onPageFinished url:" + url);
+
+        mBridgeWebViewClientDelegate.onPageFinished(url);
+
         if (mWebViewCallBack != null) {
             mWebViewCallBack.pageFinished(mWebView, url);
         }
@@ -93,6 +106,9 @@ public class BaseWebViewClient extends WebViewClient {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         LogUtil.e(TAG, "onPageStarted url: " + url);
+
+        mBridgeWebViewClientDelegate.onPageStarted(url, favicon);
+
         if (mWebViewCallBack != null) {
             mWebViewCallBack.pageStarted(mWebView, url);
         }
@@ -117,6 +133,9 @@ public class BaseWebViewClient extends WebViewClient {
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);
         LogUtil.e(TAG, "webview" + " error" + errorCode + " + " + description);
+
+        mBridgeWebViewClientDelegate.onReceivedError(errorCode, description, failingUrl);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return;
         }

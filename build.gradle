@@ -44,7 +44,7 @@ task clean(type: Delete) {
 ext {
     minSdkVersion = 21
     targetSdkVersion = 29
-    compileSdkVersion = 30
+    compileSdkVersion = 29
 
     core_ktx_version = '1.5.0'
     lifecycle_version = '2.3.1'

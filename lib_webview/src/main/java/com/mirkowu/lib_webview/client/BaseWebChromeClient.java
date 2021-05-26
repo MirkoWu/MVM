@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
-import com.mirkowu.lib_webview.callback.IWebViewCallBack;
+import com.mirkowu.lib_webview.callback.IWebViewFileChooser;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
 import com.tencent.smtt.export.external.interfaces.JsResult;
@@ -19,9 +19,9 @@ public class BaseWebChromeClient extends WebChromeClient {
     private static final int PROGRESS_LENGTH = 100;
     private static final String TAG = BaseWebChromeClient.class.getSimpleName();
     private ProgressBar mProgressBar;
-    private IWebViewCallBack mWebViewCallBack; //WebView回调统一处理
+    private IWebViewFileChooser mWebViewCallBack; //WebView回调统一处理
 
-    public BaseWebChromeClient(IWebViewCallBack webViewCallBack, ProgressBar progressBar) {
+    public BaseWebChromeClient(IWebViewFileChooser webViewCallBack, ProgressBar progressBar) {
         mWebViewCallBack = webViewCallBack;
         mProgressBar = progressBar;
     }

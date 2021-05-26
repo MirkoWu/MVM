@@ -1,0 +1,100 @@
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        js调用java
+    </title>
+</head>
+<body>
+<p>
+    <input type="text" id="text1" value="用户名(username)"/>
+</p>
+<p>
+    <input type="text" id="text2" value="password"/>
+</p>
+<p>
+    <input type="button" id="enter" value="发消息给Native" onclick="JSCallNative();"/>
+</p>
+<p>
+    <input type="button" id="enter3" value="发消息给Native" onclick="jsToNative2();"/>
+</p>
+<p>
+    <input type="button" id="enter1" value="调用Native方法" onclick="testClick1();"/>
+</p>
+<p>
+    <input type="button" id="enter2" value="显示html" onclick="testDiv();"/>
+</p>
+
+<p><input type="file" accept="image/*" value="选择图片"/></p>
+<p><input type="file" accept="video/*" value="选择视频"/></p>
+<p>
+    <input type="file" value="打开文件"/>
+</p>
+</body>
+
+<script>
+    function JSCallNative(){
+     var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+
+            //call native method
+<!--            window.android.jsCallNative("add","1");-->
+            window.WebViewJavascriptBridge.callHandler(
+                'JSCallNative'
+                , {'param': '中文测试'}
+                , function(responseData) {
+                    console.log(responseData)
+                }
+            );
+    }
+
+        function jsToNative2(){
+     var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+console.log(str1);
+            //call native method
+             window.android.jsCallNative("sub", JSON.stringify({'param': '中文测试'}),function(result){
+            console.log(result);
+           });
+          console.log('完了');
+    }
+
+        <!--下面这个方法要写  WebViewJavascriptBridge -->
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                    'WebViewJavascriptBridgeReady'
+                    , function() {
+                        callback(WebViewJavascriptBridge)
+                    },
+                    false
+                );
+            }
+        }
+
+        <!--下面这个方法 里面registerHandler -->
+        connectWebViewJavascriptBridge(function(bridge) {
+            bridge.init(function(message, responseCallback) {
+                console.log('JS got a message', message);
+                var data = {'Javascript Responds': 'WebViewJavascriptBridge 初始化完毕!'};
+                console.log('JS responding with', JSON.stringify(data));
+                responseCallback(data);
+            });
+
+            bridge.registerHandler("nativeCallJs", function(data, responseCallback) {
+                 console.log('JAVA call with', data);
+                var responseData = "Javascript Says Right back aka!";
+                responseCallback(responseData);
+            });
+        })
+
+
+
+
+
+
+
+</script>
+</html>
