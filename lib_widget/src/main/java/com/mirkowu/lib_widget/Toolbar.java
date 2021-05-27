@@ -26,6 +26,7 @@ public class Toolbar extends FrameLayout {
     private ImageView ivRight;
     private View vLine;
     private boolean mShowLine;
+    private int mBackIconResId;
 
     public Toolbar(Context context) {
         this(context, null);
@@ -44,7 +45,7 @@ public class Toolbar extends FrameLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
-        int backIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, 0);
+        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, 0);
         ta.recycle();
 
         LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
@@ -54,9 +55,7 @@ public class Toolbar extends FrameLayout {
         ivRight = findViewById(R.id.iv_right);
         vLine = findViewById(R.id.v_line);
 
-        if (backIconResId != 0) {
-            setBackIcon(backIconResId);
-        }
+        setBackIcon(mBackIconResId);
         setTitle(title);
         setShowLine(mShowLine);
     }
@@ -72,17 +71,30 @@ public class Toolbar extends FrameLayout {
         return this;
     }
 
+    public Toolbar setBackIconHide() {
+        return setBackIcon(0);
+    }
+
+    public Toolbar setBackIcon(boolean isShow) {
+        return setBackIcon(isShow ? mBackIconResId : 0);
+    }
+
     public Toolbar setBackIcon(@DrawableRes int resId) {
-        ivBack.setVisibility(VISIBLE);
-        ivBack.setImageResource(resId);
-        ivBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getContext() instanceof Activity) {
-                    ((Activity) getContext()).onBackPressed();
+        mBackIconResId = resId;
+        if (resId == 0) {
+            ivBack.setVisibility(GONE);
+        } else {
+            ivBack.setVisibility(VISIBLE);
+            ivBack.setImageResource(resId);
+            ivBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getContext() instanceof Activity) {
+                        ((Activity) getContext()).onBackPressed();
+                    }
                 }
-            }
-        });
+            });
+        }
         return this;
     }
 

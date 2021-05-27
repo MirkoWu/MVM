@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/flRootView"
+    android:id="@+id/rlRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,15 +19,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/mToolbar"
         android:visibility="visible" />
-
-    <com.mirkowu.lib_widget.stateview.StateView
-        android:id="@+id/mStateView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/mToolbar"
-        android:visibility="gone"
-        app:sv_defaultLoading="true"
-        app:sv_loadingAnim="@drawable/widget_loading_anim" />
 
     <ProgressBar
         android:id="@+id/mProgressBar"

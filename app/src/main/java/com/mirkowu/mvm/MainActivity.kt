@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
-import com.mirkowu.lib_webview.WebViewActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvp.MVPActivity
@@ -14,6 +13,7 @@ import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
 import com.mirkowu.mvm.viewbinding.binding
+
 class MainActivity : BaseActivity<EmptyMediator>() {
     val binding by binding(ActivityMainBinding::inflate)
 
@@ -47,8 +47,10 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     fun mvcClick(view: View?) {
 //        MVCActivity.start(this)
 //        WebViewActivity.start(context, "ces", "http://www.baidu.com/")
+//        CommonWebActivity.start(context, "ces", "http://www.baid")
 //        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
-        WebViewActivity.start(context, "ces", "file:///android_asset/test.html")
+//        WebViewActivity.start(context, "ces", "file:///android_asset/test.html")
+        WebActivity.start(context, "ces", "file:///android_asset/test.html")
 
     }
 

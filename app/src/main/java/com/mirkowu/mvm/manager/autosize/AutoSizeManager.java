@@ -1,5 +1,8 @@
 package com.mirkowu.mvm.manager.autosize;
 
+import android.app.Application;
+
+import me.jessyan.autosize.AutoSize;
 import me.jessyan.autosize.AutoSizeConfig;
 
 
@@ -25,15 +28,13 @@ public class AutoSizeManager {
     }
 
 
-    public void setConfig() {
+    public void setConfig(Application application) {
+        AutoSize.checkAndInit(application); //先初始化，防止多进程
         AutoSizeConfig.getInstance()
                 .setBaseOnWidth(true)
                 .setDesignWidthInDp(375)
                 .setDesignHeightInDp(812)
-                .setAutoAdaptStrategy(new CustomAutoAdaptStrategy())//自定义策略
-                .getUnitsManager()
-                .setSupportDP(true)
-                .setSupportSP(true);
+                .setAutoAdaptStrategy(new CustomAutoAdaptStrategy()); //自定义策略
     }
 
 }

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 /**
  * @author by DELL
@@ -86,6 +87,31 @@ public class PermissionsUtil {
         } else {
             //没权限就去请求
             ActivityCompat.requestPermissions(activity, permissions, requestCode);
+        }
+    }
+
+    /**
+     * 请求权限
+     */
+    public void requestPermissions(@NonNull Fragment fragment, @NonNull String[] permissions,
+                                   @NonNull OnPermissionsListener listener) {
+        requestPermissions(fragment, permissions, REQUEST_CODE, listener);
+    }
+
+    public void requestPermissions(@NonNull Fragment fragment, @NonNull String[] permissions, int requestCode,
+                                   @NonNull OnPermissionsListener listener) {
+        requestPermissions = permissions;
+        onPermissionsListener = listener;
+
+        if (requestPermissions == null || onPermissionsListener == null) {
+            throw new IllegalArgumentException("permissions or onPermissionsListener is null");
+        }
+
+        if (hasPermissions(fragment.getContext(), permissions)) {
+            listener.onPermissionGranted(requestCode);
+        } else {
+            //没权限就去请求
+            fragment.requestPermissions(permissions, requestCode);
         }
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="widget_loading_dialog" parent="android:Theme.Dialog">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="LoadingDialogStyle" parent="android:Theme.Dialog" tools:ignore="ResourceName">
         <!--提示框是否有边框-->
         <item name="android:windowFrame">@null</item>
         <!-- 背景颜色及透明程度 -->

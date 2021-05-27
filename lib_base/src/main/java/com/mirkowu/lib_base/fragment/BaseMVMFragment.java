@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,7 +15,6 @@ import androidx.lifecycle.LifecycleOwner;
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
-import com.mirkowu.lib_base.util.InstanceFactory;
 
 
 public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment implements IBaseView {
@@ -39,6 +39,9 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         this.title = title;
     }
 
+    public <T extends View> T findViewById(@IdRes int id) {
+        return getView().findViewById(id);
+    }
 
     @Nullable
     @Override
@@ -47,7 +50,6 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         return mView;
     }
 
-    protected abstract int getLayoutId();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         initialize();
     }
 
+    protected abstract int getLayoutId();
 
     protected abstract void initialize();
 

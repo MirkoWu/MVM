@@ -11,10 +11,13 @@ public class MVMApplication extends Application {
     public void onCreate() {
         super.onCreate();
         // LeakCanary.INSTANCE(this);
+//        if (!ProcessUtils.isMainProcess(this)) {
+//            return;
+//        }
+        LogUtil.init(BuildConfig.DEBUG);
+        AutoSizeManager.getInstance().setConfig(this);
 
         WebViewUtil.init(this);
-        LogUtil.init(BuildConfig.DEBUG);
-        AutoSizeManager.getInstance().setConfig();
-
     }
+
 }

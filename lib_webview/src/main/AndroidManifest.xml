@@ -14,8 +14,9 @@
 
     <application>
         <activity
-            android:name=".WebViewActivity"
+            android:name=".CommonWebActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:process=":webview"
             android:screenOrientation="portrait" />
 
         <!-- 该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。-->

@@ -56,7 +56,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         mMediator.mRequestImageListError.observe(this, errorBean -> {
             hideLoadingDialog();
             if (errorBean.isNetError()) {
-                binding.stateview.setShowState(R.mipmap.ic_launcher, errorBean.msg(), true);
+                binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
             } else if (errorBean.isBizError()) {
                 Toast.makeText(this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
             } else {

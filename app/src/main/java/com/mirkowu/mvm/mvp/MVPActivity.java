@@ -3,7 +3,6 @@ package com.mirkowu.mvm.mvp;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
@@ -36,6 +35,7 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
 //        tvTime = findViewById(R.id.tvTime);
 
         mMediator.getData();
+
     }
 
     public void getTimeClick(View view) {

@@ -13,22 +13,26 @@ import com.mirkowu.lib_util.FileUtil;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_webview.CommonWebView;
+import com.mirkowu.lib_webview.R;
 import com.tencent.smtt.sdk.WebChromeClient;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 public class DefaultWebViewFileChooser implements IWebViewFileChooser {
-    public static final String[] selectTypeArray = new String[]{"拍摄", "从相册中选择"};
-    public static final String ACCEPT_TYPE_IMAGE = "image/*";
-    public static final String ACCEPT_TYPE_VIDEO = "video/*";
-    public static final int REQ_CAMERA = 0x001010;
-    public static final int REQ_FILES = 0x001012;
+    private static final String TAG = DefaultWebViewFileChooser.class.getSimpleName();
+    private String[] mSelectTypeArray = null;
+    private static final String ACCEPT_TYPE_IMAGE = "image/*";
+    private static final String ACCEPT_TYPE_VIDEO = "video/*";
+    private static final int REQ_CAMERA = 0x001010;
+    private static final int REQ_FILES = 0x001012;
     private android.webkit.ValueCallback<Uri[]> mFilePathCallback;
-    private Activity context;
+    private WeakReference<Activity> mActivityWeakReference;
     private File mTempFle;
 
     public DefaultWebViewFileChooser(Activity activity) {
-        this.context = activity;
+        this.mActivityWeakReference = new WeakReference<>(activity);
+        this.mSelectTypeArray = new String[]{activity.getString(R.string.webview_chooser_camera), activity.getString(R.string.webview_chooser_album)};
     }
 
 
@@ -45,7 +49,10 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     }
 
     private void checkPermission(String type) {
-        PermissionsUtil.getInstance().requestPermissions(context, PermissionsUtil.PERMISSION_CAMERA, new PermissionsUtil.OnPermissionsListener() {
+        if (mActivityWeakReference.get() == null) {
+            return;
+        }
+        PermissionsUtil.getInstance().requestPermissions(mActivityWeakReference.get(), PermissionsUtil.PERMISSION_CAMERA, new PermissionsUtil.OnPermissionsListener() {
             @Override
             public void onPermissionGranted(int requestCode) {
                 fileChooser(type);
@@ -53,12 +60,12 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
 
             @Override
             public void onPermissionShowRationale(int requestCode, String[] permissions) {
-
+                LogUtil.e(TAG, "权限请求 requestPermissions onPermissionShowRationale");
             }
 
             @Override
             public void onPermissionDenied(int requestCode) {
-
+                LogUtil.e(TAG, "权限请求 requestPermissions onPermissionDenied");
             }
         });
     }
@@ -76,16 +83,16 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
             case REQ_FILES:
                 Uri uri = data.getData();
                 if (uri != null) {
-                    String absolutePath = FileUtil.getRealFilePath(context, uri);
+                    String absolutePath = FileUtil.getRealFilePath(mActivityWeakReference.get(), uri);
                     if (absolutePath != null) {
                         File file = new File(absolutePath);
                         onReceiveValue(file);
                     } else {
-                        LogUtil.e("选取失败");
+                        LogUtil.e(TAG, "选取失败");
                         onReceiveValue(null);
                     }
                 } else {
-                    LogUtil.e("选取失败");
+                    LogUtil.e(TAG, "选取失败");
                     onReceiveValue(null);
                 }
         }
@@ -99,8 +106,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         switch (acceptType) {
             case ACCEPT_TYPE_IMAGE:
             case ACCEPT_TYPE_VIDEO:
-                new AlertDialog.Builder(context)
-                        .setItems(selectTypeArray, (dialogInterface, index) -> {
+                new AlertDialog.Builder(mActivityWeakReference.get())
+                        .setItems(mSelectTypeArray, (dialogInterface, index) -> {
                             if (index == 0) {
                                 openCamera(acceptType);
                             } else {
@@ -142,8 +149,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
             file.mkdirs();
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                FileUtil.createUri(context, mTempFle));
-        context.startActivityForResult(intent, REQ_CAMERA);
+                FileUtil.createUri(mActivityWeakReference.get(), mTempFle));
+        mActivityWeakReference.get().startActivityForResult(intent, REQ_CAMERA);
     }
 
     /**
@@ -159,8 +166,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
             file.mkdirs();
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                FileUtil.createUri(context, mTempFle));
-        context.startActivityForResult(intent, REQ_CAMERA);
+                FileUtil.createUri(mActivityWeakReference.get(), mTempFle));
+        mActivityWeakReference.get().startActivityForResult(intent, REQ_CAMERA);
     }
 
     /**
@@ -175,7 +182,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         intent.setAction(Intent.ACTION_PICK);
         //使用以上这种模式，并添加以上两句
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, type);
-        context.startActivityForResult(intent, REQ_FILES);
+        mActivityWeakReference.get().startActivityForResult(intent, REQ_FILES);
     }
 
 
@@ -190,7 +197,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);
         intent.setType("*/*");
-        context.startActivityForResult(Intent.createChooser(intent, "选择要导入的文件"), requestCode);
+        mActivityWeakReference.get().startActivityForResult(
+                Intent.createChooser(intent, "选择要导入的文件"), requestCode);
     }
 
     /**

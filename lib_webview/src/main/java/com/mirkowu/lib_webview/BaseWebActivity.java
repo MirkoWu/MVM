@@ -20,7 +20,7 @@
 //    }
 //    @Override
 //    protected int getLayoutId() {
-//        return R.layout.webview_activity_web_view;
+//        return R.layout.webview_layout_common_web_view;
 //    }
 //
 //    private CommonWebView mWebView;

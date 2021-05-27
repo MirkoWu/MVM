@@ -3,6 +3,7 @@
     package="com.mirkowu.mvm">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".MVMApplication"
         android:allowBackup="true"
@@ -13,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".recycelerview.GridListActivity"></activity>
+        <activity
+            android:name=".WebActivity"
+            android:process=":webview"></activity>
+        <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".viewbinding.DataBindingActivity" />
         <activity android:name=".mvc.MVCActivity" />
         <activity android:name=".mvp.MVPActivity" />

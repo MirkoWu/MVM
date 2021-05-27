@@ -31,7 +31,6 @@ public class StateView extends LinearLayout {
     private CharSequence refreshText;
     private Integer hintImgResId;
     private Integer loadingImgResId;
-    private Integer loadingAnimResId;
     private Integer refreshBackgroundId;
     private boolean isShowRefresh;
     private AnimationDrawable animationDrawable;
@@ -167,6 +166,10 @@ public class StateView extends LinearLayout {
 
     public void setGoneState() {
         setState(ViewState.GONE);
+    }
+
+    public void setShowState() {
+        setState(ViewState.SHOW);
     }
 
     public void setShowState(@DrawableRes Integer imgResId, CharSequence hint) {

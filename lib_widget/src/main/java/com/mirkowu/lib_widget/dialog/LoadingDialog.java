@@ -25,7 +25,7 @@ public class LoadingDialog extends Dialog {
     }
 
     public LoadingDialog(Context context, CharSequence msg) {
-        super(context, R.style.widget_loading_dialog);
+        super(context, R.style.LoadingDialogStyle);
 
         mView = View.inflate(context, R.layout.widget_dialog_loading, null);
         mLoadingTextView = mView.findViewById(R.id.mLoadingTextView);

@@ -2,7 +2,6 @@ package com.mirkowu.lib_webview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,31 +18,30 @@ import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
 import com.mirkowu.lib_webview.setting.WebSettingUtil;
 import com.mirkowu.lib_widget.Toolbar;
-import com.mirkowu.lib_widget.stateview.StateView;
-import com.tencent.smtt.sdk.ValueCallback;
-import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
 
 import me.jessyan.autosize.internal.CancelAdapt;
 
-
-public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
-
-
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_URL = "url";
+/**
+ * 通用的WebView
+ * 1.支持X5
+ * 2.支持JsBridge
+ */
+public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_URL = "url";
 
     public static void start(Context context, String title, String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
-        Intent starter = new Intent(context, WebViewActivity.class);
+        Intent starter = new Intent(context, CommonWebActivity.class);
         starter.putExtra(KEY_TITLE, title);
         starter.putExtra(KEY_URL, url);
         context.startActivity(starter);
     }
 
     private Toolbar mToolbar;
-    private StateView mStateView;
     private CommonWebView mWebView;
     private ProgressBar mProgressBar;
     private IWebViewCallBack mWebViewCallBack;
@@ -56,7 +54,7 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.webview_activity_web_view;
+        return R.layout.webview_layout_common_web_view;
     }
 
     @Override
@@ -64,56 +62,21 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
         String title = getIntent().getStringExtra(KEY_TITLE);
         String url = getIntent().getStringExtra(KEY_URL);
 
-
         mToolbar = findViewById(R.id.mToolbar);
-        mToolbar.setTitle(title);
-        mToolbar.setVisibility(View.VISIBLE);
-
-        mWebView = findViewById(R.id.mWebView);
         mProgressBar = findViewById(R.id.mProgressBar);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mStateView = findViewById(R.id.mStateView);
-        mStateView.setOnRefreshListener(() -> mWebView.reload());
-        mStateView.setLoadingState();
+        mWebView = findViewById(R.id.mWebView);
+        getLifecycle().addObserver(mWebView);
 
         WebConfig webConfig = getWebConfig();
         mWebViewCallBack = webConfig.getWebViewCallBack();
 
-        getLifecycle().addObserver(mWebView);
+        mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
+        mToolbar.setBackIcon(webConfig.isShowBack());
+        mToolbar.setTitle(title);
 
         configWebSettings(webConfig);
         mWebView.clearHistory();
         mWebView.loadUrl(url);
-
-//
-//        mWebView.registerHandler("JSCallNative", new BridgeHandler() {
-//
-//            @Override
-//            public void handler(String data, CallBackFunction function) {
-//                System.out.println("registerHandler  handler = JSCallNative, data from web = " + data);
-//
-//                function.onCallBack("submitFromWeb exe, response data 中文 from Java");
-//            }
-//
-//        });
-//
-//        Message user = new Message();
-//        user.setData("我是Message");
-//
-//        mWebView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mWebView.callHandler("nativeCallJs", new Gson().toJson(user), new CallBackFunction() {
-//                    @Override
-//                    public void onCallBack(String data) {
-//                        System.out.println("nativeCallJs js回复 onCallBack = " + data);
-//                    }
-//                });
-//
-//                mWebView.send("hello");
-//            }
-//        }, 1000L);
-
     }
 
     protected void configWebSettings(WebConfig webConfig) {
@@ -127,9 +90,11 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
 
 
     protected WebConfig getWebConfig() {
-        return new WebConfig().setShowProgress(true)
-                .setShowBack(false)
-                .setJsInjectionArrays(new String[]{"android"})
+        return new WebConfig()
+                .setShowBack(true)
+                .setShowToolbar(true)
+                .setShowProgress(true)
+//                .setJsInjectionArrays(new String[]{"android"})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
@@ -138,12 +103,10 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
 
                     @Override
                     public void pageFinished(CommonWebView webView, String url) {
-                        mStateView.setGoneState();
                     }
 
                     @Override
                     public void onReceivedError(BaseWebViewClient client, CommonWebView view, int errorCode, String description, String failingUrl) {
-
                     }
 
                     @Override
@@ -158,23 +121,6 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
 
                 });
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        WebViewUtil.onResume(mWebView);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        WebViewUtil.onPause(mWebView);
-//    }
-//    @Override
-//    protected void onDestroy() {
-//        WebViewUtil.clearWebView(mWebView);
-//        super.onDestroy();
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -195,5 +141,36 @@ public class WebViewActivity extends BaseMVMActivity implements CancelAdapt {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 方式2：加载html文本
+     *
+     * @param content
+     */
+    void loadHtmlText(String content) {
+        WebSettings webSettings = mWebView.getSettings();
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(false); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(false); // 缩放至屏幕的大小
+
+
+        /*** 完美自适应屏幕  */
+        StringBuilder sb = new StringBuilder();
+        sb.append(content)
+                .append("<html>")
+                .append("<head>")
+                .append("<meta charset=\\\"utf-8\\\">")
+                .append("<meta id=\\\"viewport\\\" name=\\\"viewport\\\" content=\\\"width=device-width*0.9,initial-scale=1.0,maximum-scale=1.0,user-scalable=false\\\" />")
+                .append("<meta name=\\\"apple-mobile-web-app-capable\\\" content=\\\"yes\\\" />")
+                .append("<meta name=\\\"apple-mobile-web-app-status-bar-style\\\" content=\\\"black\\\" />")
+                .append("<meta name=\\\"black\\\" name=\\\"apple-mobile-web-app-status-bar-style\\\" />")
+                .append("<style>img{width:100%;}</style>")
+                .append("<style>iframe{width:100%;}</style>")
+                .append("<style>table{width:100%;}</style>")
+                .append("<style>body{font-size:18px;}</style>")
+                .append("<title>mWebView</title>");
+
+
+        mWebView.loadDataWithBaseURL(null, sb.toString(), "text/html", "utf-8", null);
+    }
 
 }
