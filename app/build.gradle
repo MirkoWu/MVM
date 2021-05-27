@@ -56,6 +56,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+//    implementation "com.github.mirkowu:mvm:$ext.mvm_version" //总仓库
+//    implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
     implementation project(path: ':lib_base')
     implementation project(path: ':lib_widget')
     implementation project(path: ':lib_util')

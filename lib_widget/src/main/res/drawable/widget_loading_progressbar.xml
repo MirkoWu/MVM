@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/widget_ic_loading"
-    android:pivotX="50%"
-    android:pivotY="50%" /><!-- 进度提示（转圈圈） -->
+<rotate xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 进度提示（转圈圈） 最外层要是 rotate-->
+    <rotate
+        android:drawable="@drawable/widget_ic_loading"
+        android:duration="200"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%" />
+</rotate>

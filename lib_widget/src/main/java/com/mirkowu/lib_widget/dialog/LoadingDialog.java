@@ -21,7 +21,7 @@ public class LoadingDialog extends Dialog {
     private View mView;
 
     public LoadingDialog(Context context) {
-        this(context, "");
+        this(context, context.getString(R.string.widget_loading));
     }
 
     public LoadingDialog(Context context, CharSequence msg) {
