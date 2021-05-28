@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_webview.callback.DefaultWebViewFileChooser;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.client.BaseWebChromeClient;
@@ -59,6 +60,7 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
 
     @Override
     protected void initialize() {
+        BarUtils.setStatusBarLightMode(this, true);
         String title = getIntent().getStringExtra(KEY_TITLE);
         String url = getIntent().getStringExtra(KEY_URL);
 

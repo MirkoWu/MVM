@@ -16,6 +16,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".WebActivity"
+            android:theme="@style/WebViewTheme"
             android:process=":webview"></activity>
         <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".viewbinding.DataBindingActivity" />

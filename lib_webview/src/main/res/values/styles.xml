@@ -1,0 +1,17 @@
+<resources>
+    <style name="WebViewTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <item name="colorPrimaryDark">#FFFFFF</item>
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">#F5F5F5</item>
+        <!--  自定义actionBarSize高度-->
+        <item name="actionBarSize">48dp</item>
+        <item name="android:actionBarSize">48dp</item>
+        <!--        <item name="toolbarStyle">@style/myToolbarStyle</item>-->
+        <!--        <item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>-->
+    </style>
+</resources>
