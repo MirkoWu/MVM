@@ -167,7 +167,6 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
             } else if (mInnerContainer instanceof ScrollView) {
                 mInnerContainer.scrollTo(0, 0);
             }
-
         }
         if (mRefreshLayout != null && !mRefreshLayout.isRefreshing()) {
             mRefreshLayout.autoRefresh();

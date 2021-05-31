@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mirkowu.lib_base">
 
-
+    <!--全面屏适配 声明支持的最大屏幕高宽比-->
+    <meta-data
+        android:name="android.max_aspect"
+        android:value="2.4" />
 </manifest>

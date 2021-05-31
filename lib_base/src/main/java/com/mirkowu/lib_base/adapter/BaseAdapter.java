@@ -23,11 +23,21 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         return this.mData;
     }
 
+    /**
+     * 设置数据
+     *
+     * @param list
+     */
     public void setData(List<T> list) {
         this.mData = list == null ? new ArrayList<>() : list;
         notifyDataSetChanged();
     }
 
+    /**
+     * 添加列表数据
+     *
+     * @param list
+     */
     public void addData(List<T> list) {
         list = list == null ? new ArrayList<>() : list;
         int size = this.mData.size();
@@ -36,6 +46,11 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         compatibilityDataSizeChanged(list.size());
     }
 
+    /**
+     * 添加单个数据
+     *
+     * @param item
+     */
     public void addData(T item) {
         int size = this.mData.size();
         this.mData.add(item);
@@ -43,18 +58,85 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         compatibilityDataSizeChanged(1);
     }
 
+    /**
+     * 添加指定位置的数据
+     *
+     * @param position
+     * @param item
+     */
     public void addData(int position, T item) {
         this.mData.add(position, item);
         notifyItemInserted(position);
         compatibilityDataSizeChanged(1);
     }
 
-
-    public void removeData(int position) {
-        this.mData.remove(position);
-        notifyItemRemoved(position);
+    /**
+     * 更新指定位置的数据
+     *
+     * @param position
+     * @param data
+     */
+    public void updateData(int position, T data) {
+        this.mData.set(position, data);
+        notifyItemChanged(position);
         compatibilityDataSizeChanged(0);
     }
+
+    /**
+     * 移除指定位置的数据
+     *
+     * @param position
+     */
+    public T removeData(int position) {
+        T data = this.mData.remove(position);
+        notifyItemRemoved(position);
+        compatibilityDataSizeChanged(0);
+        return data;
+    }
+
+    /**
+     * 移除指定数据 （顺序）
+     *
+     * @param data
+     */
+    public boolean removeData(T data) {
+        int position = this.mData.indexOf(data);
+        if (position > -1) {
+            this.mData.remove(position);
+            notifyItemRemoved(position);
+            compatibilityDataSizeChanged(0);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 移除列表中最后一个指定的数据 （逆序）
+     *
+     * @param data
+     * @return
+     */
+    public boolean removeLastData(T data) {
+        int position = this.mData.lastIndexOf(data);
+        if (position > -1) {
+            this.mData.remove(position);
+            notifyItemRemoved(position);
+            compatibilityDataSizeChanged(0);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 情况所有数据
+     *
+     * @param data
+     */
+    public void clearAll(T data) {
+        this.mData.clear();
+        notifyDataSetChanged();
+    }
+
 
     /**
      * 防止未被刷新

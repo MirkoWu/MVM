@@ -1,10 +1,11 @@
 package com.mirkowu.mvm.viewbinding
 
+import com.mirkowu.lib_network.state.observerRequest
+import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDataBindingBinding
-import com.mirkowu.mvm.mvvm.MVVMMediator
 
-class DataBindingActivity : BaseActivity<MVVMMediator>() {
+class DataBindingActivity : BaseActivity<DBMediator>() {
 
     val binding by binding(ActivityDataBindingBinding::inflate)
 
@@ -16,5 +17,16 @@ class DataBindingActivity : BaseActivity<MVVMMediator>() {
 
     override fun initialize() {
         //  binding.btnTest.text = "sssss"
+
+        mMediator.mImageListData.observerRequest(this,
+                onSuccess = {
+                    LogUtil.d("onSuccess")
+                },
+                onFailure = {
+                    LogUtil.d("onFailure")
+                }
+        )
+
+        mMediator.loadImage(1, 10)
     }
 }

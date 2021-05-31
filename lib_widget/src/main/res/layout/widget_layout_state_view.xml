@@ -12,21 +12,22 @@
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:visibility="gone"
         android:layout_marginBottom="30dp"
-        android:scaleType="center" />
+        android:scaleType="center"
+        android:visibility="gone" />
 
 
     <ImageView
         android:id="@+id/ivHint"
-        android:layout_width="263dp"
-        android:layout_height="170dp"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="#B3B3B3"
         android:textSize="13dp"

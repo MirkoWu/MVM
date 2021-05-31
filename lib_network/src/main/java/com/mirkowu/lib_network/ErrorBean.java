@@ -1,19 +1,19 @@
 package com.mirkowu.lib_network;
 
 public class ErrorBean {
-    private final int errorType;
+    private final ErrorType errorType;
     private final int code;
     private final String msg;
 
 
-    public ErrorBean(int errorType, int code, String msg) {
+    public ErrorBean(ErrorType errorType, int code, String msg) {
 
         this.errorType = errorType;
         this.code = code;
         this.msg = msg;
     }
 
-    public int errorType() {
+    public ErrorType errorType() {
         return errorType;
     }
 
@@ -26,12 +26,10 @@ public class ErrorBean {
     }
 
     public boolean isNetError() {
-        return errorType == ErrorType.ERROR_HTTP
-                || errorType == ErrorType.ERROR_NET_CONNECT
-                || errorType == ErrorType.ERROR_NET_TIMEOUT;
+        return errorType == ErrorType.NET;
     }
 
-    public boolean isBizError() {
-        return errorType == ErrorType.ERROR_API || errorType == ErrorType.ERROR_BUSINESS;
+    public boolean isApiError() {
+        return errorType == ErrorType.API;
     }
 }

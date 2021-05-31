@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.util.RxLife;
+import com.mirkowu.lib_network.ErrorType;
 import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
@@ -55,7 +56,7 @@ public class MVCActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(int errorType, int code, String msg) {
+                    public void onFailure(ErrorType errorType, int code, String msg) {
 
                     }
 

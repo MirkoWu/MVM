@@ -1,15 +1,27 @@
-package com.mirkowu.mvm
+package com.mirkowu.lib_util.ktxutil
 
 import android.view.View
 
-fun <T : View> T.click(block: (T) -> Unit) {
+/**
+ * 点击事件
+ */
+fun View.click(block: (view:View) -> Unit) {
+    setOnClickListener { block(this) }
+}
+
+/**
+ * 防止重复点击
+ */
+fun <T : View> T.clickFilter(delay: Long = 500, block: (view:View) -> Unit) {
     setOnClickListener {
-        block(this)
+        if (clickDelayEnable(delay)) {
+            block(this)
+        }
     }
 }
 
 /**
- * 带登录监测的点击事件
+ * 延迟判断逻辑
  */
 private fun <T : View> T.clickDelayEnable(delay: Long = 500): Boolean {
     val tag = getTag(id)
@@ -20,20 +32,6 @@ private fun <T : View> T.clickDelayEnable(delay: Long = 500): Boolean {
         setTag(id, curTime)
     }
     return enable
-}
-
-/**
- * 防止重复点击
- */
-fun <T : View> T.clickFilter(delay: Long = 500, block: (T) -> Unit) {
-    setOnClickListener {
-        if (clickDelayEnable(delay)) {
-            block(this)
-        }/* else {
-            // L.i("clickFilter", "无效点击")
-        }*/
-
-    }
 }
 
 ///**

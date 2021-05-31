@@ -4,6 +4,7 @@ import com.mirkowu.lib_util.LogUtil;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.observers.DisposableObserver;
@@ -23,7 +24,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         try {
             onSuccess(o);
         } catch (Throwable t) {
-            onFailure(ErrorType.ERROR_BUSINESS, 0, t.getMessage());
+            onFailure(ErrorType.API, ErrorCode.ERROR_BUSINESS, t.getMessage());
         }
     }
 
@@ -31,23 +32,26 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
     public void onError(@NonNull Throwable e) {
         onFinish();
         if (!(e instanceof RxJava2NullException)) {
-            LogUtil.e(e, "网络请求Error");
+            LogUtil.e(e, "AbsRxObserver 网络请求Error");
         }
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);
-        } else if (e instanceof ConnectException) {
-            onFailure(ErrorType.ERROR_NET_CONNECT, 0, "网络连接失败，请检查网络！");
-        } else if (e instanceof SocketTimeoutException) {
-            onFailure(ErrorType.ERROR_NET_TIMEOUT, 0, "请求超时，请稍候重试！");
-        } else if (e instanceof HttpException) {
-            HttpException httpException = (HttpException) e;
-            onFailure(ErrorType.ERROR_HTTP, httpException.code(), httpException.message());
         } else if (e instanceof ApiException) {
-            //api 异常
+            //api异常
             ApiException apiException = (ApiException) e;
-            onFailure(ErrorType.ERROR_API, apiException.code(), apiException.msg());
+            onFailure(ErrorType.API, apiException.code(), apiException.msg());
+        } else if (e instanceof HttpException) {
+            //网络错误
+            HttpException httpException = (HttpException) e;
+            onFailure(ErrorType.NET, httpException.code(), httpException.message());
+        } else if (e instanceof ConnectException) {
+            onFailure(ErrorType.NET, ErrorCode.NET_CONNECT, "网络连接失败，请检查网络！");
+        } else if (e instanceof SocketTimeoutException) {
+            onFailure(ErrorType.NET, ErrorCode.NET_TIMEOUT, "请求超时，请稍候重试！");
+        } else if (e instanceof UnknownHostException) {
+            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWNHOST, "请求失败，无法连接到服务器！");
         } else {
-            onFailure(ErrorType.ERROR_UNKNOW, 0, "请求失败，" + e.getMessage());
+            onFailure(ErrorType.UNKONW, ErrorCode.UNKNOW, "请求失败，" + e.getMessage());
         }
     }
 
@@ -74,5 +78,5 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      * @param code
      * @param msg
      */
-    public abstract void onFailure(int errorType, int code, String msg);
+    public abstract void onFailure(ErrorType errorType, int code, String msg);
 }

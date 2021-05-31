@@ -51,12 +51,30 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
     }
 
     public void showLoadingDialog() {
-        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(true);
+        if (mView != null) {
+            mView.showLoadingDialog();
+        }
+    }
+
+    public void showLoadingDialog(String msg) {
+        if (mView != null) {
+            mView.showLoadingDialog(msg);
+        }
     }
 
     public void hideLoadingDialog() {
-        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
+        if (mView != null) {
+            mView.hideLoadingDialog();
+        }
     }
+
+//    public void showLoadingDialog() {
+//        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(true);
+//    }
+//
+//    public void hideLoadingDialog() {
+//        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
+//    }
 
     public void jumpPage(@NonNull String path) {
         if (!TextUtils.isEmpty(path)) {

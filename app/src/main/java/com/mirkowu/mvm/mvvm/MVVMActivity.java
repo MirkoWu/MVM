@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mirkowu.lib_base.widget.RefreshHelper;
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
-import com.mirkowu.mvm.bean.GankImageBean;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
-
-import java.util.List;
 
 public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshHelper.OnRefreshListener {
 
@@ -46,24 +43,37 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         binding.rvImage.setAdapter(imageAdapter);
         binding.rvImage.setLayoutManager(new LinearLayoutManager(this));
 
-        mMediator.mRequestImageListData.observe(this, new Observer<List<GankImageBean>>() {
-            @Override
-            public void onChanged(List<GankImageBean> gankImageBeans) {
-                hideLoadingDialog();
-                refreshHelper.setLoadMore(imageAdapter, gankImageBeans);
-            }
-        });
-        mMediator.mRequestImageListError.observe(this, errorBean -> {
+//        LiveDataUtilKt.observerRequest(mMediator.mRequestImageListData, this,
+//                () -> null, () -> null,
+//                gankImageBeans -> {
+//                    refreshHelper.setLoadMore(imageAdapter, gankImageBeans);
+//                    return null;
+//                }, errorBean -> {
+//                    if (errorBean.isNetError()) {
+//                        binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+//                    } else if (errorBean.isApiError()) {
+//                        Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    return null;
+//                });
+        mMediator.mRequestImageListData.observe(this, responseData -> {
             hideLoadingDialog();
-            if (errorBean.isNetError()) {
-                binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
-            } else if (errorBean.isBizError()) {
-                Toast.makeText(this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+            if (responseData.isSuccess()) {
+                refreshHelper.setLoadMore(imageAdapter, responseData.getData());
+            } else if (responseData.isFailure()) {
+                refreshHelper.finishLoad();
+                ErrorBean errorBean = responseData.errorBean;
+                if (errorBean.isNetError()) {
+                    binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                } else if (errorBean.isApiError()) {
+                    Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
 
         binding.stateview.setLoadingState(R.mipmap.ic_launcher, "加载中");
         binding.stateview.setOnRefreshListener(() -> refreshHelper.autoRefresh());
@@ -73,7 +83,8 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
 
     @Override
     public void onLoadData(int page) {
-        //showLoadingDialog();
+        showLoadingDialog();
+//        binding.stateview.setGoneState();
         mMediator.loadImage(page, refreshHelper.getPageCount());
     }
 

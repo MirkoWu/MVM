@@ -19,9 +19,9 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
 public class BizModel extends BaseModel {
 
-    public Observable<GankBaseBean<List<GankImageBean>>> loadImage(int pageSize,int page) {
+    public Observable<GankBaseBean<List<GankImageBean>>> loadImage(int page, int pageSize) {
         return GankClient.getGankApi()
-                .loadImage(pageSize, page)
+                .loadImage(page, pageSize)
                 .compose(RxScheduler.ioToMain());
     }
 
