@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.mirkowu.lib_base.R;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_util.PermissionsUtil;
@@ -78,7 +79,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     @Override
     public void showLoadingDialog() {
-        showLoadingDialog("加载中...");
+        showLoadingDialog(getString(R.string.widget_loading));
     }
 
     @Override

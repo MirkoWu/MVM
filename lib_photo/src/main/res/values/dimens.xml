@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ivp_image_size">120dp</dimen>
+    <dimen name="ivp_space_size">2dp</dimen>
+    <dimen name="ivp_folder_cover_size">72dp</dimen>
+</resources>

@@ -59,8 +59,9 @@ public class PermissionsUtil {
         void onPermissionDenied(int requestCode);
     }
 
-    private static String[] requestPermissions;
-    private static OnPermissionsListener onPermissionsListener;
+    private static int mRequestCode;
+    private static String[] mRequestPermissions;
+    private static OnPermissionsListener mOnPermissionsListener;
     private static final int REQUEST_CODE = 1;
     private static final int REQUEST_CODE_DETAIL_SETTING = 1022;
 
@@ -75,10 +76,11 @@ public class PermissionsUtil {
 
     public void requestPermissions(@NonNull Activity activity, @NonNull String[] permissions, int requestCode,
                                    @NonNull OnPermissionsListener listener) {
-        requestPermissions = permissions;
-        onPermissionsListener = listener;
+        mRequestPermissions = permissions;
+        mOnPermissionsListener = listener;
+        mRequestCode = requestCode;
 
-        if (requestPermissions == null || onPermissionsListener == null) {
+        if (mRequestPermissions == null || mOnPermissionsListener == null) {
             throw new IllegalArgumentException("permissions or onPermissionsListener is null");
         }
 
@@ -100,10 +102,11 @@ public class PermissionsUtil {
 
     public void requestPermissions(@NonNull Fragment fragment, @NonNull String[] permissions, int requestCode,
                                    @NonNull OnPermissionsListener listener) {
-        requestPermissions = permissions;
-        onPermissionsListener = listener;
+        mRequestPermissions = permissions;
+        mOnPermissionsListener = listener;
+        mRequestCode = requestCode;
 
-        if (requestPermissions == null || onPermissionsListener == null) {
+        if (mRequestPermissions == null || mOnPermissionsListener == null) {
             throw new IllegalArgumentException("permissions or onPermissionsListener is null");
         }
 
@@ -135,10 +138,19 @@ public class PermissionsUtil {
         return false;
     }
 
+    public static boolean shouldRationale(Fragment fragment, String[] permissions) {
+        for (String perms : permissions) {
+            if (fragment.shouldShowRequestPermissionRationale(perms)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void onRequestPermissionsResult(Activity activity, int requestCode, String[] permissions, int[] grantResults) {
         //有可能会返回空数组,做下判断
-        if (requestCode == REQUEST_CODE && grantResults != null && grantResults.length > 0) {
+        if (requestCode == mRequestCode && grantResults != null && grantResults.length > 0) {
             boolean isGranted = true;
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -147,13 +159,36 @@ public class PermissionsUtil {
                 }
             }
 
-            if (onPermissionsListener != null) {
+            if (mOnPermissionsListener != null) {
                 if (isGranted) {
-                    onPermissionsListener.onPermissionGranted(requestCode);
-                } else if (shouldRationale(activity, requestPermissions)) {
-                    onPermissionsListener.onPermissionShowRationale(requestCode, requestPermissions);
+                    mOnPermissionsListener.onPermissionGranted(requestCode);
+                } else if (shouldRationale(activity, mRequestPermissions)) {
+                    mOnPermissionsListener.onPermissionShowRationale(requestCode, mRequestPermissions);
                 } else {
-                    onPermissionsListener.onPermissionDenied(requestCode);
+                    mOnPermissionsListener.onPermissionDenied(requestCode);
+                }
+            }
+        }
+    }
+
+    public void onRequestPermissionsResult(Fragment fragment, int requestCode, String[] permissions, int[] grantResults) {
+        //有可能会返回空数组,做下判断
+        if (requestCode == mRequestCode && grantResults != null && grantResults.length > 0) {
+            boolean isGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    isGranted = false;
+                    break;
+                }
+            }
+
+            if (mOnPermissionsListener != null) {
+                if (isGranted) {
+                    mOnPermissionsListener.onPermissionGranted(requestCode);
+                } else if (shouldRationale(fragment, mRequestPermissions)) {
+                    mOnPermissionsListener.onPermissionShowRationale(requestCode, mRequestPermissions);
+                } else {
+                    mOnPermissionsListener.onPermissionDenied(requestCode);
                 }
             }
         }
@@ -162,8 +197,16 @@ public class PermissionsUtil {
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
-            if (onPermissionsListener != null) {
-                requestPermissions(activity, requestPermissions, requestCode, onPermissionsListener);
+            if (mOnPermissionsListener != null) {
+                requestPermissions(activity, mRequestPermissions, requestCode, mOnPermissionsListener);
+            }
+        }
+    }
+
+    public void onActivityResult(Fragment fragment, int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
+            if (mOnPermissionsListener != null) {
+                requestPermissions(fragment, mRequestPermissions, requestCode, mOnPermissionsListener);
             }
         }
     }

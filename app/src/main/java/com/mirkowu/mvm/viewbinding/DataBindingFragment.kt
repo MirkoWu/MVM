@@ -1,21 +1,23 @@
 package com.mirkowu.mvm.viewbinding
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_util.PermissionsUtil
+import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_widget.dialog.PromptDialog
-
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.mvvm.MVVMMediator
+import java.util.*
 
 class DataBindingFragment : BaseFragment<MVVMMediator>() {
     companion object {
@@ -60,6 +62,28 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.tvBoldMid.setMediumStyle()
         binding.tvBoldDefault.setBoldWith(1.5f)
         binding.tvNormal.apply { paint.isFakeBoldText = true }
+
+        binding.btnZh.click { LanguageUtils.applyLanguage(Locale.SIMPLIFIED_CHINESE, true) }
+        binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, true) }
+        binding.btnPermission.click {
+            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.PERMISSION_CAMERA,
+                    object : PermissionsUtil.OnPermissionsListener {
+                        override fun onPermissionGranted(requestCode: Int) {
+                            Log.d(TAG, "onPermissionGranted: ")
+                        }
+
+                        override fun onPermissionShowRationale(requestCode: Int, permissions: Array<out String>?) {
+                            Log.d(TAG, "onPermissionShowRationale: ")
+
+                        }
+
+                        override fun onPermissionDenied(requestCode: Int) {
+                            Log.d(TAG, "onPermissionDenied: ")
+
+                        }
+
+                    })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

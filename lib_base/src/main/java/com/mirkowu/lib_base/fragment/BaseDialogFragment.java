@@ -35,7 +35,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements IBase
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setCancelable(false);//默认不能取消
+        setCancelable(false); //默认不能取消
         initialize();
     }
 

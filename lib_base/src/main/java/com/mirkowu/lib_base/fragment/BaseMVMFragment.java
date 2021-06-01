@@ -1,5 +1,6 @@
 package com.mirkowu.lib_base.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
+import com.mirkowu.lib_util.PermissionsUtil;
 
 
 public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment implements IBaseView {
@@ -118,6 +120,26 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
             ((BaseMVMActivity) getActivity()).hideLoadingDialog();
         }
     }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+    }
+
 
     /*** >>>>>>>>>>>>>>>>>>>> 懒加载 >>>>>>>>>>>>>>>>>>>> */
 

@@ -1,0 +1,24 @@
+<resources>
+    <string name="ivp_folder_all">所有照片</string>
+    <string name="ivp_preview">预览</string>
+    <string name="ivp_msg_no_camera">没有系统相机</string>
+    <string name="ivp_msg_amount_limit">已经达到最高选择数量</string>
+    <string name="ivp_action_done">完成</string>
+    <string name="ivp_photo_unit">张</string>
+    <string name="ivp_tip_take_photo">拍摄照片</string>
+    <string name="ivp_error_image_not_exist">图片错误</string>
+    <string name="ivp_error_no_permission">无权限</string>
+    <string name="ivp_permission_dialog_title">权限拒绝</string>
+    <string name="ivp_permission_lack">当前应用缺少必要权限，该功能暂时无法使用。如若需要，请单击【确定】按钮前往设置中心进行权限授权。</string>
+    <string name="ivp_permission_dialog_ok">好</string>
+    <string name="ivp_permission_dialog_cancel">拒绝</string>
+    <string name="ivp_permission_rationale">浏览图片需要您提供浏览存储权限</string>
+    <string name="ivp_permission_rationale_camera">拍摄照片需要您提供摄像头和存储权限</string>
+    <string name="ivp_permission_rationale_write_storage">保存拍照图片需要您提供写存储权限</string>
+    <string name="ivp_save">保存</string>
+    <string name="ivp_save_successed">已保存至%s</string>
+    <string name="ivp_save_failed">保存失败</string>
+    <string name="pick">选择</string>
+    <string name="max_count_more_zero">最大可选数量需大于 0 ！</string>
+
+</resources>

@@ -1,0 +1,25 @@
+<resources>
+    <string name="ivp_folder_all">All Images</string>
+    <string name="ivp_preview">Preview</string>
+    <string name="ivp_preview_position" translatable="false">%1$d/%2$d</string>
+    <string name="ivp_msg_no_camera">No system camera found</string>
+    <string name="ivp_msg_amount_limit">Select images amount is limit</string>
+    <string name="ivp_action_done">Done</string>
+    <string name="ivp_action_button_string" translatable="false">%1$s(%2$d/%3$d)</string>
+    <string name="ivp_photo_unit">Shot</string>
+    <string name="ivp_tip_take_photo">Take photo</string>
+    <string name="ivp_error_image_not_exist">Image error</string>
+    <string name="ivp_error_no_permission">Has no permission</string>
+    <string name="ivp_permission_dialog_title">Permission Deny</string>
+    <string name="ivp_permission_dialog_ok">OK</string>
+    <string name="ivp_permission_dialog_cancel">CANCEL</string>
+    <string name="ivp_permission_rationale">Storage read permission is needed to pick files.</string>
+    <string name="ivp_permission_rationale_camera">Camera permission And Storage write permission is needed to take photo.</string>
+    <string name="ivp_permission_rationale_write_storage">Storage write permission is needed to save the images.</string>
+    <string name="ivp_permission_lack">The current application lacks the necessary permissions, which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
+    <string name="ivp_save">Save</string>
+    <string name="ivp_save_successed">Saved to %s</string>
+    <string name="ivp_save_failed">Save failed</string>
+    <string name="pick">Pick</string>
+    <string name="max_count_more_zero">The maximum optional quantity must be greater than 0 ！</string>
+</resources>

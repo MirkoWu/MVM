@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImagePickerRecyclerView">
+        <attr name="ivp_imageScaleType" format="integer">
+            <enum name="matrix" value="0"></enum>
+            <enum name="fitXY" value="1"></enum>
+            <enum name="fitStart" value="2"></enum>
+            <enum name="fitCenter" value="3"></enum>
+            <enum name="fitEnd" value="4"></enum>
+            <enum name="center" value="5"></enum>
+            <enum name="centerCrop" value="6"></enum>
+            <enum name="centerInside" value="7"></enum>
+        </attr>
+        <attr name="ivp_itemShape" format="integer">
+            <enum name="square" value="0"></enum>
+            <enum name="size" value="1"></enum>
+        </attr>
+        <attr name="ivp_maxCount" format="integer"></attr>
+        <attr name="ivp_spanCount" format="integer"></attr>
+        <attr name="ivp_spacing" format="dimension"></attr>
+        <attr name="ivp_addImageSrc" format="reference"></attr>
+        <attr name="ivp_deleteImageSrc" format="reference"></attr>
+        <attr name="ivp_showAddImage" format="boolean"></attr>
+        <attr name="ivp_showDelete" format="boolean"></attr>
+    </declare-styleable>
+</resources>

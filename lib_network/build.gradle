@@ -43,25 +43,21 @@ dependencies {
 
     implementation project(':lib_util')
 
-    //    RxJava自动解绑
-    //api 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
+    // RxJava自动解绑
     api "com.uber.autodispose2:autodispose-androidx-lifecycle:$ext.autodispose_version"
 
     // RxJava3
     api "io.reactivex.rxjava3:rxjava:$ext.rxjava3_version"
     api "io.reactivex.rxjava3:rxandroid:$ext.rxandroid3_version"
 
-
-
-    //okhttp
+    // okhttp
     api 'com.squareup.okio:okio:2.2.2'
     api "com.squareup.okhttp3:okhttp:$ext.okhttp_version"
     api "com.squareup.okhttp3:logging-interceptor:$ext.okhttp_version"
 
-    //retrofit
+    // retrofit
     api "com.squareup.retrofit2:retrofit:$ext.retrofit_version"
     api "com.squareup.retrofit2:converter-gson:$ext.retrofit_version"
-//    api "com.squareup.retrofit2:adapter-rxjava2:$ext.retrofit_version"
     api "com.squareup.retrofit2:adapter-rxjava3:$ext.retrofit_version"
 
 

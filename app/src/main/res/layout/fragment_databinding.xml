@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.869" />
 
-  <Button
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="listClick"
@@ -92,8 +92,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="加粗字体"
-        app:boldStyle="medium"
-        android:textColor="#333333" />
+        android:textColor="#333333"
+        app:boldStyle="medium" />
 
     <TextView
         android:id="@+id/tv_normal"
@@ -106,6 +106,24 @@
         android:id="@+id/btn_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_zh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="中文" />
+
+    <Button
+        android:id="@+id/btn_en"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="英文" />
+
+    <Button
+        android:id="@+id/btn_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请求权限" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
