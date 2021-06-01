@@ -5,6 +5,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mirkowu.lib_base.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,6 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     public BaseAdapter(List<T> list) {
         this.mData = list == null ? new ArrayList<>() : list;
-        ;
     }
 
     public List<T> getData() {
@@ -65,6 +66,9 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      * @param item
      */
     public void addData(int position, T item) {
+        if (position < 0 || position >= this.mData.size()) {
+            return;
+        }
         this.mData.add(position, item);
         notifyItemInserted(position);
         compatibilityDataSizeChanged(1);
@@ -77,6 +81,9 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      * @param data
      */
     public void updateData(int position, T data) {
+        if (position < 0 || position >= this.mData.size()) {
+            return;
+        }
         this.mData.set(position, data);
         notifyItemChanged(position);
         compatibilityDataSizeChanged(0);
@@ -88,6 +95,9 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      * @param position
      */
     public T removeData(int position) {
+        if (position < 0 || position >= this.mData.size()) {
+            return null;
+        }
         T data = this.mData.remove(position);
         notifyItemRemoved(position);
         compatibilityDataSizeChanged(0);
@@ -128,11 +138,9 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     /**
-     * 情况所有数据
-     *
-     * @param data
+     * 清空所有数据
      */
-    public void clearAll(T data) {
+    public void clearAll() {
         this.mData.clear();
         notifyDataSetChanged();
     }
@@ -164,16 +172,76 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         T item = this.mData.get(position);
-        holder.itemView.setOnClickListener(v -> {
-            if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, item, position);
-            }
-        });
+
+        addOnItemClickListener(holder, position);
 
         onBindHolder(holder, item, position);
     }
 
     public abstract void onBindHolder(@NonNull VH holder, T item, int position);
+
+    /**
+     * Item添加点击事件
+     *
+     * @param holder
+     * @param position
+     */
+    private void addOnItemClickListener(VH holder, int position) {
+        if (mOnItemClickListener != null) {
+            holder.itemView.setTag(R.id.key_position, position);
+            holder.itemView.setOnClickListener(getOnItemClickListener());
+        }
+    }
+
+    private View.OnClickListener mDelegateOnItemClickListener;
+
+    private View.OnClickListener getOnItemClickListener() {
+        if (mDelegateOnItemClickListener == null) {
+            mDelegateOnItemClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = (int) view.getTag(R.id.key_position);
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(view, getItem(position), position);
+                    }
+                }
+            };
+        }
+        return mDelegateOnItemClickListener;
+    }
+
+
+    /**
+     * Child添加点击事件
+     *
+     * @param view
+     * @param position
+     * @return
+     */
+    protected void addOnItemChildClickListener(View view, int position) {
+        if (mOnItemChildClickListener != null) {
+            view.setTag(R.id.key_position, position);
+            view.setOnClickListener(getOnItemChildClickListener());
+        }
+    }
+
+    private View.OnClickListener mDelegateOnItemChildClickListener;
+
+    private View.OnClickListener getOnItemChildClickListener() {
+        if (mDelegateOnItemChildClickListener == null) {
+            mDelegateOnItemChildClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = (int) view.getTag(R.id.key_position);
+                    if (mOnItemChildClickListener != null) {
+                        mOnItemChildClickListener.onItemChildClick(view, getItem(position), position);
+                    }
+                }
+            };
+        }
+        return mDelegateOnItemChildClickListener;
+    }
+
 
     /**
      * item 点击事件
@@ -182,10 +250,10 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         void onItemClick(View view, T item, int position);
     }
 
-    protected OnItemClickListener mItemClickListener;
+    protected OnItemClickListener mOnItemClickListener;
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
-        mItemClickListener = itemClickListener;
+        mOnItemClickListener = itemClickListener;
     }
 
     /**
@@ -195,9 +263,9 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         void onItemChildClick(View view, T item, int position);
     }
 
-    protected OnItemChildClickListener mItemChildClickListener;
+    protected OnItemChildClickListener mOnItemChildClickListener;
 
     public void setOnItemChildClickListener(OnItemChildClickListener itemChildClickListener) {
-        mItemChildClickListener = itemChildClickListener;
+        mOnItemChildClickListener = itemChildClickListener;
     }
 }

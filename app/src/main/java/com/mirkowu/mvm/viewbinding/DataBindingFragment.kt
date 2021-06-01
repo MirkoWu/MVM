@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_widget.dialog.PromptDialog
 
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
@@ -41,7 +42,13 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnText.setOnClickListener {
             binding.btnText.text = "点击了${System.currentTimeMillis()}"
             DataBindingDialog(context!!).show()
+            PromptDialog().setTitle("温馨提示")
+                    .setContent("确认关闭吗？")
+                    .setUseDefaultButton()
+                    .setIcon(R.mipmap.ic_launcher)
+                    .show(childFragmentManager)
             showLoadingDialog("Toast测试")
+//            showLoadingDialog("Toast测试")
         }
         val list = mutableListOf("", "", "", "", "", "", "", "", "", "")
         val listAdapter = DataBindingAdapter(list)

@@ -1,9 +1,8 @@
 package com.mirkowu.lib_widget.dialog;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -13,60 +12,50 @@ import com.mirkowu.lib_widget.R;
 
 
 /**
- * @author: mirko
- * @date: 19-9-27
+ * 加载弹窗
  */
-public class LoadingDialog extends Dialog {
-    private TextView mLoadingTextView;
-    private View mView;
+public class LoadingDialog extends BaseDialog {
+    private String mMessage;
 
-    public LoadingDialog(Context context) {
-        this(context, context.getString(R.string.widget_loading));
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.widget_dialog_loading;
     }
 
-    public LoadingDialog(Context context, CharSequence msg) {
-        super(context, R.style.LoadingDialogStyle);
-
-        mView = View.inflate(context, R.layout.widget_dialog_loading, null);
-        mLoadingTextView = mView.findViewById(R.id.mLoadingTextView);
-        if (!TextUtils.isEmpty(msg)) {
-            mLoadingTextView.setText(msg);
+    @Override
+    protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
+        TextView mLoadingTextView = viewHolder.getView(R.id.mLoadingTextView);
+        if (!TextUtils.isEmpty(mMessage)) {
+            mLoadingTextView.setText(mMessage);
             mLoadingTextView.setVisibility(View.VISIBLE);
         } else {
             mLoadingTextView.setVisibility(View.GONE);
         }
-        this.setCanceledOnTouchOutside(false);
-        this.setCancelable(true);
+        setTouchOutCancel(false);
+        setDialogCancelable(true);
+        setDimAmount(0f);
     }
 
     @Override
-    public void show() {
-        try {
-            if (this.isShowing()) {
-                this.dismiss();
-            } else {
-                super.show();
-            }
-            //setContentView（）一定要在show之后调用
-            this.setContentView(mView);
-        } catch (WindowManager.BadTokenException exception) {
+    public void onStart() {
+        super.onStart();
+        //宽度自适应
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(params);
         }
     }
 
-    public void setMessage(String message) {
-        if (!TextUtils.isEmpty(message)) {
-            if (mLoadingTextView.getVisibility() != View.VISIBLE) {
-                mLoadingTextView.setVisibility(View.VISIBLE);
-            }
-            mLoadingTextView.setText(message);
-        }
+    public LoadingDialog setMessage(String message) {
+        this.mMessage = message;
+        return this;
     }
 
-    public void setMessage(@StringRes int message) {
-        if (mLoadingTextView.getVisibility() != View.VISIBLE) {
-            mLoadingTextView.setVisibility(View.VISIBLE);
-        }
-        mLoadingTextView.setText(message);
+    public LoadingDialog setMessage(@StringRes int resId) {
+        this.mMessage = getContext().getString(resId);
+        return this;
     }
 
 }

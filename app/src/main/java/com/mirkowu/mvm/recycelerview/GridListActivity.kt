@@ -5,7 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.mediator.EmptyMediator
-import com.mirkowu.lib_widget.LinearDecoration
+import com.mirkowu.lib_widget.decoration.LinearDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityGridListBinding

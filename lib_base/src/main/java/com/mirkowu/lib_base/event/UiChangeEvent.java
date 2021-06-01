@@ -30,6 +30,7 @@ public class UiChangeEvent {
     public MutableLiveData<StateBean> getStateViewEvent() {
         return this.mStateViewEvent = this.getLiveData(this.mStateViewEvent);
     }
+
     public MutableLiveData<Boolean> getEmptyViewEvent() {
         return this.mIsEmptyViewEvent = this.getLiveData(this.mIsEmptyViewEvent);
     }
@@ -59,6 +60,8 @@ public class UiChangeEvent {
     }
 
     public void unregisterEvent(@NonNull LifecycleOwner owner) {
+        getShowLoadingDialogEvent().removeObservers(owner);
+        getStateViewEvent().removeObservers(owner);
     }
 
     public void registerEvent(@NonNull LifecycleOwner owner, final IBaseView iBaseView) {
@@ -76,8 +79,8 @@ public class UiChangeEvent {
         getStateViewEvent().observe(owner, new Observer<StateBean>() {
             public void onChanged(StateBean stateBean) {
 
-                 //stateBean.state==
-                  //  iBaseView.showStateView();
+                //stateBean.state==
+                //  iBaseView.showStateView();
 
 
             }

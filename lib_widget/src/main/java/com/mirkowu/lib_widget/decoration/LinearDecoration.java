@@ -1,31 +1,31 @@
-package com.mirkowu.lib_widget;
+package com.mirkowu.lib_widget.decoration;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mirkowu.lib_util.utilcode.util.SizeUtils;
+
 
 /**
  * 仅对 LinearLayoutManager 样式的列表显示分割线
  */
 public class LinearDecoration extends RecyclerView.ItemDecoration {
     private Paint mDividerPaint = new Paint();
-    private DisplayMetrics mDisplayMetrics;
     private int mSpace;
     private int mEdgeSpace;
     private int mTopSpace;
     private int mBottomSpace;
 
     public LinearDecoration(Context context) {
-        mDisplayMetrics = context.getResources().getDisplayMetrics();
         mDividerPaint.setColor(Color.TRANSPARENT);
     }
 
@@ -36,7 +36,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      * @return
      */
     public LinearDecoration setSpace(float space) {
-        mSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space, mDisplayMetrics) + 0.5f);
+        mSpace = SizeUtils.dp2px(space);
         return this;
     }
 
@@ -46,7 +46,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      * @param spaceColor 默认透明
      * @return
      */
-    public LinearDecoration setSpaceColor(int spaceColor) {
+    public LinearDecoration setSpaceColor(@ColorInt int spaceColor) {
         mDividerPaint.setColor(spaceColor);
         return this;
     }
@@ -57,7 +57,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      * @param edgeSpace 间隔，单位dp
      */
     public LinearDecoration setEdgeSpace(float edgeSpace) {
-        mEdgeSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        mEdgeSpace = SizeUtils.dp2px(edgeSpace);
         return this;
     }
 
@@ -68,7 +68,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      * @return
      */
     public LinearDecoration setTopSpace(float edgeSpace) {
-        mTopSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        mTopSpace = SizeUtils.dp2px(edgeSpace);
         return this;
     }
 
@@ -79,7 +79,7 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      * @return
      */
     public LinearDecoration setBottomSpace(float edgeSpace) {
-        mBottomSpace = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, edgeSpace, mDisplayMetrics) + 0.5f);
+        mBottomSpace = SizeUtils.dp2px(edgeSpace);
         return this;
     }
 

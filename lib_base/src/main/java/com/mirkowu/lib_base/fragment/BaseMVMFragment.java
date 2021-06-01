@@ -121,8 +121,8 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
 
     /*** >>>>>>>>>>>>>>>>>>>> 懒加载 >>>>>>>>>>>>>>>>>>>> */
 
-    protected boolean isFirstLoad = true;//是否第一次加载
-    private boolean isSupportLazyLoad = true;//是否支持懒加载
+    protected boolean isFirstLoad = true; //是否第一次加载
+    private boolean isSupportLazyLoad = true; //是否支持懒加载
 
     public boolean isSupportLazyLoad() {
         return isSupportLazyLoad;

@@ -86,13 +86,13 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
                     mLoadingDialog.setMessage(msg);
                     return;
                 }
-                mLoadingDialog = new LoadingDialog(getContext(), msg);
-                if (!isFinishing() && !mLoadingDialog.isShowing()) {
-                    mLoadingDialog.show();
+                mLoadingDialog = new LoadingDialog().setMessage(msg);
+                if (!isFinishing() && !mLoadingDialog.isVisible()) {
+                    mLoadingDialog.show(getSupportFragmentManager());
                 }
             }
         });
@@ -104,7 +104,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
             @Override
             public void run() {
                 if (mLoadingDialog != null) {
-                    mLoadingDialog.cancel();
+                    mLoadingDialog.dismiss();
                     mLoadingDialog = null;
                 }
             }

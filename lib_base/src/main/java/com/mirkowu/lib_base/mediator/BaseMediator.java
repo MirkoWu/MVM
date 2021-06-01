@@ -1,16 +1,13 @@
 package com.mirkowu.lib_base.mediator;
 
-import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 
-import com.mirkowu.lib_base.event.UiChangeEvent;
-import com.mirkowu.lib_base.view.IBaseView;
-import com.mirkowu.lib_base.util.InstanceFactory;
 import com.mirkowu.lib_base.model.IBaseModel;
+import com.mirkowu.lib_base.util.InstanceFactory;
+import com.mirkowu.lib_base.view.IBaseView;
 
 
 public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends ViewModel implements IMediator<V> {
@@ -19,10 +16,14 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
     protected M mModel;
     @NonNull
     protected V mView;
-    private UiChangeEvent mUiStatusChangeLiveData;
 
     public BaseMediator() {
         initModel();
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 
     protected void initModel() {
@@ -34,20 +35,12 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
     public void attachView(V baseView) {
         mView = baseView;
         //绑定view时也注册事件
-        getUiEventChangeLiveData().registerEvent(mView.getLifecycleOwner(), mView);
+        //  getUiEventChangeLiveData().registerEvent(mView.getLifecycleOwner(), mView);
     }
 
     @Override
     public void detachView() {
         mView = null;
-    }
-
-    public UiChangeEvent getUiEventChangeLiveData() {
-        if (this.mUiStatusChangeLiveData == null) {
-            this.mUiStatusChangeLiveData = new UiChangeEvent();
-        }
-
-        return this.mUiStatusChangeLiveData;
     }
 
     public void showLoadingDialog() {
@@ -68,6 +61,16 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
         }
     }
 
+//    private UiChangeEvent mUiStatusChangeLiveData;
+//
+//    public UiChangeEvent getUiEventChangeLiveData() {
+//        if (this.mUiStatusChangeLiveData == null) {
+//            this.mUiStatusChangeLiveData = new UiChangeEvent();
+//        }
+//
+//        return this.mUiStatusChangeLiveData;
+//    }
+
 //    public void showLoadingDialog() {
 //        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(true);
 //    }
@@ -76,12 +79,12 @@ public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends Vie
 //        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
 //    }
 
-    public void jumpPage(@NonNull String path) {
-        if (!TextUtils.isEmpty(path)) {
-            this.mUiStatusChangeLiveData.getJumpPagePathEvent().setValue(path);
-        }
-
-    }
+//    public void jumpPage(@NonNull String path) {
+//        if (!TextUtils.isEmpty(path)) {
+//            this.mUiStatusChangeLiveData.getJumpPagePathEvent().setValue(path);
+//        }
+//
+//    }
 
     @Override
     public void onAny(LifecycleOwner owner, Lifecycle.Event event) {

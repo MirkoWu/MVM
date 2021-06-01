@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="LoadingDialogStyle" parent="android:Theme.Dialog" tools:ignore="ResourceName">
-        <!--提示框是否有边框-->
-        <item name="android:windowFrame">@null</item>
+    <style name="BaseDialog" parent="@android:style/Theme.Dialog" tools:ignore="ResourceName">
+
         <!-- 背景颜色及透明程度 -->
         <item name="android:windowBackground">@android:color/transparent</item>
-        <!-- 是否半透明 -->
-        <item name="android:windowIsTranslucent">false</item>
-        <!-- 是否没有标题 -->
+        <!-- 去掉标题 -->
         <item name="android:windowNoTitle">true</item>
-        <!-- 是否浮现在activity之上 -->
+        <!-- 无边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否悬浮在Activity上面 -->
         <item name="android:windowIsFloating">true</item>
-        <!-- 是否背景遮罩透明度 -->
+        <!-- 是否模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
-        <!-- 设置遮罩透明度-->
-        <item name="android:backgroundDimAmount">0.0</item>
-        <!--<item name="windowFullscreen">true</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFullscreen">@null</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@android:color/transparent</item>
+
     </style>
 </resources>
