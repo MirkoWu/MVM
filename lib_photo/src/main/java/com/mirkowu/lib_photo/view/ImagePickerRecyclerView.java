@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
-import com.mirkowu.lib_photo.utils.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImagePickerRecyclerView, defStyle, 0);
         mMaxCount = a.getInteger(R.styleable.ImagePickerRecyclerView_ivp_maxCount, 9);
         mSpanCount = a.getInteger(R.styleable.ImagePickerRecyclerView_ivp_spanCount, 4);
-        mSpacing = a.getDimensionPixelSize(R.styleable.ImagePickerRecyclerView_ivp_spacing, ScreenUtils.dip2px(context, 2));
+        mSpacing = a.getDimensionPixelSize(R.styleable.ImagePickerRecyclerView_ivp_spacing, SizeUtils.dp2px(2));
         mAddImageSrc = a.getDrawable(R.styleable.ImagePickerRecyclerView_ivp_addImageSrc);
         mDeleteImageSrc = a.getDrawable(R.styleable.ImagePickerRecyclerView_ivp_deleteImageSrc);
         mShowDelete = a.getBoolean(R.styleable.ImagePickerRecyclerView_ivp_showDelete, true);
@@ -97,7 +98,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
     }
 
     private void init(Context context) {
-        int width = ScreenUtils.getScreenWidth(getContext());
+        int width = ScreenUtils.getScreenWidth();
         mGridWidth = (int) (width * 1f / mSpanCount);
 
         if (mItemShape == ITEM_SHAPE_SQUARE) {
@@ -151,7 +152,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
         gridDivider = new MediaGridDivider(mSpanCount, mSpacing, false);
         addItemDecoration(gridDivider);
 
-        int width = ScreenUtils.getScreenWidth(getContext());
+        int width = ScreenUtils.getScreenWidth();
         mGridWidth = (int) (width * 1f / mSpanCount);
 
         notifyDataSetChanged();

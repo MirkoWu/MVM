@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
-import com.mirkowu.lib_photo.utils.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.showCamera = showCamera;
-        int width = ScreenUtils.getScreenWidth(context);
+        int width = ScreenUtils.getScreenWidth();
         //int spacing = context.getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mGridWidth = (int) (width * 1f / spanCount);//取整
     }

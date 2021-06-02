@@ -28,6 +28,7 @@ import androidx.core.view.ViewPropertyAnimatorListenerAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
+import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.adapter.PreviewImageAdapter;
 import com.mirkowu.lib_photo.utils.FileUtils;
@@ -62,7 +63,7 @@ public class ImagePreviewActivity extends AppCompatActivity implements OnPageCha
     private Toolbar mToolbar;
     private boolean mIsHidden = false;//标题栏是否隐藏
     private long mLastShowHiddenTime;//上次显示的时间
-    private int mMaxSelectCount = ImagePickerActivity.DEFAULT_IMAGE_SIZE;//最大可选择数量
+    private int mMaxSelectCount = PickerConfig.DEFAULT_IMAGE_SIZE;//最大可选择数量
 
     /**
      * 网络图片 可能会下载
@@ -231,24 +232,24 @@ public class ImagePreviewActivity extends AppCompatActivity implements OnPageCha
         int id = v.getId();
         if (id == R.id.ivSave) {//保存图片
             final File saveFile = new File(savePath);
-            FileUtils.save2SDCard(ImagePreviewActivity.this, mOriginList.get(currentPos))
-                    .subscribe(new Consumer<Bitmap>() {
-                        @Override
-                        public void accept(@NonNull Bitmap bitmap) throws Exception {
-                            FileUtils.saveBitmap2File(ImagePreviewActivity.this, bitmap, saveFile, System.currentTimeMillis() + ".jpg");
-                            // ImageEngine.saveBitmapToGallery(ImagePreviewActivity.this,bitmap, saveFile, System.currentTimeMillis() + ".jpg");
-
-                            Toast.makeText(ImagePreviewActivity.this, getString(R.string.ivp_save_successed,
-                                    saveFile.getAbsoluteFile()), Toast.LENGTH_SHORT).show();
-
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@NonNull Throwable throwable) throws Exception {
-                            Toast.makeText(ImagePreviewActivity.this,
-                                    getString(R.string.ivp_save_failed), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//            FileUtils.save2SDCard(ImagePreviewActivity.this, mOriginList.get(currentPos))
+//                    .subscribe(new Consumer<Bitmap>() {
+//                        @Override
+//                        public void accept(@NonNull Bitmap bitmap) throws Exception {
+//                            FileUtils.saveBitmap2File(ImagePreviewActivity.this, bitmap, saveFile, System.currentTimeMillis() + ".jpg");
+//                            // ImageEngine.saveBitmapToGallery(ImagePreviewActivity.this,bitmap, saveFile, System.currentTimeMillis() + ".jpg");
+//
+//                            Toast.makeText(ImagePreviewActivity.this, getString(R.string.ivp_save_successed,
+//                                    saveFile.getAbsoluteFile()), Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(@NonNull Throwable throwable) throws Exception {
+//                            Toast.makeText(ImagePreviewActivity.this,
+//                                    getString(R.string.ivp_save_failed), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
 
         } else if (id == R.id.tvPick) {//选择
             String path = mOriginList.get(currentPos);

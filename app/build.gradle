@@ -69,6 +69,7 @@ dependencies {
     implementation project(path: ':lib_network')
     implementation project(path: ':lib_image')
     implementation project(path: ':lib_webview')
+    implementation project(path: ':lib_photo')
 
 
     //检测内测泄露

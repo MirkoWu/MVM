@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mirkowu.imagepicker.view.ViewPagerFixed
+        <com.mirkowu.lib_photo.view.ViewPagerFixed
             android:id="@+id/mViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

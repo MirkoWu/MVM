@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mirkowu.mvm">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -16,8 +17,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".WebActivity"
-            android:theme="@style/WebViewTheme"
-            android:process=":webview"></activity>
+            android:process=":webview"
+            android:theme="@style/WebViewTheme"></activity>
         <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".viewbinding.DataBindingActivity" />
         <activity android:name=".mvc.MVCActivity" />
@@ -30,6 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.app.file_provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                tools:replace="resource" />
+        </provider>
     </application>
 
 </manifest>

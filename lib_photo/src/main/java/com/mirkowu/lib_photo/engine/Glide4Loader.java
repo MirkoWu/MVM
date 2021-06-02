@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.mirkowu.lib_photo.R;
 
 import java.util.concurrent.ExecutionException;
 
@@ -19,8 +20,8 @@ public class Glide4Loader implements ImageEngine {
     public void load(Context context, ImageView image, String url) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
-                        .placeholderOf(com.mirkowu.imagepicker.R.drawable.ivp_default_error)
-                        .error(com.mirkowu.imagepicker.R.drawable.ivp_default_error)
+                        .placeholderOf(R.drawable.ivp_default_error)
+                        .error(R.drawable.ivp_default_error)
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 )
                 .into(image);
@@ -29,8 +30,8 @@ public class Glide4Loader implements ImageEngine {
     public void loadThumbnail(Context context, ImageView image, String url, int width) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
-                        .placeholderOf(com.mirkowu.imagepicker.R.drawable.ivp_default_image)
-                        .error(com.mirkowu.imagepicker.R.drawable.ivp_default_error)
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_error)
                         .override(width, width)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 )
@@ -41,8 +42,8 @@ public class Glide4Loader implements ImageEngine {
     public void loadPicked(Context context, ImageView image, String url, int width, int height) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
-                        .placeholderOf(com.mirkowu.imagepicker.R.drawable.ivp_default_image)
-                        .error(com.mirkowu.imagepicker.R.drawable.ivp_default_error)
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_error)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 )
                 .into(image);

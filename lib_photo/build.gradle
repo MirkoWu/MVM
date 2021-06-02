@@ -24,7 +24,7 @@ android {
     }
 
     //资源前缀
-    resourcePrefix "ivp_"
+    //resourcePrefix "ivp_"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,5 +41,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    api "com.github.bumptech.glide:glide:$ext.glide_version"
     implementation project(':lib_util')
 }

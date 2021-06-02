@@ -7,8 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.menu.ListMenuItemView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_photo.ImagePicker
+import com.mirkowu.lib_photo.ui.ImagePickerActivity
+import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
@@ -83,6 +87,11 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                         }
 
                     })
+        }
+        binding.btnImagePicker.click {
+            ImagePicker.getInstance().setOnPickResultListener {
+                LogUtil.d("btnImagePicker", it.toString())
+            }.start(this)
         }
     }
 

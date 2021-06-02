@@ -267,23 +267,23 @@ public class FileUtils {
         }
     }
 
-    /**
-     * @param context
-     * @param url     图片的下载地址
-     */
-    public static Observable<Bitmap> save2SDCard(final Context context, final String url) {
-        Log.d("imagepricek url==", url);
-        return Observable.create(new ObservableOnSubscribe<Bitmap>() {
-            @Override
-            public void subscribe(ObservableEmitter<Bitmap> e) throws Exception {
-                Bitmap bitmap = ImagePicker.getInstance()
-                        .getImageEngine()
-                        .loadAsBitmap(context, url);
-
-                if (!e.isDisposed()) e.onNext(bitmap);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
+//    /**
+//     * @param context
+//     * @param url     图片的下载地址
+//     */
+//    public static Observable<Bitmap> save2SDCard(final Context context, final String url) {
+//        Log.d("imagepricek url==", url);
+//        return Observable.create(new ObservableOnSubscribe<Bitmap>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<Bitmap> e) throws Exception {
+//                Bitmap bitmap = ImagePicker.getInstance()
+//                        .getImageEngine()
+//                        .loadAsBitmap(context, url);
+//
+//                if (!e.isDisposed()) e.onNext(bitmap);
+//            }
+//        }).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread());
+//    }
 
 }

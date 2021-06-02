@@ -35,21 +35,21 @@ public class CompressUtil {
         return new CompressUtil();
     }
 
-    /**
-     * 返回File Observable
-     */
-    public static Observable<File> asObservable(Context context, File file) {
-        return newInstance().singleAction(context, file);
-    }
-
-    Observable<File> singleAction(final Context context, final File file) {
-        return Observable.fromCallable(new Callable<File>() {
-            @Override
-            public File call() throws Exception {
-                return compressImage(context, file);
-            }
-        })/*.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())*/;
-    }
+//    /**
+//     * 返回File Observable
+//     */
+//    public static Observable<File> asObservable(Context context, File file) {
+//        return newInstance().singleAction(context, file);
+//    }
+//
+//    Observable<File> singleAction(final Context context, final File file) {
+//        return Observable.fromCallable(new Callable<File>() {
+//            @Override
+//            public File call() throws Exception {
+//                return compressImage(context, file);
+//            }
+//        })/*.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())*/;
+//    }
 
     private String getCacheFilePath(Context context, String path) {
         //命名规则

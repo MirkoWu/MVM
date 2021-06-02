@@ -15,11 +15,11 @@ import androidx.appcompat.widget.ListPopupWindow;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.adapter.FolderAdapter;
 import com.mirkowu.lib_photo.adapter.ImageGridAdapter;
 import com.mirkowu.lib_photo.bean.Folder;
-import com.mirkowu.lib_photo.callback.IPickerCallback;
 import com.mirkowu.lib_photo.mediaLoader.MediaCollectionLoader;
 
 import java.io.File;
@@ -28,70 +28,16 @@ import java.util.ArrayList;
 /**
  * Multi image selector
  */
-public class ImagePickerActivity extends AppCompatActivity
-        implements IPickerCallback {
+public class ImagePickerActivity extends AppCompatActivity /*implements IPickerCallback*/ {
 
-    // Single choice
-    public static final int MODE_SINGLE = 0;
-    // Multi choice
-    public static final int MODE_MULTI = 1;
 
-    /**
-     * Max image size，int，{@link #DEFAULT_IMAGE_SIZE} by default
-     */
-    public static final String EXTRA_SELECT_COUNT = "max_select_count";
-    /**
-     * Select mode，{@link #MODE_MULTI} by default
-     */
-    public static final String EXTRA_SELECT_MODE = "select_count_mode";
-    /**
-     * Whether show camera，true by default
-     */
-    public static final String EXTRA_SHOW_CAMERA = "show_camera";
-    /**
-     * Result data set，ArrayList&lt;String&gt;
-     */
-    public static final String EXTRA_RESULT = "select_result";
-    /**
-     * Original data set
-     */
-    public static final String EXTRA_DEFAULT_SELECTED_LIST = "default_list";
-    // Default image size
-    public static final int DEFAULT_IMAGE_SIZE = 9;
-    public static final int DEFAULT_SINGLE_SIZE = 1;
 
     private ArrayList<String> mSelectedList = new ArrayList<>();
     private Button mSubmitButton;
-    private int mMaxSelectCount = DEFAULT_IMAGE_SIZE;
+    private int mMaxSelectCount = PickerConfig.DEFAULT_IMAGE_SIZE;
     private ImagePickerFragment mPickerFragment;
 
 
-    // image result data set
-    private ArrayList<String> mSelectedList = new ArrayList<>();
-    // image result data set 数据过大会导致传送失败使用静态变量
-    public static ArrayList<String> mLoadList = new ArrayList<>();
-    // folder result data set
-    private ArrayList<Folder> mResultFolder = new ArrayList<>();
-
-    //private GridView mGridView;
-    private RecyclerView mRvMedia;
-    private IPickerCallback mCallback;
-
-    private ImageGridAdapter mImageAdapter;
-    private FolderAdapter mFolderAdapter;
-
-    private ListPopupWindow mFolderPopupWindow;
-
-    private TextView mCategoryText;
-    private View mPopupAnchorView;
-
-
-    private int mSpanCount = 3;
-    private int mMaxSelectCount = 9;
-    //   private File mTmpFile;
-
-    private MediaCollectionLoader mLoaderCallback;
-    private RecyclerView.OnScrollListener onScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,18 +55,18 @@ public class ImagePickerActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        final Intent intent = getIntent();
-        mMaxSelectCount = intent.getIntExtra(EXTRA_SELECT_COUNT, DEFAULT_IMAGE_SIZE);
-        final int mode = intent.getIntExtra(EXTRA_SELECT_MODE, MODE_MULTI);
-        final boolean isShow = intent.getBooleanExtra(EXTRA_SHOW_CAMERA, true);
-        if (mode == MODE_MULTI && intent.hasExtra(EXTRA_DEFAULT_SELECTED_LIST)) {
-            mSelectedList = intent.getStringArrayListExtra(EXTRA_DEFAULT_SELECTED_LIST);
-        }
-
+//        final Intent intent = getIntent();
+//        mMaxSelectCount = intent.getIntExtra(EXTRA_SELECT_COUNT, DEFAULT_IMAGE_SIZE);
+//        final int mode = intent.getIntExtra(EXTRA_SELECT_MODE, MODE_MULTI);
+//        final boolean isShow = intent.getBooleanExtra(EXTRA_SHOW_CAMERA, true);
+//        if (mode == MODE_MULTI && intent.hasExtra(EXTRA_DEFAULT_SELECTED_LIST)) {
+//            mSelectedList = intent.getStringArrayListExtra(EXTRA_DEFAULT_SELECTED_LIST);
+//        }
+//        if (mode == MODE_SINGLE) {
+//            mMaxSelectCount = DEFAULT_SINGLE_SIZE;
+//        }
         mSubmitButton = (Button) findViewById(R.id.commit);
-        if (mode == MODE_SINGLE) {
-            mMaxSelectCount = DEFAULT_SINGLE_SIZE;
-        }
+
 
         updateDoneText(mSelectedList);
         mSubmitButton.setVisibility(View.VISIBLE);
@@ -131,12 +77,14 @@ public class ImagePickerActivity extends AppCompatActivity
             }
         });
 
-        if (savedInstanceState == null) {
-            Bundle bundle = new Bundle();
-            bundle.putInt(ImagePickerFragment.EXTRA_SELECT_COUNT, mMaxSelectCount);
-            bundle.putInt(ImagePickerFragment.EXTRA_SELECT_MODE, mode);
-            bundle.putBoolean(ImagePickerFragment.EXTRA_SHOW_CAMERA, isShow);
-            bundle.putStringArrayList(ImagePickerFragment.EXTRA_DEFAULT_SELECTED_LIST, mSelectedList);
+        Bundle bundle = getIntent().getExtras();
+        if (savedInstanceState == null && bundle != null) {
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(ImagePickerFragment.EXTRA_SELECT_COUNT, mMaxSelectCount);
+//            bundle.putInt(ImagePickerFragment.EXTRA_SELECT_MODE, mode);
+//            bundle.putBoolean(ImagePickerFragment.EXTRA_SHOW_CAMERA, isShow);
+//            bundle.putStringArrayList(ImagePickerFragment.EXTRA_DEFAULT_SELECTED_LIST, mSelectedList);
+
 
             mPickerFragment = ImagePickerFragment.newInstance(bundle);
             getSupportFragmentManager().beginTransaction()
@@ -149,16 +97,17 @@ public class ImagePickerActivity extends AppCompatActivity
      * 提交结果
      */
     public void submitResult() {
-        mSelectedList = mPickerFragment.getSelectedList();
-        if (mSelectedList != null && mSelectedList.size() > 0) {
-            // Notify success
-            Intent data = new Intent();
-            data.putStringArrayListExtra(EXTRA_RESULT, mSelectedList);
-            setResult(RESULT_OK, data);
-        } else {
-            setResult(RESULT_CANCELED);
-        }
-        finish();
+//        mSelectedList = mPickerFragment.getSelectedList();
+//        if (mSelectedList != null && mSelectedList.size() > 0) {
+//            // Notify success
+//            Intent data = new Intent();
+//            data.putStringArrayListExtra(EXTRA_RESULT, mSelectedList);
+//            setResult(RESULT_OK, data);
+//        } else {
+//            setResult(RESULT_CANCELED);
+//        }
+//        finish();
+        mPickerFragment.submitResult();
     }
 
     @Override
@@ -219,22 +168,22 @@ public class ImagePickerActivity extends AppCompatActivity
 //        updateDoneText(mSelectedList);
 //    }
 
-    @Override
-    public void onCameraShot(File imageFile) {
-        if (imageFile != null) {
-            // notify system the image has change
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
-
-            mSelectedList = mPickerFragment.getSelectedList();
-            if (mSelectedList != null) {
-                mSelectedList = new ArrayList<>();
-            }
-            mSelectedList.add(imageFile.getAbsolutePath());
-
-            Intent data = new Intent();
-            data.putStringArrayListExtra(EXTRA_RESULT, mSelectedList);
-            setResult(RESULT_OK, data);
-            finish();
-        }
-    }
+//    @Override
+//    public void onCameraShot(File imageFile) {
+//        if (imageFile != null) {
+//            // notify system the image has change
+//            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
+//
+//            mSelectedList = mPickerFragment.getSelectedList();
+//            if (mSelectedList != null) {
+//                mSelectedList = new ArrayList<>();
+//            }
+//            mSelectedList.add(imageFile.getAbsolutePath());
+//
+//            Intent data = new Intent();
+//            data.putStringArrayListExtra(EXTRA_RESULT, mSelectedList);
+//            setResult(RESULT_OK, data);
+//            finish();
+//        }
+//    }
 }

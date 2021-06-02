@@ -6,8 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.mirkowu.imagepicker.ImagePicker;
+
+import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.photoview.PhotoView;
 
 import java.util.ArrayList;
 

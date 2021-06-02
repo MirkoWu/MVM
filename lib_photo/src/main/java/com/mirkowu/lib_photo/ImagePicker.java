@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Toast;
 
@@ -30,14 +31,15 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ImagePicker {
 
-    public static final String EXTRA_RESULT = ImagePickerActivity.EXTRA_RESULT;
+    public static final String EXTRA_RESULT = PickerConfig.EXTRA_RESULT;
 
     private boolean mShowCamera = true;
     private boolean isSupportGif = true;
     private int mMaxCount = 9;
-    private int mMode = ImagePickerActivity.MODE_MULTI;
+    private int mMode = PickerConfig.MODE_MULTI;
     private ArrayList<String> mOriginData;
     private ImageEngine mImageEngine;
+    private OnPickResultListener mOnPickResultListener;
     private static volatile ImagePicker sSelector;
 
 
@@ -81,13 +83,13 @@ public class ImagePicker {
     }
 
     public ImagePicker maxCount(int count) {
-        mMode = ImagePickerActivity.MODE_MULTI;
+        mMode = PickerConfig.MODE_MULTI;
         mMaxCount = count;
         return sSelector;
     }
 
     public ImagePicker single() {
-        mMode = ImagePickerActivity.MODE_SINGLE;
+        mMode = PickerConfig.MODE_SINGLE;
         mMaxCount = 1;
         return sSelector;
     }
@@ -111,6 +113,15 @@ public class ImagePicker {
         return isSupportGif;
     }
 
+    public ImagePicker setOnPickResultListener(OnPickResultListener pickResultListener) {
+        mOnPickResultListener = pickResultListener;
+        return this;
+    }
+
+    public OnPickResultListener getOnPickResultListener() {
+        return mOnPickResultListener;
+
+    }
 
     public void start(final Activity activity) {
         if (mMaxCount <= 0) {
@@ -118,66 +129,7 @@ public class ImagePicker {
             return;
         }
         final Context context = activity;
-
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.PERMISSION_STORAGE, new PermissionsUtil.OnPermissionsListener() {
-            @Override
-            public void onPermissionGranted(int requestCode) {
-
-            }
-
-            @Override
-            public void onPermissionShowRationale(int requestCode, String[] permissions) {
-
-            }
-
-            @Override
-            public void onPermissionDenied(int requestCode) {
-
-            }
-        });
-
-        PermissionsUtils.requestReadStorage(activity).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(@NonNull Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    activity.startActivityForResult(createIntent(context), PermissionsUtils.REQUEST_ALBUM);
-                } else {
-                    PermissionsUtils.shouldShowRequestPermissionRationaleReadStorage(activity)
-                            .subscribe(new Consumer<Boolean>() {
-                                @Override
-                                public void accept(@NonNull Boolean aBoolean) throws Exception {
-                                    if (aBoolean) {// 要再来申请下  不能直接再次申请 要弹窗提醒 否则被拒绝的话会形成死循环
-                                        new AlertDialog.Builder(activity)
-                                                .setTitle(R.string.ivp_permission_dialog_title)
-                                                .setMessage(R.string.ivp_permission_rationale)
-                                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        start(activity);//如果想继续同意权限 就重新调用改方法
-                                                    }
-                                                })
-                                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                                .create().show();
-                                    } else {//被拒绝 且选中了 不再提醒的  要提醒用户自己去设置了
-                                        new AlertDialog.Builder(activity)
-                                                .setTitle(R.string.ivp_error_no_permission)
-                                                .setMessage(R.string.ivp_permission_lack)
-                                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                        intent.setData(Uri.parse("package:" + activity.getPackageName()));
-                                                        activity.startActivity(intent);
-                                                    }
-                                                })
-                                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                                .create().show();
-                                    }
-                                }
-                            });
-                }
-            }
-        });
+        activity.startActivity(createIntent(context));
     }
 
     public void start(final Fragment fragment) {
@@ -187,60 +139,28 @@ public class ImagePicker {
             Toast.makeText(activity, R.string.max_count_more_zero, Toast.LENGTH_SHORT).show();
             return;
         }
-        PermissionsUtils.requestReadStorage(activity).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(@NonNull Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    fragment.startActivityForResult(createIntent(context), PermissionsUtils.REQUEST_ALBUM);
-                } else {
-                    PermissionsUtils.shouldShowRequestPermissionRationaleReadStorage(activity).subscribe(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(@NonNull Boolean aBoolean) throws Exception {
-                            if (aBoolean) {// 要再来申请下  不能直接再次申请 要弹窗提醒 否则被拒绝的话会形成死循环
-                                new AlertDialog.Builder(activity)
-                                        .setTitle(R.string.ivp_permission_dialog_title)
-                                        .setMessage(R.string.ivp_permission_rationale)
-                                        .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                start(fragment);//如果想继续同意权限 就重新调用改方法
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                        .create().show();
-                            } else {//被拒绝 且选中了 不再提醒的  要提醒用户自己去设置了
-                                new AlertDialog.Builder(activity)
-                                        .setTitle(R.string.ivp_error_no_permission)
-                                        .setMessage(R.string.ivp_permission_lack)
-                                        .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                intent.setData(Uri.parse("package:" + activity.getPackageName()));
-                                                fragment.startActivity(intent);
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                        .create().show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        fragment.startActivity(createIntent(context));
     }
 
 
     private Intent createIntent(Context context) {
 
-
-        Intent intent = new Intent(context, ImagePickerActivity.class);
-        intent.putExtra(ImagePickerActivity.EXTRA_SHOW_CAMERA, mShowCamera);
-        intent.putExtra(ImagePickerActivity.EXTRA_SELECT_COUNT, mMaxCount);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PickerConfig.EXTRA_SELECT_MODE, mMode);
+        bundle.putInt(PickerConfig.EXTRA_SELECT_COUNT, mMaxCount);
+        bundle.putBoolean(PickerConfig.EXTRA_SHOW_CAMERA, mShowCamera);
         if (mOriginData != null) {
-            intent.putStringArrayListExtra(ImagePickerActivity.EXTRA_DEFAULT_SELECTED_LIST, mOriginData);
+            bundle.putStringArrayList(PickerConfig.EXTRA_DEFAULT_SELECTED_LIST, mOriginData);
         }
-        intent.putExtra(ImagePickerActivity.EXTRA_SELECT_MODE, mMode);
+        Intent intent = new Intent(context, ImagePickerActivity.class);
+        intent.putExtras(bundle);
+//        intent.putExtra(ImagePickerActivity.EXTRA_SHOW_CAMERA, mShowCamera);
+//        intent.putExtra(ImagePickerActivity.EXTRA_SELECT_COUNT, mMaxCount);
+//        if (mOriginData != null) {
+//            intent.putStringArrayListExtra(ImagePickerActivity.EXTRA_DEFAULT_SELECTED_LIST, mOriginData);
+//        }
+//        intent.putExtra(ImagePickerActivity.EXTRA_SELECT_MODE, mMode);
+
         return intent;
     }
 

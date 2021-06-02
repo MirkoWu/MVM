@@ -1,12 +1,15 @@
 package com.mirkowu.lib_photo.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +18,28 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.adapter.FolderAdapter;
 import com.mirkowu.lib_photo.adapter.ImageGridAdapter;
 import com.mirkowu.lib_photo.bean.Folder;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.callback.ICollectionLoaderCallback;
-import com.mirkowu.lib_photo.callback.IPickerCallback;
 import com.mirkowu.lib_photo.mediaLoader.MediaCollectionLoader;
 import com.mirkowu.lib_photo.utils.PermissionsUtils;
-import com.mirkowu.lib_photo.utils.ScreenUtils;
 import com.mirkowu.lib_photo.view.MediaGridDivider;
+import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,8 +50,6 @@ import static android.app.Activity.RESULT_OK;
 
 /**
  * Multi image selector Fragment
- * Created by Nereo on 2015/4/7.
- * Updated by nereo on 2016/5/18.
  */
 public class ImagePickerFragment extends Fragment {
 
@@ -53,27 +58,7 @@ public class ImagePickerFragment extends Fragment {
 
     private static final String KEY_TEMP_FILE = "key_temp_file";
 
-    // Single choice
-    public static final int MODE_SINGLE = 0;
-    // Multi choice
-    public static final int MODE_MULTI = 1;
 
-    /**
-     * Max image size，int，
-     */
-    public static final String EXTRA_SELECT_COUNT = "max_select_count";
-    /**
-     * Select mode，{@link #MODE_MULTI} by default
-     */
-    public static final String EXTRA_SELECT_MODE = "select_count_mode";
-    /**
-     * Whether show camera，true by default
-     */
-    public static final String EXTRA_SHOW_CAMERA = "show_camera";
-    /**
-     * Original data set
-     */
-    public static final String EXTRA_DEFAULT_SELECTED_LIST = "default_list";
 
     // image result data set
     private ArrayList<String> mSelectedList = new ArrayList<>();
@@ -84,7 +69,6 @@ public class ImagePickerFragment extends Fragment {
 
     //private GridView mGridView;
     private RecyclerView mRvMedia;
-    private IPickerCallback mCallback;
 
     private ImageGridAdapter mImageAdapter;
     private FolderAdapter mFolderAdapter;
@@ -109,15 +93,7 @@ public class ImagePickerFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mCallback = (IPickerCallback) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("The Activity must implement ImagePickerFragment.Callback interface...");
-        }
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -129,8 +105,8 @@ public class ImagePickerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final int mode = selectMode();
-        if (mode == MODE_MULTI) {
-            ArrayList<String> tmp = getArguments().getStringArrayList(EXTRA_DEFAULT_SELECTED_LIST);
+        if (mode == PickerConfig.MODE_MULTI) {
+            ArrayList<String> tmp = getArguments().getStringArrayList(PickerConfig.EXTRA_DEFAULT_SELECTED_LIST);
             if (tmp != null && tmp.size() > 0) {
                 mSelectedList = tmp;
             }
@@ -154,6 +130,51 @@ public class ImagePickerFragment extends Fragment {
                 updatePreviewOriginList(allList);//更新预览数据源
             }
         });
+
+        checkPermission();
+    }
+
+    private void checkPermission() {
+        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.PERMISSION_STORAGE,
+                new PermissionsUtil.OnPermissionsListener() {
+                    @Override
+                    public void onPermissionGranted(int requestCode) {
+                        /*** 加载图片数据 */
+                        startLoadImagesTask(false, null);
+                    }
+
+                    @Override
+                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.ivp_permission_dialog_title)
+                                .setMessage(R.string.ivp_permission_rationale)
+                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkPermission();//如果想继续同意权限 就重新调用改方法
+                                    }
+                                })
+                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
+                                .create().show();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(int requestCode) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.ivp_error_no_permission)
+                                .setMessage(R.string.ivp_permission_lack)
+                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.parse("package:" + getContext().getPackageName()));
+                                        startActivity(intent);
+                                    }
+                                })
+                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
+                                .create().show();
+                    }
+                });
     }
 
     private void initView(View view, final int mode) {
@@ -163,7 +184,7 @@ public class ImagePickerFragment extends Fragment {
 
         //图片列表
         mImageAdapter = new ImageGridAdapter(getActivity(), showCamera(), mSpanCount);
-        mImageAdapter.setMultiSelect(mode == MODE_MULTI);
+        mImageAdapter.setMultiSelect(mode == PickerConfig.MODE_MULTI);
         mRvMedia.setAdapter(mImageAdapter);
         int spacing = getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mRvMedia.addItemDecoration(new MediaGridDivider(mSpanCount, spacing, false));
@@ -181,7 +202,7 @@ public class ImagePickerFragment extends Fragment {
                     }
                 } else {//前往预览
                     ImagePreviewActivity.startFromPick(ImagePickerFragment.this,
-                             mSelectedList,
+                            mSelectedList,
                             position, mMaxSelectCount);
                 }
             }
@@ -215,7 +236,6 @@ public class ImagePickerFragment extends Fragment {
         mCategoryText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (mFolderPopupWindow == null) {
                     createPopupFolderList();
                 }
@@ -237,8 +257,8 @@ public class ImagePickerFragment extends Fragment {
      * Create popup ListView
      */
     private void createPopupFolderList() {
-        int width = ScreenUtils.getScreenWidth(getActivity());
-        int height = (int) (ScreenUtils.getScreenHeight(getActivity()) * 0.6f);
+        int width = ScreenUtils.getScreenWidth();
+        int height = (int) (ScreenUtils.getScreenHeight() * 0.6f);
         mFolderPopupWindow = new ListPopupWindow(getActivity());
         mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mFolderPopupWindow.setAdapter(mFolderAdapter);
@@ -292,13 +312,6 @@ public class ImagePickerFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        /*** 加载图片数据 */
-        startLoadImagesTask(false, null);
-    }
-
     /**
      * 开始查询图片任务
      *
@@ -307,14 +320,14 @@ public class ImagePickerFragment extends Fragment {
     private void startLoadImagesTask(boolean isRestart, String path) {
         if (TextUtils.isEmpty(path)) {//所有图片
             if (isRestart) {
-                getActivity().getSupportLoaderManager().restartLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
+                LoaderManager.getInstance(this).restartLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
             } else {
-                getActivity().getSupportLoaderManager().initLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
+                LoaderManager.getInstance(this).initLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
             }
         } else {//加载指定路径图片
             Bundle bundle = new Bundle();
             bundle.putString(MediaCollectionLoader.KEY_PATH, path);
-            getActivity().getSupportLoaderManager().initLoader(MediaCollectionLoader.LOADER_CATEGORY, bundle, mLoaderCallback);
+            LoaderManager.getInstance(this).initLoader(MediaCollectionLoader.LOADER_CATEGORY, bundle, mLoaderCallback);
         }
     }
 
@@ -341,9 +354,24 @@ public class ImagePickerFragment extends Fragment {
         super.onDestroyView();
     }
 
+    /**
+     * 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+
         //更新已选中图片
         if (requestCode == ImagePreviewActivity.REQUEST_CODE_PREVIEW && resultCode == RESULT_OK) {
             ArrayList<String> list = data.getStringArrayListExtra(ImagePreviewActivity.KEY_SELECTED_DATA);
@@ -358,12 +386,17 @@ public class ImagePickerFragment extends Fragment {
             }
         }
 
-        if (mCallback != null) {
-            File mTmpFile = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
-            if (mTmpFile != null) {
-                mCallback.onCameraShot(mTmpFile);
+
+            File imageFile = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
+            if (imageFile != null) {
+                // notify system the image has change
+                getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
+
+                mSelectedList.add(imageFile.getAbsolutePath());
+
+                submitResult();
             }
-        }
+
     }
 
     @Override
@@ -390,7 +423,7 @@ public class ImagePickerFragment extends Fragment {
      */
     private void selectImageFromGrid(MediaBean mediaBean, int mode) {
         if (mediaBean != null) {
-            if (mode == MODE_MULTI) {
+            if (mode == PickerConfig.MODE_MULTI) {
                 if (mSelectedList.contains(mediaBean.path)) {
                     mSelectedList.remove(mediaBean.path);
 //                    if (mCallback != null) {
@@ -407,7 +440,7 @@ public class ImagePickerFragment extends Fragment {
 //                    }
                 }
                 mImageAdapter.select(mediaBean);
-            } else if (mode == MODE_SINGLE) {
+            } else if (mode == PickerConfig.MODE_SINGLE) {
                 mSelectedList.clear();
                 mSelectedList.add(mediaBean.path);
                 mImageAdapter.select(mediaBean);
@@ -431,15 +464,15 @@ public class ImagePickerFragment extends Fragment {
     }
 
     private boolean showCamera() {
-        return getArguments() == null || getArguments().getBoolean(EXTRA_SHOW_CAMERA, true);
+        return getArguments() == null || getArguments().getBoolean(PickerConfig.EXTRA_SHOW_CAMERA, true);
     }
 
     private int selectMode() {
-        return getArguments() == null ? MODE_MULTI : getArguments().getInt(EXTRA_SELECT_MODE);
+        return getArguments() == null ? PickerConfig.MODE_MULTI : getArguments().getInt(PickerConfig.EXTRA_SELECT_MODE);
     }
 
     private int selectImageCount() {
-        return getArguments() == null ? 9 : getArguments().getInt(EXTRA_SELECT_COUNT);
+        return getArguments() == null ? 9 : getArguments().getInt(PickerConfig.EXTRA_SELECT_COUNT);
     }
 
     public ArrayList<String> getSelectedList() {
@@ -452,10 +485,13 @@ public class ImagePickerFragment extends Fragment {
         }
     }
 
-    private void submitResult() {
-        if (getActivity() != null && !getActivity().isFinishing() && (getActivity() instanceof ImagePickerActivity)) {
-            ((ImagePickerActivity) getActivity()).submitResult();
+    public void submitResult() {
+        if (mSelectedList != null && mSelectedList.size() > 0) {
+            if (ImagePicker.getInstance().getOnPickResultListener() != null) {
+                ImagePicker.getInstance().getOnPickResultListener().onPickResult(mSelectedList);
+            }
         }
+        getActivity().finish();
     }
 
 }
