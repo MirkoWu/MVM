@@ -8,6 +8,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 
 import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.engine.ILoader;
 import com.mirkowu.lib_photo.photoview.PhotoView;
 
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ public class PreviewImageAdapter extends PagerAdapter {
     private View.OnClickListener mOnClickListener;
     private ArrayList<String> mData;
     private int size;
+    private ILoader iLoader;
 
-    public PreviewImageAdapter(View.OnClickListener onClickListener,ArrayList<String> mData) {
+    public PreviewImageAdapter(View.OnClickListener onClickListener, ArrayList<String> mData) {
         this.mData = mData;
+        iLoader = ImagePicker.getInstance().getPickerConfig().getILoader();
         this.mOnClickListener = onClickListener;
         setData(mData);
     }
@@ -42,7 +45,7 @@ public class PreviewImageAdapter extends PagerAdapter {
     public View instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView imageView = new PhotoView(container.getContext());
         imageView.setOnClickListener(mOnClickListener);
-        ImagePicker.getInstance().getImageEngine().load(container.getContext(), imageView, mData.get(position));
+        iLoader.load(container.getContext(), imageView, mData.get(position));
         container.addView(imageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return imageView;
     }

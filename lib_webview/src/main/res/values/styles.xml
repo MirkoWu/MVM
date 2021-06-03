@@ -7,10 +7,12 @@
 <!--        <item name="colorAccent">@color/colorAccent</item>-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">#F5F5F5</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <!--  自定义actionBarSize高度-->
         <item name="actionBarSize">48dp</item>
         <item name="android:actionBarSize">48dp</item>
+        <item name="android:windowContentOverlay">@null</item>
+<!--        <item name="android:windowDisablePreview">true</item>-->
         <!--        <item name="toolbarStyle">@style/myToolbarStyle</item>-->
         <!--        <item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>-->
     </style>

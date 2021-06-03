@@ -3,6 +3,7 @@ package com.mirkowu.mvm;
 import android.app.Application;
 
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.mirkowu.mvm.manager.autosize.AutoSizeManager;
 
@@ -14,13 +15,14 @@ public class MVMApplication extends Application {
     public void onCreate() {
         super.onCreate();
         // LeakCanary.INSTANCE(this);
-//        if (!ProcessUtils.isMainProcess(this)) {
-//            return;
-//        }
         LogUtil.init(BuildConfig.DEBUG);
+        WebViewUtil.initMultiProcess(this);
+        if (!ProcessUtils.isMainProcess()) {
+            return;
+        }
+
         AutoSizeManager.getInstance().setConfig(this);
 
-        WebViewUtil.init(this);
 
         //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {

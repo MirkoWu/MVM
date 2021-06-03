@@ -1,6 +1,5 @@
 package com.mirkowu.lib_photo.ui;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -59,7 +58,6 @@ public class ImagePickerFragment extends Fragment {
     private static final String KEY_TEMP_FILE = "key_temp_file";
 
 
-
     // image result data set
     private ArrayList<String> mSelectedList = new ArrayList<>();
     // image result data set 数据过大会导致传送失败使用静态变量
@@ -67,32 +65,32 @@ public class ImagePickerFragment extends Fragment {
     // folder result data set
     private ArrayList<Folder> mResultFolder = new ArrayList<>();
 
-    //private GridView mGridView;
-    private RecyclerView mRvMedia;
 
     private ImageGridAdapter mImageAdapter;
     private FolderAdapter mFolderAdapter;
 
     private ListPopupWindow mFolderPopupWindow;
-
+    private RecyclerView mRvMedia;
     private TextView mCategoryText;
     private View mPopupAnchorView;
 
 
     private int mSpanCount = 3;
-    private int mMaxSelectCount = 9;
+    private int mMaxPickCount = 9;
+    private boolean mIsSingleMode;
+    private boolean mIsShowCamera;
+    private boolean mIsShowVideo;
+    private boolean mIsShowGif;
     //   private File mTmpFile;
 
     private MediaCollectionLoader mLoaderCallback;
-    private RecyclerView.OnScrollListener onScrollListener;
+    private RecyclerView.OnScrollListener mOnScrollListener;
+    private PickerConfig mConfig = ImagePicker.getInstance().getPickerConfig();
 
-    public static ImagePickerFragment newInstance(Bundle args) {
-
+    public static ImagePickerFragment newInstance() {
         ImagePickerFragment fragment = new ImagePickerFragment();
-        fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Override
@@ -103,19 +101,14 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mMaxPickCount = mConfig.getMaxPickCount();
+        mIsShowCamera = mConfig.isShowCamera();
+        mIsShowVideo = mConfig.isShowVideo();
+        mIsShowGif = mConfig.isShowGif();
+        mIsSingleMode = mMaxPickCount == 1;
 
-        final int mode = selectMode();
-        if (mode == PickerConfig.MODE_MULTI) {
-            ArrayList<String> tmp = getArguments().getStringArrayList(PickerConfig.EXTRA_DEFAULT_SELECTED_LIST);
-            if (tmp != null && tmp.size() > 0) {
-                mSelectedList = tmp;
-            }
-            mMaxSelectCount = selectImageCount();
-        } else {
-            mMaxSelectCount = 1;
-        }
         //初始化
-        initView(view, mode);
+        initView(view);
 
         mLoaderCallback = new MediaCollectionLoader(getContext(), new ICollectionLoaderCallback() {
             @Override
@@ -127,7 +120,7 @@ public class ImagePickerFragment extends Fragment {
                     mImageAdapter.setDefaultSelected(mSelectedList);
                 }
                 mFolderAdapter.setData(folderList);
-                updatePreviewOriginList(allList);//更新预览数据源
+                updatePreviewOriginList(allList); //更新预览数据源
             }
         });
 
@@ -151,7 +144,7 @@ public class ImagePickerFragment extends Fragment {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        checkPermission();//如果想继续同意权限 就重新调用改方法
+                                        checkPermission(); //如果想继续同意权限 就重新调用改方法
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -177,14 +170,14 @@ public class ImagePickerFragment extends Fragment {
                 });
     }
 
-    private void initView(View view, final int mode) {
+    private void initView(View view) {
         mRvMedia = view.findViewById(R.id.mRvMedia);
         mPopupAnchorView = view.findViewById(R.id.footer);
         mCategoryText = view.findViewById(R.id.category_btn);
 
         //图片列表
-        mImageAdapter = new ImageGridAdapter(getActivity(), showCamera(), mSpanCount);
-        mImageAdapter.setMultiSelect(mode == PickerConfig.MODE_MULTI);
+        mImageAdapter = new ImageGridAdapter(mIsShowCamera, mSpanCount);
+        mImageAdapter.setMultiSelect(!mIsSingleMode);
         mRvMedia.setAdapter(mImageAdapter);
         int spacing = getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mRvMedia.addItemDecoration(new MediaGridDivider(mSpanCount, spacing, false));
@@ -192,43 +185,43 @@ public class ImagePickerFragment extends Fragment {
         mImageAdapter.setOnItemClickListener(new ImageGridAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ImageGridAdapter adapter, View itemView, int position) {
-                if (mImageAdapter.isShowCamera()) {//前往拍照
+                if (mImageAdapter.isShowCamera()) { //前往拍照
                     if (position == 0) {
                         showCameraAction();
                     } else {
                         ImagePreviewActivity.startFromPick(ImagePickerFragment.this,
                                 mSelectedList,
-                                position - 1, mMaxSelectCount);
+                                position - 1, mMaxPickCount);
                     }
-                } else {//前往预览
+                } else { //前往预览
                     ImagePreviewActivity.startFromPick(ImagePickerFragment.this,
                             mSelectedList,
-                            position, mMaxSelectCount);
+                            position, mMaxPickCount);
                 }
             }
 
             @Override
             public void onItemViewClick(ImageGridAdapter adapter, View view, int position) {
-                if (mImageAdapter.isShowCamera() && position == 0) {//前往拍照
+                if (mImageAdapter.isShowCamera() && position == 0) { //前往拍照
                     showCameraAction();
                 } else {
                     MediaBean mediaBean = adapter.getItem(position);
-                    selectImageFromGrid(mediaBean, mode);
+                    selectImageFromGrid(mediaBean);
                 }
             }
         });
-        onScrollListener = new RecyclerView.OnScrollListener() {
+        mOnScrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 //滚动时，停止加载
                 if (newState != RecyclerView.SCROLL_STATE_IDLE) {
-                    ImagePicker.getInstance().getImageEngine().pause(getContext());
+                    mConfig.getILoader().pause(getContext());
                 } else {
-                    ImagePicker.getInstance().getImageEngine().resume(getContext());
+                    mConfig.getILoader().resume(getContext());
                 }
             }
         };
-        mRvMedia.addOnScrollListener(onScrollListener);
+        mRvMedia.addOnScrollListener(mOnScrollListener);
 
         //文件夹
         mFolderAdapter = new FolderAdapter(getActivity());
@@ -269,11 +262,10 @@ public class ImagePickerFragment extends Fragment {
         mFolderPopupWindow.setModal(true);
         mFolderPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                mFolderAdapter.setSelectIndex(position);
 
-                mFolderAdapter.setSelectIndex(i);
-
-                final int index = i;
+                final int index = position;
                 final AdapterView v = adapterView;
 
                 new Handler().postDelayed(new Runnable() {
@@ -290,16 +282,16 @@ public class ImagePickerFragment extends Fragment {
                                 mImageAdapter.setDefaultSelected(mSelectedList);
                             }
 
-                            if (showCamera() && index == 0) {
+                            if (mIsShowCamera && index == 0) {
                                 mImageAdapter.setShowCamera(true);
                             } else {
                                 mImageAdapter.setShowCamera(false);
                             }
-                            updatePreviewOriginList(folder.mediaBeans);//更新预览数据源
+                            updatePreviewOriginList(folder.mediaBeans); //更新预览数据源
                         }
                         mRvMedia.smoothScrollToPosition(0);
                     }
-                }, 100);
+                }, 100L);
 
             }
         });
@@ -318,41 +310,19 @@ public class ImagePickerFragment extends Fragment {
      * @param path 指定路径
      */
     private void startLoadImagesTask(boolean isRestart, String path) {
-        if (TextUtils.isEmpty(path)) {//所有图片
+        if (TextUtils.isEmpty(path)) { //所有图片
             if (isRestart) {
                 LoaderManager.getInstance(this).restartLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
             } else {
                 LoaderManager.getInstance(this).initLoader(MediaCollectionLoader.LOADER_ALL, null, mLoaderCallback);
             }
-        } else {//加载指定路径图片
+        } else { //加载指定路径图片
             Bundle bundle = new Bundle();
             bundle.putString(MediaCollectionLoader.KEY_PATH, path);
             LoaderManager.getInstance(this).initLoader(MediaCollectionLoader.LOADER_CATEGORY, bundle, mLoaderCallback);
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //  outState.putSerializable(KEY_TEMP_FILE, mTmpFile);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-//        if (savedInstanceState != null) {
-//            mTmpFile = (File) savedInstanceState.getSerializable(KEY_TEMP_FILE);
-//        }
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        if (mRvMedia != null) {
-            mRvMedia.removeOnScrollListener(onScrollListener);
-        }
-        super.onDestroyView();
-    }
 
     /**
      * 权限回调
@@ -382,20 +352,20 @@ public class ImagePickerFragment extends Fragment {
                 updateActivityToolbar();
             }
             if (submit) {
-                submitResult();//提交结果
+                submitResult(); //提交结果
             }
         }
 
 
-            File imageFile = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
-            if (imageFile != null) {
-                // notify system the image has change
-                getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
+        File imageFile = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
+        if (imageFile != null) {
+            // notify system the image has change
+            getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
 
-                mSelectedList.add(imageFile.getAbsolutePath());
+            mSelectedList.add(imageFile.getAbsolutePath());
 
-                submitResult();
-            }
+            submitResult();
+        }
 
     }
 
@@ -421,32 +391,23 @@ public class ImagePickerFragment extends Fragment {
      *
      * @param mediaBean mediaBean data
      */
-    private void selectImageFromGrid(MediaBean mediaBean, int mode) {
+    private void selectImageFromGrid(MediaBean mediaBean) {
         if (mediaBean != null) {
-            if (mode == PickerConfig.MODE_MULTI) {
+            if (mIsSingleMode) {
+                mSelectedList.clear();
+                mSelectedList.add(mediaBean.path);
+                mImageAdapter.select(mediaBean);
+            } else {
                 if (mSelectedList.contains(mediaBean.path)) {
                     mSelectedList.remove(mediaBean.path);
-//                    if (mCallback != null) {
-//                        mCallback.onImageUnselected(mediaBean.path);
-//                    }
                 } else {
-                    if (mMaxSelectCount == mSelectedList.size()) {
+                    if (mMaxPickCount == mSelectedList.size()) {
                         Toast.makeText(getActivity(), R.string.ivp_msg_amount_limit, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     mSelectedList.add(mediaBean.path);
-//                    if (mCallback != null) {
-//                        mCallback.onImageSelected(mediaBean.path);
-//                    }
                 }
                 mImageAdapter.select(mediaBean);
-            } else if (mode == PickerConfig.MODE_SINGLE) {
-                mSelectedList.clear();
-                mSelectedList.add(mediaBean.path);
-                mImageAdapter.select(mediaBean);
-//                if (mCallback != null) {
-//                    mCallback.onSingleImageSelected(mediaBean.path);
-//                }
             }
             updateActivityToolbar();
         }
@@ -463,17 +424,6 @@ public class ImagePickerFragment extends Fragment {
         return null;
     }
 
-    private boolean showCamera() {
-        return getArguments() == null || getArguments().getBoolean(PickerConfig.EXTRA_SHOW_CAMERA, true);
-    }
-
-    private int selectMode() {
-        return getArguments() == null ? PickerConfig.MODE_MULTI : getArguments().getInt(PickerConfig.EXTRA_SELECT_MODE);
-    }
-
-    private int selectImageCount() {
-        return getArguments() == null ? 9 : getArguments().getInt(PickerConfig.EXTRA_SELECT_COUNT);
-    }
 
     public ArrayList<String> getSelectedList() {
         return mSelectedList;
@@ -492,6 +442,29 @@ public class ImagePickerFragment extends Fragment {
             }
         }
         getActivity().finish();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //  outState.putSerializable(KEY_TEMP_FILE, mTmpFile);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+//        if (savedInstanceState != null) {
+//            mTmpFile = (File) savedInstanceState.getSerializable(KEY_TEMP_FILE);
+//        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        if (mRvMedia != null) {
+            mRvMedia.removeOnScrollListener(mOnScrollListener);
+        }
+        super.onDestroyView();
     }
 
 }

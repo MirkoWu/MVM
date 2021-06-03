@@ -3,7 +3,6 @@ package com.mirkowu.lib_photo.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +26,9 @@ import androidx.core.view.ViewPropertyAnimatorListenerAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
-import com.mirkowu.lib_photo.PickerConfig;
+import com.mirkowu.lib_photo.PickerConstant;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.adapter.PreviewImageAdapter;
-import com.mirkowu.lib_photo.utils.FileUtils;
 import com.mirkowu.lib_photo.view.ViewPagerFixed;
 
 import java.io.File;
@@ -63,7 +60,7 @@ public class ImagePreviewActivity extends AppCompatActivity implements OnPageCha
     private Toolbar mToolbar;
     private boolean mIsHidden = false;//标题栏是否隐藏
     private long mLastShowHiddenTime;//上次显示的时间
-    private int mMaxSelectCount = PickerConfig.DEFAULT_IMAGE_SIZE;//最大可选择数量
+    private int mMaxSelectCount = PickerConstant.DEFAULT_IMAGE_SIZE;//最大可选择数量
 
     /**
      * 网络图片 可能会下载

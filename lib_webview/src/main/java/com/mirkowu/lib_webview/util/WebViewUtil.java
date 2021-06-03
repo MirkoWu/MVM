@@ -2,14 +2,16 @@ package com.mirkowu.lib_webview.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.ProcessUtils;
+import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.CommonWebView;
+import com.mirkowu.lib_webview.service.EmptyService;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.GeolocationPermissions;
 import com.tencent.smtt.sdk.QbSdk;
@@ -29,14 +31,32 @@ public class WebViewUtil {
      *
      * @param application
      */
-    public static void init(Application application) {
-        QbSdk.initX5Environment(application.getApplicationContext(), null);
+    public static void initMultiProcess(Application application) {
         configWebViewCacheDirWithAndroidP(application);
+        if (!ProcessUtils.isMainProcess()) {
+            QbSdk.initX5Environment(application.getApplicationContext(), null);
+            return;
+        }
+        startMultiProcess(application);
+    }
+
+    /**
+     * 提前启动多进程
+     *
+     * @param context
+     */
+    private static void startMultiProcess(Context context) {
+        try {
+            Intent intent = new Intent(context, EmptyService.class);
+            context.startService(intent);
+        } catch (Exception e) {
+            LogUtil.e(e, "startMultiProcess");
+        }
     }
 
     private static void configWebViewCacheDirWithAndroidP(Application application) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            String processName = ProcessUtils.getCurrentProcessName(application);
+            String processName = ProcessUtils.getCurrentProcessName();
             String appPackageName = application.getPackageName();
             if (!TextUtils.equals(appPackageName, processName)) {
                 WebView.setDataDirectorySuffix(processName);
@@ -44,6 +64,7 @@ public class WebViewUtil {
             }
         }
     }
+
     /**
      * 清除缓存
      *

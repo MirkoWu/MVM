@@ -1,6 +1,5 @@
 package com.mirkowu.lib_photo.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_photo.engine.ILoader;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
-import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,24 +27,22 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_VIDEO = 2;
 
-    private Context mContext;
 
-    private LayoutInflater mInflater;
     private boolean showCamera = true;
     private boolean multiSelect = true;
+    private ILoader mILoader;
 
     private List<MediaBean> mData = new ArrayList<>();
     private List<MediaBean> mSelectedData = new ArrayList<>();
 
     final int mGridWidth;
 
-    public ImageGridAdapter(Context context, boolean showCamera, int spanCount) {
-        mContext = context;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ImageGridAdapter(boolean showCamera, int spanCount) {
+        this.mILoader = ImagePicker.getInstance().getPickerConfig().getILoader();
         this.showCamera = showCamera;
         int width = ScreenUtils.getScreenWidth();
         //int spacing = context.getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
-        mGridWidth = (int) (width * 1f / spanCount);//取整
+        mGridWidth = (int) (width * 1f / spanCount); //取整
     }
 
     /**
@@ -144,10 +141,11 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         if (isShowCamera() && viewType == TYPE_CAMERA) {
-            return new ViewHolder(mInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
+            return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
         }
-        return new ViewHolder(mInflater.inflate(R.layout.ivp_list_item_image, parent, false));
+        return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
     }
 
     @Override
@@ -207,6 +205,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
         ImageView ivSelect;
         View mask;
 
+
         ViewHolder(View view) {
             super(view);
             ivThumb = view.findViewById(R.id.ivThumb);
@@ -218,8 +217,6 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
             if (data == null) return;
 
             // 处理单选和多选状态
-            //  if (showSelectIndicator) {
-            // ivSelect.setVisibility(View.VISIBLE);
             if (mSelectedData.contains(data)) {
                 // 设置选中状态
                 ivSelect.setImageResource(R.drawable.ivp_btn_selected);
@@ -229,12 +226,10 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
                 ivSelect.setImageResource(R.drawable.ivp_btn_unselected);
                 mask.setVisibility(View.GONE);
             }
-//            } else {
-//                ivSelect.setVisibility(View.GONE);
-//            }
+
 
             // 显示图片
-            ImagePicker.getInstance().getImageEngine().loadThumbnail(mContext, ivThumb, data.path, mGridWidth);
+            mILoader.loadThumbnail(ivThumb.getContext(), ivThumb, data.path, mGridWidth);
         }
     }
 

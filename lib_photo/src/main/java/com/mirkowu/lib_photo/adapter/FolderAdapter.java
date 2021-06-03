@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.Folder;
+import com.mirkowu.lib_photo.engine.ILoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,11 @@ public class FolderAdapter extends BaseAdapter {
     int mImageSize;
 
     int lastSelected = 0;
+    private ILoader iLoader;
 
     public FolderAdapter(Context context) {
         mContext = context;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        iLoader = ImagePicker.getInstance().getPickerConfig().getILoader();
         mImageSize = mContext.getResources().getDimensionPixelOffset(R.dimen.ivp_folder_cover_size);
     }
 
@@ -75,20 +77,6 @@ public class FolderAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         if (holder != null) {
-//            if (i == 0) {
-//                holder.name.setText(R.string.ivp_folder_all);
-//                holder.path.setText("/sdcard");
-//                holder.size.setText(String.format("%d%s",
-//                        getTotalImageSize(), mContext.getResources().getString(R.string.ivp_photo_unit)));
-//                if (mFolders.size() > 0) {
-//                    Folder f = mFolders.get(0);
-//                    if (f != null) {
-//                        ImagePicker.getInstance().getImageEngine().loadThumbnail(mContext, holder.cover, f.cover.path, mImageSize);
-//                    } else {
-//                        holder.cover.setImageResource(R.drawable.ivp_default_error);
-//                    }
-//                }
-//            } else {
             holder.bindData(getItem(i));
             //  }
             if (lastSelected == i) {
@@ -150,7 +138,7 @@ public class FolderAdapter extends BaseAdapter {
             }
             if (data.cover != null) {
                 // 显示图片
-                ImagePicker.getInstance().getImageEngine().loadThumbnail(mContext, cover, data.cover.path, mImageSize);
+                iLoader.loadThumbnail(mContext, cover, data.cover.path, mImageSize);
             } else {
                 cover.setImageResource(R.drawable.ivp_default_error);
             }

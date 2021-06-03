@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 /**
  *  默认Glide 图片加载
  */
-public class Glide4Loader implements ImageEngine {
+public class GlideLoader implements ILoader {
 
     public void load(Context context, ImageView image, String url) {
         Glide.with(context).load(url)

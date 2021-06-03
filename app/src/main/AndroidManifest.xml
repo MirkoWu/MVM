@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".WebActivity"
+            android:launchMode="singleTask"
             android:process=":webview"
             android:theme="@style/WebViewTheme"></activity>
         <activity android:name=".recycelerview.GridListActivity" />
@@ -43,6 +44,7 @@
                 android:resource="@xml/file_paths"
                 tools:replace="resource" />
         </provider>
+
     </application>
 
 </manifest>

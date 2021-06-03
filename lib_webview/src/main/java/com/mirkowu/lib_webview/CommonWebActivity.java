@@ -39,6 +39,7 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
         Intent starter = new Intent(context, CommonWebActivity.class);
         starter.putExtra(KEY_TITLE, title);
         starter.putExtra(KEY_URL, url);
+        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(starter);
     }
 
@@ -52,6 +53,7 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
     protected BaseMediator initMediator() {
         return null;
     }
+
 
     @Override
     protected int getLayoutId() {
@@ -72,6 +74,8 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
         WebConfig webConfig = getWebConfig();
         mWebViewCallBack = webConfig.getWebViewCallBack();
 
+
+        mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
         mToolbar.setBackIcon(webConfig.isShowBack());
         mToolbar.setTitle(title);

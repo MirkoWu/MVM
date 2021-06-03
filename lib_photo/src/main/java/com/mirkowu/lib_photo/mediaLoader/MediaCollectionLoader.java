@@ -64,7 +64,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
         this.mContext = context;
         this.mCallback = callback;
         mResultFolder = new ArrayList<>();
-        mSupportMineType = ImagePicker.getInstance().isSupportGif() ? whereArgsWithGif : whereArgs;
+        mSupportMineType = ImagePicker.getInstance().getPickerConfig().isShowGif() ? whereArgsWithGif : whereArgs;
     }
 
 

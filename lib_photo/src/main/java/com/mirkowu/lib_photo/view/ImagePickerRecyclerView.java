@@ -323,7 +323,8 @@ public class ImagePickerRecyclerView extends RecyclerView {
             if (mShowAddImage && getItemViewType(position) == 0) {//// 最后一项显示一个＋按钮
                 holder.ivThumb.setImageDrawable(mAddImageSrc);
             } else {
-                ImagePicker.getInstance().getImageEngine().loadPicked(context, holder.ivThumb, mData.get(position), mGridWidth, mGridWidth);
+                ImagePicker.getInstance().getPickerConfig().getILoader()
+                        .loadPicked(context, holder.ivThumb, mData.get(position), mGridWidth, mGridWidth);
             }
 
         }

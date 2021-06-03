@@ -6,11 +6,7 @@ import android.widget.ImageView;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by MirkoWu on 2017/4/6 0006.
- */
-
-public interface ImageEngine {
+public interface ILoader {
 
 
     /**
