@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
-import com.mirkowu.lib_photo.bean.Folder;
+import com.mirkowu.lib_photo.bean.FolderBean;
 import com.mirkowu.lib_photo.engine.ILoader;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class FolderAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
 
-    private List<Folder> mFolders = new ArrayList<>();
+    private List<FolderBean> mFolders = new ArrayList<>();
 
     int mImageSize;
 
@@ -43,7 +43,7 @@ public class FolderAdapter extends BaseAdapter {
      *
      * @param folders
      */
-    public void setData(List<Folder> folders) {
+    public void setData(List<FolderBean> folders) {
         if (folders != null && folders.size() > 0) {
             mFolders = folders;
         } else {
@@ -58,7 +58,7 @@ public class FolderAdapter extends BaseAdapter {
     }
 
     @Override
-    public Folder getItem(int i) {
+    public FolderBean getItem(int i) {
         return mFolders.get(i);
     }
 
@@ -71,14 +71,13 @@ public class FolderAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
-            view = mInflater.inflate(R.layout.ivp_list_item_folder, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ivp_list_item_folder, viewGroup, false);
             holder = new ViewHolder(view);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         if (holder != null) {
             holder.bindData(getItem(i));
-            //  }
             if (lastSelected == i) {
                 holder.indicator.setVisibility(View.VISIBLE);
             } else {
@@ -91,8 +90,8 @@ public class FolderAdapter extends BaseAdapter {
     private int getTotalImageSize() {
         int result = 0;
         if (mFolders != null && mFolders.size() > 0) {
-            for (Folder f : mFolders) {
-                result += f.mediaBeans.size();
+            for (FolderBean f : mFolders) {
+                result += f.mediaList.size();
             }
         }
         return result;
@@ -125,14 +124,14 @@ public class FolderAdapter extends BaseAdapter {
             view.setTag(this);
         }
 
-        void bindData(Folder data) {
+        void bindData(FolderBean data) {
             if (data == null) {
                 return;
             }
             name.setText(data.name);
             path.setText(data.path);
-            if (data.mediaBeans != null) {
-                size.setText(String.format("%d%s", data.mediaBeans.size(), mContext.getResources().getString(R.string.ivp_photo_unit)));
+            if (data.mediaList != null) {
+                size.setText(String.format("%d%s", data.mediaList.size(), mContext.getResources().getString(R.string.ivp_photo_unit)));
             } else {
                 size.setText("*" + mContext.getResources().getString(R.string.ivp_photo_unit));
             }

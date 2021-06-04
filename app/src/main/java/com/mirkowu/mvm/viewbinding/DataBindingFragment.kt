@@ -1,17 +1,13 @@
 package com.mirkowu.mvm.viewbinding
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.ListMenuItemView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_photo.ImagePicker
-import com.mirkowu.lib_photo.ui.ImagePickerActivity
+import com.mirkowu.lib_photo.PickerConfig
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
@@ -89,9 +85,12 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     })
         }
         binding.btnImagePicker.click {
-            ImagePicker.getInstance().setOnPickResultListener {
+            ImagePicker.getInstance()
+                    .setPickerConfig(PickerConfig().setShowCamera(true)
+                            .setSpanCount(4))
+                    .setOnPickResultListener {
                 LogUtil.d("btnImagePicker", it.toString())
-            }.start(context)
+            }.start(context!!)
         }
     }
 

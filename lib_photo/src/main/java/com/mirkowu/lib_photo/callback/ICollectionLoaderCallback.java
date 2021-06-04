@@ -1,7 +1,7 @@
 package com.mirkowu.lib_photo.callback;
 
 
-import com.mirkowu.lib_photo.bean.Folder;
+import com.mirkowu.lib_photo.bean.FolderBean;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface ICollectionLoaderCallback {
 
-    void onLoadFinish(List<Folder> folderList);
+    void onLoadFinish(List<FolderBean> folderList);
 }

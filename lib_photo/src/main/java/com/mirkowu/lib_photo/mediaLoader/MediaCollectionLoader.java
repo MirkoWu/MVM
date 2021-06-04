@@ -14,7 +14,7 @@ import androidx.loader.content.Loader;
 
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
-import com.mirkowu.lib_photo.bean.Folder;
+import com.mirkowu.lib_photo.bean.FolderBean;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.callback.ICollectionLoaderCallback;
 
@@ -53,7 +53,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     // folder result data set
     private boolean hasFolderGened;//文件夹是否已遍历 生成过
     private boolean mLoadFinished;//是否已经加载完毕 该标识为了避免 onResume时再次调用
-    private ArrayList<Folder> mResultFolder;//文件夹列表
+    private ArrayList<FolderBean> mResultFolder;//文件夹列表
 
     private Context mContext;
     private String[] mSupportMineType;
@@ -72,12 +72,12 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         CursorLoader cursorLoader = null;
-        if (id == LOADER_ALL) {//加载所有
+        if (id == LOADER_ALL) { //加载所有
             cursorLoader = new CursorLoader(mContext,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
                     IMAGE_PROJECTION[4] + ">0 AND " + where,
                     mSupportMineType, IMAGE_PROJECTION[2] + " DESC");
-        } else if (id == LOADER_CATEGORY) {//加载分类文件夹
+        } else if (id == LOADER_CATEGORY) { //加载分类文件夹
             cursorLoader = new CursorLoader(mContext,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
                     IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
@@ -114,18 +114,18 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                         File folderFile = new File(path).getParentFile();
                         if (folderFile != null && folderFile.exists()) {
                             String fp = folderFile.getAbsolutePath();
-                            Folder f = getFolderByPath(fp);
+                            FolderBean f = getFolderByPath(fp);
                             if (f == null) {
-                                Folder folder = new Folder();
+                                FolderBean folder = new FolderBean();
                                 folder.name = folderFile.getName();
                                 folder.path = fp;
                                 folder.cover = mediaBean;
                                 List<MediaBean> mediaBeanList = new ArrayList<>();
                                 mediaBeanList.add(mediaBean);
-                                folder.mediaBeans = mediaBeanList;
+                                folder.mediaList = mediaBeanList;
                                 mResultFolder.add(folder);
                             } else {
-                                f.mediaBeans.add(mediaBean);
+                                f.mediaList.add(mediaBean);
                             }
                         }
                     }
@@ -134,11 +134,11 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
 
                 if (!allList.isEmpty()) {
                     //构造所有图片的集合
-                    Folder allImagesFolder = new Folder();
+                    FolderBean allImagesFolder = new FolderBean();
                     allImagesFolder.name = mContext.getResources().getString(R.string.ivp_folder_all);
                     allImagesFolder.path = "/sdcard";
                     allImagesFolder.cover = allList.get(0);
-                    allImagesFolder.mediaBeans = allList;
+                    allImagesFolder.mediaList = allList;
                     mResultFolder.add(0, allImagesFolder);
                 }
                 hasFolderGened = true;
@@ -162,9 +162,9 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
         return false;
     }
 
-    private Folder getFolderByPath(String path) {
+    private FolderBean getFolderByPath(String path) {
         if (mResultFolder != null) {
-            for (Folder folder : mResultFolder) {
+            for (FolderBean folder : mResultFolder) {
                 if (TextUtils.equals(folder.path, path)) {
                     return folder;
                 }

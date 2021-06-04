@@ -7,19 +7,17 @@ import java.util.List;
 /**
  * 文件夹
  */
-public class Folder {
+public class FolderBean {
     public String name;
     public String path;
     public MediaBean cover;
-    public List<MediaBean> mediaBeans;
+    public List<MediaBean> mediaList;
 
     @Override
     public boolean equals(Object o) {
-        try {
-            Folder other = (Folder) o;
+        if (o instanceof FolderBean) {
+            FolderBean other = (FolderBean) o;
             return TextUtils.equals(other.path, path);
-        }catch (ClassCastException e){
-            e.printStackTrace();
         }
         return super.equals(o);
     }

@@ -2,16 +2,23 @@ package com.mirkowu.lib_photo.bean;
 
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 /**
  * 图片实体
  */
 public class MediaBean {
+    @NonNull
     public String path;
     public String name;
     public long time;
 
 
-    public MediaBean(String path, String name, long time){
+    public MediaBean(@NonNull String path) {
+        this.path = path;
+    }
+
+    public MediaBean(@NonNull String path, String name, long time) {
         this.path = path;
         this.name = name;
         this.time = time;
@@ -22,7 +29,7 @@ public class MediaBean {
         try {
             MediaBean other = (MediaBean) o;
             return TextUtils.equals(this.path, other.path);
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
         return super.equals(o);

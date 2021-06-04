@@ -3,6 +3,7 @@ package com.mirkowu.lib_photo.ui;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.PickerConstant;
 import com.mirkowu.lib_photo.R;
+import com.mirkowu.lib_photo.bean.MediaBean;
 
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 public class ImagePickerActivity extends AppCompatActivity /*implements IPickerCallback*/ {
 
 
-    private ArrayList<String> mSelectedList = new ArrayList<>();
+    //    private ArrayList<MediaBean> mSelectedList = new ArrayList<>();
     private Button mSubmitButton;
     private int mMaxSelectCount = PickerConstant.DEFAULT_IMAGE_SIZE;
     private ImagePickerFragment mPickerFragment;
@@ -31,13 +33,13 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.IVP_NO_ACTIONBAR);
-        setContentView(R.layout.ivp_activity_default);
+        setContentView(R.layout.ivp_activity_image_picker);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.BLACK);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -53,7 +55,7 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
 //        if (mode == MODE_SINGLE) {
 //            mMaxSelectCount = DEFAULT_SINGLE_SIZE;
 //        }
-        mSubmitButton = (Button) findViewById(R.id.commit);
+        mSubmitButton = findViewById(R.id.btnCommit);
 
 
         mSubmitButton.setVisibility(View.VISIBLE);
@@ -64,7 +66,7 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
             }
         });
 
-      //  Bundle bundle = getIntent().getExtras();
+        //  Bundle bundle = getIntent().getExtras();
         if (savedInstanceState == null/* && bundle != null*/) {
 //            Bundle bundle = new Bundle();
 //            bundle.putInt(ImagePickerFragment.EXTRA_SELECT_COUNT, mMaxSelectCount);
@@ -75,7 +77,7 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
 //            if (bundle.containsKey(PickerConstant.EXTRA_DEFAULT_SELECTED_LIST)) {
 //                mSelectedList = bundle.getStringArrayList(PickerConstant.EXTRA_DEFAULT_SELECTED_LIST);
 //            }
-            mSelectedList =ImagePicker.getInstance().getPickerConfig().getOriginSelectList();
+            ArrayList<MediaBean> mSelectedList = ImagePicker.getInstance().getPickerConfig().getOriginSelectList();
             updateDoneText(mSelectedList);
 
             mPickerFragment = ImagePickerFragment.newInstance();
@@ -102,33 +104,32 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
         mPickerFragment.submitResult();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                setResult(RESULT_CANCELED);
-//                onBackPressed();
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                setResult(RESULT_CANCELED);
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * Update done button by select image data
      *
      * @param mSelectedList selected image data
      */
-    public void updateDoneText(ArrayList<String> mSelectedList) {
-        int size = 0;
-        if (mSelectedList == null || mSelectedList.size() <= 0) {
+    public void updateDoneText(ArrayList<MediaBean> mSelectedList) {
+        int size = mSelectedList != null ? mSelectedList.size() : 0;
+        if (size <= 0) {
             mSubmitButton.setText(R.string.ivp_action_done);
             mSubmitButton.setEnabled(false);
         } else {
-            size = mSelectedList.size();
             mSubmitButton.setEnabled(true);
+            mSubmitButton.setText(getString(R.string.ivp_action_button_string,
+                    getString(R.string.ivp_action_done), size, mMaxSelectCount));
         }
-        mSubmitButton.setText(getString(R.string.ivp_action_button_string,
-                getString(R.string.ivp_action_done), size, mMaxSelectCount));
     }
 
 //    @Override

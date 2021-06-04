@@ -17,8 +17,7 @@
     <RelativeLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentBottom="true"
+        android:layout_height="48dp"
         android:background="@color/ivp_actionbar_color"
         android:clickable="true">
 
@@ -39,6 +38,30 @@
             android:textColor="@color/ivp_folder_text_color"
             android:textSize="16sp"
             tools:text="所有图片" />
+
+        <LinearLayout
+            android:id="@+id/ll_origin_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="10dp"
+                android:src="@drawable/ivp_origin_photo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ipv_origin_image"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+        </LinearLayout>
 
     </RelativeLayout>
 

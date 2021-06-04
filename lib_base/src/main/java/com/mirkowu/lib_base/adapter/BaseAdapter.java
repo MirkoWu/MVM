@@ -156,7 +156,6 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         if (dataSize == size) {
             this.notifyDataSetChanged();
         }
-
     }
 
     public T getItem(int position) {

@@ -8,6 +8,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 
 import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.engine.ILoader;
 import com.mirkowu.lib_photo.photoview.PhotoView;
 
@@ -20,23 +21,23 @@ import java.util.ArrayList;
  */
 public class PreviewImageAdapter extends PagerAdapter {
     private View.OnClickListener mOnClickListener;
-    private ArrayList<String> mData;
+    private ArrayList<MediaBean> mData;
     private int size;
     private ILoader iLoader;
 
-    public PreviewImageAdapter(View.OnClickListener onClickListener, ArrayList<String> mData) {
+    public PreviewImageAdapter(View.OnClickListener onClickListener, ArrayList<MediaBean> mData) {
         this.mData = mData;
         iLoader = ImagePicker.getInstance().getPickerConfig().getILoader();
         this.mOnClickListener = onClickListener;
         setData(mData);
     }
 
-    public void setData(ArrayList<String> mData) {
+    public void setData(ArrayList<MediaBean> mData) {
         this.mData = mData;
         size = mData == null ? 0 : mData.size();
     }
 
-    public int getCount() {// 返回数量
+    public int getCount() {
         return size;
     }
 
@@ -45,7 +46,7 @@ public class PreviewImageAdapter extends PagerAdapter {
     public View instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView imageView = new PhotoView(container.getContext());
         imageView.setOnClickListener(mOnClickListener);
-        iLoader.load(container.getContext(), imageView, mData.get(position));
+        iLoader.load(container.getContext(), imageView, mData.get(position).path);
         container.addView(imageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return imageView;
     }

@@ -12,6 +12,7 @@ import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.engine.ILoader;
+import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 
 import java.util.ArrayList;
@@ -28,41 +29,44 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
     private static final int TYPE_VIDEO = 2;
 
 
-    private boolean showCamera = true;
-    private boolean multiSelect = true;
+    private boolean mIsShowCamera = true;
+//    private boolean multiSelect = true;
     private ILoader mILoader;
 
     private List<MediaBean> mData = new ArrayList<>();
-    private List<MediaBean> mSelectedData = new ArrayList<>();
+    //   private List<MediaBean> mSelectedData = new ArrayList<>();
 
     final int mGridWidth;
 
     public ImageGridAdapter(boolean showCamera, int spanCount) {
         this.mILoader = ImagePicker.getInstance().getPickerConfig().getILoader();
-        this.showCamera = showCamera;
+        this.mIsShowCamera = showCamera;
         int width = ScreenUtils.getScreenWidth();
         //int spacing = context.getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mGridWidth = (int) (width * 1f / spanCount); //取整
     }
+//
+//    /**
+//     * 显示选择指示器
+//     *
+//     * @param b
+//     */
+//    public void setMultiSelect(boolean b) {
+//        multiSelect = b;
+//    }
 
-    /**
-     * 显示选择指示器
-     *
-     * @param b
-     */
-    public void setMultiSelect(boolean b) {
-        multiSelect = b;
+    public void setIsShowCamera(boolean showCamera) {
+        if (mIsShowCamera == showCamera) return;
+        mIsShowCamera = showCamera;
+        if (mIsShowCamera) {
+            notifyItemInserted(0);
+        } else {
+            notifyItemRemoved(0);
+        }
     }
 
-    public void setShowCamera(boolean b) {
-        if (showCamera == b) return;
-
-        showCamera = b;
-        notifyDataSetChanged();
-    }
-
-    public boolean isShowCamera() {
-        return showCamera;
+    public boolean isIsShowCamera() {
+        return mIsShowCamera;
     }
 
     /**
@@ -70,36 +74,39 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
      *
      * @param mediaBean
      */
-    public void select(MediaBean mediaBean) {
-        if (multiSelect) {
-            if (mSelectedData.contains(mediaBean)) {
-                mSelectedData.remove(mediaBean);
-            } else {
-                mSelectedData.add(mediaBean);
-            }
-        } else {
-            mSelectedData.clear();
-            mSelectedData.add(mediaBean);
-        }
-        notifyDataSetChanged();
+    public void select(int position, MediaBean mediaBean) {
+//        if (multiSelect) {
+//            if (mSelectedData.contains(mediaBean)) {
+//                mSelectedData.remove(mediaBean);
+//            } else {
+//                mSelectedData.add(mediaBean);
+//            }
+//        } else {
+//            mSelectedData.clear();
+//            mSelectedData.add(mediaBean);
+//        }
+        notifyItemChanged(position);
+        compatibilityDataSizeChanged(0);
     }
 
-    /**
-     * 通过图片路径设置默认选择
-     *
-     * @param resultList
-     */
-    public void setDefaultSelected(ArrayList<String> resultList) {
-        for (String path : resultList) {
-            MediaBean mediaBean = getImageByPath(path);
-            if (mediaBean != null) {
-                mSelectedData.add(mediaBean);
-            }
-        }
-        if (mSelectedData.size() > 0) {
-            notifyDataSetChanged();
-        }
-    }
+//    /**
+//     * 通过图片路径设置默认选择
+//     *
+//     * @param selectList
+//     */
+//    public void setDefaultSelected(ArrayList<MediaBean> selectList) {
+//
+//
+////        for (MediaBean bean : resultList) {
+////            MediaBean mediaBean = getImageByPath(path);
+////            if (mediaBean != null) {
+//        mSelectedData.addAll(selectList);
+////            }
+////        }
+//        if (mSelectedData.size() > 0) {
+//            notifyDataSetChanged();
+//        }
+//    }
 
     private MediaBean getImageByPath(String path) {
         if (mData != null && mData.size() > 0) {
@@ -115,16 +122,11 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
     /**
      * 设置数据集
      *
-     * @param mediaBeans
+     * @param list
      */
-    public void setData(List<MediaBean> mediaBeans) {
-        mSelectedData.clear();
-
-        if (mediaBeans != null && mediaBeans.size() > 0) {
-            mData = mediaBeans;
-        } else {
-            mData.clear();
-        }
+    public void setData(List<MediaBean> list) {
+        this.mData = list == null ? new ArrayList<>() : list;
+//        mSelectedData.clear();
         notifyDataSetChanged();
     }
 
@@ -137,12 +139,23 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
         return mData;
     }
 
+    /**
+     * 防止未被刷新
+     *
+     * @param size 新加的数量
+     */
+    private void compatibilityDataSizeChanged(int size) {
+        int dataSize = this.mData == null ? 0 : this.mData.size();
+        if (dataSize == size) {
+            this.notifyDataSetChanged();
+        }
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        if (isShowCamera() && viewType == TYPE_CAMERA) {
+        if (mIsShowCamera && viewType == TYPE_CAMERA) {
             return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
         }
         return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
@@ -150,21 +163,23 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        if (onItemClickListener != null) {
+        if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(ImageGridAdapter.this, v, position);
+                    mOnItemClickListener.onItemClick(ImageGridAdapter.this, v, position);
                 }
             });
 
-            if (getItemViewType(position) != TYPE_CAMERA)
+            if (getItemViewType(position) != TYPE_CAMERA) {
+
                 holder.ivSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onItemClickListener.onItemViewClick(ImageGridAdapter.this, v, position);
+                        mOnItemClickListener.onItemViewClick(ImageGridAdapter.this, v, position);
                     }
                 });
+            }
         }
 
         holder.bindData(getItem(position));
@@ -172,7 +187,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     @Override
     public int getItemViewType(int position) {
-        if (showCamera) {
+        if (mIsShowCamera) {
             return position == 0 ? TYPE_CAMERA : TYPE_IMAGE;
         }
         return TYPE_IMAGE;
@@ -180,7 +195,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
 
     public MediaBean getItem(int i) {
-        if (showCamera) {
+        if (mIsShowCamera) {
             if (i == 0) {
                 return null;
             }
@@ -197,7 +212,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     @Override
     public int getItemCount() {
-        return showCamera ? mData.size() + 1 : mData.size();
+        return mIsShowCamera ? mData.size() + 1 : mData.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -217,7 +232,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
             if (data == null) return;
 
             // 处理单选和多选状态
-            if (mSelectedData.contains(data)) {
+            if (ResultModel.contains(data)) {
                 // 设置选中状态
                 ivSelect.setImageResource(R.drawable.ivp_btn_selected);
                 mask.setVisibility(View.VISIBLE);
@@ -234,10 +249,10 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
     }
 
 
-    protected OnItemClickListener onItemClickListener;
+    protected OnItemClickListener mOnItemClickListener;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     public interface OnItemClickListener {

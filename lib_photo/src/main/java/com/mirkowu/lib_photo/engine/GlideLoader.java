@@ -13,10 +13,10 @@ import com.mirkowu.lib_photo.R;
 import java.util.concurrent.ExecutionException;
 
 /**
- *  默认Glide 图片加载
+ * 默认Glide 图片加载
  */
 public class GlideLoader implements ILoader {
-
+    @Override
     public void load(Context context, ImageView image, String url) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
@@ -27,6 +27,7 @@ public class GlideLoader implements ILoader {
                 .into(image);
     }
 
+    @Override
     public void loadThumbnail(Context context, ImageView image, String url, int width) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
