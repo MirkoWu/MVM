@@ -40,6 +40,7 @@ import com.mirkowu.lib_photo.mediaLoader.MediaModel;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_photo.utils.PermissionsUtils;
 import com.mirkowu.lib_photo.view.MediaGridDivider;
+import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 
@@ -192,7 +193,7 @@ public class ImagePickerFragment extends Fragment {
             }
         });
         //图片列表
-        mImageAdapter = new ImageGridAdapter(mIsShowCamera, mSpanCount);
+        mImageAdapter = new ImageGridAdapter(mIsShowCamera,mIsShowVideo, mSpanCount);
         // mImageAdapter.setMultiSelect(!mIsSingleMode);
         mImageAdapter.setOnItemClickListener(new ImageGridAdapter.OnItemClickListener() {
             @Override
@@ -453,9 +454,11 @@ public class ImagePickerFragment extends Fragment {
 
     public void submitResult() {
         if (ResultModel.isEmpty()) {
-            if (ImagePicker.getInstance().getOnPickResultListener() != null) {
-                ImagePicker.getInstance().getOnPickResultListener().onPickResult(ResultModel.getList());
-            }
+            LogUtil.e("选择数量不能少于0张！！！");
+            return;
+        }
+        if (ImagePicker.getInstance().getOnPickResultListener() != null) {
+            ImagePicker.getInstance().getOnPickResultListener().onPickResult(ResultModel.getList());
         }
         getActivity().finish();
         ImagePicker.getInstance().clear();

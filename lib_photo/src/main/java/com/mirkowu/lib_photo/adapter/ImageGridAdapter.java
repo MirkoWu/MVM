@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_photo.bean.MineType;
 import com.mirkowu.lib_photo.engine.ILoader;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +25,16 @@ import java.util.List;
 /**
  * 图片Adapter
  */
-public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.ViewHolder> {
+public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.ImageHolder> {
 
     private static final int TYPE_CAMERA = 0;
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_VIDEO = 2;
 
 
-    private boolean mIsShowCamera = true;
-//    private boolean multiSelect = true;
+    private boolean mIsShowCamera = false;
+    private boolean mIsShowVideo = false;
+    //    private boolean multiSelect = true;
     private ILoader mILoader;
 
     private List<MediaBean> mData = new ArrayList<>();
@@ -38,9 +42,10 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     final int mGridWidth;
 
-    public ImageGridAdapter(boolean showCamera, int spanCount) {
+    public ImageGridAdapter(boolean showCamera, boolean showVideo, int spanCount) {
         this.mILoader = ImagePicker.getInstance().getPickerConfig().getILoader();
         this.mIsShowCamera = showCamera;
+        this.mIsShowVideo = showVideo;
         int width = ScreenUtils.getScreenWidth();
         //int spacing = context.getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mGridWidth = (int) (width * 1f / spanCount); //取整
@@ -153,16 +158,18 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         if (mIsShowCamera && viewType == TYPE_CAMERA) {
-            return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
+            return new ImageHolder(layoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
+        } else if (mIsShowVideo && viewType == TYPE_VIDEO) {
+            return new VideoHolder(layoutInflater.inflate(R.layout.ivp_list_item_video, parent, false));
         }
-        return new ViewHolder(layoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
+        return new ImageHolder(layoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ImageHolder holder, final int position) {
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,7 +179,6 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
             });
 
             if (getItemViewType(position) != TYPE_CAMERA) {
-
                 holder.ivSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -187,8 +193,14 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
     @Override
     public int getItemViewType(int position) {
-        if (mIsShowCamera) {
-            return position == 0 ? TYPE_CAMERA : TYPE_IMAGE;
+        if (mIsShowCamera && position == 0) {
+            return TYPE_CAMERA;
+        }
+        if (mIsShowVideo) {
+            MediaBean bean = getItem(position);
+            if (bean != null && bean.type.contains(MineType.VIDEO)) {
+                return TYPE_VIDEO;
+            }
         }
         return TYPE_IMAGE;
     }
@@ -215,13 +227,13 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
         return mIsShowCamera ? mData.size() + 1 : mData.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ImageHolder extends RecyclerView.ViewHolder {
         ImageView ivThumb;
         ImageView ivSelect;
         View mask;
 
 
-        ViewHolder(View view) {
+        ImageHolder(View view) {
             super(view);
             ivThumb = view.findViewById(R.id.ivThumb);
             ivSelect = view.findViewById(R.id.ivSelect);
@@ -245,6 +257,23 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
 
             // 显示图片
             mILoader.loadThumbnail(ivThumb.getContext(), ivThumb, data.path, mGridWidth);
+        }
+    }
+
+    class VideoHolder extends ImageHolder {
+        TextView tvDuration;
+
+
+        VideoHolder(View view) {
+            super(view);
+            tvDuration = view.findViewById(R.id.tvDuration);
+
+            mask = view.findViewById(R.id.mask);
+        }
+
+        void bindData(final MediaBean data) {
+            super.bindData(data);
+            tvDuration.setText(TimeUtils.millis2String(data.duration, "mm:ss"));
         }
     }
 

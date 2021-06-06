@@ -2,6 +2,7 @@ package com.mirkowu.lib_photo.mediaLoader;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -13,13 +14,16 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.FolderBean;
 import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_photo.bean.MineType;
 import com.mirkowu.lib_photo.callback.ICollectionLoaderCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,22 +38,33 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     public static final String KEY_PATH = "path";//文件夹路径
 
     private final String[] IMAGE_PROJECTION = {
-            MediaStore.Images.Media.DATA,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.DATE_ADDED,
-            MediaStore.Images.Media.MIME_TYPE,
-            MediaStore.Images.Media.SIZE,
-            MediaStore.Images.Media._ID};
+            MediaStore.MediaColumns.DATA,
+            MediaStore.MediaColumns.DISPLAY_NAME,
+            MediaStore.MediaColumns.DATE_ADDED,
+            MediaStore.MediaColumns.MIME_TYPE,
+            MediaStore.MediaColumns.SIZE,
+            MediaStore.MediaColumns.DURATION,
+            MediaStore.MediaColumns._ID,
+    };
 
     private final String where
-            = MediaStore.Video.Media.MIME_TYPE + "=? or "
-            + MediaStore.Video.Media.MIME_TYPE + "=? or "
-            + MediaStore.Video.Media.MIME_TYPE + "=? or "
-            + MediaStore.Video.Media.MIME_TYPE + "=?";
+            = MediaStore.MediaColumns.MIME_TYPE + "=? or "
+            + MediaStore.MediaColumns.MIME_TYPE + "=? or "
+            + MediaStore.MediaColumns.MIME_TYPE + "=? or "
+            + MediaStore.MediaColumns.MIME_TYPE + "=?";
 
     private final String[] whereArgs = {"image/png", "image/jpg", "image/jpeg"};
     private final String[] whereArgsWithGif = {"image/png", "image/jpg", "image/jpeg", "image/gif"};
+    private final String selectionSingle = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)";
+    private final String selectionAll = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+            + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)";
 
+    private final String[] selectionArgsImage = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)};
+    private final String[] selectionArgsVideo = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
+    private final String[] selectionAllArgs = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+            String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
+
+    private final ArrayList<String> mMineType = new ArrayList<>();
     // folder result data set
     private boolean hasFolderGened;//文件夹是否已遍历 生成过
     private boolean mLoadFinished;//是否已经加载完毕 该标识为了避免 onResume时再次调用
@@ -58,12 +73,22 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     private Context mContext;
     private String[] mSupportMineType;
     private ICollectionLoaderCallback mCallback;
+    private boolean isShowGif;
+    private boolean isShowVideo;
+    private boolean isOnlyVideo;
 
 
     public MediaCollectionLoader(Context context, ICollectionLoaderCallback callback) {
         this.mContext = context;
         this.mCallback = callback;
         mResultFolder = new ArrayList<>();
+        PickerConfig config = ImagePicker.getInstance().getPickerConfig();
+        isShowGif = config.isShowGif();
+        isShowVideo = config.isShowVideo();
+        isOnlyVideo = config.isOnlyVideo();
+
+        mMineType.addAll(Arrays.asList(whereArgs));
+
         mSupportMineType = ImagePicker.getInstance().getPickerConfig().isShowGif() ? whereArgsWithGif : whereArgs;
     }
 
@@ -72,17 +97,39 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         CursorLoader cursorLoader = null;
+        Uri contentUri = MediaStore.Files.getContentUri("external");
         if (id == LOADER_ALL) { //加载所有
+            String selection;
+            String[] selectionArgs;
+            if (isOnlyVideo || !isShowVideo) {
+                selection = selectionSingle;
+                if (isOnlyVideo) {
+                    selectionArgs = selectionArgsVideo;
+                } else {
+                    selectionArgs = selectionArgsImage;
+                }
+            } else {
+                selection = selectionAll;
+                selectionArgs = selectionAllArgs;
+            }
+
             cursorLoader = new CursorLoader(mContext,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                    IMAGE_PROJECTION[4] + ">0 AND " + where,
-                    mSupportMineType, IMAGE_PROJECTION[2] + " DESC");
-        } else if (id == LOADER_CATEGORY) { //加载分类文件夹
-            cursorLoader = new CursorLoader(mContext,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                    IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
-                    null, IMAGE_PROJECTION[2] + " DESC");
+//                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    contentUri,
+                    IMAGE_PROJECTION,
+//                    IMAGE_PROJECTION[4] + ">0 AND " + where,
+                    selection,
+                    selectionArgs, IMAGE_PROJECTION[2] + " DESC");
         }
+//        else if (id == LOADER_CATEGORY) { //加载分类文件夹
+//            cursorLoader = new CursorLoader(mContext,
+////                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                    contentUri,
+//                    IMAGE_PROJECTION,
+////                    IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
+//                    IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
+//                    null, IMAGE_PROJECTION[2] + " DESC");
+//        }
         mLoadFinished = false;
         hasFolderGened = false;
         return cursorLoader;
@@ -101,12 +148,18 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                     String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                     String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
                     long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                    String mineType = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
                     if (!fileExist(path)) {
                         continue;
                     }
                     MediaBean mediaBean = null;
                     if (!TextUtils.isEmpty(name)) {
-                        mediaBean = new MediaBean(path, name, dateTime);
+                        if (mineType.contains(MineType.VIDEO)) {
+                            long duration = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
+                            mediaBean = new MediaBean(path, name, mineType, dateTime, duration);
+                        } else {
+                            mediaBean = new MediaBean(path, name, mineType, dateTime);
+                        }
                         allList.add(mediaBean);
                     }
                     if (!hasFolderGened) {

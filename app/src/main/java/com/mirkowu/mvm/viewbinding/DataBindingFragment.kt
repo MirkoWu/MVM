@@ -86,10 +86,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
         binding.btnImagePicker.click {
             ImagePicker.getInstance()
-                    .setPickerConfig(PickerConfig().setShowCamera(true)
+                    .setPickerConfig(PickerConfig()/*.setShowCamera(true)*//*.setShowVideo(true)*//*.setOnlyVideo(true)*/
                             .setSpanCount(4))
                     .setOnPickResultListener {
-                LogUtil.d("btnImagePicker", it.toString())
+                LogUtil.e("btnImagePicker", it.toString())
             }.start(context!!)
         }
     }
