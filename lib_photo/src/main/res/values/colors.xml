@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ivp_actionbar_color">#21282C</color>
+    <color name="ivp_toolbar_color">#21282C</color>
+    <color name="ivp_bg_color">#21282C</color>
+    <color name="ivp_blue">#19AC28</color>
+    <color name="ivp_mask_normal_color">#18000000</color>
+    <color name="ivp_mask_select_color">#88000000</color>
 </resources>

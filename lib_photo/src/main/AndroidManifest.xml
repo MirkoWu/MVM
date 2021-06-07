@@ -13,13 +13,19 @@
 
         <activity
             android:name=".ui.ImagePickerActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/ivp_theme" />
         <activity
-            android:name=".ui.ImagePreviewActivity"
-            android:configChanges="orientation|screenSize" />
+            android:name=".ui.AlbumPreviewActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/ivp_theme" />
+        <activity
+            android:name=".ui.PreviewActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/ivp_theme" />
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".provider.IVPProvider"
             android:authorities="${applicationId}.ivp.file_provider"
             android:exported="false"
             android:grantUriPermissions="true">

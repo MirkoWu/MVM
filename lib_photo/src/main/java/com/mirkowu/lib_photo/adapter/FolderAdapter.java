@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.FolderBean;
-import com.mirkowu.lib_photo.engine.ILoader;
+import com.mirkowu.lib_photo.engine.IImageEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +30,11 @@ public class FolderAdapter extends BaseAdapter {
     int mImageSize;
 
     int lastSelected = 0;
-    private ILoader iLoader;
+    private IImageEngine iLoader;
 
     public FolderAdapter(Context context) {
         mContext = context;
-        iLoader = ImagePicker.getInstance().getPickerConfig().getILoader();
+        iLoader = ImagePicker.getInstance().getImageEngine();
         mImageSize = mContext.getResources().getDimensionPixelOffset(R.dimen.ivp_folder_cover_size);
     }
 
@@ -137,7 +137,7 @@ public class FolderAdapter extends BaseAdapter {
             }
             if (data.cover != null) {
                 // 显示图片
-                iLoader.loadThumbnail(mContext, cover, data.cover.path, mImageSize);
+                iLoader.loadThumbnail(mContext, cover, data.cover.uri, mImageSize);
             } else {
                 cover.setImageResource(R.drawable.ivp_default_error);
             }

@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -38,6 +39,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
     private boolean mShowAddImage;
     private Drawable mAddImageSrc;
     private Drawable mDeleteImageSrc;
+    @NonNull
     private ImagePickedAdapter mAdapter;
     private MediaGridDivider gridDivider;
     private ImageView.ScaleType mScaleType = ImageView.ScaleType.CENTER_CROP;
@@ -237,6 +239,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
     }
 
 
+    @NonNull
     public ImagePickedAdapter getAdapter() {
         return mAdapter;
     }
@@ -245,19 +248,19 @@ public class ImagePickerRecyclerView extends RecyclerView {
     public class ImagePickedAdapter extends RecyclerView.Adapter<ImagePickedAdapter.ImgViewHolder> {
 
         Context context;
-        List<String> mData = new ArrayList<>();
+        ArrayList<String> mData = new ArrayList<>();
 
         public ImagePickedAdapter(Context context) {
             this.context = context;
         }
 
         public void setData(List<String> data) {
-            if (data == null) data = new ArrayList<>();
-            mData = data;
+            mData.clear();
+            mData.addAll(data);
             notifyDataSetChanged();
         }
 
-        public List<String> getData() {
+        public ArrayList<String> getData() {
             return mData;
         }
 
@@ -282,7 +285,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
             if (mShowAddImage && (position) == mData.size() && mData.size() < mMaxCount) {
                 return 0;
             } else {
-                return R.layout.ivp_list_item_image;
+                return R.layout.ivp_list_item_selected_image;
             }
         }
 
@@ -298,11 +301,13 @@ public class ImagePickerRecyclerView extends RecyclerView {
             holder.itemView.setLayoutParams(mItemLayoutParams);
             holder.ivThumb.setScaleType(mScaleType);
 
-            holder.ivSelect.setVisibility(mShowDelete ? VISIBLE : GONE);
+            holder.flDelete.setVisibility(mShowDelete ? VISIBLE : GONE);
             if (mShowDelete && getItemViewType(position) != 0) {
-                holder.ivSelect.setVisibility(VISIBLE);
-                holder.ivSelect.setImageDrawable(mDeleteImageSrc);
-            } else holder.ivSelect.setVisibility(GONE);
+                holder.flDelete.setVisibility(VISIBLE);
+                holder.ivDelete.setImageDrawable(mDeleteImageSrc);
+            } else {
+                holder.flDelete.setVisibility(GONE);
+            }
 
             //点击事件 交给外界处理
             if (onImagePickEventListener != null) {
@@ -312,18 +317,18 @@ public class ImagePickerRecyclerView extends RecyclerView {
                         onImagePickEventListener.onItemClick(position, getItemViewType(position) == 0);
                     }
                 });
-                holder.ivSelect.setOnClickListener(new View.OnClickListener() {
+                holder.flDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onImagePickEventListener.onItemDelete(position);
+                        onImagePickEventListener.onItemDeleteClick(position);
                     }
                 });
             }
 
-            if (mShowAddImage && getItemViewType(position) == 0) {//// 最后一项显示一个＋按钮
+            if (mShowAddImage && getItemViewType(position) == 0) { // 最后一项显示一个＋按钮
                 holder.ivThumb.setImageDrawable(mAddImageSrc);
             } else {
-                ImagePicker.getInstance().getPickerConfig().getILoader()
+                ImagePicker.getInstance().getImageEngine()
                         .loadPicked(context, holder.ivThumb, mData.get(position), mGridWidth, mGridWidth);
             }
 
@@ -332,12 +337,14 @@ public class ImagePickerRecyclerView extends RecyclerView {
 
         public class ImgViewHolder extends RecyclerView.ViewHolder {
             SquaredImageView ivThumb;
-            ImageView ivSelect;
+            FrameLayout flDelete;
+            ImageView ivDelete;
 
             public ImgViewHolder(View itemView) {
                 super(itemView);
                 ivThumb = itemView.findViewById(R.id.ivThumb);
-                ivSelect = itemView.findViewById(R.id.ivSelect);
+                flDelete = itemView.findViewById(R.id.flDelete);
+                ivDelete = itemView.findViewById(R.id.ivDelete);
                 ivThumb.setAdjustViewBounds(true);
             }
         }
@@ -355,7 +362,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
     public interface OnImagePickEventListener {
         void onItemClick(int position, boolean isAddImage);
 
-        void onItemDelete(int position);
+        void onItemDeleteClick(int position);
     }
 
 }

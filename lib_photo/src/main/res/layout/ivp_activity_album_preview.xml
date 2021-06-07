@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#181819"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -16,38 +17,14 @@
             android:layout_height="match_parent"
             android:background="#000000" />
 
-        <LinearLayout
-            android:id="@+id/llSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/ivp_bottom_shape"
-            android:gravity="right"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/ivSave"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="20dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/ivp_save" />
-        </LinearLayout>
-
     </RelativeLayout>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/ivp_actionbar_color"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="?actionBarSize"
+        android:background="@color/ivp_toolbar_color"
+        app:titleTextAppearance="@style/ivp_Toolbar_TitleText">
 
         <Button
             android:id="@+id/btnCommit"
@@ -75,7 +52,7 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom"
         android:layout_marginRight="6dp"
-        android:background="@color/ivp_actionbar_color">
+        android:background="@color/ivp_toolbar_color">
 
 
         <TextView

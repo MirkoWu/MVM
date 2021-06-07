@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#181819"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mirkowu.lib_photo.view.ViewPagerFixed
+            android:id="@+id/mViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <LinearLayout
+            android:id="@+id/llSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/ivp_bottom_shape"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivSave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/ivp_save" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/ivp_toolbar_color"
+        app:titleTextAppearance="@style/ivp_Toolbar_TitleText">
+
+<!--        <Button-->
+<!--            android:id="@+id/btnCommit"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:layout_marginRight="12dp"-->
+<!--            android:background="@drawable/ivp_action_btn"-->
+<!--            android:gravity="center"-->
+<!--            android:minWidth="1dp"-->
+<!--            android:minHeight="1dp"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:paddingTop="5dp"-->
+<!--            android:paddingRight="10dp"-->
+<!--            android:paddingBottom="5dp"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/ivp_default_text_color"-->
+<!--            android:textSize="14sp" />-->
+
+    </androidx.appcompat.widget.Toolbar>
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rlBottom"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        android:layout_marginRight="6dp"-->
+<!--        android:background="@color/ivp_toolbar_color">-->
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvPick"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:drawableLeft="@drawable/ivp_btn_unselected"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:paddingRight="10dp"-->
+<!--            android:text="@string/pick"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="15sp" />-->
+
+<!--    </RelativeLayout>-->
+
+</FrameLayout>

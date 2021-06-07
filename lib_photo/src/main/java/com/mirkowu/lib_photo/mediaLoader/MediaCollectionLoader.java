@@ -1,5 +1,6 @@
 package com.mirkowu.lib_photo.mediaLoader;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,7 +24,6 @@ import com.mirkowu.lib_photo.callback.ICollectionLoaderCallback;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,9 +33,9 @@ import java.util.List;
  */
 public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     // loaders
-    public static final int LOADER_ALL = 0;//加载全部
-    public static final int LOADER_CATEGORY = 1;//分文件夹加载
-    public static final String KEY_PATH = "path";//文件夹路径
+    public static final int LOADER_ALL = 0; //加载全部
+    public static final int LOADER_CATEGORY = 1; //分文件夹加载
+    public static final String KEY_PATH = "path"; //文件夹路径
 
     private final String[] IMAGE_PROJECTION = {
             MediaStore.MediaColumns.DATA,
@@ -47,14 +47,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
             MediaStore.MediaColumns._ID,
     };
 
-    private final String where
-            = MediaStore.MediaColumns.MIME_TYPE + "=? or "
-            + MediaStore.MediaColumns.MIME_TYPE + "=? or "
-            + MediaStore.MediaColumns.MIME_TYPE + "=? or "
-            + MediaStore.MediaColumns.MIME_TYPE + "=?";
 
-    private final String[] whereArgs = {"image/png", "image/jpg", "image/jpeg"};
-    private final String[] whereArgsWithGif = {"image/png", "image/jpg", "image/jpeg", "image/gif"};
     private final String selectionSingle = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)";
     private final String selectionAll = "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
             + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)";
@@ -64,18 +57,16 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     private final String[] selectionAllArgs = new String[]{String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
             String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
 
-    private final ArrayList<String> mMineType = new ArrayList<>();
     // folder result data set
-    private boolean hasFolderGened;//文件夹是否已遍历 生成过
-    private boolean mLoadFinished;//是否已经加载完毕 该标识为了避免 onResume时再次调用
-    private ArrayList<FolderBean> mResultFolder;//文件夹列表
+    private boolean mLoadFinished; //是否已经加载完毕 该标识为了避免 onResume时再次调用
+    private boolean mHasFolderGenerated; //文件夹是否已遍历 生成过
+    private ArrayList<FolderBean> mResultFolder; //文件夹列表
 
     private Context mContext;
-    private String[] mSupportMineType;
     private ICollectionLoaderCallback mCallback;
-    private boolean isShowGif;
-    private boolean isShowVideo;
-    private boolean isOnlyVideo;
+    private boolean mIsShowGif;
+    private boolean mIsShowVideo;
+    private boolean mIsOnlyVideo;
 
 
     public MediaCollectionLoader(Context context, ICollectionLoaderCallback callback) {
@@ -83,13 +74,9 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
         this.mCallback = callback;
         mResultFolder = new ArrayList<>();
         PickerConfig config = ImagePicker.getInstance().getPickerConfig();
-        isShowGif = config.isShowGif();
-        isShowVideo = config.isShowVideo();
-        isOnlyVideo = config.isOnlyVideo();
-
-        mMineType.addAll(Arrays.asList(whereArgs));
-
-        mSupportMineType = ImagePicker.getInstance().getPickerConfig().isShowGif() ? whereArgsWithGif : whereArgs;
+        mIsShowGif = config.isShowGif();
+        mIsShowVideo = config.isShowVideo();
+        mIsOnlyVideo = config.isOnlyVideo();
     }
 
 
@@ -101,9 +88,9 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
         if (id == LOADER_ALL) { //加载所有
             String selection;
             String[] selectionArgs;
-            if (isOnlyVideo || !isShowVideo) {
+            if (mIsOnlyVideo || !mIsShowVideo) {
                 selection = selectionSingle;
-                if (isOnlyVideo) {
+                if (mIsOnlyVideo) {
                     selectionArgs = selectionArgsVideo;
                 } else {
                     selectionArgs = selectionArgsImage;
@@ -114,24 +101,14 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
             }
 
             cursorLoader = new CursorLoader(mContext,
-//                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                     contentUri,
                     IMAGE_PROJECTION,
-//                    IMAGE_PROJECTION[4] + ">0 AND " + where,
                     selection,
-                    selectionArgs, IMAGE_PROJECTION[2] + " DESC");
+                    selectionArgs,
+                    IMAGE_PROJECTION[2] + " DESC");
         }
-//        else if (id == LOADER_CATEGORY) { //加载分类文件夹
-//            cursorLoader = new CursorLoader(mContext,
-////                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                    contentUri,
-//                    IMAGE_PROJECTION,
-////                    IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
-//                    IMAGE_PROJECTION[4] + ">0 AND " + IMAGE_PROJECTION[0] + " like '%" + args.getString(KEY_PATH) + "%'",
-//                    null, IMAGE_PROJECTION[2] + " DESC");
-//        }
         mLoadFinished = false;
-        hasFolderGened = false;
+        mHasFolderGenerated = false;
         return cursorLoader;
     }
 
@@ -147,22 +124,31 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                 do {
                     String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                     String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                    long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
                     String mineType = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
-                    if (!fileExist(path)) {
+                    long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                    long id = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]));
+                    if (!fileExist(path) || TextUtils.isEmpty(mineType)) {
                         continue;
                     }
+
+                    if (!mIsShowGif && (mineType.contains(MineType.GIF) || path.endsWith(MineType.GIF))) {
+                        continue;
+                    }
+
+                    Uri contentUri = MediaStore.Files.getContentUri("external");
+                    Uri uri = ContentUris.withAppendedId(contentUri, id);
+
                     MediaBean mediaBean = null;
                     if (!TextUtils.isEmpty(name)) {
                         if (mineType.contains(MineType.VIDEO)) {
                             long duration = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
-                            mediaBean = new MediaBean(path, name, mineType, dateTime, duration);
+                            mediaBean = new MediaBean(uri, path, name, mineType, dateTime, duration);
                         } else {
-                            mediaBean = new MediaBean(path, name, mineType, dateTime);
+                            mediaBean = new MediaBean(uri, path, name, mineType, dateTime);
                         }
                         allList.add(mediaBean);
                     }
-                    if (!hasFolderGened) {
+                    if (!mHasFolderGenerated) {
                         // get all folder data
                         File folderFile = new File(path).getParentFile();
                         if (folderFile != null && folderFile.exists()) {
@@ -188,13 +174,20 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                 if (!allList.isEmpty()) {
                     //构造所有图片的集合
                     FolderBean allImagesFolder = new FolderBean();
-                    allImagesFolder.name = mContext.getResources().getString(R.string.ivp_folder_all);
+
+                    if (mIsOnlyVideo) {
+                        allImagesFolder.name = mContext.getResources().getString(R.string.ivp_all_video);
+                    } else if (mIsShowVideo) {
+                        allImagesFolder.name = mContext.getResources().getString(R.string.ivp_all_image_video);
+                    } else {
+                        allImagesFolder.name = mContext.getResources().getString(R.string.ivp_all_image);
+                    }
                     allImagesFolder.path = "/sdcard";
                     allImagesFolder.cover = allList.get(0);
                     allImagesFolder.mediaList = allList;
                     mResultFolder.add(0, allImagesFolder);
                 }
-                hasFolderGened = true;
+                mHasFolderGenerated = true;
                 if (mCallback != null) {
                     mCallback.onLoadFinish(mResultFolder);
                 }

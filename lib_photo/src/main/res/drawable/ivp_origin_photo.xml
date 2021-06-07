@@ -6,14 +6,14 @@
                 <shape>
                     <size android:width="64dp" android:height="64dp" />
                     <corners android:radius="32dp" />
-                    <stroke android:width="3dp" android:color="#06F81E" />
+                    <stroke android:width="3dp" android:color="@color/ivp_blue" />
                 </shape>
             </item>
             <item android:gravity="center">
                 <shape>
                     <size android:width="40dp" android:height="40dp" />
                     <corners android:radius="30dp" />
-                    <solid android:color="#06F81E" />
+                    <solid android:color="@color/ivp_blue" />
                 </shape>
             </item>
         </layer-list>

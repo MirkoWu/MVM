@@ -21,4 +21,14 @@ public class FolderBean {
         }
         return super.equals(o);
     }
+
+    @Override
+    public String toString() {
+        return "FolderBean{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", cover=" + cover +
+                ", mediaList=" + mediaList +
+                '}';
+    }
 }

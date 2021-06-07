@@ -1,7 +1,5 @@
 package com.mirkowu.lib_photo.ui;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,11 +7,13 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.PickerConstant;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
 import java.util.ArrayList;
 
@@ -32,12 +32,13 @@ public class ImagePickerActivity extends AppCompatActivity /*implements IPickerC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.IVP_NO_ACTIONBAR);
+       // setTheme(R.style.IVP_NO_ACTIONBAR);
         setContentView(R.layout.ivp_activity_image_picker);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.BLACK);
-        }
+        BarUtils.setStatusBarColor(this, ContextCompat.getColor(this, R.color.ivp_toolbar_color));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setStatusBarColor();
+//        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {

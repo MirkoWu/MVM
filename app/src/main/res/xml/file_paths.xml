@@ -5,8 +5,5 @@
         <external-path
             name="external_files"
             path="." />
-        <root-path
-            name="ivp_camera_photos"
-            path="" />
     </paths>
 </resources>

@@ -2,11 +2,12 @@ package com.mirkowu.lib_photo.engine;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import java.util.concurrent.ExecutionException;
 
-public interface ILoader {
+public interface IImageEngine {
 
 
     /**
@@ -19,6 +20,8 @@ public interface ILoader {
      */
     void load(Context context, ImageView image, String url);
 
+    void load(Context context, ImageView image, Uri uri);
+
     /**
      * 加载 文件夹，图片列表等 用到的方法 可重写size
      * 必须填写
@@ -29,6 +32,29 @@ public interface ILoader {
      * @param width   size宽度
      */
     void loadThumbnail(Context context, ImageView image, String url, int width);
+
+    void loadThumbnail(Context context, ImageView image, Uri uri, int width);
+
+
+    /**
+     * 加载Gif ，保持不播放
+     *
+     * @param context
+     * @param image
+     * @param uri
+     * @param width
+     */
+    void loadGifAsBitmap(Context context, ImageView image, Uri uri, int width);
+
+    /**
+     * 加载Gif 自动播放
+     *
+     * @param context
+     * @param image
+     * @param uri
+     * @param width
+     */
+    void loadGif(Context context, ImageView image, Uri uri, int width);
 
     /**
      * 加载 已经挑选的图片 ImagePickerRecyclerView内的显示 一般和 load 相似
@@ -41,6 +67,9 @@ public interface ILoader {
      * @param height
      */
     void loadPicked(Context context, ImageView image, String url, int width, int height);
+
+    void loadPicked(Context context, ImageView image, Uri uri, int width, int height);
+
 
     /**
      * 停止加载

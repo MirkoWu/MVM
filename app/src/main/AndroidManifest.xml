@@ -15,11 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".imagepicker.ImagePickerActivity"></activity>
         <activity
             android:name=".WebActivity"
             android:launchMode="singleTask"
             android:process=":webview"
-            android:theme="@style/WebViewTheme"></activity>
+            android:theme="@style/WebViewTheme" />
         <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".viewbinding.DataBindingActivity" />
         <activity android:name=".mvc.MVCActivity" />
@@ -44,7 +45,6 @@
                 android:resource="@xml/file_paths"
                 tools:replace="resource" />
         </provider>
-
     </application>
 
 </manifest>

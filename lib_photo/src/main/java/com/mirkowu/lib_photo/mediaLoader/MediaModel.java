@@ -1,5 +1,7 @@
 package com.mirkowu.lib_photo.mediaLoader;
 
+import android.text.TextUtils;
+
 import com.mirkowu.lib_photo.bean.FolderBean;
 import com.mirkowu.lib_photo.bean.MediaBean;
 
@@ -34,6 +36,25 @@ public class MediaModel {
 
     public static boolean contains(MediaBean bean) {
         return sFolderList.contains(bean);
+    }
+
+    /**
+     *
+     *
+     * @param path
+     * @return
+     */
+    public static MediaBean containsPath(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        for (MediaBean bean : sCurChildList) {
+            if (TextUtils.equals(path, bean.path)) {
+                return bean;
+            }
+        }
+
+        return null;
     }
 
     public static boolean isEmpty() {

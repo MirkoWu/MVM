@@ -1,5 +1,7 @@
 <resources>
-    <string name="ivp_folder_all">All Images</string>
+    <string name="ivp_all_image">All Images</string>
+    <string name="ivp_all_video">All Videos</string>
+    <string name="ivp_all_image_video">All Photos and Videos</string>
     <string name="ivp_preview">Preview</string>
     <string name="ivp_preview_position" translatable="false">%1$d/%2$d</string>
     <string name="ivp_msg_no_camera">No system camera found</string>

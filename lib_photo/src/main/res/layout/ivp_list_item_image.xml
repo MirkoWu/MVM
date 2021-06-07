@@ -14,17 +14,26 @@
         android:id="@+id/mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#88000000"
-        android:visibility="gone" />
+        android:background="#10000000"
+        android:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/ivSelect"
+    <FrameLayout
+        android:id="@+id/flSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
-        android:layout_marginRight="5.5dp"
-        android:layout_marginTop="5.5dp"
-        android:padding="5dp"
-        android:src="@drawable/ivp_btn_unselected" />
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="10dp">
 
+        <TextView
+            android:id="@+id/tvNumber"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ivp_number_bg"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+    </FrameLayout>
 </FrameLayout>

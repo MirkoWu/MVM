@@ -25,7 +25,7 @@ import java.nio.file.Paths;
  */
 public class FileUtil {
     public static final String TAG = FileUtil.class.getName();
-    public static final String FILE_NAME = "PlanLife";
+    public static final String FILE_NAME = "Mirko";
 
     public static Uri createUri(Context context, File file) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {

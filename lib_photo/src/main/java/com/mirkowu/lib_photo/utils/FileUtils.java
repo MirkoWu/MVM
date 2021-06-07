@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.Observable;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -15,8 +14,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
-
-import com.mirkowu.lib_photo.ImagePicker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -235,7 +232,9 @@ public class FileUtils {
             output.close();
             //关闭输出流
             Toast.makeText(context, "图片已成功保存到" + filePath, Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(context, "SD卡不存在或者不可读写", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "SD卡不存在或者不可读写", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void saveBitmap2File(Context context, Bitmap bitmap, File dirFile, String saveName) {
@@ -261,7 +260,7 @@ public class FileUtils {
                     e.printStackTrace();
                 }
             }
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));//刷新相册
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file))); //刷新相册
         } else {
             throw new RuntimeException("the file is not exists or it is not directory !");
         }

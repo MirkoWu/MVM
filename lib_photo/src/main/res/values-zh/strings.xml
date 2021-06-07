@@ -1,5 +1,7 @@
 <resources>
-    <string name="ivp_folder_all">所有照片</string>
+    <string name="ivp_all_image">所有图片</string>
+    <string name="ivp_all_video">所有视频</string>
+    <string name="ivp_all_image_video">所有图片和视频</string>
     <string name="ivp_preview">预览</string>
     <string name="ivp_msg_no_camera">没有系统相机</string>
     <string name="ivp_msg_amount_limit">已经达到最高选择数量</string>

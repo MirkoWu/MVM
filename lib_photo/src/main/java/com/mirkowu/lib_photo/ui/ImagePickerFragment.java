@@ -38,7 +38,7 @@ import com.mirkowu.lib_photo.callback.ICollectionLoaderCallback;
 import com.mirkowu.lib_photo.mediaLoader.MediaCollectionLoader;
 import com.mirkowu.lib_photo.mediaLoader.MediaModel;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
-import com.mirkowu.lib_photo.utils.PermissionsUtils;
+import com.mirkowu.lib_photo.utils.CameraUtil;
 import com.mirkowu.lib_photo.view.MediaGridDivider;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
@@ -55,20 +55,8 @@ import static android.app.Activity.RESULT_OK;
  * Multi image selector Fragment
  */
 public class ImagePickerFragment extends Fragment {
-
     public static final String TAG = "ImagePickerFragment";
-
-
     private static final String KEY_TEMP_FILE = "key_temp_file";
-
-
-    // image result data set
-    //  private ArrayList<String> mSelectedList = new ArrayList<>();
-    // image result data set 数据过大会导致传送失败使用静态变量
-    //  public static ArrayList<String> mLoadList = new ArrayList<>();
-    // folder result data set
-    private ArrayList<FolderBean> mResultFolder = new ArrayList<>();
-
 
     private ImageGridAdapter mImageAdapter;
     private FolderAdapter mFolderAdapter;
@@ -78,14 +66,11 @@ public class ImagePickerFragment extends Fragment {
     private TextView mCategoryText;
     private View mPopupAnchorView;
 
-
     private int mSpanCount;
     private int mMaxPickCount;
     private boolean mIsSingleMode;
     private boolean mIsShowCamera;
     private boolean mIsShowVideo;
-    private boolean mIsShowGif;
-    //   private File mTmpFile;
 
     private MediaCollectionLoader mLoaderCallback;
     private RecyclerView.OnScrollListener mOnScrollListener;
@@ -109,7 +94,6 @@ public class ImagePickerFragment extends Fragment {
         mSpanCount = mConfig.getSpanCount();
         mIsShowCamera = mConfig.isShowCamera();
         mIsShowVideo = mConfig.isShowVideo();
-        mIsShowGif = mConfig.isShowGif();
         mIsSingleMode = mMaxPickCount == 1;
         ResultModel.addList(mConfig.getOriginSelectList());
 
@@ -120,16 +104,10 @@ public class ImagePickerFragment extends Fragment {
             @Override
             public void onLoadFinish(List<FolderBean> folderList) {
                 MediaModel.init(folderList);
-
                 mFolderAdapter.setData(folderList);
 
                 ArrayList<MediaBean> allList = MediaModel.getCurChildList();
                 mImageAdapter.setData(allList);
-
-
-                //   mImageAdapter.setDefaultSelected(ResultModel.getList());
-
-                // updatePreviewOriginList(allList); //更新预览数据源
             }
         });
 
@@ -193,8 +171,7 @@ public class ImagePickerFragment extends Fragment {
             }
         });
         //图片列表
-        mImageAdapter = new ImageGridAdapter(mIsShowCamera,mIsShowVideo, mSpanCount);
-        // mImageAdapter.setMultiSelect(!mIsSingleMode);
+        mImageAdapter = new ImageGridAdapter(getContext());
         mImageAdapter.setOnItemClickListener(new ImageGridAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ImageGridAdapter adapter, View itemView, int position) {
@@ -202,13 +179,10 @@ public class ImagePickerFragment extends Fragment {
                     if (position == 0) {
                         showCameraAction();
                     } else {
-                        ImagePreviewActivity.startFromPick(ImagePickerFragment.this,
-                                position - 1);
+                        AlbumPreviewActivity.start(ImagePickerFragment.this, position - 1);
                     }
                 } else { //前往预览
-                    ImagePreviewActivity.startFromPick(ImagePickerFragment.this,
-
-                            position);
+                    AlbumPreviewActivity.start(ImagePickerFragment.this, position);
                 }
             }
 
@@ -231,9 +205,9 @@ public class ImagePickerFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 //滚动时，停止加载
                 if (newState != RecyclerView.SCROLL_STATE_IDLE) {
-                    mConfig.getILoader().pause(getContext());
+                    ImagePicker.getInstance().getImageEngine().pause(getContext());
                 } else {
-                    mConfig.getILoader().resume(getContext());
+                    ImagePicker.getInstance().getImageEngine().resume(getContext());
                 }
             }
         };
@@ -241,7 +215,14 @@ public class ImagePickerFragment extends Fragment {
 
         //文件夹
         mFolderAdapter = new FolderAdapter(getActivity());
-        mCategoryText.setText(R.string.ivp_folder_all);
+
+        if (mConfig.isOnlyVideo()) {
+            mCategoryText.setText(R.string.ivp_all_video);
+        } else if (mIsShowVideo) {
+            mCategoryText.setText(R.string.ivp_all_image_video);
+        } else {
+            mCategoryText.setText(R.string.ivp_all_image);
+        }
         mCategoryText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,7 +240,6 @@ public class ImagePickerFragment extends Fragment {
                 }
             }
         });
-
     }
 
     /**
@@ -294,16 +274,11 @@ public class ImagePickerFragment extends Fragment {
                         if (null != folder) {
                             mImageAdapter.setData(folder.mediaList);
                             mCategoryText.setText(folder.name);
-//                            if (mSelectedList != null && mSelectedList.size() > 0) {
-//                                mImageAdapter.setDefaultSelected(mSelectedList);
-//                            }
-
                             if (mIsShowCamera && index == 0) {
                                 mImageAdapter.setIsShowCamera(true);
                             } else {
                                 mImageAdapter.setIsShowCamera(false);
                             }
-                            //  updatePreviewOriginList(folder.mediaList); //更新预览数据源
                         }
                         mRvMedia.smoothScrollToPosition(0);
                     }
@@ -312,13 +287,6 @@ public class ImagePickerFragment extends Fragment {
             }
         });
     }
-
-//    private void updatePreviewOriginList(List<MediaBean> mediaBeans) {
-//        mLoadList.clear();
-//        for (MediaBean bean : mediaBeans) {
-//            mLoadList.add(bean.path);
-//        }
-//    }
 
     /**
      * 开始查询图片任务
@@ -357,31 +325,24 @@ public class ImagePickerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
-
-        //更新已选中图片
-        if (requestCode == ImagePreviewActivity.REQUEST_CODE_PREVIEW && resultCode == RESULT_OK) {
-            //  ArrayList<String> list = data.getStringArrayListExtra(ImagePreviewActivity.KEY_SELECTED_DATA);
-            boolean submit = data.getBooleanExtra(ImagePreviewActivity.KEY_SUBMIT, false);
-            boolean notifyData = data.getBooleanExtra(ImagePreviewActivity.KEY_NOTIFY_DATA, false);
-//            if (list != null && list.size() > 0) {
-////                mImageAdapter.setDefaultSelected(list);
-////                mSelectedList = list;
-//                updateActivityToolbar();
-//            }
-            if (submit) {
-                submitResult(); //提交结果
-            } else if (notifyData) {
-                mImageAdapter.notifyDataSetChanged(); //刷新结果
-                updateActivityToolbar();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == AlbumPreviewActivity.REQUEST_CODE_PREVIEW) {
+                boolean submit = data.getBooleanExtra(AlbumPreviewActivity.KEY_SUBMIT, false);
+                boolean notifyData = data.getBooleanExtra(AlbumPreviewActivity.KEY_NOTIFY_DATA, false);
+                if (submit) {
+                    submitResult(); //提交结果
+                } else if (notifyData) {
+                    mImageAdapter.notifyDataSetChanged(); //刷新结果
+                    updateActivityToolbar();
+                }
+            } else if (requestCode == PermissionsUtil.REQUEST_CODE) {
+                File imageFile = CameraUtil.onActivityResult(requestCode, resultCode, data);
+                if (imageFile != null) {
+                    getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
+                   // ResultModel.add(MediaModel.contains());
+                    submitResult();
+                }
             }
-        }
-
-
-        File imageFile = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
-        if (imageFile != null) {
-            getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
-            // mSelectedList.add(imageFile.getAbsolutePath());
-            submitResult();
         }
     }
 
@@ -399,7 +360,7 @@ public class ImagePickerFragment extends Fragment {
      * Open camera
      */
     private void showCameraAction() {
-        PermissionsUtils.showCameraAction(this);
+        CameraUtil.showCameraAction(this);
     }
 
     /**
@@ -412,7 +373,7 @@ public class ImagePickerFragment extends Fragment {
         if (mediaBean != null) {
             if (mIsSingleMode) {
                 ResultModel.addSingle(mediaBean);
-                mImageAdapter.select(position, mediaBean);
+                mImageAdapter.notifyItemChanged(position);
             } else {
                 if (ResultModel.contains(mediaBean)) {
                     ResultModel.remove(mediaBean);
@@ -423,28 +384,12 @@ public class ImagePickerFragment extends Fragment {
                     }
                     ResultModel.addMulti(mediaBean);
                 }
-                mImageAdapter.notifyItemChanged(position);
+                mImageAdapter.notifyDataSetChanged();
             }
 
             updateActivityToolbar();
         }
     }
-
-    private FolderBean getFolderByPath(String path) {
-        if (mResultFolder != null) {
-            for (FolderBean folder : mResultFolder) {
-                if (TextUtils.equals(folder.path, path)) {
-                    return folder;
-                }
-            }
-        }
-        return null;
-    }
-
-
-//    public ArrayList<String> getSelectedList() {
-//        return mSelectedList;
-//    }
 
     private void updateActivityToolbar() {
         if (getActivity() != null && !getActivity().isFinishing() && (getActivity() instanceof ImagePickerActivity)) {
@@ -461,7 +406,6 @@ public class ImagePickerFragment extends Fragment {
             ImagePicker.getInstance().getOnPickResultListener().onPickResult(ResultModel.getList());
         }
         getActivity().finish();
-        ImagePicker.getInstance().clear();
     }
 
     @Override

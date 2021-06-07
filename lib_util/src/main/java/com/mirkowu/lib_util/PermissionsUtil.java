@@ -62,7 +62,7 @@ public class PermissionsUtil {
     private static int mRequestCode;
     private static String[] mRequestPermissions;
     private static OnPermissionsListener mOnPermissionsListener;
-    private static final int REQUEST_CODE = 1;
+    public static final int REQUEST_CODE = 0x2488;
     private static final int REQUEST_CODE_DETAIL_SETTING = 1022;
 
 

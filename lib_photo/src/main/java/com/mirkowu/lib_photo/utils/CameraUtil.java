@@ -5,14 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Observable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -29,14 +27,10 @@ import static android.app.Activity.RESULT_OK;
  * Created by donglua on 2016/10/19.
  */
 
-public class PermissionsUtils {
+public class CameraUtil {
     private static File mTmpFile;
 
     public static final int REQUEST_CAMERA = 0x3230;
-    public static final int REQUEST_ALBUM = 0x3234;
-    public static final int REQUEST_CAMERA_PERMISSION = 1111;
-    public static final int REQUEST_EXTERNAL_READ_PERMISSION = 2222;
-    public static final int REQUEST_EXTERNAL_WRITE_PERMISSION = 3333;
 
     public static final String[] PERMISSIONS_CAMERA_STORAGE = {
             Manifest.permission.CAMERA,

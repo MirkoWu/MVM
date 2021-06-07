@@ -2,6 +2,7 @@ package com.mirkowu.lib_photo.engine;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -15,12 +16,23 @@ import java.util.concurrent.ExecutionException;
 /**
  * 默认Glide 图片加载
  */
-public class GlideLoader implements ILoader {
+public class GlideLoader implements IImageEngine {
     @Override
     public void load(Context context, ImageView image, String url) {
         Glide.with(context).load(url)
                 .apply(RequestOptions
-                        .placeholderOf(R.drawable.ivp_default_error)
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_error)
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                )
+                .into(image);
+    }
+
+    @Override
+    public void load(Context context, ImageView image, Uri uri) {
+        Glide.with(context).load(uri)
+                .apply(RequestOptions
+                        .placeholderOf(R.drawable.ivp_default_image)
                         .error(R.drawable.ivp_default_error)
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 )
@@ -30,6 +42,42 @@ public class GlideLoader implements ILoader {
     @Override
     public void loadThumbnail(Context context, ImageView image, String url, int width) {
         Glide.with(context).load(url)
+                .apply(RequestOptions
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_image)
+                        .override(width, width)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(image);
+    }
+
+    @Override
+    public void loadThumbnail(Context context, ImageView image, Uri uri, int width) {
+        Glide.with(context).load(uri)
+                .apply(RequestOptions
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_image)
+                        .override(width, width)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(image);
+    }
+
+    @Override
+    public void loadGifAsBitmap(Context context, ImageView image, Uri uri, int width) {
+        Glide.with(context).asBitmap().load(uri)
+                .apply(RequestOptions
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_image)
+                        .override(width, width)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(image);
+    }
+
+    @Override
+    public void loadGif(Context context, ImageView image, Uri uri, int width) {
+        Glide.with(context).asGif().load(uri)
                 .apply(RequestOptions
                         .placeholderOf(R.drawable.ivp_default_image)
                         .error(R.drawable.ivp_default_error)
@@ -42,6 +90,17 @@ public class GlideLoader implements ILoader {
     @Override
     public void loadPicked(Context context, ImageView image, String url, int width, int height) {
         Glide.with(context).load(url)
+                .apply(RequestOptions
+                        .placeholderOf(R.drawable.ivp_default_image)
+                        .error(R.drawable.ivp_default_error)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(image);
+    }
+
+    @Override
+    public void loadPicked(Context context, ImageView image, Uri uri, int width, int height) {
+        Glide.with(context).load(uri)
                 .apply(RequestOptions
                         .placeholderOf(R.drawable.ivp_default_image)
                         .error(R.drawable.ivp_default_error)

@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.viewbinding
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
+import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import java.util.*
 
@@ -81,16 +83,11 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                             Log.d(TAG, "onPermissionDenied: ")
 
                         }
-
                     })
         }
         binding.btnImagePicker.click {
-            ImagePicker.getInstance()
-                    .setPickerConfig(PickerConfig()/*.setShowCamera(true)*//*.setShowVideo(true)*//*.setOnlyVideo(true)*/
-                            .setSpanCount(4))
-                    .setOnPickResultListener {
-                LogUtil.e("btnImagePicker", it.toString())
-            }.start(context!!)
+            startActivity(Intent(context, ImagePickerActivity::class.java))
+
         }
     }
 

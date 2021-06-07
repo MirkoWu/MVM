@@ -7,11 +7,14 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_photo.callback.OnPickResultListener;
+import com.mirkowu.lib_photo.engine.GlideLoader;
+import com.mirkowu.lib_photo.engine.IImageEngine;
 import com.mirkowu.lib_photo.mediaLoader.MediaModel;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_photo.ui.ImagePickerActivity;
-import com.mirkowu.lib_photo.utils.PermissionsUtils;
+import com.mirkowu.lib_photo.ui.PreviewActivity;
+import com.mirkowu.lib_photo.utils.CameraUtil;
 import com.mirkowu.lib_util.LogUtil;
 
 import java.util.ArrayList;
@@ -20,9 +23,9 @@ import java.util.ArrayList;
  * 图片选择器
  */
 public class ImagePicker {
-    public static final String TAG = ImagePicker.class.getSimpleName();
-    public static final String EXTRA_RESULT = PickerConstant.EXTRA_RESULT;
+    private static final String TAG = ImagePicker.class.getSimpleName();
 
+    private IImageEngine mIImageEngine;
     private PickerConfig mPickerConfig;
     private PickerConfig mPickerConfigCache;
     private OnPickResultListener mOnPickResultListener;
@@ -42,6 +45,29 @@ public class ImagePicker {
     private ImagePicker() {
     }
 
+
+    /**
+     * 设置加载引擎
+     *
+     * @param iLoader
+     * @return
+     */
+    public ImagePicker setImageEngine(@NonNull IImageEngine iLoader) {
+        mIImageEngine = iLoader;
+        return this;
+    }
+
+    /**
+     * 获取加载引擎 默认Glide
+     *
+     * @return
+     */
+    public IImageEngine getImageEngine() {
+        if (mIImageEngine == null) {
+            mIImageEngine = new GlideLoader();
+        }
+        return mIImageEngine;
+    }
 
     /**
      * 设置挑选配置 如果不设置则使用默认配置
@@ -128,13 +154,13 @@ public class ImagePicker {
      * @param originData 需要传进去的数据
      * @param currentPos 当前点击的数据下标
      */
-//    public static void previewImageWithSave(Context context, String savePath, ArrayList<String> originData, int currentPos) {
-//        ImagePreviewActivity.startFromPreview(context, savePath, originData, currentPos);
-//    }
+    public static void previewImageWithSave(Context context, String savePath, ArrayList<String> originData, int currentPos) {
+        PreviewActivity.start(context, savePath, ResultModel.pathsToBeans(originData), currentPos);
+    }
 
-//    public static void previewImage(Context context, ArrayList<String> originData, int currentPos) {
-//        previewImageWithSave(context, null, originData, currentPos);
-//    }
+    public static void previewImage(Context context, ArrayList<String> originData, int currentPos) {
+        previewImageWithSave(context, null, originData, currentPos);
+    }
 
     /**
      * 直接前往拍照
@@ -142,11 +168,11 @@ public class ImagePicker {
      * @param activity
      */
     public void showCameraAction(Activity activity) {
-        PermissionsUtils.showCameraAction(activity);
+        CameraUtil.showCameraAction(activity);
     }
 
     public void showCameraAction(Fragment fragment) {
-        PermissionsUtils.showCameraAction(fragment);
+        CameraUtil.showCameraAction(fragment);
     }
 
 //    public void onActivityResult(int requestCode, int resultCode, Intent data, OnPickResultListener onPickResultListener) {
@@ -164,10 +190,6 @@ public class ImagePicker {
 //            }
 //        }
 //    }
-
-    public interface OnPickResultListener {
-        void onPickResult(ArrayList<MediaBean> imageList);
-    }
 
 
 }

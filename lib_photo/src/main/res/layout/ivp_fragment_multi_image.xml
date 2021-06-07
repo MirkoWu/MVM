@@ -18,7 +18,7 @@
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/ivp_actionbar_color"
+        android:background="@color/ivp_toolbar_color"
         android:clickable="true">
 
         <Button

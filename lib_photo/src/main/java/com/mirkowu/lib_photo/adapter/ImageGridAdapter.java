@@ -1,19 +1,23 @@
 package com.mirkowu.lib_photo.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_photo.ImagePicker;
+import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.bean.MineType;
-import com.mirkowu.lib_photo.engine.ILoader;
+import com.mirkowu.lib_photo.engine.IImageEngine;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_util.utilcode.util.TimeUtils;
@@ -31,34 +35,25 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_VIDEO = 2;
 
-
-    private boolean mIsShowCamera = false;
-    private boolean mIsShowVideo = false;
-    //    private boolean multiSelect = true;
-    private ILoader mILoader;
-
     private List<MediaBean> mData = new ArrayList<>();
-    //   private List<MediaBean> mSelectedData = new ArrayList<>();
 
+
+    private boolean mIsShowCamera;
+    private boolean mIsShowVideo;
+    private IImageEngine mILoader;
+    private LayoutInflater mLayoutInflater;
     final int mGridWidth;
 
-    public ImageGridAdapter(boolean showCamera, boolean showVideo, int spanCount) {
-        this.mILoader = ImagePicker.getInstance().getPickerConfig().getILoader();
-        this.mIsShowCamera = showCamera;
-        this.mIsShowVideo = showVideo;
+    public ImageGridAdapter(Context context) {
+        mLayoutInflater = LayoutInflater.from(context);
+        PickerConfig config = ImagePicker.getInstance().getPickerConfig();
+        this.mILoader = ImagePicker.getInstance().getImageEngine();
+        this.mIsShowCamera = config.isShowCamera();
+        this.mIsShowVideo = config.isShowVideo();
+        int spanCount = config.getSpanCount();
         int width = ScreenUtils.getScreenWidth();
-        //int spacing = context.getResources().getDimensionPixelSize(R.dimen.ivp_space_size);
         mGridWidth = (int) (width * 1f / spanCount); //取整
     }
-//
-//    /**
-//     * 显示选择指示器
-//     *
-//     * @param b
-//     */
-//    public void setMultiSelect(boolean b) {
-//        multiSelect = b;
-//    }
 
     public void setIsShowCamera(boolean showCamera) {
         if (mIsShowCamera == showCamera) return;
@@ -74,55 +69,14 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
         return mIsShowCamera;
     }
 
-    /**
-     * 选择某个图片，改变选择状态
-     *
-     * @param mediaBean
-     */
-    public void select(int position, MediaBean mediaBean) {
-//        if (multiSelect) {
-//            if (mSelectedData.contains(mediaBean)) {
-//                mSelectedData.remove(mediaBean);
-//            } else {
-//                mSelectedData.add(mediaBean);
-//            }
-//        } else {
-//            mSelectedData.clear();
-//            mSelectedData.add(mediaBean);
-//        }
-        notifyItemChanged(position);
-        compatibilityDataSizeChanged(0);
-    }
-
 //    /**
-//     * 通过图片路径设置默认选择
+//     * 选择某个图片，改变选择状态
 //     *
-//     * @param selectList
+//     * @param mediaBean
 //     */
-//    public void setDefaultSelected(ArrayList<MediaBean> selectList) {
-//
-//
-////        for (MediaBean bean : resultList) {
-////            MediaBean mediaBean = getImageByPath(path);
-////            if (mediaBean != null) {
-//        mSelectedData.addAll(selectList);
-////            }
-////        }
-//        if (mSelectedData.size() > 0) {
-//            notifyDataSetChanged();
-//        }
+//    public void select(int position, MediaBean mediaBean) {
+//        notifyItemChanged(position);
 //    }
-
-    private MediaBean getImageByPath(String path) {
-        if (mData != null && mData.size() > 0) {
-            for (MediaBean mediaBean : mData) {
-                if (mediaBean.path.equalsIgnoreCase(path)) {
-                    return mediaBean;
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * 设置数据集
@@ -130,42 +84,32 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
      * @param list
      */
     public void setData(List<MediaBean> list) {
-        this.mData = list == null ? new ArrayList<>() : list;
-//        mSelectedData.clear();
-        notifyDataSetChanged();
+        int oldSize = getItemCount();
+        list = list == null ? new ArrayList<>() : list;
+        this.mData.clear();
+        notifyItemRangeRemoved(0, oldSize);
+        this.mData.addAll(list);
+        notifyItemRangeInserted(0, getItemCount());
     }
 
-    /**
-     * 获取
-     *
-     * @return
-     */
-    public List<MediaBean> getData() {
-        return mData;
-    }
-
-    /**
-     * 防止未被刷新
-     *
-     * @param size 新加的数量
-     */
-    private void compatibilityDataSizeChanged(int size) {
-        int dataSize = this.mData == null ? 0 : this.mData.size();
-        if (dataSize == size) {
-            this.notifyDataSetChanged();
-        }
-    }
+//    /**
+//     * 获取
+//     *
+//     * @return
+//     */
+//    public List<MediaBean> getData() {
+//        return mData;
+//    }
 
     @NonNull
     @Override
     public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         if (mIsShowCamera && viewType == TYPE_CAMERA) {
-            return new ImageHolder(layoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
+            return new ImageHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
         } else if (mIsShowVideo && viewType == TYPE_VIDEO) {
-            return new VideoHolder(layoutInflater.inflate(R.layout.ivp_list_item_video, parent, false));
+            return new VideoHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_video, parent, false));
         }
-        return new ImageHolder(layoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
+        return new ImageHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_image, parent, false));
     }
 
     @Override
@@ -179,7 +123,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
             });
 
             if (getItemViewType(position) != TYPE_CAMERA) {
-                holder.ivSelect.setOnClickListener(new View.OnClickListener() {
+                holder.flSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mOnItemClickListener.onItemViewClick(ImageGridAdapter.this, v, position);
@@ -206,20 +150,15 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
     }
 
 
-    public MediaBean getItem(int i) {
+    public MediaBean getItem(int position) {
         if (mIsShowCamera) {
-            if (i == 0) {
+            if (position == 0) {
                 return null;
             }
-            return mData.get(i - 1);
+            return mData.get(position - 1);
         } else {
-            return mData.get(i);
+            return mData.get(position);
         }
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
     }
 
     @Override
@@ -228,15 +167,18 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
     }
 
     class ImageHolder extends RecyclerView.ViewHolder {
-        ImageView ivThumb;
-        ImageView ivSelect;
-        View mask;
-
+        final FrameLayout flSelect;
+        final TextView tvNumber;
+//        final ImageView ivSelect;
+        final ImageView ivThumb;
+        final View mask;
 
         ImageHolder(View view) {
             super(view);
+            flSelect = view.findViewById(R.id.flSelect);
+            tvNumber = view.findViewById(R.id.tvNumber);
+//            ivSelect = view.findViewById(R.id.ivSelect);
             ivThumb = view.findViewById(R.id.ivThumb);
-            ivSelect = view.findViewById(R.id.ivSelect);
             mask = view.findViewById(R.id.mask);
         }
 
@@ -245,30 +187,35 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
 
             // 处理单选和多选状态
             if (ResultModel.contains(data)) {
+                int number = ResultModel.getNumber(data);
+
                 // 设置选中状态
-                ivSelect.setImageResource(R.drawable.ivp_btn_selected);
-                mask.setVisibility(View.VISIBLE);
+//                ivSelect.setImageResource(R.drawable.ivp_btn_selected);
+                flSelect.setSelected(true);
+                tvNumber.setText(String.valueOf(number));
+//                mask.setVisibility(View.VISIBLE);
+                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(),R.color.ivp_mask_select_color));
             } else {
                 // 未选择
-                ivSelect.setImageResource(R.drawable.ivp_btn_unselected);
-                mask.setVisibility(View.GONE);
+//                ivSelect.setImageResource(R.drawable.ivp_btn_unselected);
+                flSelect.setSelected(false);
+                tvNumber.setText(null);
+//                mask.setVisibility(View.GONE);
+                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(),R.color.ivp_mask_normal_color));
+
             }
 
-
             // 显示图片
-            mILoader.loadThumbnail(ivThumb.getContext(), ivThumb, data.path, mGridWidth);
+            mILoader.loadThumbnail(ivThumb.getContext(), ivThumb, data.uri, mGridWidth);
         }
     }
 
     class VideoHolder extends ImageHolder {
-        TextView tvDuration;
-
+        final TextView tvDuration;
 
         VideoHolder(View view) {
             super(view);
             tvDuration = view.findViewById(R.id.tvDuration);
-
-            mask = view.findViewById(R.id.mask);
         }
 
         void bindData(final MediaBean data) {
