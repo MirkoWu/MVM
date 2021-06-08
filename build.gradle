@@ -56,5 +56,5 @@ ext {
     rxandroid3_version = '3.0.0'
     autodispose_version = '2.0.0'
     refresh_version = '2.0.3'
-    glide_version = '4.9.0'
+    glide_version = '4.11.0'
 }

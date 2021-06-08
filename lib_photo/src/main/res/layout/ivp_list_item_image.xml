@@ -36,4 +36,27 @@
             android:textColor="#FFFFFF"
             android:textSize="12sp" />
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flGif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:background="@drawable/ivp_bottom_shape"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ivp_gif_bg"
+            android:paddingHorizontal="3dp"
+            android:paddingVertical="1dp"
+            android:text="GIF"
+            android:textColor="#D0000000"
+            android:textSize="9sp" />
+    </FrameLayout>
+
 </FrameLayout>

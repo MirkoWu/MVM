@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * 图片Adapter
  */
-public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.ImageHolder> {
+public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.BaseHolder> {
 
     private static final int TYPE_CAMERA = 0;
     private static final int TYPE_IMAGE = 1;
@@ -103,9 +103,9 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
 
     @NonNull
     @Override
-    public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (mIsShowCamera && viewType == TYPE_CAMERA) {
-            return new ImageHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
+            return new BaseHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_camera, parent, false));
         } else if (mIsShowVideo && viewType == TYPE_VIDEO) {
             return new VideoHolder(mLayoutInflater.inflate(R.layout.ivp_list_item_video, parent, false));
         }
@@ -113,7 +113,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ImageHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final BaseHolder holder, final int position) {
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,13 +166,13 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
         return mIsShowCamera ? mData.size() + 1 : mData.size();
     }
 
-    class ImageHolder extends RecyclerView.ViewHolder {
+    class BaseHolder extends RecyclerView.ViewHolder {
         final FrameLayout flSelect;
         final TextView tvNumber;
         final ImageView ivThumb;
         final View mask;
 
-        ImageHolder(View view) {
+        BaseHolder(View view) {
             super(view);
             flSelect = view.findViewById(R.id.flSelect);
             tvNumber = view.findViewById(R.id.tvNumber);
@@ -203,7 +203,22 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
         }
     }
 
-    class VideoHolder extends ImageHolder {
+    class ImageHolder extends BaseHolder {
+        final FrameLayout flGif;
+
+        ImageHolder(View view) {
+            super(view);
+            flGif = view.findViewById(R.id.flGif);
+        }
+
+        void bindData(final MediaBean data) {
+            super.bindData(data);
+            flGif.setVisibility(data.isGif() ? View.VISIBLE : View.GONE);
+        }
+    }
+
+
+    class VideoHolder extends BaseHolder {
         final TextView tvDuration;
 
         VideoHolder(View view) {

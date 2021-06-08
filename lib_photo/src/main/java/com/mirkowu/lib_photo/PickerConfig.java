@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PickerConfig {
     private boolean isOnlyVideo = false; //是否显示GIF格式图片 默认不显示
-    private boolean isShowGif = true; //是否显示GIF格式图片 默认不显示
+    private boolean isShowGif = true; //是否显示GIF格式图片 默认显示
     private boolean isShowVideo = false; //是否显示视频 默认不显示
     private boolean isShowCamera = false; //是否显示拍照按钮 默认不显示
     private ArrayList<MediaBean> originSelectList; //原始选择的图片列表

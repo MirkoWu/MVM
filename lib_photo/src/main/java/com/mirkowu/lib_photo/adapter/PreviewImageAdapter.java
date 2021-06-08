@@ -29,19 +29,11 @@ import java.util.ArrayList;
  */
 public class PreviewImageAdapter extends PagerAdapter {
     private View.OnClickListener mOnClickListener;
-    private OnViewTapListener mOnViewTapListener;
     private ArrayList<MediaBean> mData;
     private int size;
     private IImageEngine iLoader;
     private int width;
 
-    public PreviewImageAdapter(ArrayList<MediaBean> mData, OnViewTapListener onTapClickListener) {
-        this.mData = mData;
-        iLoader = ImagePicker.getInstance().getImageEngine();
-        this.mOnViewTapListener = onTapClickListener;
-        width = SizeUtils.dp2px(56f);
-        setData(mData);
-    }
     public PreviewImageAdapter(ArrayList<MediaBean> mData, View.OnClickListener onClickListener) {
         this.mData = mData;
         iLoader = ImagePicker.getInstance().getImageEngine();
@@ -66,8 +58,7 @@ public class PreviewImageAdapter extends PagerAdapter {
         MediaBean bean = mData.get(position);
 
         PhotoView photoView = new PhotoView(container.getContext());
-        //photoView.setOnClickListener(mOnClickListener);
-        photoView.setOnViewTapListener(mOnViewTapListener);
+        photoView.setOnClickListener(mOnClickListener);
         if (bean.uri != null) {
             iLoader.load(container.getContext(), photoView, bean.uri);
         } else {
@@ -76,17 +67,14 @@ public class PreviewImageAdapter extends PagerAdapter {
 
         if (bean.isVideo()) {
             FrameLayout rootView = new FrameLayout(context);
-            rootView.addView(photoView);
-//            photoView.setZoomable(false);
+            rootView.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            photoView.setZoomable(false);
             ImageView ivPlay = new ImageView(context);
             ivPlay.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             ivPlay.setImageResource(R.drawable.ivp_video);
             ivPlay.setTag(bean);
             ivPlay.setOnClickListener(mOClickListener);
-
-//            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, width);
             rootView.addView(ivPlay, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            params.gravity = Gravity.CENTER;
             container.addView(rootView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             return rootView;
         } else {

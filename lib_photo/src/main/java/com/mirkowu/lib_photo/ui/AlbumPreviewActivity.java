@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,16 +100,11 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
         mRlBottom = findViewById(R.id.rlBottom);
         mTvPick = findViewById(R.id.tvPick);
 
-        mAdapter = new PreviewImageAdapter(mOriginList, new OnViewTapListener() {
+        mAdapter = new PreviewImageAdapter(mOriginList, new View.OnClickListener() {
             @Override
-            public void onViewTap(View view, float x, float y) {
+            public void onClick(View view) {
                 clickChangeToolbarState();
             }
-
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
         });
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(mCurPosition);
@@ -212,7 +210,8 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
         if (mRlBottom != null) {
             mRlBottom.setVisibility(View.VISIBLE);
             ViewCompat.setAlpha(mRlBottom, 0);
-            ViewCompat.animate(mRlBottom).alpha(1).setInterpolator(new DecelerateInterpolator(2)).start();
+            ViewCompat.animate(mRlBottom).alpha(1)
+                    .setInterpolator(new DecelerateInterpolator(2)).start();
         }
 
         BarUtils.setStatusBarVisibility(this, true);
