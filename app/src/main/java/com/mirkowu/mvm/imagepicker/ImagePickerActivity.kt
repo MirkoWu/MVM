@@ -34,7 +34,7 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
             override fun onItemClick(position: Int, isAddImage: Boolean) {
                 if (isAddImage) {
                     ImagePicker.getInstance()
-                            .setPickerConfig(PickerConfig().setShowCamera(true).setShowGif(true)
+                            .setPickerConfig(PickerConfig().setShowCamera(true).setShowGif(true).setShowVideo(true)
                                     .setOriginSelectList(ResultModel.pathsToBeans(binding.rvPick.data)))
                             .setOnPickResultListener {
                                 LogUtil.d("ImagePicker: $it")

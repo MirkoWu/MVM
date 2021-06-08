@@ -25,6 +25,7 @@ import com.mirkowu.lib_photo.adapter.PreviewImageAdapter;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.mediaLoader.MediaModel;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
+import com.mirkowu.lib_photo.photoview.OnViewTapListener;
 import com.mirkowu.lib_photo.view.ViewPagerFixed;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
@@ -96,11 +97,16 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
         mRlBottom = findViewById(R.id.rlBottom);
         mTvPick = findViewById(R.id.tvPick);
 
-        mAdapter = new PreviewImageAdapter(mOriginList, new View.OnClickListener() {
+        mAdapter = new PreviewImageAdapter(mOriginList, new OnViewTapListener() {
             @Override
-            public void onClick(View view) {
+            public void onViewTap(View view, float x, float y) {
                 clickChangeToolbarState();
             }
+
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
         });
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(mCurPosition);

@@ -21,6 +21,9 @@ public class MediaBean implements Parcelable {
     public long time;
     public long duration;
 
+    public boolean isVideo() {
+        return !TextUtils.isEmpty(type) && type.contains(MineType.VIDEO) && uri != null;
+    }
 
     public MediaBean(@NonNull String path) {
         this.path = path;
