@@ -13,6 +13,8 @@ import com.mirkowu.lib_photo.R;
 
 import java.util.concurrent.ExecutionException;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 /**
  * 默认Glide 图片加载
  */
@@ -30,12 +32,12 @@ public class GlideLoader implements IImageEngine {
 
     @Override
     public void load(Context context, ImageView image, Uri uri) {
-        Glide.with(context).load(uri)
-                .apply(RequestOptions
-                        .placeholderOf(R.drawable.ivp_default_image)
-                        .error(R.drawable.ivp_default_error)
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                )
+        Glide.with(context).load(uri).transition(withCrossFade())
+//                .apply(RequestOptions
+//                        .placeholderOf(R.drawable.ivp_default_image)
+//                        .error(R.drawable.ivp_default_error)
+//                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                )
                 .into(image);
     }
 
@@ -53,13 +55,13 @@ public class GlideLoader implements IImageEngine {
 
     @Override
     public void loadThumbnail(Context context, ImageView image, Uri uri, int width) {
-        Glide.with(context).load(uri)
-                .apply(RequestOptions
-                        .placeholderOf(R.drawable.ivp_default_image)
-                        .error(R.drawable.ivp_default_image)
-                        .override(width, width)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                )
+        Glide.with(context).load(uri).transition(withCrossFade())
+//                .apply(RequestOptions
+//                        .placeholderOf(R.drawable.ivp_default_image)
+//                        .error(R.drawable.ivp_default_image)
+//                        .override(width, width)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                )
                 .into(image);
     }
 
@@ -100,12 +102,12 @@ public class GlideLoader implements IImageEngine {
 
     @Override
     public void loadPicked(Context context, ImageView image, Uri uri, int width, int height) {
-        Glide.with(context).load(uri)
-                .apply(RequestOptions
-                        .placeholderOf(R.drawable.ivp_default_image)
-                        .error(R.drawable.ivp_default_error)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                )
+        Glide.with(context).load(uri).transition(withCrossFade())
+//                .apply(RequestOptions
+//                        .placeholderOf(R.drawable.ivp_default_image)
+//                        .error(R.drawable.ivp_default_error)
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                )
                 .into(image);
     }
 

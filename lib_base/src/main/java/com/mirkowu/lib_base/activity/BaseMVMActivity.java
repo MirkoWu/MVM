@@ -71,11 +71,6 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        detachMediator();
-        super.onDestroy();
-    }
 
     @Override
     public void showLoadingDialog() {
@@ -129,6 +124,12 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        detachMediator();
+        super.onDestroy();
     }
 
     @Override

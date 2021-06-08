@@ -167,29 +167,11 @@ public class ImagePicker {
      *
      * @param activity
      */
-    public void showCameraAction(Activity activity) {
-        CameraUtil.showCameraAction(activity);
+    public void startCamera(Activity activity) {
+        CameraUtil.startCameraAction(activity);
     }
 
-    public void showCameraAction(Fragment fragment) {
-        CameraUtil.showCameraAction(fragment);
+    public void startCamera(Fragment fragment) {
+        CameraUtil.startCameraAction(fragment);
     }
-
-//    public void onActivityResult(int requestCode, int resultCode, Intent data, OnPickResultListener onPickResultListener) {
-//        if (onPickResultListener != null) {
-//            if (requestCode == PermissionsUtils.REQUEST_ALBUM && resultCode == RESULT_OK) {
-//                ArrayList<String> selectPath = data.getStringArrayListExtra(ImagePicker.EXTRA_RESULT);
-//                onPickResultListener.onPickResult(selectPath);
-//            } else if (requestCode == PermissionsUtils.REQUEST_CAMERA) {
-//                File file = PermissionsUtils.onActivityResult(requestCode, resultCode, data);
-//                if (resultCode == RESULT_OK && file != null) {
-//                    ArrayList<String> selectPath = new ArrayList<>();
-//                    selectPath.add(file.getAbsolutePath());
-//                    onPickResultListener.onPickResult(selectPath);
-//                }
-//            }
-//        }
-//    }
-
-
 }

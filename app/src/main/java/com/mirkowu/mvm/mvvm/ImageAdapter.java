@@ -20,7 +20,7 @@ public class ImageAdapter extends BaseAdapter<GankImageBean, ImageAdapter.Holder
     @Override
     public void onBindHolder(@NonNull Holder holder, GankImageBean item, int position) {
         ImageLoader.load(holder.binding.ivImage, item.url, glideOptions);
-        addOnItemChildClickListener(holder.binding.ivImage, position);
+        addOnItemChildClickListener(holder, holder.binding.ivImage);
 
     }
 

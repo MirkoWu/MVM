@@ -52,7 +52,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         if (mActivityWeakReference.get() == null) {
             return;
         }
-        PermissionsUtil.getInstance().requestPermissions(mActivityWeakReference.get(), PermissionsUtil.PERMISSION_CAMERA, new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtil.getInstance().requestPermissions(mActivityWeakReference.get(), PermissionsUtil.GROUP_CAMERA, new PermissionsUtil.OnPermissionsListener() {
             @Override
             public void onPermissionGranted(int requestCode) {
                 fileChooser(type);

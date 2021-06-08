@@ -26,6 +26,11 @@ public class MediaBean implements Parcelable {
         this.path = path;
     }
 
+    public MediaBean(@NonNull Uri uri, @NonNull String path) {
+        this.uri = uri;
+        this.path = path;
+    }
+
     public MediaBean(@NonNull Uri uri, @NonNull String path, String name, String type, long time) {
         this.uri = uri;
         this.path = path;

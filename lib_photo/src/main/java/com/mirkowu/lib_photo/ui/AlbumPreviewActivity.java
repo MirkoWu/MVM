@@ -208,6 +208,8 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
             ViewCompat.setAlpha(mRlBottom, 0);
             ViewCompat.animate(mRlBottom).alpha(1).setInterpolator(new DecelerateInterpolator(2)).start();
         }
+
+        BarUtils.setStatusBarVisibility(this, true);
     }
 
     private void hideToolbar() {
@@ -225,6 +227,8 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
         if (mRlBottom != null) {
             ViewCompat.animate(mRlBottom).alpha(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
+
+        BarUtils.setStatusBarVisibility(this, false);
     }
 
     @Override

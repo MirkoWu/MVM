@@ -169,7 +169,6 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
     class ImageHolder extends RecyclerView.ViewHolder {
         final FrameLayout flSelect;
         final TextView tvNumber;
-//        final ImageView ivSelect;
         final ImageView ivThumb;
         final View mask;
 
@@ -177,7 +176,6 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
             super(view);
             flSelect = view.findViewById(R.id.flSelect);
             tvNumber = view.findViewById(R.id.tvNumber);
-//            ivSelect = view.findViewById(R.id.ivSelect);
             ivThumb = view.findViewById(R.id.ivThumb);
             mask = view.findViewById(R.id.mask);
         }
@@ -190,19 +188,14 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.Imag
                 int number = ResultModel.getNumber(data);
 
                 // 设置选中状态
-//                ivSelect.setImageResource(R.drawable.ivp_btn_selected);
                 flSelect.setSelected(true);
                 tvNumber.setText(String.valueOf(number));
-//                mask.setVisibility(View.VISIBLE);
-                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(),R.color.ivp_mask_select_color));
+                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(), R.color.ivp_mask_select_color));
             } else {
                 // 未选择
-//                ivSelect.setImageResource(R.drawable.ivp_btn_unselected);
                 flSelect.setSelected(false);
                 tvNumber.setText(null);
-//                mask.setVisibility(View.GONE);
-                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(),R.color.ivp_mask_normal_color));
-
+                mask.setBackgroundColor(ContextCompat.getColor(mask.getContext(), R.color.ivp_mask_normal_color));
             }
 
             // 显示图片

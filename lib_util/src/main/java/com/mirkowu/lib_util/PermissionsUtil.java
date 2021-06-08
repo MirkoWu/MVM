@@ -32,7 +32,7 @@ public class PermissionsUtil {
     /**
      * 摄像头，文件存储
      */
-    public static String[] PERMISSION_CAMERA = new String[]{
+    public static final String[] GROUP_CAMERA = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
@@ -40,18 +40,32 @@ public class PermissionsUtil {
     /**
      * 文件存储
      */
-    public static String[] PERMISSION_STORAGE = new String[]{
+    public static final String[] GROUP_STORAGE = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
     /**
+     * 蓝牙权限（需要粗略定位权限 ）
+     */
+    public static final String[] GROUP_BLUETOOTH = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.BLUETOOTH
+    };
+    /**
+     * 定位权限
+     */
+    public static final String[] GROUP_LOCATION_ALL = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    /**
      * 手机信息
      */
-    public static String[] PERMISSION_PHONE = new String[]{
+    public static final String[] GROUP_PHONE = new String[]{
             Manifest.permission.READ_PHONE_STATE
     };
 
-    public interface OnPermissionsListener {
+    public static interface OnPermissionsListener {
         void onPermissionGranted(int requestCode);
 
         void onPermissionShowRationale(int requestCode, String[] permissions);
@@ -62,8 +76,8 @@ public class PermissionsUtil {
     private static int mRequestCode;
     private static String[] mRequestPermissions;
     private static OnPermissionsListener mOnPermissionsListener;
-    public static final int REQUEST_CODE = 0x2488;
-    private static final int REQUEST_CODE_DETAIL_SETTING = 1022;
+    public static final int REQUEST_CODE = 2488;
+    public static final int REQUEST_CODE_DETAIL_SETTING = 1022;
 
 
     /**
@@ -211,14 +225,25 @@ public class PermissionsUtil {
         }
     }
 
+    public void removeListener() {
+        mRequestPermissions = null;
+        mOnPermissionsListener = null;
+    }
+
     /**
      * 前往应用设置详情界面
      *
      * @param activity
      */
-    public static void startAppSettingDetail(Activity activity) {
-        AppInfoUtil.startAppSettingDetail(activity, REQUEST_CODE_DETAIL_SETTING);
+    public static void startAppSettingNoResult(Activity activity) {
+        AppSettingUtil.startAppSettingNoResult(activity);
     }
 
+    public static boolean startAppSettingForResult(Activity activity) {
+        return AppSettingUtil.startAppSettingForResult(activity, REQUEST_CODE_DETAIL_SETTING);
+    }
 
+    public static boolean startAppSettingForResult(Fragment fragment) {
+        return AppSettingUtil.startAppSettingForResult(fragment, REQUEST_CODE_DETAIL_SETTING);
+    }
 }

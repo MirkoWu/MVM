@@ -84,7 +84,7 @@ public class ImagePickerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.ivp_fragment_multi_image, container, false);
+        return inflater.inflate(R.layout.ivp_fragment_image_picker, container, false);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class ImagePickerFragment extends Fragment {
     }
 
     private void checkPermission() {
-        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.PERMISSION_STORAGE,
+        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_STORAGE,
                 new PermissionsUtil.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
@@ -240,6 +240,8 @@ public class ImagePickerFragment extends Fragment {
                 }
             }
         });
+
+        updateActivityToolbar();
     }
 
     /**
@@ -335,11 +337,13 @@ public class ImagePickerFragment extends Fragment {
                     mImageAdapter.notifyDataSetChanged(); //刷新结果
                     updateActivityToolbar();
                 }
-            } else if (requestCode == PermissionsUtil.REQUEST_CODE) {
+            } else if (requestCode == CameraUtil.REQUEST_CAMERA) {
                 File imageFile = CameraUtil.onActivityResult(requestCode, resultCode, data);
                 if (imageFile != null) {
-                    getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
-                   // ResultModel.add(MediaModel.contains());
+                    Uri uri = Uri.fromFile(imageFile);
+                    getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                    MediaBean bean = new MediaBean(uri, imageFile.getAbsolutePath());
+                    ResultModel.add(bean);
                     submitResult();
                 }
             }
@@ -360,7 +364,7 @@ public class ImagePickerFragment extends Fragment {
      * Open camera
      */
     private void showCameraAction() {
-        CameraUtil.showCameraAction(this);
+        CameraUtil.startCameraAction(this);
     }
 
     /**
@@ -393,7 +397,7 @@ public class ImagePickerFragment extends Fragment {
 
     private void updateActivityToolbar() {
         if (getActivity() != null && !getActivity().isFinishing() && (getActivity() instanceof ImagePickerActivity)) {
-            ((ImagePickerActivity) getActivity()).updateDoneText(ResultModel.getList());
+            ((ImagePickerActivity) getActivity()).updateDoneText();
         }
     }
 
@@ -428,6 +432,7 @@ public class ImagePickerFragment extends Fragment {
         if (mRvMedia != null) {
             mRvMedia.removeOnScrollListener(mOnScrollListener);
         }
+        PermissionsUtil.getInstance().removeListener();
         super.onDestroyView();
     }
 

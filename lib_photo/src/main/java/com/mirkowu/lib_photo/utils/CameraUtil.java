@@ -1,17 +1,13 @@
 package com.mirkowu.lib_photo.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -28,41 +24,19 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class CameraUtil {
-    private static File mTmpFile;
+    private static File sTmpFile;
 
     public static final int REQUEST_CAMERA = 0x3230;
 
-    public static final String[] PERMISSIONS_CAMERA_STORAGE = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public static final String[] PERMISSIONS_EXTERNAL_READ = {
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
 
-
-    public static void showCameraAction(final Activity activity) {
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.PERMISSION_CAMERA,
+    public static void startCameraAction(final Activity activity) {
+        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.GROUP_CAMERA,
                 new PermissionsUtil.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                            try {
-                                mTmpFile = FileUtils.createTmpFile(activity);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (mTmpFile != null && mTmpFile.exists()) {
-                                Uri imgUri = FileUtils.createFileUri(activity, mTmpFile);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                                activity.startActivityForResult(intent, REQUEST_CAMERA);
-                            } else {
-                                Toast.makeText(activity, R.string.ivp_error_image_not_exist, Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(activity, R.string.ivp_msg_no_camera, Toast.LENGTH_SHORT).show();
+                        Intent intent = createCameraIntent(activity);
+                        if (intent != null) {
+                            activity.startActivityForResult(intent, REQUEST_CAMERA);
                         }
                     }
 
@@ -74,7 +48,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        showCameraAction(activity);//如果想继续同意权限 就重新调用改方法
+                                        startCameraAction(activity); //如果想继续同意权限 就重新调用改方法
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -89,9 +63,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + activity.getPackageName()));
-                                        activity.startActivity(intent);
+                                        PermissionsUtil.startAppSettingForResult(activity);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -100,30 +72,16 @@ public class CameraUtil {
                 });
     }
 
-    public static void showCameraAction(final Fragment fragment) {
-        final Activity activity = fragment.getActivity();
+    public static void startCameraAction(final Fragment fragment) {
         final Context context = fragment.getContext();
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.PERMISSION_CAMERA,
-                new PermissionsUtil.OnPermissionsListener(){
+        PermissionsUtil.getInstance().requestPermissions(fragment, PermissionsUtil.GROUP_CAMERA,
+                new PermissionsUtil.OnPermissionsListener() {
 
                     @Override
                     public void onPermissionGranted(int requestCode) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (intent.resolveActivity(context.getPackageManager()) != null) {
-                            try {
-                                mTmpFile = FileUtils.createTmpFile(context);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (mTmpFile != null && mTmpFile.exists()) {
-                                Uri imgUri = FileUtils.createFileUri(activity, mTmpFile);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                                fragment.startActivityForResult(intent, REQUEST_CAMERA);
-                            } else {
-                                Toast.makeText(context, R.string.ivp_error_image_not_exist, Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(context, R.string.ivp_msg_no_camera, Toast.LENGTH_SHORT).show();
+                        Intent intent = createCameraIntent(context);
+                        if (intent != null) {
+                            fragment.startActivityForResult(intent, REQUEST_CAMERA);
                         }
                     }
 
@@ -135,7 +93,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        showCameraAction(fragment);//如果想继续同意权限 就重新调用改方法
+                                        startCameraAction(fragment); //如果想继续同意权限 就重新调用改方法
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -150,9 +108,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + context.getPackageName()));
-                                        fragment.startActivity(intent);
+                                        PermissionsUtil.startAppSettingForResult(fragment);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -160,6 +116,28 @@ public class CameraUtil {
                     }
                 });
 
+    }
+
+
+    private static Intent createCameraIntent(Context context) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            try {
+                sTmpFile = FileUtils.createTmpFile(context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (sTmpFile != null && sTmpFile.exists()) {
+                Uri imgUri = FileUtils.createFileUri(context, sTmpFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+                return intent;
+            } else {
+                Toast.makeText(context, R.string.ivp_error_image_not_exist, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, R.string.ivp_msg_no_camera, Toast.LENGTH_SHORT).show();
+        }
+        return null;
     }
 
     /**
@@ -173,15 +151,15 @@ public class CameraUtil {
     public static File onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == RESULT_OK) {
-                if (mTmpFile != null) {
-                    return mTmpFile;
+                if (sTmpFile != null) {
+                    return sTmpFile;
                 }
             } else {
                 // delete tmp file
-                while (mTmpFile != null && mTmpFile.exists()) {
-                    boolean success = mTmpFile.delete();
+                if (sTmpFile != null && sTmpFile.exists()) {
+                    boolean success = sTmpFile.delete();
                     if (success) {
-                        mTmpFile = null;
+                        sTmpFile = null;
                     }
                 }
             }

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -43,7 +43,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
 
     private ViewPagerFixed mViewPager;
     private PreviewImageAdapter mAdapter;
-    private LinearLayout mLlSave;
+    private RelativeLayout mRlBottom;
     private int mCurPosition;
     private ArrayList<MediaBean> mOriginList;
 
@@ -95,7 +95,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
 
     private void initView() {
         mToolbar = findViewById(R.id.toolbar);
-        mLlSave = findViewById(R.id.llSave);
+        mRlBottom = findViewById(R.id.rlBottom);
         mViewPager = findViewById(R.id.mViewPager);
         ImageView ivSave = findViewById(R.id.ivSave);
 
@@ -105,7 +105,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
         }
 
         if (!TextUtils.isEmpty(mSavePath)) {
-            mLlSave.setVisibility(View.VISIBLE);
+            mRlBottom.setVisibility(View.VISIBLE);
             ivSave.setOnClickListener(this);
         }
         mAdapter = new PreviewImageAdapter(mOriginList, new View.OnClickListener() {
@@ -213,11 +213,13 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
                     }).start();
         }
 
-        if (!TextUtils.isEmpty(mSavePath) && mLlSave != null) {
-            mLlSave.setVisibility(View.VISIBLE);
-            ViewCompat.setAlpha(mLlSave, 0);
-            ViewCompat.animate(mLlSave).alpha(1).setInterpolator(new DecelerateInterpolator(2)).start();
+        if (!TextUtils.isEmpty(mSavePath) && mRlBottom != null) {
+            mRlBottom.setVisibility(View.VISIBLE);
+            ViewCompat.setAlpha(mRlBottom, 0);
+            ViewCompat.animate(mRlBottom).alpha(1).setInterpolator(new DecelerateInterpolator(2)).start();
         }
+
+        BarUtils.setStatusBarVisibility(this, true);
     }
 
     private void hideToolbar() {
@@ -232,9 +234,11 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
                     }).start();
         }
 
-        if (!TextUtils.isEmpty(mSavePath) && mLlSave != null) {
-            ViewCompat.animate(mLlSave).alpha(0).setInterpolator(new DecelerateInterpolator(2)).start();
+        if (!TextUtils.isEmpty(mSavePath) && mRlBottom != null) {
+            ViewCompat.animate(mRlBottom).alpha(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
+
+        BarUtils.setStatusBarVisibility(this, false);
     }
 
     @Override

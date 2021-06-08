@@ -7,9 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mirkowu.lib_photo.ImagePicker
-import com.mirkowu.lib_photo.PickerConfig
-import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
@@ -68,7 +65,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnZh.click { LanguageUtils.applyLanguage(Locale.SIMPLIFIED_CHINESE, true) }
         binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, true) }
         binding.btnPermission.click {
-            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.PERMISSION_CAMERA,
+            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
                     object : PermissionsUtil.OnPermissionsListener {
                         override fun onPermissionGranted(requestCode: Int) {
                             Log.d(TAG, "onPermissionGranted: ")

@@ -10,6 +10,8 @@ import com.mirkowu.lib_base.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
+
 public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     private List<T> mData = new ArrayList<>();
 
@@ -71,6 +73,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         }
         this.mData.add(position, item);
         notifyItemInserted(position);
+        notifyItemRangeChanged(position, this.mData.size() - position);
         compatibilityDataSizeChanged(1);
     }
 
@@ -100,6 +103,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         }
         T data = this.mData.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position, this.mData.size() - position);
         compatibilityDataSizeChanged(0);
         return data;
     }
@@ -114,6 +118,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         if (position > -1) {
             this.mData.remove(position);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position, this.mData.size() - position);
             compatibilityDataSizeChanged(0);
             return true;
         }
@@ -131,6 +136,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         if (position > -1) {
             this.mData.remove(position);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position, this.mData.size() - position);
             compatibilityDataSizeChanged(0);
             return true;
         }
@@ -172,7 +178,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public void onBindViewHolder(@NonNull VH holder, int position) {
         T item = this.mData.get(position);
 
-        addOnItemClickListener(holder, position);
+        addOnItemClickListener(holder);
 
         onBindHolder(holder, item, position);
     }
@@ -183,11 +189,10 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      * Item添加点击事件
      *
      * @param holder
-     * @param position
      */
-    private void addOnItemClickListener(VH holder, int position) {
+    private void addOnItemClickListener(VH holder) {
         if (mOnItemClickListener != null) {
-            holder.itemView.setTag(R.id.key_position, position);
+            holder.itemView.setTag(R.id.key_holder, holder);
             holder.itemView.setOnClickListener(getOnItemClickListener());
         }
     }
@@ -199,7 +204,13 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
             mDelegateOnItemClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position = (int) view.getTag(R.id.key_position);
+                    //兼容NotifyItemRemoved()
+                    VH holder = (VH) view.getTag(R.id.key_holder);
+                    int position = holder.getAdapterPosition();
+                    if (position == NO_POSITION) {
+                        return;
+                    }
+
                     if (mOnItemClickListener != null) {
                         mOnItemClickListener.onItemClick(view, getItem(position), position);
                     }
@@ -214,12 +225,11 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      * Child添加点击事件
      *
      * @param view
-     * @param position
      * @return
      */
-    protected void addOnItemChildClickListener(View view, int position) {
+    protected void addOnItemChildClickListener(VH holder, View view) {
         if (mOnItemChildClickListener != null) {
-            view.setTag(R.id.key_position, position);
+            view.setTag(R.id.key_holder, holder);
             view.setOnClickListener(getOnItemChildClickListener());
         }
     }
@@ -231,7 +241,12 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
             mDelegateOnItemChildClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position = (int) view.getTag(R.id.key_position);
+                    //兼容NotifyItemRemoved()
+                    VH holder = (VH) view.getTag(R.id.key_holder);
+                    int position = holder.getAdapterPosition();
+                    if (position == NO_POSITION) {
+                        return;
+                    }
                     if (mOnItemChildClickListener != null) {
                         mOnItemChildClickListener.onItemChildClick(view, getItem(position), position);
                     }

@@ -19,6 +19,8 @@ class GridAdapter : BaseAdapter<String, GridAdapter.Holder>() {
         holder.binding.apply {
             tvTitle.text = "第${position}XXXXXXXXXX"
             tvContent.text = "内容${position}"
+            addOnItemChildClickListener(holder,tvTitle)
+            addOnItemChildClickListener(holder,tvContent)
         }
     }
 }
