@@ -1,5 +1,5 @@
 # MVM
-
+[![](https://jitpack.io/v/mirkowu/mvm.svg)](https://jitpack.io/#mirkowu/mvm)
 -----------------------------------
 我所理解的MVM
 M:Model 数据层
@@ -16,5 +16,20 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 回顾我们所写过的MVP,MVVM等模式，我们会发现其相同之处，都是作为一个中间层来进行数据交互，而最根本的解构方面似乎还是
 很鸡肋，完全没达到传说中的高内聚低耦合，具体代码还要看个人水平。
 
-MVM尽管没有解决
+//你可以直接使用
+```
+    implementation "com.github.mirkowu:mvm:$ext.mvm_version" //总仓库
+
+```
+//也可以按需索取
+```
+    implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
+```
+
 
