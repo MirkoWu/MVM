@@ -8,11 +8,12 @@
     android:id="@+id/mRootView"
     tools:context=".imagepicker.ImagePickerActivity">
 
-<!--    <com.mirkowu.lib_widget.Toolbar-->
-<!--        android:id="@+id/mToolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:title="选取图片" />-->
+    <com.mirkowu.lib_widget.Toolbar
+        android:id="@+id/mToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backIcon="0"
+        app:title="选取图片" />
 
     <com.mirkowu.lib_photo.view.ImagePickerRecyclerView
         android:id="@+id/rv_pick"

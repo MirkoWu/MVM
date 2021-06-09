@@ -82,11 +82,7 @@ public class Toolbar extends FrameLayout {
         return this;
     }
 
-    public Toolbar setBackIconHide() {
-        return setBackIcon(0);
-    }
-
-    public Toolbar setBackIcon(boolean isShow) {
+    public Toolbar setShowBackIcon(boolean isShow) {
         return setBackIcon(isShow ? mBackIconResId : 0);
     }
 

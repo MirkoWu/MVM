@@ -11,7 +11,6 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.BarUtils
-import com.mirkowu.lib_widget.Toolbar
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityImagePickerBinding
@@ -27,9 +26,9 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 
     override fun getLayoutId() = 0
     override fun initialize() {
-        val toolbar = Toolbar(this)
-        binding.mRootView.addView(toolbar, 0)
-//        BarUtils.setStatusBarColor(this, Color.WHITE)
+//        val toolbar = Toolbar(this)
+//        binding.mRootView.addView(toolbar, 0)
+        val toolbar = binding.mToolbar
         BarUtils.setStatusBarLightMode(this, true)
         toolbar.setTitle("选取图片")
         toolbar.setRightIcon(R.drawable.svg_setting) {}

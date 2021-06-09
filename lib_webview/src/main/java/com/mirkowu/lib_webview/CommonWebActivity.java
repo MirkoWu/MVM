@@ -77,7 +77,7 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
 
         mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
-        mToolbar.setBackIcon(webConfig.isShowBack());
+        mToolbar.setShowBackIcon(webConfig.isShowBack());
         mToolbar.setTitle(title);
 
         configWebSettings(webConfig);

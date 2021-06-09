@@ -67,7 +67,7 @@ public class CommonWebFragment extends BaseMVMFragment implements CancelAdapt {
         mWebViewCallBack = webConfig.getWebViewCallBack();
 
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
-        mToolbar.setBackIcon(webConfig.isShowBack());
+        mToolbar.setShowBackIcon(webConfig.isShowBack());
 
         configWebSettings(webConfig);
 
