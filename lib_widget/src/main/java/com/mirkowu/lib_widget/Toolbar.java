@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +13,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
+import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
 /**
  * @author: mirko
@@ -45,15 +46,15 @@ public class Toolbar extends FrameLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
-        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, 0);
+        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, R.drawable.widget_ic_back);
         ta.recycle();
 
-        LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
-        tvTitle = findViewById(R.id.btv_title);
-        ivBack = findViewById(R.id.iv_back);
-        tvRight = findViewById(R.id.tv_right);
-        ivRight = findViewById(R.id.iv_right);
-        vLine = findViewById(R.id.v_line);
+        View view = inflate(context, R.layout.widget_layout_toolbar, this);
+        tvTitle = view.findViewById(R.id.btv_title);
+        ivBack = view.findViewById(R.id.iv_back);
+        tvRight = view.findViewById(R.id.tv_right);
+        ivRight = view.findViewById(R.id.iv_right);
+        vLine = view.findViewById(R.id.v_line);
 
         setBackIcon(mBackIconResId);
         setTitle(title);
@@ -68,6 +69,16 @@ public class Toolbar extends FrameLayout {
 
     public Toolbar setTitle(@StringRes int titleResId) {
         tvTitle.setText(titleResId);
+        return this;
+    }
+
+    public Toolbar setTitleColor(@ColorInt int colorId) {
+        tvTitle.setTextColor(colorId);
+        return this;
+    }
+
+    public Toolbar setTitleSize(int sizeSp) {
+        tvTitle.setTextSize(sizeSp);
         return this;
     }
 
@@ -102,6 +113,22 @@ public class Toolbar extends FrameLayout {
         ivRight.setVisibility(VISIBLE);
         ivRight.setImageResource(resId);
         ivRight.setOnClickListener(clickListener);
+        return this;
+    }
+
+    public Toolbar setRightIconPadding(int paddingDp) {
+        int size = SizeUtils.dp2px(paddingDp);
+        ivRight.setPadding(size, size, size, size);
+        return this;
+    }
+
+    public Toolbar setRightTextColor(@ColorInt int colorId) {
+        tvRight.setTextColor(colorId);
+        return this;
+    }
+
+    public Toolbar setRightTextSize(@ColorInt int sizeSp) {
+        tvRight.setTextSize(sizeSp);
         return this;
     }
 

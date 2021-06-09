@@ -30,28 +30,35 @@
         android:gravity="center"
         android:singleLine="true"
         android:textColor="#222222"
-        android:textSize="16sp"
+        android:textSize="17sp"
         tools:text="标题" />
 
     <TextView
         android:id="@+id/tv_right"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="right"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:visibility="gone" />
+        android:paddingHorizontal="10dp"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="菜单" />
 
     <ImageView
         android:id="@+id/iv_right"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:layout_gravity="right"
+        android:layout_marginEnd="10dp"
+        android:paddingVertical="13dp"
         android:visibility="gone" />
 
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom"
         android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
         android:background="#1A000000" />
 </FrameLayout>

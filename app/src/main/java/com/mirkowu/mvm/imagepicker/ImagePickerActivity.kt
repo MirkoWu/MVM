@@ -10,6 +10,9 @@ import com.mirkowu.lib_util.FileUtil
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.utilcode.util.BarUtils
+import com.mirkowu.lib_widget.Toolbar
+import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityImagePickerBinding
 import com.mirkowu.mvm.viewbinding.binding
@@ -24,7 +27,12 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 
     override fun getLayoutId() = 0
     override fun initialize() {
-
+        val toolbar = Toolbar(this)
+        binding.mRootView.addView(toolbar, 0)
+//        BarUtils.setStatusBarColor(this, Color.WHITE)
+        BarUtils.setStatusBarLightMode(this, true)
+        toolbar.setTitle("选取图片")
+        toolbar.setRightIcon(R.drawable.svg_setting) {}
         val list = mutableListOf(
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2Fmonth_1011%2F1011250123f7480cd63703c992.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625652923&t=f88648f6594af41d02c7a30ff67d3284",
                 "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwx1.sinaimg.cn%2Flarge%2F008fHVgdly4gqfhftvhl5j30u00iv40g.jpg&refer=http%3A%2F%2Fwx1.sinaimg.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625652886&t=a116fe8bd5ca59a461966d2b09b814e4"
