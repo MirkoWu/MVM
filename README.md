@@ -25,11 +25,25 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 ```
     implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
 ```
+
+### [Base组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_base)
+
+### [Widget组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_widget)
+
+### [Network组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_network)
+
+### [Util组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_util)
+
+### [Image组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_image)
+
+### [WebView组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_webview)
+
+### [Photo组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_photo)
 
 

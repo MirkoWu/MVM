@@ -19,10 +19,19 @@ public class ImageLoader {
 
     private volatile static ILoader sILoader;
 
+    /**
+     * 设置加载引擎
+     *
+     * @param loader
+     */
     public static void setLoader(ILoader loader) {
         sILoader = loader;
     }
 
+    /**
+     * 默认用 Glide
+     * @return
+     */
     public static ILoader getLoader() {
         if (sILoader == null) {
             synchronized (ImageLoader.class) {

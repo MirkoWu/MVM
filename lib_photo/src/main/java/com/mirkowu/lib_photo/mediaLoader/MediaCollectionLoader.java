@@ -120,6 +120,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
 
             if (data.getCount() > 0) {
                 List<MediaBean> allList = new ArrayList<>();
+                List<MediaBean> allVideoList = new ArrayList<>();
                 data.moveToFirst();
                 do {
                     String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
@@ -131,6 +132,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                         continue;
                     }
 
+                    //过滤GIF
                     if (!mIsShowGif && (mineType.contains(MineType.GIF) || path.endsWith(MineType.GIF))) {
                         continue;
                     }
@@ -138,16 +140,18 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                     Uri contentUri = MediaStore.Files.getContentUri("external");
                     Uri uri = ContentUris.withAppendedId(contentUri, id);
 
+                    //创建单个实体类
                     MediaBean mediaBean = null;
-                    if (!TextUtils.isEmpty(name)) {
-                        if (mineType.contains(MineType.VIDEO)) {
-                            long duration = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
-                            mediaBean = new MediaBean(uri, path, name, mineType, dateTime, duration);
-                        } else {
-                            mediaBean = new MediaBean(uri, path, name, mineType, dateTime);
-                        }
-                        allList.add(mediaBean);
+                    if (mineType.contains(MineType.VIDEO)) {
+                        long duration = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
+                        mediaBean = new MediaBean(uri, path, name, mineType, dateTime, duration);
+                        allVideoList.add(mediaBean);
+                    } else {
+                        mediaBean = new MediaBean(uri, path, name, mineType, dateTime);
                     }
+                    allList.add(mediaBean);
+
+                    //没有创建文件夹，先创建文件夹，已创建则直接加入
                     if (!mHasFolderGenerated) {
                         // get all folder data
                         File folderFile = new File(path).getParentFile();
@@ -171,6 +175,17 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
 
                 } while (data.moveToNext());
 
+                //混合类型，添加所有视频集合，如果有的话
+                if (!mIsOnlyVideo && mIsShowVideo && !allVideoList.isEmpty()) {
+                    FolderBean allVideoFolder = new FolderBean();
+                    allVideoFolder.name = mContext.getResources().getString(R.string.ivp_all_video);
+                    allVideoFolder.path = "/sdcard";
+                    allVideoFolder.cover = allVideoList.get(0);
+                    allVideoFolder.mediaList = allVideoList;
+                    mResultFolder.add(0, allVideoFolder);
+                }
+
+                //添加所有图片(包括视频)集合
                 if (!allList.isEmpty()) {
                     //构造所有图片的集合
                     FolderBean allImagesFolder = new FolderBean();
@@ -187,6 +202,7 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
                     allImagesFolder.mediaList = allList;
                     mResultFolder.add(0, allImagesFolder);
                 }
+
                 mHasFolderGenerated = true;
                 if (mCallback != null) {
                     mCallback.onLoadFinish(mResultFolder);

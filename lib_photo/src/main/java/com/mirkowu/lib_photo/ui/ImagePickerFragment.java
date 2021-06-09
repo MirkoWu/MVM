@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -250,7 +249,7 @@ public class ImagePickerFragment extends Fragment {
     private void createPopupFolderList() {
         int width = ScreenUtils.getScreenWidth();
         int height = (int) (ScreenUtils.getScreenHeight() * 0.6f);
-        mFolderPopupWindow = new ListPopupWindow(getActivity());
+        mFolderPopupWindow = new ListPopupWindow(getContext());
         mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         mFolderPopupWindow.setAdapter(mFolderAdapter);
         mFolderPopupWindow.setContentWidth(width);
@@ -261,31 +260,22 @@ public class ImagePickerFragment extends Fragment {
         mFolderPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                mFolderAdapter.setSelectIndex(position);
-
-                final int index = position;
-                final AdapterView v = adapterView;
                 MediaModel.selectFolder(position);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFolderPopupWindow.dismiss();
+                mFolderAdapter.setSelectIndex(position);
+                mFolderPopupWindow.dismiss();
 
-                        //startLoadImagesTask(folder.path);//此处直接使用列表中的数据，不再查询
-                        FolderBean folder = (FolderBean) v.getAdapter().getItem(index);
-                        if (null != folder) {
-                            mImageAdapter.setData(folder.mediaList);
-                            mCategoryText.setText(folder.name);
-                            if (mIsShowCamera && index == 0) {
-                                mImageAdapter.setIsShowCamera(true);
-                            } else {
-                                mImageAdapter.setIsShowCamera(false);
-                            }
-                        }
-                        mRvMedia.smoothScrollToPosition(0);
+                //startLoadImagesTask(folder.path);//此处直接使用列表中的数据，不再查询
+                FolderBean folder = mFolderAdapter.getItem(position);
+                if (null != folder) {
+                    mImageAdapter.setData(folder.mediaList);
+                    mCategoryText.setText(folder.name);
+                    if (position == 0) {
+                        mImageAdapter.setIsShowCamera(mIsShowCamera);
+                    } else {
+                        mImageAdapter.setIsShowCamera(false);
                     }
-                }, 100L);
-
+                }
+                mRvMedia.smoothScrollToPosition(0);
             }
         });
     }
