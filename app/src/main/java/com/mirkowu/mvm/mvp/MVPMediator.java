@@ -7,6 +7,8 @@ import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.network.RxObserver;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.reactivex.rxjava3.functions.Action;
 
 public class MVPMediator extends BaseMediator<IMVPView, BizModel> {
@@ -28,7 +30,7 @@ public class MVPMediator extends BaseMediator<IMVPView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(ErrorType errorType, int code, String msg) {
+                    public void onFailure(@NotNull ErrorType errorType, int code, String msg) {
 
                     }
                 });

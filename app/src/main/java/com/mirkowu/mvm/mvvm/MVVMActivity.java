@@ -77,10 +77,10 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         mMediator.mRequestImageListData.observe(this, responseData -> {
             hideLoadingDialog();
             if (responseData.isSuccess()) {
-                refreshHelper.setLoadMore(imageAdapter, responseData.getData());
+                refreshHelper.setLoadMore(imageAdapter, responseData.data);
             } else if (responseData.isFailure()) {
                 refreshHelper.finishLoad();
-                ErrorBean errorBean = responseData.errorBean;
+                ErrorBean errorBean = responseData.error;
                 if (errorBean.isNetError()) {
                     binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
                 } else if (errorBean.isApiError()) {

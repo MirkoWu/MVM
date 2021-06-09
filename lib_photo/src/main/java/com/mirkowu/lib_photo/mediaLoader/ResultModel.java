@@ -13,12 +13,10 @@ import java.util.Map;
 
 public class ResultModel {
     private static LinkedHashMap<String, MediaBean> sMaps = new LinkedHashMap<>();
-    //    private static ArrayList<MediaBean> sList = new ArrayList<>();
     private static boolean sIsOriginPhoto;
 
     public static ArrayList<MediaBean> getList() {
         return new ArrayList<>(sMaps.values());
-//        return sList;
     }
 
     public static ArrayList<String> getPaths(List<MediaBean> list) {

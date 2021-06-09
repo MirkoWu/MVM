@@ -31,13 +31,13 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                     @Override
                     public void onSuccess(GankBaseBean<List<GankImageBean>> data) {
                         if (data.isSuccess()) {
-                            mRequestImageListData.setValue(new ResponseData<>(data.data));
+                            mRequestImageListData.setValue(ResponseData.success(data.data));
                         }
                     }
 
                     @Override
-                    public void onFailure(ErrorType errorType, int code, String msg) {
-                        mRequestImageListData.setValue(new ResponseData<>(new ErrorBean(errorType, code, msg)));
+                    public void onFailure(ErrorType type, int code, String msg) {
+                        mRequestImageListData.setValue(ResponseData.error(type, code, msg));
                     }
                 });
     }

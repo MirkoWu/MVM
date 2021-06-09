@@ -20,7 +20,7 @@ inline fun <T> LiveData<ResponseData<T>>.observerRequest(owner: LifecycleOwner,
         when (t.state) {
             RequestState.LOADING -> onLoading()
             RequestState.SUCCESS -> onSuccess(t.data)
-            RequestState.FAILURE -> onFailure(t.errorBean)
+            RequestState.FAILURE -> onFailure(t.error)
             RequestState.FINISH -> onFinish()
         }
     })

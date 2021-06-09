@@ -3,6 +3,9 @@ package com.mirkowu.lib_base.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +17,11 @@ import androidx.lifecycle.LifecycleOwner;
 import com.mirkowu.lib_base.R;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
+import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_widget.dialog.LoadingDialog;
+
+import java.lang.reflect.Method;
 
 /**
  * 更多可配置的
@@ -131,6 +137,39 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         detachMediator();
         super.onDestroy();
     }
+
+    @Override
+    public void setRequestedOrientation(int requestedOrientation) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating()) {
+            LogUtil.d("avoid calling setRequestedOrientation when Oreo.");
+            return;
+        }
+        super.setRequestedOrientation(requestedOrientation);
+    }
+
+    /**
+     * 是否是透明的Activity
+     * 8.0透明Activity不允许旋转屏幕
+     *
+     * @return
+     */
+    private boolean isTranslucentOrFloating() {
+        boolean isTranslucentOrFloating = false;
+        try {
+            int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable")
+                    .getField("Window").get(null);
+            TypedArray ta = obtainStyledAttributes(styleableRes);
+            Method m = ActivityInfo.class.getMethod("isTranslucentOrFloating", TypedArray.class);
+            m.setAccessible(true);
+            isTranslucentOrFloating = (boolean) m.invoke(null, ta);
+            m.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isTranslucentOrFloating;
+    }
+
 
     @Override
     public Context getContext() {

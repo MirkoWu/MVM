@@ -24,7 +24,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         try {
             onSuccess(o);
         } catch (Throwable t) {
-            onFailure(ErrorType.API, ErrorCode.ERROR_BUSINESS, t.getMessage());
+            onFailure(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage());
         }
     }
 
@@ -78,5 +78,5 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      * @param code
      * @param msg
      */
-    public abstract void onFailure(ErrorType errorType, int code, String msg);
+    public abstract void onFailure(@androidx.annotation.NonNull ErrorType type, int code, String msg);
 }

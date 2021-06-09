@@ -3,7 +3,6 @@ package com.mirkowu.mvm.viewbinding
 import com.mirkowu.lib_base.mediator.BaseMediator
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.view.IBaseView
-import com.mirkowu.lib_network.ErrorBean
 import com.mirkowu.lib_network.ErrorType
 import com.mirkowu.lib_network.state.ResponseData
 import com.mirkowu.lib_network.state.ResponseLiveData
@@ -12,22 +11,6 @@ import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
 import com.mirkowu.mvm.bean.GankImageBean
 import com.mirkowu.mvm.network.RxObserver
-
-
-//fun <T> ObservableSubscribeProxy<T>.subscribe(
-//        onSuccess: (T?) -> Unit = {},
-//        onFailure: (ErrorBean) -> Unit = {}) {
-//    subscribe(object : AbsRxObserver<T>() {
-//        override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
-//            onFailure(ErrorBean(errorType, code, msg))
-//        }
-//
-//        override fun onSuccess(data: T) {
-//            onSuccess(data)
-//        }
-//    })
-//}
-
 
 class DBMediator : BaseMediator<IBaseView?, BizModel?>() {
     var mImageListData = ResponseLiveData<List<GankImageBean?>?>()
@@ -50,13 +33,13 @@ class DBMediator : BaseMediator<IBaseView?, BizModel?>() {
                     override fun onSuccess(data: GankBaseBean<List<GankImageBean?>?>?) {
                         data?.let {
                             if (it.isSuccess && !it.data.isNullOrEmpty()) {
-                                mImageListData.value = ResponseData(it.data!!)
+                                mImageListData.value = ResponseData.success(it.data!!)
                             }
                         }
                     }
 
                     override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
-                        mImageListData.value = ResponseData(ErrorBean(errorType, code, msg))
+                        mImageListData.value = ResponseData.error(errorType, code, msg)
                     }
                 })
     }

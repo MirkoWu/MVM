@@ -1,6 +1,7 @@
 package com.mirkowu.lib_photo;
 
 import com.mirkowu.lib_photo.bean.MediaBean;
+import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 
 import java.util.ArrayList;
 
@@ -74,6 +75,11 @@ public class PickerConfig {
 
     public PickerConfig setOriginSelectList(ArrayList<MediaBean> originSelectList) {
         this.originSelectList = originSelectList;
+        return this;
+    }
+
+    public PickerConfig setOriginSelectPathList(ArrayList<String> originSelectList) {
+        this.originSelectList = ResultModel.pathsToBeans(originSelectList);
         return this;
     }
 }
