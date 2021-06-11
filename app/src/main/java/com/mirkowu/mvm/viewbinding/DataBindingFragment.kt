@@ -14,6 +14,7 @@ import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
+import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import java.util.*
@@ -85,6 +86,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnImagePicker.click {
             startActivity(Intent(context, ImagePickerActivity::class.java))
 
+        }
+        binding.btnDown.click {
+            startActivity(Intent(context, DownloadActivity::class.java))
         }
     }
 
