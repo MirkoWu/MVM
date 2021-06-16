@@ -24,6 +24,7 @@ public class ProgressResponseBody extends ResponseBody {
     private OnDownloadListener progressListener;
     private BufferedSource bufferedSource;
     private Handler handler;
+    private static final long INTERVAL = 100L; //回调间隔
 
     public ProgressResponseBody(@NonNull ResponseBody responseBody, OnDownloadListener progressListener) {
         this.responseBody = responseBody;
@@ -37,7 +38,6 @@ public class ProgressResponseBody extends ResponseBody {
                         progressListener.onProgress(bean.readBytes, bean.totalBytes);
                     }
                 }
-
                 return false;
             }
         });
@@ -64,16 +64,21 @@ public class ProgressResponseBody extends ResponseBody {
     private Source source(Source source) {
 
         return new ForwardingSource(source) {
-            long totalBytesRead = 0;
+            private long totalBytesRead = 0;
+            private long lastUpdateTime;
 
             @Override
             public long read(@NotNull Buffer sink, long byteCount) throws IOException {
                 long byteRead = super.read(sink, byteCount);
                 totalBytesRead += (byteRead != -1 ? byteRead : 0);
 
-                Message message = Message.obtain();
-                message.obj = new ProgressBean(totalBytesRead, contentLength());
-                handler.sendMessage(message);
+                long time = System.currentTimeMillis();
+                if (time - lastUpdateTime > INTERVAL || byteRead == -1) {
+                    Message message = Message.obtain();
+                    message.obj = new ProgressBean(totalBytesRead, contentLength());
+                    handler.sendMessage(message);
+                    lastUpdateTime = time;
+                }
 
                 return byteRead;
             }

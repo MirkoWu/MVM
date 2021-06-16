@@ -4,6 +4,7 @@ package com.mirkowu.mvm.base;
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.util.InstanceFactory;
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
 public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivity<M> {
 
@@ -16,6 +17,10 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
         return mMediator;
     }
 
+    @Override
+    protected void initStatusBar() {
+        BarUtils.setStatusBarLightMode(this, true);
+    }
 //    @Override
 //    public void showStateView(StateBean bean) {
 //

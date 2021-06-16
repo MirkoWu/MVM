@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,10 +47,10 @@ public class Toolbar extends FrameLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
-        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, R.drawable.widget_ic_back);
+        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, R.drawable.widget_ic_back_black);
         ta.recycle();
 
-        View view = inflate(context, R.layout.widget_layout_toolbar, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
         tvTitle = view.findViewById(R.id.btv_title);
         ivBack = view.findViewById(R.id.iv_back);
         tvRight = view.findViewById(R.id.tv_right);
@@ -60,7 +61,6 @@ public class Toolbar extends FrameLayout {
         setTitle(title);
         setShowLine(mShowLine);
     }
-
 
     public Toolbar setTitle(String title) {
         tvTitle.setText(title);

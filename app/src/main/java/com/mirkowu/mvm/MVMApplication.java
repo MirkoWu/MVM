@@ -24,7 +24,7 @@ public class MVMApplication extends Application {
         AutoSizeManager.getInstance().setConfig(this);
 
 
-        //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
+//        RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Throwable {

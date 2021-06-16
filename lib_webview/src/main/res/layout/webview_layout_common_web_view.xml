@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:visibility="gone"
-        app:backIcon="@drawable/widget_ic_back" />
+        app:backIcon="@drawable/widget_ic_back_black" />
 
     <com.mirkowu.lib_webview.CommonWebView
         android:id="@+id/mWebView"

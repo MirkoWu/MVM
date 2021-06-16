@@ -22,6 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //资源前缀
+    resourcePrefix "qr_"
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -33,4 +41,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    implementation project(':lib_util')
+    implementation project(':lib_widget')
+    //AndroidX 版本
+    implementation 'com.king.zxing:zxing-lite:2.0.3'
 }

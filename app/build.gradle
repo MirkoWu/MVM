@@ -64,6 +64,7 @@ dependencies {
 //    implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
 //    implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
 //    implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
+//    implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
     implementation project(path: ':lib_base')
     implementation project(path: ':lib_widget')
     implementation project(path: ':lib_util')
@@ -71,6 +72,7 @@ dependencies {
     implementation project(path: ':lib_image')
     implementation project(path: ':lib_webview')
     implementation project(path: ':lib_photo')
+    implementation project(path: ':lib_qr')
 
 
     //检测内测泄露

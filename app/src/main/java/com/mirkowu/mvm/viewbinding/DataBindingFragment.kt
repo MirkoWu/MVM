@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_qr.QRScanner
+import com.mirkowu.lib_qr.ScanConfig
+import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
@@ -18,6 +21,7 @@ import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import java.util.*
+
 
 class DataBindingFragment : BaseFragment<MVVMMediator>() {
     companion object {
@@ -89,6 +93,14 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
         binding.btnDown.click {
             startActivity(Intent(context, DownloadActivity::class.java))
+        }
+        binding.btnQr.click {
+            QRScanner.getInstance().setScanConfig(ScanConfig()
+                    .setShowFlashlight(true)
+                    .setShowAlbumPick(true))
+                    .setOnScanResultListener {
+                        LogUtil.e("扫描结果：" + it)
+                    }.start(context)
         }
     }
 

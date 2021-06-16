@@ -1,9 +1,10 @@
 package com.mirkowu.mvm.download
 
 import com.mirkowu.lib_base.mediator.EmptyMediator
-import com.mirkowu.lib_network.download.DownloadClient
+import com.mirkowu.lib_network.download.Downloader
 import com.mirkowu.lib_network.download.OnDownloadListener
 import com.mirkowu.lib_util.FileUtil
+import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.mvm.base.BaseActivity
@@ -28,15 +29,14 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         val url2 = "https://dw.fjweite.cn/syt/windows_10_professional_x64_2020.iso"
         binding.btnDown.click {
             val filePath = FileUtil.getDiskExternalPath() + "/" + System.currentTimeMillis() + ".jpg"
-            id = DownloadClient.getInstance().setUrl(url2)
+            id = Downloader.create(url)
                     .setFilePath(filePath)
                     .setOnProgressListener(object : OnDownloadListener {
                         override fun onProgress(readBytes: Long, totalBytes: Long) {
                             val size = ConvertUtils.byte2FitMemorySize(totalBytes)
-                            //  LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
+                            LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
                             var progress = (readBytes * 100f / totalBytes).toInt()
                             binding.pbDown.progress = progress
-
                             binding.tvProgress.setText("$progress% ${size}")
                         }
 
@@ -48,16 +48,17 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
                     }).start()
         }
         binding.btnCancel.click {
-            DownloadClient.getInstance().cancel(id)
+            Downloader.cancel(id)
         }
         binding.btnDown2.click {
             val filePath = FileUtil.getDiskExternalPath() + "/" + System.currentTimeMillis() + ".jpg"
-            id2 = DownloadClient.getInstance().setUrl(url2)
+            id2 = Downloader.create(url2)
+                    .setUrl(url2)
                     .setFilePath(filePath)
                     .setOnProgressListener(object : OnDownloadListener {
                         override fun onProgress(readBytes: Long, totalBytes: Long) {
                             val size = ConvertUtils.byte2FitMemorySize(totalBytes)
-                            //  LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
+                            LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
                             var progress = (readBytes * 100f / totalBytes).toInt()
                             binding.pbDown2.progress = progress
 
@@ -67,12 +68,12 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
                         override fun onSuccess(file: File) {
                         }
 
-                        override fun onFailure(e: Throwable?) {
+                        override fun onFailure(e: Throwable) {
                         }
                     }).start()
         }
         binding.btnCancel2.click {
-            DownloadClient.getInstance().cancel(id2)
+            Downloader.cancel(id2)
         }
     }
 }
