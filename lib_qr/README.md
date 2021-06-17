@@ -16,4 +16,4 @@
 
 ### 感谢
 
-    [ZXingLite](https://github.com/jenly1314/ZXingLite)
+[ZXingLite](https://github.com/jenly1314/ZXingLite)
