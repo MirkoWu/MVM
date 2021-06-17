@@ -11,8 +11,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backIcon="@null"
         app:showLine="true"
+        android:background="#FFFFFF"
         app:title="@string/app_name" />
 
     <com.mirkowu.lib_widget.NoScrollViewPager

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_refresh">刷新一下</string>
-    <string name="widget_loading">加载中...</string>
-    <string name="widget_timer_hint_text">获取验证码</string>
-    <string name="widget_timer_finish_text">获取验证码</string>
-    <string name="widget_timer_count_format_text">获取验证码(%d)</string>
-    <string name="widget_btn_confirm">确定</string>
-    <string name="widget_btn_cancel">取消</string>
+    <string name="widget_refresh">Click Refresh</string>
+    <string name="widget_loading">Loading...</string>
+    <string name="widget_timer_hint_text">Get Captcha</string>
+    <string name="widget_timer_finish_text">Get Captcha</string>
+    <string name="widget_timer_count_format_text">Get Captcha(%d)</string>
+    <string name="widget_btn_confirm">confirm</string>
+    <string name="widget_btn_cancel">cancel</string>
 </resources>

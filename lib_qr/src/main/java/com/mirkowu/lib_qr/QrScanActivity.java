@@ -2,7 +2,6 @@ package com.mirkowu.lib_qr;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -45,8 +44,7 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
         ivFlashlight.setOnClickListener(this);
         ivAlbum.setOnClickListener(this);
 
-        toolbar.setTitleColor(Color.WHITE);
-        toolbar.setBackIcon(R.drawable.widget_ic_back_white);
+
 
         ScanConfig config = QRScanner.getInstance().getScanConfig();
 

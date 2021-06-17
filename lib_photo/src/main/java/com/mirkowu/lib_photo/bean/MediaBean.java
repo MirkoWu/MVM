@@ -22,11 +22,11 @@ public class MediaBean implements Parcelable {
     public long duration;
 
     public boolean isVideo() {
-        return !TextUtils.isEmpty(type) && type.contains(MineType.VIDEO) && uri != null;
+        return !TextUtils.isEmpty(type) && type.contains(MineType.VIDEO);
     }
 
     public boolean isGif() {
-        return !TextUtils.isEmpty(type) && type.contains(MineType.GIF) && uri != null;
+        return !TextUtils.isEmpty(type) && type.contains(MineType.GIF);
     }
 
     public MediaBean(@NonNull String path) {

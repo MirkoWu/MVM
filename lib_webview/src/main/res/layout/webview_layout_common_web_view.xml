@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:background="#FFFFFF"
         android:visibility="gone"
         app:backIcon="@drawable/widget_ic_back_black" />
 
@@ -27,5 +28,6 @@
         android:layout_height="2dp"
         android:layout_below="@+id/mToolbar"
         android:max="100"
+        android:progressDrawable="@drawable/webview_progress"
         android:visibility="gone" />
 </RelativeLayout>

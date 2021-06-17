@@ -3,6 +3,7 @@ package com.mirkowu.lib_widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ public class Toolbar extends FrameLayout {
     private ImageView ivRight;
     private View vLine;
     private boolean mShowLine;
+    private int mTitleColorId;
+    private int mRightColorId;
     private Drawable mBackIconDrawable;
 
     public Toolbar(Context context) {
@@ -41,12 +44,17 @@ public class Toolbar extends FrameLayout {
 
     public Toolbar(final Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        setFitsSystemWindows(true);
+
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
+        mTitleColorId = ta.getColor(R.styleable.Toolbar_titleColor, Color.parseColor("#222222"));
+        mRightColorId = ta.getColor(R.styleable.Toolbar_rightColor, Color.parseColor("#333333"));
         mBackIconDrawable = ta.getDrawable(R.styleable.Toolbar_backIcon);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
         ta.recycle();
@@ -58,9 +66,13 @@ public class Toolbar extends FrameLayout {
         ivRight = view.findViewById(R.id.iv_right);
         vLine = view.findViewById(R.id.v_line);
 
+        setTitle(title);
+        setTitleColor(mTitleColorId);
+        setRightTextColor(mRightColorId);
         setBackIcon(mBackIconDrawable);
         setShowLine(mShowLine);
-        setTitle(title);
+
+
     }
 
     public Toolbar setTitle(String title) {

@@ -20,8 +20,8 @@
     <string name="ivp_save">保存</string>
     <string name="ivp_save_successed">已保存至%s</string>
     <string name="ivp_save_failed">保存失败</string>
-    <string name="pick">选择</string>
-    <string name="max_count_more_zero">最大可选数量需大于 0 ！</string>
-    <string name="ipv_origin_image">原图</string>
+    <string name="ivp_pick">选择</string>
+    <string name="ivp_max_count_more_zero">最大可选数量需大于 0 ！</string>
+    <string name="ivp_origin_image">原图</string>
 
 </resources>

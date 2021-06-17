@@ -22,7 +22,7 @@
     <string name="ivp_save">Save</string>
     <string name="ivp_save_successed">Saved to %s</string>
     <string name="ivp_save_failed">Save failed</string>
-    <string name="pick">Pick</string>
-    <string name="max_count_more_zero">The maximum optional quantity must be greater than 0 ！</string>
-    <string name="ipv_origin_image">Full Image</string>
+    <string name="ivp_pick">Pick</string>
+    <string name="ivp_max_count_more_zero">The maximum optional quantity must be greater than 0 ！</string>
+    <string name="ivp_origin_image">Full Image</string>
 </resources>

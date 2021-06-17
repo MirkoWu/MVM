@@ -1,4 +1,4 @@
 <resources>
-    <string name="webview_chooser_camera">拍摄</string>
-    <string name="webview_chooser_album">从相册中选择</string>
+    <string name="webview_chooser_camera">Take Photo</string>
+    <string name="webview_chooser_album">Choose From Album</string>
 </resources>
