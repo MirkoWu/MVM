@@ -30,6 +30,7 @@ MVVM或衍生出来的变种其行为目的都是一致的。
     implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
 ```
 
 ### [Base组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_base)
@@ -45,5 +46,7 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 ### [WebView组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_webview)
 
 ### [Photo组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_photo)
+
+### [QR组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qr)
 
 

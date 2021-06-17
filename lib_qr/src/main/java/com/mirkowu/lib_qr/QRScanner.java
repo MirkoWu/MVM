@@ -27,6 +27,9 @@ public class QRScanner {
         return this;
     }
 
+    /**
+     * 设置默认的配置
+     */
     public ScanConfig getScanConfig() {
         if (mScanConfig == null) {
             mScanConfig = new ScanConfig();

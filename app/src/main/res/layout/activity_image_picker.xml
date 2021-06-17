@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/mRootView"
     tools:context=".imagepicker.ImagePickerActivity">
 
     <com.mirkowu.lib_widget.Toolbar
         android:id="@+id/mToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backIcon="0"
+        app:backIcon="@drawable/widget_ic_back_black"
         app:title="选取图片" />
 
     <com.mirkowu.lib_photo.view.ImagePickerRecyclerView

@@ -3,6 +3,7 @@ package com.mirkowu.lib_widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class Toolbar extends FrameLayout {
     private ImageView ivRight;
     private View vLine;
     private boolean mShowLine;
-    private int mBackIconResId;
+    private Drawable mBackIconDrawable;
 
     public Toolbar(Context context) {
         this(context, null);
@@ -46,8 +47,8 @@ public class Toolbar extends FrameLayout {
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
+        mBackIconDrawable = ta.getDrawable(R.styleable.Toolbar_backIcon);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
-        mBackIconResId = ta.getResourceId(R.styleable.Toolbar_backIcon, R.drawable.widget_ic_back_black);
         ta.recycle();
 
         View view = LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
@@ -57,9 +58,9 @@ public class Toolbar extends FrameLayout {
         ivRight = view.findViewById(R.id.iv_right);
         vLine = view.findViewById(R.id.v_line);
 
-        setBackIcon(mBackIconResId);
-        setTitle(title);
+        setBackIcon(mBackIconDrawable);
         setShowLine(mShowLine);
+        setTitle(title);
     }
 
     public Toolbar setTitle(String title) {
@@ -83,16 +84,20 @@ public class Toolbar extends FrameLayout {
     }
 
     public Toolbar setShowBackIcon(boolean isShow) {
-        return setBackIcon(isShow ? mBackIconResId : 0);
+        return setBackIcon(isShow ? mBackIconDrawable : null);
     }
 
     public Toolbar setBackIcon(@DrawableRes int resId) {
-        mBackIconResId = resId;
-        if (resId == 0) {
+        return setBackIcon(getResources().getDrawable(resId));
+    }
+
+    public Toolbar setBackIcon(Drawable drawable) {
+        mBackIconDrawable = drawable;
+        if (drawable == null) {
             ivBack.setVisibility(GONE);
         } else {
             ivBack.setVisibility(VISIBLE);
-            ivBack.setImageResource(resId);
+            ivBack.setImageDrawable(drawable);
             ivBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -158,26 +163,4 @@ public class Toolbar extends FrameLayout {
     public boolean isShowLine() {
         return mShowLine;
     }
-
-//
-//    public void autoSizeTitleMargin() {
-//        LayoutParams leftParams = (LayoutParams) ivBack.getLayoutParams();
-//        LayoutParams rightParams = (LayoutParams) llMenu.getLayoutParams();
-//        int leftWidth = ivBack.getWidth() + leftParams.leftMargin + leftParams.rightMargin;
-//        int rightWidth = llMenu.getWidth() + rightParams.leftMargin + rightParams.rightMargin;
-//        int width = Math.max(leftWidth, rightWidth);
-//        int margin = 16;
-//        width += margin;
-//        LayoutParams params = (LayoutParams) tvToolbarTitle.getLayoutParams();
-//        if (width == params.getMarginStart() && width == params.getMarginEnd()) return;
-//        params.setMarginStart(width);
-//        params.setMarginEnd(width);
-//        tvToolbarTitle.setLayoutParams(params);
-//    }
-//
-//    @Override
-//    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-//        super.onSizeChanged(w, h, oldw, oldh);
-//        autoSizeTitleMargin();
-//    }
 }

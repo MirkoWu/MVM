@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backIcon="@mipmap/ic_launcher"
+        app:backIcon="@null"
         app:showLine="true"
         app:title="@string/app_name" />
 

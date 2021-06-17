@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="wrap_content"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:gravity="center_vertical">
@@ -11,20 +11,23 @@
     <ImageView
         android:id="@+id/iv_back"
         android:layout_width="30dp"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/widget_toolbar_height"
         android:layout_gravity="start"
         android:layout_marginStart="10dp"
         android:background="?selectableItemBackgroundBorderless"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:scaleType="centerInside"
+        android:src="@drawable/widget_ic_back_black"
         android:visibility="visible" />
 
     <com.mirkowu.lib_widget.BoldTextView
         android:id="@+id/btv_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/widget_toolbar_height"
         android:layout_gravity="center"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:ellipsize="middle"
         android:gravity="center"
         android:singleLine="true"
@@ -35,7 +38,7 @@
     <TextView
         android:id="@+id/tv_right"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/widget_toolbar_height"
         android:layout_gravity="right"
         android:layout_marginEnd="10dp"
         android:gravity="center"
@@ -48,7 +51,7 @@
     <ImageView
         android:id="@+id/iv_right"
         android:layout_width="48dp"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/widget_toolbar_height"
         android:layout_gravity="right"
         android:layout_marginEnd="10dp"
         android:paddingVertical="13dp"

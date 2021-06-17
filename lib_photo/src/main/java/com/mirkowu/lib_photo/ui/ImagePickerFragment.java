@@ -367,7 +367,6 @@ public class ImagePickerFragment extends Fragment {
         if (mediaBean != null) {
             if (mIsSingleMode) {
                 ResultModel.addSingle(mediaBean);
-                mImageAdapter.notifyItemChanged(position);
             } else {
                 if (ResultModel.contains(mediaBean)) {
                     ResultModel.remove(mediaBean);
@@ -378,8 +377,8 @@ public class ImagePickerFragment extends Fragment {
                     }
                     ResultModel.addMulti(mediaBean);
                 }
-                mImageAdapter.notifyDataSetChanged();
             }
+            mImageAdapter.notifyDataSetChanged();
 
             updateActivityToolbar();
         }
@@ -405,15 +404,11 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //  outState.putSerializable(KEY_TEMP_FILE, mTmpFile);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-//        if (savedInstanceState != null) {
-//            mTmpFile = (File) savedInstanceState.getSerializable(KEY_TEMP_FILE);
-//        }
     }
 
 

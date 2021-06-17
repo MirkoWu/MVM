@@ -97,7 +97,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnQr.click {
             QRScanner.getInstance().setScanConfig(ScanConfig()
                     .setShowFlashlight(true)
-                    .setShowAlbumPick(true))
+                    .setShowAlbumPick(true)
+                    .setCameraAutoZoom(true)
+            )
                     .setOnScanResultListener {
                         LogUtil.e("扫描结果：" + it)
                     }.start(context)

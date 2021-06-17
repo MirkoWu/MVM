@@ -43,6 +43,7 @@ dependencies {
 
     implementation project(':lib_util')
     implementation project(':lib_widget')
+    implementation project(':lib_photo')
     //AndroidX 版本
     implementation 'com.king.zxing:zxing-lite:2.0.3'
 }
