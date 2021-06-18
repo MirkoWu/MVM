@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <string name="strNetworkTipsCancelBtn">Cancel</string>
+    <string name="strNetworkTipsConfirmBtn">Continue</string>
+    <string name="strNetworkTipsMessage">The Network have switch to mobile network, continue？</string>
+    <string name="strNetworkTipsTitle">Network tips</string>
+    <string name="strNotificationClickToContinue">Continue download</string>
+    <string name="strNotificationClickToInstall">Click to install</string>
+    <string name="strNotificationClickToRetry">Click to retry</string>
+    <string name="strNotificationClickToView">Click to check</string>
+    <string name="strNotificationDownloadError">Download fail</string>
+    <string name="strNotificationDownloadSucc">Download finished</string>
+    <string name="strNotificationDownloading">Downloading...</string>
+    <string name="strNotificationHaveNewVersion">Have new version</string>
+    <string name="strToastCheckUpgradeError">Check upgrade fail, retry after</string>
+    <string name="strToastCheckingUpgrade">Checking upgrade...</string>
+    <string name="strToastYourAreTheLatestVersion">You have no new version</string>
+    <string name="strUpgradeDialogCancelBtn">Next time</string>
+    <string name="strUpgradeDialogContinueBtn">Continue</string>
+    <string name="strUpgradeDialogFeatureLabel">Upgrade feature</string>
+    <string name="strUpgradeDialogFileSizeLabel">Package Size</string>
+    <string name="strUpgradeDialogInstallBtn">Install</string>
+    <string name="strUpgradeDialogRetryBtn">Retry</string>
+    <string name="strUpgradeDialogUpdateTimeLabel">Upgrade time</string>
+    <string name="strUpgradeDialogUpgradeBtn">Upgrade</string>
+    <string name="strUpgradeDialogVersionLabel">Version</string>
+
+<!--    <style name="AppBaseTheme" parent="android:Theme.Light">-->
+<!--        &lt;!&ndash;-->
+<!--            Theme customizations available in newer API levels can go in-->
+<!--            res/values-vXX/styles.xml, while customizations related to-->
+<!--            backward-compatibility can go here.-->
+<!--        &ndash;&gt;-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme" parent="AppBaseTheme">-->
+<!--        &lt;!&ndash; All customizations that are NOT specific to a particular API-level can go here. &ndash;&gt;-->
+<!--    </style>-->
+</resources>

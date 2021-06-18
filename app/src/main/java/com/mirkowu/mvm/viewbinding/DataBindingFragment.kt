@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
+import com.mirkowu.lib_upgrade.AppUpgradeDialog
+import com.mirkowu.lib_upgrade.BuglyManager
+import com.mirkowu.lib_upgrade.IUpgradeInfo
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
@@ -20,6 +23,7 @@ import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
+import com.tencent.bugly.beta.upgrade.UpgradeStateListener
 import java.util.*
 
 
@@ -93,6 +97,36 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
         binding.btnDown.click {
             startActivity(Intent(context, DownloadActivity::class.java))
+        }
+        binding.btnUpgrade.click {
+           // BuglyManager.checkUpgrade(true, false)
+            val url = "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
+
+            AppUpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
+                override fun getTitle(): String {
+                    return "title"
+                }
+
+                override fun getContent(): String {
+                    return "getContent"
+                }
+
+                override fun getApkUrl(): String {
+                    return url;
+                }
+
+                override fun getVersionName(): String {
+                    return "1.0.1"
+                }
+
+                override fun getVersionCode(): Int {
+                    return 1001
+                }
+
+                override fun isForceUpgrade(): Int {
+                    return 0
+                }
+            })
         }
         binding.btnQr.click {
             QRScanner.getInstance().setScanConfig(ScanConfig()

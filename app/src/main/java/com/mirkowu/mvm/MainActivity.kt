@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_upgrade.BuglyManager
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvp.MVPActivity
@@ -42,6 +43,18 @@ class MainActivity : BaseActivity<EmptyMediator>() {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_PHONE_STATE
         )
+
+        BuglyManager.setOnUpgradeListener { upgradeInfo, isManual ->
+            Log.e(DataBindingFragment.TAG, "setUpgradeListener:   upgradeInfo=$upgradeInfo")
+
+            if (upgradeInfo != null) {
+              //  UpgradeDialog.show(supportFragmentManager, upgradeInfo)
+            } else if (isManual) {
+               // ToastUtils.showShort("当前已是最新版本!")
+            }
+        }
+       // Beta.upgradeStateListener
+       // BuglyManager.checkUpgrade(false,false)
     }
 
     fun mvcClick(view: View?) {
@@ -70,5 +83,6 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     fun listClick(view: View?) {
         GridListActivity.start(this)
     }
+
 
 }

@@ -90,9 +90,9 @@ public class FileUtil {
      */
     public static String getAppCachePath(Context context) {
         if (hasSDCard()) {
-            return context.getExternalCacheDir().getAbsolutePath();// /mnt/sdcard/Android/data/com.my.app/cache
+            return context.getExternalCacheDir().getAbsolutePath(); // /mnt/sdcard/Android/data/com.my.app/cache
         } else {
-            return context.getCacheDir().getAbsolutePath();// /data/data/com.my.app/cache
+            return context.getCacheDir().getAbsolutePath(); // /data/data/com.my.app/cache
         }
     }
 

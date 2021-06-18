@@ -143,6 +143,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="下载" />
+  <Button
+        android:id="@+id/btn_upgrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更新版本" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"

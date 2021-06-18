@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="up_next_time">Next time</string>
+    <string name="up_upgrade">Upgrade</string>
+    <string name="up_cancel">取消</string>
+    <string name="up_check_new_version">检测到新版本</string>
+    <string name="up_downloading">下载中...</string>
+    <string name="up_upgrade_failure">更新失败</string>
+    <string name="up_click_install">点击安装</string>
+    <string name="up_download_failure">下载失败，请稍候重试</string>
+</resources>

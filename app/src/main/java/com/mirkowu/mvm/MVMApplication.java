@@ -2,6 +2,7 @@ package com.mirkowu.mvm;
 
 import android.app.Application;
 
+import com.mirkowu.lib_upgrade.BuglyManager;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.util.WebViewUtil;
@@ -21,6 +22,7 @@ public class MVMApplication extends Application {
             return;
         }
 
+        BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
         AutoSizeManager.getInstance().setConfig(this);
 
 

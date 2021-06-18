@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.imagepicker
 
+import android.graphics.Color
 import android.util.Log
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_photo.ImagePicker
@@ -29,6 +30,7 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 //        val toolbar = Toolbar(this)
 //        binding.mRootView.addView(toolbar, 0)
         val toolbar = binding.mToolbar
+        toolbar.setBackgroundColor(Color.WHITE)
         BarUtils.setStatusBarLightMode(this, true)
         toolbar.setTitle("选取图片")
         toolbar.setRightIcon(R.drawable.svg_setting) {}

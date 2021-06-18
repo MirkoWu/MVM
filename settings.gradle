@@ -1,3 +1,4 @@
+include ':lib_upgrade'
 include ':lib_qr'
 include ':lib_webview'
 include ':lib_photo'
