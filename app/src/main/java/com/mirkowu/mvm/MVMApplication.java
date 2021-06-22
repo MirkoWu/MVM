@@ -17,16 +17,21 @@ public class MVMApplication extends Application {
         super.onCreate();
         // LeakCanary.INSTANCE(this);
         LogUtil.init(BuildConfig.DEBUG);
+
         WebViewUtil.initMultiProcess(this);
+
+        //防止初始化多次，视项目情况设置
         if (!ProcessUtils.isMainProcess()) {
             return;
         }
 
+        ////换成你自己的bugly账号
         BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
+
+        //屏幕适配
         AutoSizeManager.getInstance().setConfig(this);
 
-
-//        RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
+        //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Throwable {

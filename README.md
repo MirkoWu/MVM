@@ -31,6 +31,33 @@ MVVM或衍生出来的变种其行为目的都是一致的。
     implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
     implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
+```
+
+你可以在Application的onCreate()中进行对应的初始化
+```java
+       LogUtil.init(BuildConfig.DEBUG);
+
+       WebViewUtil.initMultiProcess(this);
+
+       //防止初始化多次，视项目情况设置
+       if (!ProcessUtils.isMainProcess()) {
+            return;
+       }
+
+        //换成你自己的bugly账号
+        BuglyManager.init(this, "buglyId", BuildConfig.DEBUG);
+
+        //屏幕适配
+        AutoSizeManager.getInstance().setConfig(this);
+
+        //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Throwable {
+                LogUtil.e(throwable, "RxJavaPlugins");
+            }
+        });
 ```
 
 ### [Base组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_base)
@@ -48,5 +75,7 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 ### [Photo组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_photo)
 
 ### [QR组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qr)
+
+### [Upgrade组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_upgrade)
 
 
