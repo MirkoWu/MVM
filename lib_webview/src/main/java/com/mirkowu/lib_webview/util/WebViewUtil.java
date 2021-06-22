@@ -12,6 +12,7 @@ import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.service.EmptyService;
+import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.GeolocationPermissions;
 import com.tencent.smtt.sdk.QbSdk;
@@ -19,6 +20,8 @@ import com.tencent.smtt.sdk.WebIconDatabase;
 import com.tencent.smtt.sdk.WebStorage;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewDatabase;
+
+import java.util.HashMap;
 
 /**
  * 这个处理webview初始化、cookie同步、删除缓存清除等。
@@ -34,6 +37,13 @@ public class WebViewUtil {
     public static void initMultiProcess(Application application) {
         configWebViewCacheDirWithAndroidP(application);
         if (!ProcessUtils.isMainProcess()) {
+            //首次初始化冷启动优化  在调用TBS初始化、创建WebView之前进行如下配置
+            HashMap map = new HashMap();
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
+            QbSdk.initTbsSettings(map);
+
+            //初始化环境
             QbSdk.initX5Environment(application.getApplicationContext(), null);
             return;
         }

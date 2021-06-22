@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# ==================logger start=====================
+-dontwarn com.orhanobut.logger.**
+-keep class com.orhanobut.logger.**{*;}
+-keep interface com.orhanobut.logger.**{*;}
+# ==================logger end=====================

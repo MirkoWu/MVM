@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+apply plugin: 'bugly'
+
+bugly {
+    appId = "3e2cd9bf87"
+    appKey = "1b977565-a3ce-4188-9eea-255729b7ddc8"
+}
+
 def ext = rootProject.ext
 android {
     compileSdkVersion ext.compileSdkVersion
@@ -14,6 +21,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        ndk {
+//            //设置支持的SO库架构
+//            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+//        }
     }
 
     signingConfigs {
@@ -32,7 +43,7 @@ android {
             signingConfig signingConfigs.release
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }

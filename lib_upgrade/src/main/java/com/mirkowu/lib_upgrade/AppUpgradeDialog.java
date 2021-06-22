@@ -28,6 +28,10 @@ import java.io.File;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+
+/**
+ * 网络Url下载更新版本
+ */
 public class AppUpgradeDialog extends BaseDialog implements View.OnClickListener {
 
 

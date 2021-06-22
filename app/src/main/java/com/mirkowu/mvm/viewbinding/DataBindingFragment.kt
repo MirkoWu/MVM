@@ -16,6 +16,7 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
+import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
@@ -23,7 +24,9 @@ import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
+import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.upgrade.UpgradeStateListener
+import java.lang.RuntimeException
 import java.util.*
 
 
@@ -135,8 +138,12 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     .setCameraAutoZoom(true)
             )
                     .setOnScanResultListener {
+                        ToastUtils.showShort("扫描结果：" + it)
                         LogUtil.e("扫描结果：" + it)
                     }.start(context)
+        }
+        binding.btnCrash.click {
+            throw RuntimeException("测试BUG")
         }
     }
 
