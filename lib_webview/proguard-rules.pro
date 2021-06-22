@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# ==================X5浏览器 start=====================
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
+-keep class com.tencent.smtt.** {*;}
+-keep class com.tencent.tbs.** {*;}
+# ==================X5浏览器 end=====================
+
+# >>>>>>>>>>>>>>>----------3.与js互相调用的类---------->>>>>>>>>>>>>>>
+
+# <<<<<<<<<<<<<<<----------3.与js互相调用的类----------<<<<<<<<<<<<<<<

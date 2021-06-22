@@ -1,5 +1,11 @@
 # WebView组件库
 
+### 使用
+
+```
+//初始化WebView
+WebViewUtil.initMultiProcess(this);
+```
 
 ### 功能
 - [x] 支持X5浏览器
