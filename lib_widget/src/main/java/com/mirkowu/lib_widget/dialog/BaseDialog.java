@@ -88,6 +88,10 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
             WindowManager.LayoutParams params = window.getAttributes();
             params.y = mMarginTop;
             params.dimAmount = mDimAmount;
+            if (mDimAmount == 0) {
+                //为0时，取消背景色，防止状态栏变色
+                window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            }
             if (mShowBottomEnable) {
                 params.gravity = Gravity.BOTTOM;
             } else if (mShowTopEnable) {

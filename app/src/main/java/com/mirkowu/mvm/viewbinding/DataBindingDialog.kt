@@ -2,14 +2,12 @@ package com.mirkowu.mvm.viewbinding
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import com.mirkowu.mvm.R
 import com.mirkowu.mvm.databinding.DialogDatabindingBinding
 
 class DataBindingDialog(context: Context) : Dialog(context) {
 
-    val binding by binding(DialogDatabindingBinding::inflate)
+    val binding by bindingView(DialogDatabindingBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

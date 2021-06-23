@@ -20,8 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# ==================bugly start===================
--dontwarn com.tencent.bugly.**
--keep public class com.tencent.bugly.**{*;}
--keep class android.support.**{*;}
-# ==================bugly end===================
+-keep public class com.mirkowu.lib_upgrade.** { *; }
+-dontwarn com.mirkowu.lib_upgrade.**

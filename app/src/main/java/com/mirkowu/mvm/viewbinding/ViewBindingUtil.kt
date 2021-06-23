@@ -22,7 +22,7 @@ import kotlin.reflect.KProperty
  * 绑定Activity  eg.
  * val binding by binding(ActivityMainBinding::inflate)
  */
-inline fun <VB : ViewBinding> ComponentActivity.binding(crossinline inflate: (LayoutInflater) -> VB) = lazy {
+inline fun <VB : ViewBinding> ComponentActivity.bindingView(crossinline inflate: (LayoutInflater) -> VB) = lazy {
     inflate(layoutInflater).also {
         setContentView(it.root)
         /*if (this is ViewDataBinding) {
@@ -36,22 +36,22 @@ inline fun <VB : ViewBinding> ComponentActivity.binding(crossinline inflate: (La
  * 绑定Fragment  eg.
  * val binding by binding { FragmentHomeBinding.bind(view!!) }
  */
-fun <VB : ViewBinding> Fragment.binding(bind: (View) -> VB) =
+fun <VB : ViewBinding> Fragment.bindingView(bind: (View) -> VB) =
         FragmentBindingDelegate(bind)
 
 /**
  * 绑定Dialog  eg.
  * val binding by binding(DialogHintBinding::inflate)
  */
-fun <VB : ViewBinding> Dialog.binding(inflate: (LayoutInflater) -> VB) = lazy {
+fun <VB : ViewBinding> Dialog.bindingView(inflate: (LayoutInflater) -> VB) = lazy {
     inflate(layoutInflater).also { setContentView(it.root) }
 }
 
 /**
  * 绑定ViewGroup
  */
-fun <VB : ViewBinding> ViewGroup.binding(inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-                                         attachToParent: Boolean = true) = lazy {
+fun <VB : ViewBinding> ViewGroup.bindingView(inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB,
+                                             attachToParent: Boolean = true) = lazy {
     inflate(LayoutInflater.from(context), if (attachToParent) this else null, attachToParent)
 }
 

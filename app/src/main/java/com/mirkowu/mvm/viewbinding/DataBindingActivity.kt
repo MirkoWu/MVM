@@ -7,7 +7,7 @@ import com.mirkowu.mvm.databinding.ActivityDataBindingBinding
 
 class DataBindingActivity : BaseActivity<DBMediator>() {
 
-    val binding by binding(ActivityDataBindingBinding::inflate)
+    val binding by bindingView(ActivityDataBindingBinding::inflate)
 
     override fun bindContentView() {
         binding.root

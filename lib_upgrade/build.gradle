@@ -14,10 +14,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "proguard-rules.pro"
-//        ndk {
-//            //设置支持的SO库架构
-//            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-//        }
     }
 
 //    buildTypes {
@@ -46,12 +42,6 @@ dependencies {
 
     implementation project(':lib_util')
     implementation project(':lib_widget')
-
-    //注释掉原有bugly的仓库
-    //compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.3.2
-    api 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    api 'com.tencent.bugly:nativecrashreport:latest.release'
-
     //下载无需混淆
     implementation 'com.liulishuo.filedownloader:library:1.7.6'
 }

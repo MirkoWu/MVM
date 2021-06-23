@@ -10,7 +10,7 @@ import com.mirkowu.lib_widget.decoration.LinearDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityGridListBinding
-import com.mirkowu.mvm.viewbinding.binding
+import com.mirkowu.mvm.viewbinding.bindingView
 
 class GridListActivity : BaseActivity<EmptyMediator>() {
     companion object {
@@ -22,7 +22,7 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
         }
     }
 
-    val binding by binding(ActivityGridListBinding::inflate)
+    val binding by bindingView(ActivityGridListBinding::inflate)
     override fun bindContentView() {
 //        super.bindContentView()
         binding.root

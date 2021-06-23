@@ -7,4 +7,5 @@
     <string name="widget_timer_count_format_text">Get Captcha(%d)</string>
     <string name="widget_btn_confirm">confirm</string>
     <string name="widget_btn_cancel">cancel</string>
+
 </resources>

@@ -15,11 +15,11 @@ import com.mirkowu.lib_util.utilcode.util.BarUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityImagePickerBinding
-import com.mirkowu.mvm.viewbinding.binding
+import com.mirkowu.mvm.viewbinding.bindingView
 
 class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 
-    val binding by binding(ActivityImagePickerBinding::inflate)
+    val binding by bindingView(ActivityImagePickerBinding::inflate)
 
     override fun bindContentView() {
         binding.root

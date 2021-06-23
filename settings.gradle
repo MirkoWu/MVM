@@ -1,4 +1,7 @@
 include ':lib_upgrade'
+include ':lib_stat'
+include ':lib_crash'
+include ':lib_bugly'
 include ':lib_qr'
 include ':lib_webview'
 include ':lib_photo'

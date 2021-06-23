@@ -1,45 +1,64 @@
 package com.mirkowu.lib_upgrade;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadSampleListener;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.mirkowu.lib_util.FileUtil;
+import com.mirkowu.lib_util.HtmlUtil;
+import com.mirkowu.lib_util.IntentUtil;
+import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
+import com.mirkowu.lib_util.utilcode.util.ToastUtils;
+import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
-import com.tencent.bugly.beta.UpgradeInfo;
-import com.tencent.bugly.beta.download.DownloadListener;
-import com.tencent.bugly.beta.download.DownloadTask;
-import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
+
+import java.io.File;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 
 /**
- * Bugly 升级版本SDK
+ * 网络Url下载更新版本
  */
-public class UpgradeDialog extends BaseDialog implements DownloadListener, UpgradeStateListener {
-    TextView tvTitle;
-    TextView tvContent;
-    TextView tvProgress;
-    TextView tvNegative;
-    TextView tvPositive;
-    ProgressBar mProgressBar;
-    RelativeLayout llProgress;
-    LinearLayout llButton;
+public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
-    private UpgradeInfo upgradeInfo;
-    private boolean isForceUpgrade;
 
-    public static void show(FragmentManager manager, UpgradeInfo upgradeInfo) {
+    public static void show(FragmentManager manager, IUpgradeInfo upgradeInfo) {
+        FileDownloader.setup(Utils.getApp());
 
         UpgradeDialog dialog = new UpgradeDialog();
         dialog.upgradeInfo = upgradeInfo;
         dialog.show(manager);
     }
 
+
+    protected ImageView ivIcon;
+    protected TextView tvTitle;
+    protected TextView tvContent;
+    protected TextView tvPositive;
+    protected TextView tvNegative;
+
+    RelativeLayout llProgress;
+    ProgressBar mProgressBar;
+    TextView tvProgress;
+
+
+    //    protected OnButtonClickListener listener;
+    private BaseDownloadTask downloadTask;
+    public IUpgradeInfo upgradeInfo;
+    private File apkFile;
 
     @Override
     protected int getLayoutResId() {
@@ -48,67 +67,36 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 
     @Override
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
+
+        ivIcon = viewHolder.getView(R.id.ivIcon);
         tvTitle = viewHolder.getView(R.id.tvTitle);
         tvContent = viewHolder.getView(R.id.tvContent);
-        tvProgress = viewHolder.getView(R.id.tvProgress);
-        mProgressBar = viewHolder.getView(R.id.mProgressBar);
-        llProgress = viewHolder.getView(R.id.llProgress);
-        tvNegative = viewHolder.getView(R.id.tvNegative);
         tvPositive = viewHolder.getView(R.id.tvPositive);
-        llButton = viewHolder.getView(R.id.llButton);
+        tvNegative = viewHolder.getView(R.id.tvNegative);
+
+        llProgress = viewHolder.getView(R.id.llProgress);
+        mProgressBar = viewHolder.getView(R.id.mProgressBar);
+        tvProgress = viewHolder.getView(R.id.tvProgress);
+
+        tvPositive.setOnClickListener(this);
+        tvNegative.setOnClickListener(this);
+        ivIcon.setVisibility(GONE);
 
 
-        tvPositive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTask();
-            }
-        });
-
-        if (upgradeInfo == null) {
-            dismissAllowingStateLoss();
-            return;
-        }
-
-        tvTitle.setText(upgradeInfo.title);
-        tvContent.setText(upgradeInfo.newFeature);
-
-        if (isForceUpgrade = upgradeInfo.upgradeType == 2) { //强制
-            tvNegative.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(upgradeInfo.getTitle())) {
+            tvTitle.setText(R.string.up_check_new_version);
         } else {
-            tvNegative.setVisibility(View.VISIBLE);
-            tvNegative.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
+            tvTitle.setText(upgradeInfo.getTitle());
         }
+        HtmlUtil.setTextViewHtml(tvContent, upgradeInfo.getContent()); //支持html
 
-        setTouchOutCancel(false);
+        tvNegative.setVisibility(upgradeInfo.isForceUpgrade() == 1 ? GONE : VISIBLE);
+        tvPositive.setVisibility(VISIBLE);
+        tvPositive.setText(R.string.up_upgrade);
+        tvNegative.setText(R.string.up_next_time);
+
         setDialogCancelable(false);
-
-        BuglyManager.registerDownloadListener(this);
-        BuglyManager.setUpgradeStateListener(this);
-    }
-
-    private void startTask() {
-        llButton.setVisibility(View.GONE);
-        llProgress.setVisibility(View.VISIBLE);
-//        tvNegative.setText(R.string.up_cancel);
-//        tvNegative.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                BuglyManager.cancelDownload();
-//                dismiss();
-//            }
-//        });
-        BuglyManager.startDownloadTask();
-
         setTouchOutCancel(false);
-        setDialogCancelable(false);
-        setCancelable(false);
-        getDialog().setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -124,56 +112,108 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     }
 
     @Override
-    public void onReceive(DownloadTask downloadTask) {
-        int progress = (int) (downloadTask.getSavedLength() * 100f / downloadTask.getTotalLength());
-        tvProgress.setText(String.format("%d%%", progress));
-        mProgressBar.setProgress(progress);
-    }
-
-    @Override
-    public void onCompleted(DownloadTask downloadTask) {
-
-        if (!isForceUpgrade) {
-            dismissAllowingStateLoss();
-        } else {
-            llButton.setVisibility(View.VISIBLE);
-            tvNegative.setVisibility(View.GONE);
-            tvPositive.setVisibility(View.VISIBLE);
-            llProgress.setVisibility(View.GONE);
+    public void onClick(View v) {
+//        if (listener != null) {
+        int i = v.getId();
+        if (i == R.id.tvPositive) {
+            if (apkFile != null) {
+                IntentUtil.startInstall(getContext(), apkFile);
+            } else {
+                downloadApk();
+            }
+        } else if (i == R.id.tvNegative) {
+            if (downloadTask != null) {
+                downloadTask.pause();
+                FileDownloader.getImpl().clear(downloadTask.getId(), downloadTask.getTargetFilePath());
+            }
+            dismiss();
         }
+//        }
     }
 
-    @Override
-    public void onFailed(DownloadTask downloadTask, int i, String s) {
+//    public AppUpgradeDialog setOnButtonClickListener(OnButtonClickListener listener) {
+//        this.listener = listener;
+//        return this;
+//    }
+//
+//    public interface OnButtonClickListener {
+//
+//        /**
+//         * 当窗口按钮被点击
+//         *
+//         * @param dialog
+//         * @param isPositiveClick true :PositiveButton点击, false :NegativeButton点击
+//         */
+//        void onButtonClick(AppUpgradeDialog dialog, boolean isPositiveClick);
+//    }
+
+    public void downloadApk() {
+        llProgress.setVisibility(VISIBLE);
+        tvPositive.setVisibility(GONE);
+        tvNegative.setVisibility(VISIBLE);
+        if (upgradeInfo.isForceUpgrade() != 1) {
+            tvNegative.setText(R.string.up_cancel);
+            tvNegative.setEnabled(true);
+        } else {
+            tvNegative.setText(R.string.up_downloading);
+            tvNegative.setEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(upgradeInfo.getApkUrl())) {
+            ToastUtils.showShort(R.string.up_upgrade_failed);
+            dismissAllowingStateLoss();
+            return;
+        }
+        apkFile = null;
+        String path = FileUtil.getAppCachePath(getContext()) + File.separator
+                + "download" + File.separator + upgradeInfo.getVersionName() + ".apk";
+        downloadTask = FileDownloader.getImpl()
+                .create(upgradeInfo.getApkUrl())
+                .setPath(path)
+                .setForceReDownload(true)
+                .setCallbackProgressTimes(100)
+                .setMinIntervalUpdateSpeed(100)
+                .setListener(new FileDownloadSampleListener() {
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        int progress = (int) ((soFarBytes * 100.0) / totalBytes);
+                        tvProgress.setText(String.format("%d%%", progress));
+                        mProgressBar.setProgress(progress);
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        if (!isAdded() || isDetached()) return;
+
+                        tvProgress.setText(String.format("%d%%", 100));
+                        tvNegative.setVisibility(GONE);
+                        tvNegative.setEnabled(true);
+                        tvPositive.setVisibility(VISIBLE);
+                        tvPositive.setText(R.string.up_click_install);
+
+                        apkFile = new File(path);
+                        IntentUtil.startInstall(getContext(), apkFile);
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        FileDownloader.getImpl().clear(task.getId(), path);
+                        ToastUtils.showShort(R.string.up_download_failure);
+                        LogUtil.e("下载失败:" + e);
+                        dismissAllowingStateLoss();
+                        e.printStackTrace();
+                    }
+                });
+
+
+        downloadTask.start();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        BuglyManager.unregisterDownloadListener();
-        BuglyManager.cancelDownload();
-    }
-
-    @Override
-    public void onUpgradeFailed(boolean b) {
-
-    }
-
-    @Override
-    public void onUpgradeSuccess(boolean b) {
-    }
-
-    @Override
-    public void onUpgradeNoVersion(boolean b) {
-
-    }
-
-    @Override
-    public void onUpgrading(boolean b) {
-
-    }
-
-    @Override
-    public void onDownloadCompleted(boolean b) {
+        if (downloadTask != null) {
+            downloadTask.pause();
+        }
     }
 }

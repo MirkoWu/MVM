@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
-import com.mirkowu.lib_upgrade.BuglyManager
+import com.mirkowu.lib_bugly.BuglyManager
+import com.mirkowu.lib_bugly.UpgradeDialog
+import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvp.MVPActivity
@@ -14,10 +16,10 @@ import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
-import com.mirkowu.mvm.viewbinding.binding
+import com.mirkowu.mvm.viewbinding.bindingView
 
 class MainActivity : BaseActivity<EmptyMediator>() {
-    val binding by binding(ActivityMainBinding::inflate)
+    val binding by bindingView(ActivityMainBinding::inflate)
 
 
     override fun initMediator(): EmptyMediator {
@@ -48,9 +50,9 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             Log.e(DataBindingFragment.TAG, "setUpgradeListener:   upgradeInfo=$upgradeInfo")
 
             if (upgradeInfo != null) {
-              //  UpgradeDialog.show(supportFragmentManager, upgradeInfo)
+                UpgradeDialog.show(supportFragmentManager, upgradeInfo)
             } else if (isManual) {
-               // ToastUtils.showShort("当前已是最新版本!")
+                ToastUtils.showShort("当前已是最新版本!")
             }
         }
        // Beta.upgradeStateListener

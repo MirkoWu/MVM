@@ -11,12 +11,12 @@ import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDownloadBinding
-import com.mirkowu.mvm.viewbinding.binding
+import com.mirkowu.mvm.viewbinding.bindingView
 import java.io.File
 
 class DownloadActivity : BaseActivity<EmptyMediator>() {
 
-    val binding by binding(ActivityDownloadBinding::inflate)
+    val binding by bindingView(ActivityDownloadBinding::inflate)
 
     override fun bindContentView() {
         // super.bindContentView()

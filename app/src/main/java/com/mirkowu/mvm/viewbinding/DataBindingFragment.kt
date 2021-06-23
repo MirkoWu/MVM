@@ -9,23 +9,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
-import com.mirkowu.lib_upgrade.AppUpgradeDialog
-import com.mirkowu.lib_upgrade.BuglyManager
 import com.mirkowu.lib_upgrade.IUpgradeInfo
+import com.mirkowu.lib_upgrade.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
-import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
-import com.tencent.bugly.Bugly
-import com.tencent.bugly.beta.upgrade.UpgradeStateListener
+import com.mirkowu.mvm.widgetdemo.WidgetDemoActivity
 import java.lang.RuntimeException
 import java.util.*
 
@@ -44,7 +41,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
     }
 //    val binding  :FragmentDatabindingBinding  by binding()
 
-    val binding by binding { FragmentDatabindingBinding.bind(view!!) }
+    val binding by bindingView { FragmentDatabindingBinding.bind(view!!) }
 
 //    var _binding: FragmentDatabindingBinding? = null
 //    val binding get() = _binding!!
@@ -54,14 +51,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnText.text = "这是fragment databinding"
         binding.btnText.setOnClickListener {
             binding.btnText.text = "点击了${System.currentTimeMillis()}"
-            DataBindingDialog(context!!).show()
-            PromptDialog().setTitle("温馨提示")
-                    .setContent("确认关闭吗？")
-                    .setUseDefaultButton()
-                    .setIcon(R.mipmap.ic_launcher)
-                    .show(childFragmentManager)
-            showLoadingDialog("Toast测试")
-//            showLoadingDialog("Toast测试")
+        }
+        binding.btnUi.click {
+            WidgetDemoActivity.start(context!!)
         }
         val list = mutableListOf("", "", "", "", "", "", "", "", "", "")
         val listAdapter = DataBindingAdapter(list)
@@ -105,7 +97,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
            // BuglyManager.checkUpgrade(true, false)
             val url = "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
 
-            AppUpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
+            UpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
                 override fun getTitle(): String {
                     return "title"
                 }

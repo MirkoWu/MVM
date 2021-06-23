@@ -2,20 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/widget_card_bg_10dp"
+    android:background="@drawable/widget_card_bg_6dp"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-
-    <TextView
+    <com.mirkowu.lib_widget.BoldTextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="#333333"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/ivIcon"
@@ -28,17 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:lineSpacingExtra="6dp"
-        android:minHeight="48dp"
+        android:minHeight="36dp"
         android:textColor="#666666"
         android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="#eeeeee" />
 
     <LinearLayout

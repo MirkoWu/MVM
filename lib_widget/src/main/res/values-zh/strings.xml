@@ -7,4 +7,5 @@
     <string name="widget_timer_count_format_text">获取验证码(%d)</string>
     <string name="widget_btn_confirm">确定</string>
     <string name="widget_btn_cancel">取消</string>
+
 </resources>

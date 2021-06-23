@@ -2,6 +2,7 @@ package com.mirkowu.lib_util;
 
 import android.util.Log;
 
+import com.mirkowu.lib_util.utilcode.util.CrashUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -15,6 +16,9 @@ public class LogUtil {
         //设置打印适配器，保证只有一个
         Logger.clearLogAdapters();
         Logger.addLogAdapter(new AndroidLogAdapter());
+
+        //本地Crash日志
+        CrashUtils.init();
     }
 
     public static void json(String json) {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/widget_card_bg_10dp"
+    android:background="@drawable/widget_card_bg_6dp"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -72,7 +72,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:max="100"
-            android:progressDrawable="@drawable/up_shape_loading_progress" />
+            android:progressDrawable="@drawable/up_upgrade_loading_progress" />
 
 
     </RelativeLayout>
