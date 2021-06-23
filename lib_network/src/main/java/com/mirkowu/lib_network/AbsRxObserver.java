@@ -22,6 +22,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
 
     private void doOnSuccess(T o) {
         try {
+            onFinish();
             onSuccess(o);
         } catch (Throwable t) {
             onFailure(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage());
@@ -57,12 +58,11 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onComplete() {
-        onFinish();
     }
 
 
     public void onFinish() {
-        //只可能来自onComplete/onError二者之一
+        //只可能来自doOnSuccess/onError二者之一
     }
 
     /**
