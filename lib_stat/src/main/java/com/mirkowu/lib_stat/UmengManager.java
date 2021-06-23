@@ -10,6 +10,8 @@ import com.umeng.commonsdk.UMConfigure;
 import java.util.HashMap;
 
 public class UmengManager {
+    private static final String EVENT_API_REQUEST_FAILED = "api_request_failed";
+
     /**
      * SDK预初始化函数
      * 在Applicaiton.onCreate函数中调用预初始化函数UMConfigure.preInit()，预初始化函数不会采集设备信息，也不会向友盟后台上报数据。
@@ -83,7 +85,7 @@ public class UmengManager {
      * <p>
      * 调用onKillProcess方法，用来保存统计数据。
      */
-    public void onKillProcess() {
+    public static void onKillProcess() {
         Context context = Utils.getApp();
         MobclickAgent.onKillProcess(context);
     }
@@ -134,17 +136,18 @@ public class UmengManager {
             reportError(e);
         }
     }
+
     /**
      * 统计Api接口请求失败事件
      *
      * @param api
      * @param code
      */
-//    public static void sendApiReqFailedEvent(String api, String code) {
-//        Context context = Utils.getApp();
-//        HashMap<String, String> params = new HashMap<>();
-//        params.put("api", api);
-//        params.put("code", code);
-//        MobclickAgent.onEvent(context, EventString.EVENT_API_REQ_FAILED, params);
-//    }
+    public static void onApiRequestFailedEvent(String api, String code) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api", api);
+        params.put("code", code);
+        params.put("code_api", code + "_" + api);
+        onEvent(EVENT_API_REQUEST_FAILED, params);
+    }
 }
