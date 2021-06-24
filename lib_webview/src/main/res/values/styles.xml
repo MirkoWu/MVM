@@ -1,19 +1,20 @@
 <resources>
+
     <style name="WebViewTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <item name="colorPrimaryDark">#FFFFFF</item>
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
+        <!--        <item name="colorAccent">@color/colorAccent</item>-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--  定义为透明会显示黑屏-->
+        <!--        <item name="android:windowBackground">@android:color/transparent</item>-->
         <!--  自定义actionBarSize高度-->
         <item name="actionBarSize">48dp</item>
         <item name="android:actionBarSize">48dp</item>
-        <item name="android:windowContentOverlay">@null</item>
-<!--        <item name="android:windowDisablePreview">true</item>-->
-        <!--        <item name="toolbarStyle">@style/myToolbarStyle</item>-->
-        <!--        <item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>-->
+        <!--        windowContentOverlay为null会清空window变黑屏-->
+        <!--        <item name="android:windowContentOverlay">@null</item>-->
+        <!--        <item name="android:windowDisablePreview">true</item>-->
     </style>
 </resources>

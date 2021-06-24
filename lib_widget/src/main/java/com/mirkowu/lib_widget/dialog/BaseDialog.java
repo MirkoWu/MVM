@@ -169,6 +169,11 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
         return this;
     }
 
+    public BaseDialog setWidth(int width) {
+        mWidth = width;
+        return this;
+    }
+
     /**
      * @param margin 设置左右margin
      */

@@ -48,7 +48,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    //4.0及以上
+    //AS4.0及以上
     buildFeatures {
         viewBinding = true
 //        dataBinding = true
@@ -108,7 +108,7 @@ dependencies {
     implementation project(path: ':lib_upgrade')
     implementation project(path: ':lib_bugly') //bugly 包含升级SDK 二选一
 //    implementation project(path: ':lib_crash') //bugly 不含升级SDK 二选一
-
+    implementation project(path: ':lib_screen')
 
     //检测内测泄露
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'

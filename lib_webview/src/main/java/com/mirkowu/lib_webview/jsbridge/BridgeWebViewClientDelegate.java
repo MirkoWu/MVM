@@ -41,19 +41,19 @@ public class BridgeWebViewClientDelegate {
     }
 
 
-    public void onPageStarted(  String url, Bitmap favicon) {
+    public void onPageStarted(String url, Bitmap favicon) {
 
     }
 
 
-    public void onPageFinished(  String url) {
+    public void onPageFinished(String url) {
         if (webView != null) {
             webView.loadLocalJS();
         }
     }
 
 
-    public void onReceivedError(  int errorCode, String description, String failingUrl) {
+    public void onReceivedError(int errorCode, String description, String failingUrl) {
 
     }
 }

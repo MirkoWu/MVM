@@ -19,14 +19,13 @@ import com.mirkowu.lib_webview.setting.WebSettingUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.tencent.smtt.sdk.WebSettings;
 
-import me.jessyan.autosize.internal.CancelAdapt;
 
 /**
  * 通用的WebView
  * 1.支持X5
  * 2.支持JsBridge
  */
-public class CommonWebFragment extends BaseMVMFragment implements CancelAdapt {
+public class CommonWebFragment extends BaseMVMFragment {
     private static final String KEY_TITLE = "title";
     private static final String KEY_URL = "url";
 

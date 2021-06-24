@@ -65,8 +65,8 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 //        CommonWebActivity.start(context, "ces", "http://www.baid")
 //        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
 //        WebViewActivity.start(context, "ces", "file:///android_asset/test.html")
-//        WebActivity.start(context, "ces", "file:///android_asset/test.html")
-        WebActivity.start(context, "ces", "http://www.baidu.com/")
+        WebActivity.start(context, "ces", "file:///android_asset/test.html")
+//        WebActivity.start(context, "ces", "http://www.baidu.com/")
         Log.d("WebActivity", "start: ")
     }
 

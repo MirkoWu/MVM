@@ -1,8 +1,6 @@
 package com.mirkowu.lib_bugly;
 
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -10,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.download.DownloadListener;
@@ -21,6 +18,8 @@ import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
  * Bugly 升级版本SDK
  */
 public class UpgradeDialog extends BaseDialog implements DownloadListener, UpgradeStateListener {
+    protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
+
     TextView tvTitle;
     TextView tvContent;
     TextView tvProgress;
@@ -105,6 +104,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 //        });
         BuglyManager.startDownloadTask();
 
+        setWidth(DEFAULT_WIDTH);
         setTouchOutCancel(false);
         setDialogCancelable(false);
         setCancelable(false);
@@ -114,13 +114,13 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     @Override
     public void onStart() {
         super.onStart();
-        //宽度
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams params = window.getAttributes();
-            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
-            window.setAttributes(params);
-        }
+//        //宽度
+//        Window window = getDialog().getWindow();
+//        if (window != null) {
+//            WindowManager.LayoutParams params = window.getAttributes();
+//            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
+//            window.setAttributes(params);
+//        }
     }
 
     @Override

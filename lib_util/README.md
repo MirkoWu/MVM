@@ -15,3 +15,15 @@ LogUtil.init(BuildConfig.DEBUG);
 
 ### 更新日志
 - 2021/06/09 发布稳定版1.0.2
+
+
+### 感谢
+[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
+引用版本
+```
+implementation 'com.blankj:utilcode:1.30.6'
+```
+
+修改点
+1.ToastUtils utils_toast_view.xml 根布局替换此RelativeLayout
+2.ToastUtils 背景色字体颜色等颜色修改

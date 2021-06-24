@@ -2,8 +2,6 @@ package com.mirkowu.lib_widget.dialog;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,13 +10,13 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_widget.R;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class PromptDialog extends BaseDialog implements View.OnClickListener {
+    protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
     private int mIconResId;
     private String mTitle;
     private String mContent;
@@ -64,26 +62,30 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
             tvPositive.setVisibility(TextUtils.isEmpty(mPositiveText) ? GONE : VISIBLE);
             tvNegative.setVisibility(TextUtils.isEmpty(mNegativeText) ? GONE : VISIBLE);
 
-            if (mPositiveTextColorResId != 0)
+            if (mPositiveTextColorResId != 0) {
                 tvPositive.setTextColor(ContextCompat.getColor(getContext(), mPositiveTextColorResId));
-            if (mNegativeTextColorResId != 0)
+            }
+            if (mNegativeTextColorResId != 0) {
                 tvNegative.setTextColor(ContextCompat.getColor(getContext(), mNegativeTextColorResId));
+            }
         } else {
             tvPositive.setText(R.string.widget_btn_confirm);
             tvNegative.setText(R.string.widget_btn_cancel);
         }
+
+        setWidth(DEFAULT_WIDTH);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         //宽度
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams params = window.getAttributes();
-            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
-            window.setAttributes(params);
-        }
+//        Window window = getDialog().getWindow();
+//        if (window != null) {
+//            WindowManager.LayoutParams params = window.getAttributes();
+//            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
+//            window.setAttributes(params);
+//        }
     }
 
     @Override

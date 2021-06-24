@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+def ext = rootProject.ext
+android {
+    compileSdkVersion ext.compileSdkVersion
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        consumerProguardFiles "proguard-rules.pro"
+    }
+
+//    buildTypes {
+//        release {
+//            consumerProguardFiles "proguard-rules.pro"
+//        }
+//    }
+
+    //资源前缀
+    resourcePrefix "screen_"
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+   // implementation "androidx.core:core-ktx:$ext.core_ktx_version"
+    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
+    implementation project(':lib_util')
+}

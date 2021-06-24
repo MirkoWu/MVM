@@ -2,8 +2,6 @@ package com.mirkowu.lib_upgrade;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,7 +16,6 @@ import com.mirkowu.lib_util.FileUtil;
 import com.mirkowu.lib_util.HtmlUtil;
 import com.mirkowu.lib_util.IntentUtil;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
@@ -33,6 +30,7 @@ import static android.view.View.VISIBLE;
  * 网络Url下载更新版本
  */
 public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
+    protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
 
 
     public static void show(FragmentManager manager, IUpgradeInfo upgradeInfo) {
@@ -95,6 +93,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         tvPositive.setText(R.string.up_upgrade);
         tvNegative.setText(R.string.up_next_time);
 
+        setWidth(DEFAULT_WIDTH);
         setDialogCancelable(false);
         setTouchOutCancel(false);
     }
@@ -102,13 +101,13 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        //宽度
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams params = window.getAttributes();
-            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
-            window.setAttributes(params);
-        }
+//        //宽度
+//        Window window = getDialog().getWindow();
+//        if (window != null) {
+//            WindowManager.LayoutParams params = window.getAttributes();
+//            params.width = (int) (ScreenUtils.getScreenWidth() * 0.75f);
+//            window.setAttributes(params);
+//        }
     }
 
     @Override

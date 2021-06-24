@@ -15,13 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".widgetdemo.WidgetDemoActivity"></activity>
+        <activity
+            android:name=".widgetdemo.WidgetDemoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="sensor"></activity>
         <activity android:name=".download.DownloadActivity" />
         <activity android:name=".imagepicker.ImagePickerActivity" />
         <activity
             android:name=".WebActivity"
             android:launchMode="singleTask"
             android:process=":webview"
+            android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
         <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".viewbinding.DataBindingActivity" />

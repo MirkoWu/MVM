@@ -13,15 +13,15 @@
 
         <activity
             android:name=".ui.ImagePickerActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/ivp_theme" />
         <activity
             android:name=".ui.AlbumPreviewActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/ivp_theme" />
         <activity
             android:name=".ui.PreviewActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/ivp_theme" />
 
         <provider

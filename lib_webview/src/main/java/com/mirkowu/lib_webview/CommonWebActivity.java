@@ -21,14 +21,13 @@ import com.mirkowu.lib_webview.setting.WebSettingUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.tencent.smtt.sdk.WebSettings;
 
-import me.jessyan.autosize.internal.CancelAdapt;
 
 /**
  * 通用的WebView
  * 1.支持X5
  * 2.支持JsBridge
  */
-public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
+public class CommonWebActivity extends BaseMVMActivity  {
     public static final String KEY_TITLE = "title";
     public static final String KEY_URL = "url";
 
@@ -44,7 +43,7 @@ public class CommonWebActivity extends BaseMVMActivity implements CancelAdapt {
     }
 
     private Toolbar mToolbar;
-    private CommonWebView mWebView;
+    protected CommonWebView mWebView;
     private ProgressBar mProgressBar;
     private IWebViewCallBack mWebViewCallBack;
     private DefaultWebViewFileChooser mFileChooser;

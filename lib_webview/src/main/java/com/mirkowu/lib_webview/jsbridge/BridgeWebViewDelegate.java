@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
+import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class BridgeWebViewDelegate implements WebViewJavascriptBridge {
 //    }
 
     public void handlerReturnData(String url) {
+        LogUtil.e(TAG, url);
         String functionName = BridgeUtil.getFunctionFromReturnUrl(url);
         CallBackFunction f = responseCallbacks.get(functionName);
         String data = BridgeUtil.getDataFromReturnUrl(url);
@@ -121,6 +123,7 @@ public class BridgeWebViewDelegate implements WebViewJavascriptBridge {
         messageJson = messageJson.replaceAll("(\\\\)([^utrn])", "\\\\\\\\$1$2");
         messageJson = messageJson.replaceAll("(?<=[^\\\\])(\")", "\\\\\"");
         String javascriptCommand = String.format(BridgeUtil.JS_HANDLE_MESSAGE_FROM_JAVA, messageJson);
+        LogUtil.e(TAG, javascriptCommand);
         if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
             this.loadUrl(javascriptCommand);
         }

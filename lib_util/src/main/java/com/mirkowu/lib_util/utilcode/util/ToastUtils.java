@@ -12,7 +12,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,28 +54,28 @@ public final class ToastUtils {
     @Retention(RetentionPolicy.SOURCE)
     public @interface MODE {
         String LIGHT = "light";
-        String DARK  = "dark";
+        String DARK = "dark";
     }
 
-    private static final String     TAG_TOAST     = "TAG_TOAST";
-    private static final int        COLOR_DEFAULT = 0xFEFFFFFF;
-    private static final String     NULL          = "toast null";
-    private static final String     NOTHING       = "toast nothing";
+    private static final String TAG_TOAST = "TAG_TOAST";
+    private static final int COLOR_DEFAULT = 0xFEFFFFFF;
+    private static final String NULL = "toast null";
+    private static final String NOTHING = "toast nothing";
     private static final ToastUtils DEFAULT_MAKER = make();
 
     private static WeakReference<IToast> sWeakToast;
 
-    private String     mMode;
-    private int        mGravity            = -1;
-    private int        mXOffset            = -1;
-    private int        mYOffset            = -1;
-    private int        mBgColor            = COLOR_DEFAULT;
-    private int        mBgResource         = -1;
-    private int        mTextColor          = COLOR_DEFAULT;
-    private int        mTextSize           = -1;
-    private boolean    isLong              = false;
-    private Drawable[] mIcons              = new Drawable[4];
-    private boolean    isNotUseSystemToast = false;
+    private String mMode = MODE.DARK;
+    private int mGravity = -1;
+    private int mXOffset = -1;
+    private int mYOffset = -1;
+    private int mBgColor = COLOR_DEFAULT;
+    private int mBgResource = -1;
+    private int mTextColor = COLOR_DEFAULT;
+    private int mTextSize = -1;
+    private boolean isLong = false;
+    private Drawable[] mIcons = new Drawable[4];
+    private boolean isNotUseSystemToast = false;
 
     /**
      * Make a toast.
@@ -342,12 +340,15 @@ public final class ToastUtils {
             return null;
         }
 
-        View toastView = UtilsBridge.layoutId2View(R.layout.utils_toast_view);
+        View toastView = UtilsBridge.layoutId2View(R.layout.util_toast_view);
         TextView messageTv = toastView.findViewById(android.R.id.message);
+        GradientDrawable bg = (GradientDrawable) toastView.getBackground().mutate();
         if (MODE.DARK.equals(mMode)) {
-            GradientDrawable bg = (GradientDrawable) toastView.getBackground().mutate();
-            bg.setColor(Color.parseColor("#BB000000"));
+            bg.setColor(Color.parseColor("#A0000000"));
             messageTv.setTextColor(Color.WHITE);
+        } else {
+            bg.setColor(Color.parseColor("#BBFFFFFF"));
+            messageTv.setTextColor(Color.BLACK);
         }
         messageTv.setText(text);
         if (mIcons[0] != null) {
@@ -437,7 +438,7 @@ public final class ToastUtils {
      * @param args  The args.
      */
     public static void showLong(@StringRes final int resId, final Object... args) {
-        show(UtilsBridge.getString(resId), Toast.LENGTH_LONG, DEFAULT_MAKER);
+        show(UtilsBridge.getString(resId, args), Toast.LENGTH_LONG, DEFAULT_MAKER);
     }
 
     /**
@@ -656,7 +657,7 @@ public final class ToastUtils {
         private static int sShowingIndex = 0;
 
         private Utils.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
-        private IToast                           iToast;
+        private IToast iToast;
 
         ActivityToast(ToastUtils toastUtils) {
             super(toastUtils);
@@ -785,9 +786,9 @@ public final class ToastUtils {
 
     static abstract class AbsToast implements IToast {
 
-        protected Toast      mToast;
+        protected Toast mToast;
         protected ToastUtils mToastUtils;
-        protected View       mToastView;
+        protected View mToastView;
 
         AbsToast(ToastUtils toastUtils) {
             mToast = new Toast(Utils.getApp());
@@ -815,7 +816,7 @@ public final class ToastUtils {
 
             mToastView = mToast.getView();
             if (mToastView == null || mToastView.findViewById(android.R.id.message) == null) {
-                setToastView(UtilsBridge.layoutId2View(R.layout.utils_toast_view));
+                setToastView(UtilsBridge.layoutId2View(R.layout.util_toast_view));
             }
 
             TextView messageTv = mToastView.findViewById(android.R.id.message);
@@ -886,26 +887,29 @@ public final class ToastUtils {
         void cancel();
     }
 
-    public static final class UtilsMaxWidthRelativeLayout extends RelativeLayout {
-
-        private static final int SPACING = UtilsBridge.dp2px(80);
-
-        public UtilsMaxWidthRelativeLayout(Context context) {
-            super(context);
-        }
-
-        public UtilsMaxWidthRelativeLayout(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public UtilsMaxWidthRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int widthMaxSpec = MeasureSpec.makeMeasureSpec(UtilsBridge.getAppScreenWidth() - SPACING, MeasureSpec.AT_MOST);
-            super.onMeasure(widthMaxSpec, heightMeasureSpec);
-        }
-    }
+    /***
+     * @see ToastRelativeLayout
+     */
+//    public static final class UtilsMaxWidthRelativeLayout extends RelativeLayout {
+//
+//        private static final int SPACING = UtilsBridge.dp2px(80);
+//
+//        public UtilsMaxWidthRelativeLayout(Context context) {
+//            super(context);
+//        }
+//
+//        public UtilsMaxWidthRelativeLayout(Context context, AttributeSet attrs) {
+//            super(context, attrs);
+//        }
+//
+//        public UtilsMaxWidthRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+//            super(context, attrs, defStyleAttr);
+//        }
+//
+//        @Override
+//        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//            int widthMaxSpec = MeasureSpec.makeMeasureSpec(UtilsBridge.getAppScreenWidth() - SPACING, MeasureSpec.AT_MOST);
+//            super.onMeasure(widthMaxSpec, heightMeasureSpec);
+//        }
+//    }
 }

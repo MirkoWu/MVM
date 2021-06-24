@@ -1,3 +1,4 @@
+include ':lib_screen'
 include ':lib_upgrade'
 include ':lib_stat'
 include ':lib_crash'

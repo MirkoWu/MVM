@@ -13,7 +13,10 @@
     <input type="text" id="text2" value="password"/>
 </p>
 <p>
-    <input type="button" id="enter" value="发消息给Native" onclick="JSCallNative();"/>
+    <input type="button" id="text3" value="实例文本"/>
+</p>
+<p>
+    <input type="button" id="enter" value="发消息给Java" onclick="showToast();"/>
 </p>
 <p>
     <input type="button" id="enter3" value="发消息给Native" onclick="jsToNative2();"/>
@@ -33,6 +36,15 @@
 </body>
 
 <script>
+function showToast(){
+window.WebViewJavascriptBridge.callHandler(
+                'showToast'
+                , '来自JS的数据 lalala'
+                , function(responseData) {
+                    console.log('Java 返回的数据 = '+responseData)
+                }
+            );
+}
     function JSCallNative(){
      var str1 = document.getElementById("text1").value;
             var str2 = document.getElementById("text2").value;
@@ -86,6 +98,14 @@ console.log(str1);
             bridge.registerHandler("nativeCallJs", function(data, responseCallback) {
                  console.log('JAVA call with', data);
                 var responseData = "Javascript Says Right back aka!";
+                responseCallback(responseData);
+            });
+
+             bridge.registerHandler("changeText", function(data, responseCallback) {
+                 console.log('changeText ----- ', data);
+                var responseData = "Javascript Says Right back aka!";
+                document.getElementById("text3").value = data;
+
                 responseCallback(responseData);
             });
         })
