@@ -1,6 +1,7 @@
 package com.mirkowu.mvm
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -10,7 +11,6 @@ import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
-import com.mirkowu.mvm.databinding.ActivityMainBinding
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
@@ -19,7 +19,14 @@ import com.mirkowu.mvm.viewbinding.DataBindingFragment
 import com.mirkowu.mvm.viewbinding.bindingView
 
 class MainActivity : BaseActivity<EmptyMediator>() {
-    val binding by bindingView(ActivityMainBinding::inflate)
+    companion object {
+        fun start(context: Context) {
+            val starter = Intent(context, MainActivity::class.java)
+            context.startActivity(starter)
+        }
+    }
+
+    val binding by bindingView(com.mirkowu.mvm.databinding.ActivityMainBinding::inflate)
 
 
     override fun initMediator(): EmptyMediator {

@@ -4,8 +4,7 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.Gravity;
-
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 
 /**
@@ -14,8 +13,9 @@ import androidx.appcompat.widget.AppCompatTextView;
  * @describe 倒计时View 语言需自己处理
  */
 
-public class TimerTextView extends AppCompatTextView {
-    private int COUNT_DOWN_TIME = 60;
+public class TimerTextView extends TextView {
+    private int COUNT_DOWN_TIME = 60; //倒计时 默认60s
+    private int mInterval = 1; //间隔 默认1s
     private CountDownTimer downTimer;
     private String hintText;
     private String formatText;
@@ -46,7 +46,7 @@ public class TimerTextView extends AppCompatTextView {
     }
 
     private void createTimer() {
-        downTimer = new CountDownTimer(COUNT_DOWN_TIME * 1000L, 1000L) {
+        downTimer = new CountDownTimer(COUNT_DOWN_TIME * 1000L, mInterval * 1000L) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //四舍五入 优化系统误差
@@ -55,8 +55,8 @@ public class TimerTextView extends AppCompatTextView {
 
             @Override
             public void onFinish() {
-                if (onCountDownListener != null) {
-                    onCountDownListener.onFinish();
+                if (mOnTimerListener != null) {
+                    mOnTimerListener.onFinish();
                 }
 
                 finish();
@@ -100,16 +100,29 @@ public class TimerTextView extends AppCompatTextView {
     }
 
     /**
-     * 设置倒计时的时间，单位 秒
+     * 设置倒计时的时间，单位 秒 默认60s
      *
      * @param duration
      */
-    public void setCountDownTime(int duration) {
+    public void setTimerTime(int duration) {
         COUNT_DOWN_TIME = duration;
     }
 
-    public int getCountDownTime() {
+    public int getTimerTime() {
         return COUNT_DOWN_TIME;
+    }
+
+    /**
+     * 设置倒计时间隔 单位 秒 默认 1s
+     *
+     * @param interval
+     */
+    public void setTimerInterval(int interval) {
+        mInterval = interval;
+    }
+
+    public int getTimerInterval() {
+        return mInterval;
     }
 
     /**
@@ -146,13 +159,13 @@ public class TimerTextView extends AppCompatTextView {
     }
 
 
-    public OnCountDownListener onCountDownListener;
+    public OnTimerListener mOnTimerListener;
 
-    public void setOnCountDownListener(OnCountDownListener listener) {
-        onCountDownListener = listener;
+    public void setOnTimerListener(OnTimerListener listener) {
+        mOnTimerListener = listener;
     }
 
-    public interface OnCountDownListener {
+    public interface OnTimerListener {
         void onFinish();
     }
 

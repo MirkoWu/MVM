@@ -16,9 +16,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".widgetdemo.WidgetDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="sensor"></activity>
+            android:screenOrientation="sensor" />
         <activity android:name=".download.DownloadActivity" />
         <activity android:name=".imagepicker.ImagePickerActivity" />
         <activity
