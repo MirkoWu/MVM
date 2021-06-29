@@ -103,7 +103,9 @@ public class CommonWebActivity extends BaseMVMActivity {
     }
 
     protected void loadUrl(String url) {
-        mWebView.loadUrl(url);
+        if (!TextUtils.isEmpty(url)) {
+            mWebView.loadUrl(url);
+        }
     }
 
     protected void clearHistory() {

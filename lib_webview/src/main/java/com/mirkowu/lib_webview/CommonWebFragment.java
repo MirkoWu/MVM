@@ -2,6 +2,7 @@ package com.mirkowu.lib_webview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -94,7 +95,9 @@ public class CommonWebFragment extends BaseMVMFragment {
     }
 
     protected void loadUrl(String url) {
-        mWebView.loadUrl(url);
+        if (!TextUtils.isEmpty(url)) {
+            mWebView.loadUrl(url);
+        }
     }
 
     protected void clearHistory() {
