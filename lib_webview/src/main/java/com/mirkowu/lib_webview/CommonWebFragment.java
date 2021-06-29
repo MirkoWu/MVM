@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.fragment.BaseMVMFragment;
@@ -39,11 +40,11 @@ public class CommonWebFragment extends BaseMVMFragment {
         return fragment;
     }
 
-    private Toolbar mToolbar;
-    private CommonWebView mWebView;
-    private ProgressBar mProgressBar;
-    private IWebViewCallBack mWebViewCallBack;
-    private DefaultWebViewFileChooser mFileChooser;
+    protected Toolbar mToolbar;
+    protected CommonWebView mWebView;
+    protected ProgressBar mProgressBar;
+    protected IWebViewCallBack mWebViewCallBack;
+    protected DefaultWebViewFileChooser mFileChooser;
 
     @Override
     protected BaseMediator initMediator() {
@@ -57,31 +58,52 @@ public class CommonWebFragment extends BaseMVMFragment {
 
     @Override
     protected void initialize() {
+        String title = null;
+        String url = null;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            title = bundle.getString(KEY_TITLE);
+            url = bundle.getString(KEY_URL);
+        }
+
+        initView();
+
+        WebConfig webConfig = getWebConfig();
+
+        configToolbar(title, webConfig);
+
+        configWebSettings(webConfig);
+
+        loadUrl(url);
+
+    }
+
+
+    protected void initView() {
         mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mProgressBar = (ProgressBar) findViewById(R.id.mProgressBar);
         mWebView = (CommonWebView) findViewById(R.id.mWebView);
         getLifecycle().addObserver(mWebView);
-
-        WebConfig webConfig = getWebConfig();
-        mWebViewCallBack = webConfig.getWebViewCallBack();
-
-        mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
-        mToolbar.setShowBackIcon(webConfig.isShowBack());
-
-        configWebSettings(webConfig);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String title = bundle.getString(KEY_TITLE);
-            String url = bundle.getString(KEY_URL);
-            mToolbar.setTitle(title);
-
-            mWebView.clearHistory();
-            mWebView.loadUrl(url);
-        }
     }
 
-    protected void configWebSettings(WebConfig webConfig) {
+    protected void configToolbar(String title, @NonNull WebConfig webConfig) {
+        mToolbar.setTitle(title);
+        mToolbar.setShowBackIcon(webConfig.isShowBack());
+        mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
+        mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
+    }
+
+    protected void loadUrl(String url) {
+        mWebView.loadUrl(url);
+    }
+
+    protected void clearHistory() {
+        mWebView.clearHistory();
+    }
+
+    protected void configWebSettings(@NonNull WebConfig webConfig) {
+        mWebViewCallBack = webConfig.getWebViewCallBack();
+
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
@@ -90,7 +112,7 @@ public class CommonWebFragment extends BaseMVMFragment {
         mWebView.setWebChromeClient(new BaseWebChromeClient(mFileChooser, mProgressBar));
     }
 
-
+    @NonNull
     protected WebConfig getWebConfig() {
         return new WebConfig()
                 .setShowBack(true)
@@ -127,13 +149,24 @@ public class CommonWebFragment extends BaseMVMFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        handleWebResult(requestCode, resultCode, data);
+    }
+
+    protected void handleWebResult(int requestCode, int resultCode, Intent data) {
         if (mFileChooser != null) {
             mFileChooser.onActivityResult(mWebView, requestCode, resultCode, data);
         }
     }
 
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    /**
+     * 处理返回键
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    public boolean handleWebBack(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mWebView != null && mWebView.canGoBack()) {
                 mWebView.goBack();
@@ -148,7 +181,7 @@ public class CommonWebFragment extends BaseMVMFragment {
      *
      * @param content
      */
-    void loadHtmlText(String content) {
+    protected void loadHtmlText(String content) {
         WebSettings webSettings = mWebView.getSettings();
         //设置自适应屏幕，两者合用
         webSettings.setUseWideViewPort(false); //将图片调整到适合webview的大小

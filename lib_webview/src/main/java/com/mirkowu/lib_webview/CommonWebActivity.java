@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
@@ -68,14 +69,14 @@ public class CommonWebActivity extends BaseMVMActivity {
         initView();
 
         WebConfig webConfig = getWebConfig();
-        mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
-        mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
-        mToolbar.setShowBackIcon(webConfig.isShowBack());
-        mToolbar.setTitle(title);
+
+        configToolbar(title, webConfig);
 
         configWebSettings(webConfig);
+
         loadUrl(url);
     }
+
 
     protected void initView() {
         mToolbar = findViewById(R.id.mToolbar);
@@ -84,8 +85,14 @@ public class CommonWebActivity extends BaseMVMActivity {
         getLifecycle().addObserver(mWebView);
     }
 
+    protected void configToolbar(String title, @NonNull WebConfig webConfig) {
+        mToolbar.setTitle(title);
+        mToolbar.setShowBackIcon(webConfig.isShowBack());
+        mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
+        mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
+    }
 
-    protected void configWebSettings(WebConfig webConfig) {
+    protected void configWebSettings(@NonNull WebConfig webConfig) {
         mWebViewCallBack = webConfig.getWebViewCallBack();
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
@@ -103,6 +110,7 @@ public class CommonWebActivity extends BaseMVMActivity {
         mWebView.clearHistory();
     }
 
+    @NonNull
     protected WebConfig getWebConfig() {
         return new WebConfig()
                 .setShowBack(true)
@@ -142,7 +150,7 @@ public class CommonWebActivity extends BaseMVMActivity {
         handleWebResult(requestCode, resultCode, data);
     }
 
-    private void handleWebResult(int requestCode, int resultCode, Intent data) {
+    protected void handleWebResult(int requestCode, int resultCode, Intent data) {
         if (mFileChooser != null) {
             mFileChooser.onActivityResult(mWebView, requestCode, resultCode, data);
         }
