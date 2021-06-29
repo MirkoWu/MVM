@@ -18,20 +18,27 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 
 //你可以直接使用
 ```
-    implementation "com.github.mirkowu:mvm:$ext.mvm_version" //总仓库
+        implementation("com.github.mirkowu:mvm:$ext.mvm_version") { //总仓库
+            exclude group: "com.github.mirkowu.mvm", module: "lib_bugly" //bugly 包含升级SDK 二选一
+            //exclude group: "com.github.mirkowu.mvm", module: "lib_crash" //bugly 不含升级SDK 二选一
+        }
 
 ```
-//也可以按需索取
+//也可以按需索取，部分库之间有依赖，请一同依赖
 ```
-    implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
-    implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
+    implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version" //基础库
+    implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version" //UI组件库
+    implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version" //网络库
+    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version" //工具库
+    implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version" //图片加载库(默认glide)
+    implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version" //X5 + JsBridge 的WebView
+    implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version" //相册选择库
+    implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version" //二维码扫描
+    implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version" //版本更新(弹窗和下载安装功能)
+    implementation "com.github.mirkowu.mvm:lib_stat:$ext.mvm_version" //umeng统计
+    implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version" //屏幕适配
+    implementation "com.github.mirkowu.mvm:lib_bugly:$ext.mvm_version" //bugly 包含升级SDK 二选一
+//    implementation "com.github.mirkowu.mvm:lib_crash:$ext.mvm_version" //bugly 不含升级SDK 二选一
 ```
 
 你可以在Application的onCreate()中进行对应的初始化
@@ -45,8 +52,12 @@ MVVM或衍生出来的变种其行为目的都是一致的。
             return;
        }
 
-        //换成你自己的bugly账号
+        //换成你自己的bugly账号 请根据官方SDK对接，此处只做演示
         BuglyManager.init(this, "buglyId", BuildConfig.DEBUG);
+
+        //umeng 请根据官方SDK对接，此处只做演示
+        UmengManager.preInit(this, "60d310388a102159db787693", "umeng", BuildConfig.DEBUG);
+        UmengManager.init(this, null);
 
         //屏幕适配
         AutoSizeManager.getInstance().setConfig(this);
@@ -77,5 +88,14 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 ### [QR组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qr)
 
 ### [Upgrade组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_upgrade)
+
+### [Screen组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_screen)
+
+### [Stat组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_stat)
+
+### [Bugly组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_bugly)
+
+### [Crash组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_crash)
+
 
 

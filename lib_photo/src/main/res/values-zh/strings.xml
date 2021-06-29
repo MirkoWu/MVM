@@ -18,7 +18,7 @@
     <string name="ivp_permission_rationale_camera">拍摄照片需要您提供摄像头和存储权限</string>
     <string name="ivp_permission_rationale_write_storage">保存拍照图片需要您提供写存储权限</string>
     <string name="ivp_save">保存</string>
-    <string name="ivp_save_successed">已保存至%s</string>
+    <string name="ivp_save_succeed">已保存至%s</string>
     <string name="ivp_save_failed">保存失败</string>
     <string name="ivp_pick">选择</string>
     <string name="ivp_max_count_more_zero">最大可选数量需大于 0 ！</string>

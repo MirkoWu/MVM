@@ -20,7 +20,7 @@
     <string name="ivp_permission_rationale_write_storage">Storage write permission is needed to save the images.</string>
     <string name="ivp_permission_lack">The current application lacks the necessary permissions, which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
     <string name="ivp_save">Save</string>
-    <string name="ivp_save_successed">Saved to %s</string>
+    <string name="ivp_save_succeed">Saved to %s</string>
     <string name="ivp_save_failed">Save failed</string>
     <string name="ivp_pick">Pick</string>
     <string name="ivp_max_count_more_zero">The maximum optional quantity must be greater than 0 ！</string>

@@ -166,7 +166,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(PreviewActivity.this, getString(R.string.ivp_save_successed,
+                        Toast.makeText(PreviewActivity.this, getString(R.string.ivp_save_succeed,
                                 saveFile.getAbsoluteFile()), Toast.LENGTH_SHORT).show();
                     }
                 });

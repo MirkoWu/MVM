@@ -8,6 +8,12 @@ bugly {
     appKey = "1b977565-a3ce-4188-9eea-255729b7ddc8"
 }
 
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd-HH-mm')
+    return formattedDate
+}
+
 def ext = rootProject.ext
 android {
     compileSdkVersion ext.compileSdkVersion
@@ -44,8 +50,13 @@ android {
         }
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            debuggable false
+            jniDebuggable false
+            zipAlignEnabled true
         }
     }
     //AS4.0及以上
@@ -63,13 +74,22 @@ android {
 
     //支持Java1.8必加
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
 
-//    kotlinOptions {
-//        jvmTarget = JavaVersion.VERSION_1_8.toString()
-//    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    // 自定义输出配置
+    applicationVariants.all { variant ->
+        def versionName = variant.versionName
+        def buildTypeName = variant.buildType.name
+        variant.outputs.all { output ->
+            outputFileName = "V" + versionName + "_" + getDate() + "_" + buildTypeName + ".apk"
+        }
+    }
 }
 
 dependencies {
@@ -78,12 +98,15 @@ dependencies {
     implementation "androidx.core:core-ktx:$ext.core_ktx_version"
     implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-//    implementation "com.github.mirkowu:mvm:$ext.mvm_version" //总仓库
+//    implementation("com.github.mirkowu:mvm:$ext.mvm_version") { //总仓库
+//        exclude group: "com.github.mirkowu.mvm", module: "lib_bugly"
+////        exclude group: "com.github.mirkowu.mvm", module: "lib_crash"
+//    }
 //    implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
 //    implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
 //    implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
@@ -107,9 +130,9 @@ dependencies {
     implementation project(path: ':lib_qr')
     implementation project(path: ':lib_stat')
     implementation project(path: ':lib_upgrade')
+    implementation project(path: ':lib_screen')
     implementation project(path: ':lib_bugly') //bugly 包含升级SDK 二选一
 //    implementation project(path: ':lib_crash') //bugly 不含升级SDK 二选一
-    implementation project(path: ':lib_screen')
 
     //检测内测泄露
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
