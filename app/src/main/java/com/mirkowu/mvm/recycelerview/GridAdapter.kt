@@ -3,10 +3,10 @@ package com.mirkowu.mvm.recycelerview
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mirkowu.lib_base.adapter.BaseAdapter
+import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.mvm.databinding.ItemBindingListBinding
 
-class GridAdapter : BaseAdapter<String, GridAdapter.Holder>() {
+class GridAdapter : BaseRVAdapter<String, GridAdapter.Holder>() {
     class Holder(val binding: ItemBindingListBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }

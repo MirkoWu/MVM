@@ -114,6 +114,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     return "1.0.1"
                 }
 
+                override fun getSavePath(): String {
+                    return ""
+                }
+
                 override fun getVersionCode(): Int {
                     return 1001
                 }

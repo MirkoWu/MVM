@@ -36,8 +36,8 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
     private float mDimAmount = 0.5f; //背景昏暗度
     private boolean mShowBottomEnable; //是否底部显示
     private boolean mShowTopEnable; //是否顶部显示
-    private int mMargin = 0; //左右边距
-    private int mMarginTop = 0; //san边距
+    private int mMarginHor = 0; //左右边距
+    private int mMarginVer = 0; //san边距
     private int mAnimStyle = 0; //进入退出动画
     private boolean mTouchOutCancel = true; //点击外部取消
     private boolean mCancelable = true; //能否取消
@@ -86,7 +86,7 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
         if (window != null) {
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             WindowManager.LayoutParams params = window.getAttributes();
-            params.y = mMarginTop;
+            params.y = ConvertUtils.dp2px(mMarginVer);
             params.dimAmount = mDimAmount;
             if (mDimAmount == 0) {
                 //为0时，取消背景色，防止状态栏变色
@@ -98,7 +98,7 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
                 params.gravity = Gravity.TOP;
             }
             if (mWidth == 0) {
-                params.width = ScreenUtils.getScreenWidth() - 2 * ConvertUtils.dp2px(mMargin);
+                params.width = ScreenUtils.getScreenWidth() - 2 * ConvertUtils.dp2px(mMarginHor);
             } else {
                 params.width = ConvertUtils.dp2px(mWidth);
             }
@@ -175,18 +175,18 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
     }
 
     /**
-     * @param margin 设置左右margin
+     * @param marginHor 设置左右margin
      */
-    public BaseDialog setMargin(int margin) {
-        mMargin = margin;
+    public BaseDialog setMarginHor(int marginHor) {
+        mMarginHor = marginHor;
         return this;
     }
 
     /**
-     * @param marginTop 设置顶部margin
+     * @param marginVer 设置顶底部margin
      */
-    public BaseDialog setMarginTop(int marginTop) {
-        mMarginTop = marginTop;
+    public BaseDialog setMarginVer(int marginVer) {
+        mMarginVer = marginVer;
         return this;
     }
 

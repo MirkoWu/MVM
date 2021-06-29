@@ -9,6 +9,7 @@ import com.mirkowu.lib_screen.internal.CustomAdapt
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
+import com.mirkowu.lib_widget.dialog.BottomListDialog
 import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
@@ -34,32 +35,39 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
         }
         binding.btnPrompt.click {
             PromptDialog().setTitle("温馨提示")
-                    .setContent("确认关闭吗？")
-                    .setUseDefaultButton()
-                    .setIcon(R.mipmap.ic_launcher)
-                    .show(supportFragmentManager)
+                .setContent("确认关闭吗？")
+                .setUseDefaultButton()
+                .setIcon(R.mipmap.ic_launcher)
+                .show(supportFragmentManager)
 //            showLoadingDialog("Toast测试")
         }
         binding.btnPrompt2.click {
             PromptDialog().setTitle("温馨提示")
-                    .setContent("确认关闭吗？")
-                    .setUseDefaultButton()
-                    .show(supportFragmentManager)
+                .setContent("确认关闭吗？")
+                .setUseDefaultButton()
+                .show(supportFragmentManager)
 //            showLoadingDialog("Toast测试")
+        }
+        binding.btnBottomList.click {
+            BottomListDialog()
+                .setData(mutableListOf("测试环境", "测试环境", "测试环境", "测试环境"))
+                //.setTitle("标题")
+                .useRoundBackground().setMarginHor(20).setMarginVer(20)
+                .show(supportFragmentManager)
         }
         binding.btnBinding.click {
             DataBindingDialog(context!!).show()
         }
         binding.btnToastDark.click {
             ToastUtils.make()
-                    .setMode(ToastUtils.MODE.DARK)
-                    .setLeftIcon(R.mipmap.ic_launcher)
-                    .show("下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到")
+                .setMode(ToastUtils.MODE.DARK)
+                .setLeftIcon(R.mipmap.ic_launcher)
+                .show("下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到")
         }
         binding.btnToastLight.click {
             ToastUtils.make().setMode(ToastUtils.MODE.LIGHT)
-                    .setLeftIcon(R.mipmap.ic_launcher)
-                    .show("下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到")
+                .setLeftIcon(R.mipmap.ic_launcher)
+                .show("下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到")
         }
     }
 

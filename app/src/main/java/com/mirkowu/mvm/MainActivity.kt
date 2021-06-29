@@ -36,12 +36,14 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     override fun getLayoutId() = R.layout.activity_main
 
     override fun initialize() {
-        val pagerAdapter = FragmentBasePagerAdapter(supportFragmentManager,
+        val pagerAdapter =
+            FragmentBasePagerAdapter(
+                supportFragmentManager,
                 DataBindingFragment.newInstance(),
                 DataBindingFragment.newInstance(),
                 DataBindingFragment.newInstance(),
                 DataBindingFragment.newInstance()
-        )
+            )
         binding.vpHome.apply {
             adapter = pagerAdapter
             isScroll = true

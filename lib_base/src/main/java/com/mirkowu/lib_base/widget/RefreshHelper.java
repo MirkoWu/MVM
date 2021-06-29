@@ -6,7 +6,7 @@ import android.widget.ScrollView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mirkowu.lib_base.adapter.BaseAdapter;
+import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -79,7 +79,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      * @param adapter
      * @param list
      */
-    public void setLoadData(BaseAdapter adapter, List<?> list) {
+    public void setLoadData(BaseRVAdapter adapter, List<?> list) {
         if (mRefreshLayout != null) {
             mRefreshLayout.finishRefresh();
         }
@@ -92,11 +92,11 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      * @param adapter
      * @param list
      */
-    public void setLoadMore(BaseAdapter adapter, List<?> list) {
+    public void setLoadMore(BaseRVAdapter adapter, List<?> list) {
         setLoadMore(adapter, list, list != null && list.size() >= PAGE_COUNT);
     }
 
-    public void setLoadMore(BaseAdapter adapter, List<?> list, boolean hasMore) {
+    public void setLoadMore(BaseRVAdapter adapter, List<?> list, boolean hasMore) {
         if (mRefreshLayout != null) {
             mRefreshLayout.finishRefresh();
         }

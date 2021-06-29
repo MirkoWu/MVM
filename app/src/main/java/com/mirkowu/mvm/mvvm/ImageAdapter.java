@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.mirkowu.lib_base.adapter.BaseAdapter;
+import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.lib_image.ImageLoader;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.bean.GankImageBean;
 import com.mirkowu.mvm.databinding.ItemGankImageBinding;
 
-public class ImageAdapter extends BaseAdapter<GankImageBean, ImageAdapter.Holder> {
+public class ImageAdapter extends BaseRVAdapter<GankImageBean, ImageAdapter.Holder> {
     private RequestOptions glideOptions = RequestOptions.placeholderOf(R.mipmap.ic_launcher).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
     @Override

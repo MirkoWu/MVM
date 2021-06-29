@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -16,6 +17,7 @@ import com.mirkowu.lib_util.FileUtil;
 import com.mirkowu.lib_util.HtmlUtil;
 import com.mirkowu.lib_util.IntentUtil;
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
@@ -33,7 +35,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
 
 
-    public static void show(FragmentManager manager, IUpgradeInfo upgradeInfo) {
+    public static void show(FragmentManager manager, @NonNull IUpgradeInfo upgradeInfo) {
         FileDownloader.setup(Utils.getApp());
 
         UpgradeDialog dialog = new UpgradeDialog();
@@ -48,15 +50,15 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     protected TextView tvPositive;
     protected TextView tvNegative;
 
-    RelativeLayout llProgress;
-    ProgressBar mProgressBar;
-    TextView tvProgress;
+    protected RelativeLayout llProgress;
+    protected ProgressBar mProgressBar;
+    protected TextView tvProgress;
 
 
-    //    protected OnButtonClickListener listener;
-    private BaseDownloadTask downloadTask;
+    protected OnButtonClickListener listener;
+    protected BaseDownloadTask downloadTask;
     public IUpgradeInfo upgradeInfo;
-    private File apkFile;
+    protected File apkFile;
 
     @Override
     protected int getLayoutResId() {
@@ -65,7 +67,6 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
-
         ivIcon = viewHolder.getView(R.id.ivIcon);
         tvTitle = viewHolder.getView(R.id.tvTitle);
         tvContent = viewHolder.getView(R.id.tvContent);
@@ -112,39 +113,58 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-//        if (listener != null) {
         int i = v.getId();
         if (i == R.id.tvPositive) {
+            if (listener != null) {
+                listener.onButtonClick(this, true);
+            }
             if (apkFile != null) {
                 IntentUtil.startInstall(getContext(), apkFile);
             } else {
-                downloadApk();
+                if (PermissionsUtil.hasPermissions(getContext(), PermissionsUtil.GROUP_STORAGE)) {
+                    downloadApk();
+                } else {
+                    LogUtil.e("没有存储权限");
+                    if (listener != null) {
+                        listener.onNeedPermission(this);
+                    } else {
+                        LogUtil.e("下载到默认路径");
+                        downloadApk();
+                    }
+                }
             }
         } else if (i == R.id.tvNegative) {
+            if (listener != null) {
+                listener.onButtonClick(this, true);
+            }
             if (downloadTask != null) {
                 downloadTask.pause();
                 FileDownloader.getImpl().clear(downloadTask.getId(), downloadTask.getTargetFilePath());
             }
+
             dismiss();
         }
-//        }
     }
 
-//    public AppUpgradeDialog setOnButtonClickListener(OnButtonClickListener listener) {
-//        this.listener = listener;
-//        return this;
-//    }
-//
-//    public interface OnButtonClickListener {
-//
-//        /**
-//         * 当窗口按钮被点击
-//         *
-//         * @param dialog
-//         * @param isPositiveClick true :PositiveButton点击, false :NegativeButton点击
-//         */
-//        void onButtonClick(AppUpgradeDialog dialog, boolean isPositiveClick);
-//    }
+    public UpgradeDialog setOnButtonClickListener(OnButtonClickListener listener) {
+        this.listener = listener;
+        return this;
+    }
+
+    public interface OnButtonClickListener {
+
+        void onNeedPermission(UpgradeDialog dialog);
+
+        /**
+         * 当窗口按钮被点击
+         *
+         * @param dialog
+         * @param isPositiveClick true :PositiveButton点击, false :NegativeButton点击
+         * @return 是否
+         */
+        default void onButtonClick(UpgradeDialog dialog, boolean isPositiveClick) {
+        }
+    }
 
     public void downloadApk() {
         llProgress.setVisibility(VISIBLE);
@@ -164,8 +184,16 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
             return;
         }
         apkFile = null;
-        String path = FileUtil.getAppCachePath(getContext()) + File.separator
-                + "download" + File.separator + upgradeInfo.getVersionName() + ".apk";
+
+        String path = upgradeInfo.getSavePath();
+        if (TextUtils.isEmpty(path)) {
+            path = FileUtil.getAppCachePath(getContext()) + File.separator
+                    + "download" + File.separator + upgradeInfo.getVersionName() + ".apk";
+        }
+        startTask(path);
+    }
+
+    protected void startTask(String path) {
         downloadTask = FileDownloader.getImpl()
                 .create(upgradeInfo.getApkUrl())
                 .setPath(path)
@@ -182,6 +210,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
                     @Override
                     protected void completed(BaseDownloadTask task) {
+                        LogUtil.e("下载成功，path =:" + path);
                         if (!isAdded() || isDetached()) return;
 
                         tvProgress.setText(String.format("%d%%", 100));
@@ -196,9 +225,9 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
                     @Override
                     protected void error(BaseDownloadTask task, Throwable e) {
+                        LogUtil.e("下载失败:" + e);
                         FileDownloader.getImpl().clear(task.getId(), path);
                         ToastUtils.showShort(R.string.up_download_failure);
-                        LogUtil.e("下载失败:" + e);
                         dismissAllowingStateLoss();
                         e.printStackTrace();
                     }

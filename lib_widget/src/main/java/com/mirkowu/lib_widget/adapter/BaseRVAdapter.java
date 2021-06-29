@@ -1,24 +1,24 @@
-package com.mirkowu.lib_base.adapter;
+package com.mirkowu.lib_widget.adapter;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mirkowu.lib_base.R;
+import com.mirkowu.lib_widget.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
-public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     private List<T> mData = new ArrayList<>();
 
-    public BaseAdapter() {
+    public BaseRVAdapter() {
     }
 
-    public BaseAdapter(List<T> list) {
+    public BaseRVAdapter(List<T> list) {
         this.mData = list == null ? new ArrayList<>() : list;
     }
 
