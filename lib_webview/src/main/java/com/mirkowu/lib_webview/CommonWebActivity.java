@@ -88,6 +88,8 @@ public class CommonWebActivity extends BaseMVMActivity {
     protected void configToolbar(String title, @NonNull WebConfig webConfig) {
         mToolbar.setTitle(title);
         mToolbar.setShowBackIcon(webConfig.isShowBack());
+        mToolbar.setCloseIcon(R.drawable.widget_ic_close_black);
+        mToolbar.setShowCloseIcon(false);
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
         mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
     }
@@ -114,19 +116,22 @@ public class CommonWebActivity extends BaseMVMActivity {
 
     @NonNull
     protected WebConfig getWebConfig() {
+        boolean showClose = true;
         return new WebConfig()
                 .setShowBack(true)
+                .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
 //                .setJsInjectionArrays(new String[]{"android"})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
-
                     }
 
                     @Override
                     public void pageFinished(CommonWebView webView, String url) {
+                        //显示关闭按钮
+                        mToolbar.setShowCloseIcon(webView.canGoBack() && showClose);
                     }
 
                     @Override
@@ -160,26 +165,29 @@ public class CommonWebActivity extends BaseMVMActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (handleWebBack(keyCode, event)) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && handleWebBack()) {
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (handleWebBack()) {
+            return;
+        }
+        super.onBackPressed();
     }
 
     /**
      * 处理返回键
      *
-     * @param keyCode
-     * @param event
      * @return
      */
-    protected boolean handleWebBack(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mWebView != null && mWebView.canGoBack()) {
-                mWebView.goBack();
-                return true;
-            }
+    protected boolean handleWebBack() {
+        if (mWebView != null && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
         }
         return false;
     }

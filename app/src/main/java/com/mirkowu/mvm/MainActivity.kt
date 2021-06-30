@@ -50,9 +50,9 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             offscreenPageLimit = pagerAdapter.count
         }
         val PERMISSION_STORAGE = arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE
         )
 
         BuglyManager.setOnUpgradeListener { upgradeInfo, isManual ->
@@ -64,18 +64,20 @@ class MainActivity : BaseActivity<EmptyMediator>() {
                 ToastUtils.showShort("当前已是最新版本!")
             }
         }
-       // Beta.upgradeStateListener
-       // BuglyManager.checkUpgrade(false,false)
+        // Beta.upgradeStateListener
+        // BuglyManager.checkUpgrade(false,false)
     }
 
-    fun mvcClick(view: View?) {
+    fun webLocalClick(view: View?) {
 //        MVCActivity.start(this)
-//        WebViewActivity.start(context, "ces", "http://www.baidu.com/")
+        WebActivity.start(context, "ces", "file:///android_asset/test.html")
+        Log.d("WebActivity", "start: ")
+    }
+
+    fun webNetClick(view: View?) {
 //        CommonWebActivity.start(context, "ces", "http://www.baid")
 //        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
-//        WebViewActivity.start(context, "ces", "file:///android_asset/test.html")
-        WebActivity.start(context, "ces", "file:///android_asset/test.html")
-//        WebActivity.start(context, "ces", "http://www.baidu.com/")
+        WebActivity.start(context, "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题", "http://www.baidu.com/")
         Log.d("WebActivity", "start: ")
     }
 

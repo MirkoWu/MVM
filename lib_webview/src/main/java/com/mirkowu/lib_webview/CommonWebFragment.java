@@ -3,7 +3,6 @@ package com.mirkowu.lib_webview;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -117,19 +116,22 @@ public class CommonWebFragment extends BaseMVMFragment {
 
     @NonNull
     protected WebConfig getWebConfig() {
+        boolean showClose = true;
         return new WebConfig()
                 .setShowBack(true)
+                .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
 //                .setJsInjectionArrays(new String[]{"android"})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
-
                     }
 
                     @Override
                     public void pageFinished(CommonWebView webView, String url) {
+                        //显示关闭按钮
+                        mToolbar.setShowCloseIcon(webView.canGoBack() && showClose);
                     }
 
                     @Override
@@ -165,16 +167,12 @@ public class CommonWebFragment extends BaseMVMFragment {
     /**
      * 处理返回键
      *
-     * @param keyCode
-     * @param event
      * @return
      */
-    public boolean handleWebBack(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mWebView != null && mWebView.canGoBack()) {
-                mWebView.goBack();
-                return true;
-            }
+    public boolean handleWebBack() {
+        if (mWebView != null && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
         }
         return false;
     }

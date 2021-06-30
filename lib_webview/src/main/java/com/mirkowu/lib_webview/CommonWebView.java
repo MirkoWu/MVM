@@ -189,7 +189,7 @@ public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJ
         super.saveWebArchive(basename, autoName, valueCallback);
     }
 
-    protected boolean onBackHandle() {
+    public boolean onBackHandle() {
         if (canGoBack()) {
             goBack();
             return true;

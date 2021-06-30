@@ -9,9 +9,10 @@ import java.util.Map;
  * 处理可配置的业务逻辑。但这些逻辑webView有可能用不到。所以是可用可不用的。
  */
 public class WebConfig {
-//    private String mTitleText; //标题文案
+    //    private String mTitleText; //标题文案
     private boolean mShowToolbar; //设置是否需要标题栏，true表示需要，false表示不需要
-    private boolean mShowBack; //设置是否需要标题栏，true表示需要，false表示不需要
+    private boolean mShowBack; //设置是否需要返回键，true表示需要，false表示不需要
+    private boolean mShowClose; //设置是否需要关闭键，true表示需要，false表示不需要
     private boolean mShowProgress; //设置是否需要进度条，true表示需要，false表示不需要
     private IWebViewCallBack mWebViewCallBack; //WebView回调统一处理
     private String mUserAgent;
@@ -35,12 +36,22 @@ public class WebConfig {
         mShowToolbar = showToolbar;
         return this;
     }
+
     /**
      * @param showBack 左上角是否需要返回键，true表示需要，false表示不需要
      * @return
      */
     public WebConfig setShowBack(boolean showBack) {
         mShowBack = showBack;
+        return this;
+    }
+
+    /**
+     * @param showClose 左上角是否需要关闭键，true表示需要，false表示不需要
+     * @return
+     */
+    public WebConfig setShowClose(boolean showClose) {
+        mShowClose = showClose;
         return this;
     }
 
@@ -104,8 +115,12 @@ public class WebConfig {
     public boolean isShowToolbar() {
         return mShowToolbar;
     }
+
     public boolean isShowBack() {
         return mShowBack;
+    }
+    public boolean isShowClose() {
+        return mShowClose;
     }
 
     public boolean isShowProgress() {

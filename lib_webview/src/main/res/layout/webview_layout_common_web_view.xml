@@ -12,7 +12,9 @@
         android:layout_alignParentTop="true"
         android:background="#FFFFFF"
         android:visibility="gone"
-        app:backIcon="@drawable/widget_ic_back_black" />
+        app:backIcon="@drawable/widget_ic_back_black"
+        app:closeIcon="@drawable/widget_ic_close_black"
+        app:titleEllipsize="marquee" />
 
     <com.mirkowu.lib_webview.CommonWebView
         android:id="@+id/mWebView"

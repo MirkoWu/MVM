@@ -5,17 +5,19 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
@@ -23,9 +25,11 @@ import com.mirkowu.lib_util.utilcode.util.SizeUtils;
  * @author: mirko
  * @date: 19-10-15
  */
-public class Toolbar extends FrameLayout {
+public class Toolbar extends RelativeLayout {
+    public static final int ELLIPSIZE_NONE = -1;
     private BoldTextView tvTitle;
     private ImageView ivBack;
+    private ImageView ivClose;
     private TextView tvRight;
     private ImageView ivRight;
     private View vLine;
@@ -33,6 +37,8 @@ public class Toolbar extends FrameLayout {
     private int mTitleColorId;
     private int mRightColorId;
     private Drawable mBackIconDrawable;
+    private Drawable mCloseIconDrawable;
+    private int mTitleEllipsize;
 
     public Toolbar(Context context) {
         this(context, null);
@@ -56,12 +62,15 @@ public class Toolbar extends FrameLayout {
         mTitleColorId = ta.getColor(R.styleable.Toolbar_titleColor, Color.parseColor("#222222"));
         mRightColorId = ta.getColor(R.styleable.Toolbar_rightColor, Color.parseColor("#333333"));
         mBackIconDrawable = ta.getDrawable(R.styleable.Toolbar_backIcon);
+        mCloseIconDrawable = ta.getDrawable(R.styleable.Toolbar_closeIcon);
+        mTitleEllipsize = ta.getInt(R.styleable.Toolbar_titleEllipsize, ELLIPSIZE_NONE);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
         ta.recycle();
 
         View view = LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
         tvTitle = view.findViewById(R.id.btv_title);
         ivBack = view.findViewById(R.id.iv_back);
+        ivClose = view.findViewById(R.id.iv_close);
         tvRight = view.findViewById(R.id.tv_right);
         ivRight = view.findViewById(R.id.iv_right);
         vLine = view.findViewById(R.id.v_line);
@@ -70,13 +79,44 @@ public class Toolbar extends FrameLayout {
         setTitleColor(mTitleColorId);
         setRightTextColor(mRightColorId);
         setBackIcon(mBackIconDrawable);
+        setCloseIcon(mCloseIconDrawable);
         setShowLine(mShowLine);
+        initTitleEllipsize();
+    }
 
-
+    private void initTitleEllipsize() {
+        if (mTitleEllipsize > -1) {
+            if (mTitleEllipsize == 0) {
+                setTitleEllipsize(TextUtils.TruncateAt.START);
+            } else if (mTitleEllipsize == 1) {
+                setTitleEllipsize(TextUtils.TruncateAt.MIDDLE);
+            } else if (mTitleEllipsize == 2) {
+                setTitleEllipsize(TextUtils.TruncateAt.END);
+            } else {
+                setTitleEllipsize(TextUtils.TruncateAt.MARQUEE);
+            }
+        }
     }
 
     public Toolbar setTitle(String title) {
         tvTitle.setText(title);
+        return this;
+    }
+
+    /**
+     * 设置标题缩略格式 或 跑马灯
+     *
+     * @param where
+     * @return
+     */
+    public Toolbar setTitleEllipsize(TextUtils.TruncateAt where) {
+        tvTitle.setEllipsize(where);
+        if (where == TextUtils.TruncateAt.MARQUEE) {
+            tvTitle.setMarqueeRepeatLimit(-1);
+            tvTitle.setFocusableInTouchMode(true);
+            tvTitle.setFocusable(true);
+            tvTitle.setSelected(true);
+        }
         return this;
     }
 
@@ -96,11 +136,16 @@ public class Toolbar extends FrameLayout {
     }
 
     public Toolbar setShowBackIcon(boolean isShow) {
-        return setBackIcon(isShow ? mBackIconDrawable : null);
+        if (isShow) {
+            setBackIcon(mBackIconDrawable);
+        } else {
+            ivBack.setVisibility(GONE);
+        }
+        return this;
     }
 
     public Toolbar setBackIcon(@DrawableRes int resId) {
-        return setBackIcon(getResources().getDrawable(resId));
+        return setBackIcon(ContextCompat.getDrawable(getContext(), resId));
     }
 
     public Toolbar setBackIcon(Drawable drawable) {
@@ -115,6 +160,38 @@ public class Toolbar extends FrameLayout {
                 public void onClick(View v) {
                     if (getContext() instanceof Activity) {
                         ((Activity) getContext()).onBackPressed();
+                    }
+                }
+            });
+        }
+        return this;
+    }
+
+    public Toolbar setShowCloseIcon(boolean isShow) {
+        if (isShow) {
+            setCloseIcon(mCloseIconDrawable);
+        } else {
+            ivClose.setVisibility(GONE);
+        }
+        return this;
+    }
+
+    public Toolbar setCloseIcon(@DrawableRes int resId) {
+        return setCloseIcon(ContextCompat.getDrawable(getContext(), resId));
+    }
+
+    public Toolbar setCloseIcon(Drawable drawable) {
+        mCloseIconDrawable = drawable;
+        if (drawable == null) {
+            ivClose.setVisibility(GONE);
+        } else {
+            ivClose.setVisibility(VISIBLE);
+            ivClose.setImageDrawable(drawable);
+            ivClose.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getContext() instanceof Activity) {
+                        ((Activity) getContext()).finish();
                     }
                 }
             });
