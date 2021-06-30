@@ -1,6 +1,5 @@
 package com.mirkowu.lib_widget.dialog;
 
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_widget.R;
@@ -27,14 +27,18 @@ import java.util.List;
 
 public class BottomListDialog extends BaseDialog {
 
-    private boolean hideCancelBtn = false; //默认不显示
-    private boolean useRoundBackground = false; // 是否使用圆角背景
+    private boolean showCancelBtn; //是否显示取消按钮
+    private boolean useRoundBackground; // 是否使用圆角背景
     private String title;
     private List<String> data;
 
-    private RecyclerView mRecyclerView;
-    private TextView tvTitle;
-    private TextView tvCancel;
+    public BottomListDialog() {
+        setShowBottom(true);
+        setTouchOutCancel(false);
+        setDialogCancelable(false);
+        setRoundBackground(true);
+        setShowCancelBtn(true);
+    }
 
     @Override
     public int getLayoutResId() {
@@ -71,13 +75,13 @@ public class BottomListDialog extends BaseDialog {
 
     @Override
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
-        tvTitle = (TextView) viewHolder.getView(R.id.tvTitle);
-        tvCancel = (TextView) viewHolder.getView(R.id.tvCancel);
-        mRecyclerView = (RecyclerView) viewHolder.getView(R.id.mRecyclerView);
+        TextView tvTitle = (TextView) viewHolder.getView(R.id.tvTitle);
+        TextView tvCancel = (TextView) viewHolder.getView(R.id.tvCancel);
+        RecyclerView rvList = (RecyclerView) viewHolder.getView(R.id.mRecyclerView);
 
         tvTitle.setText(title);
         tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
-        tvCancel.setVisibility(hideCancelBtn ? View.GONE : View.VISIBLE);
+        tvCancel.setVisibility(showCancelBtn ? View.VISIBLE : View.GONE);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,17 +89,17 @@ public class BottomListDialog extends BaseDialog {
             }
         });
         LinearDecoration decoration = new LinearDecoration(getContext())
-                .setSpaceColor(Color.parseColor("#CCCCCC"))
+                .setSpaceColor(ContextCompat.getColor(getContext(), R.color.widget_color_line_e5))
                 .setSpace(0.5f);
         if (!TextUtils.isEmpty(title)) {
             decoration.setTopSpace(0.5f);
         }
-        mRecyclerView.addItemDecoration(decoration);
+        rvList.addItemDecoration(decoration);
 
 
         ListAdapter listAdapter = new ListAdapter();
         listAdapter.setData(data);
-        if (mOnItemClickListener != null)
+        if (mOnItemClickListener != null) {
             listAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, Object item, int position) {
@@ -103,8 +107,9 @@ public class BottomListDialog extends BaseDialog {
                     BottomListDialog.this.dismiss();
                 }
             });
+        }
 
-        mRecyclerView.setAdapter(listAdapter);
+        rvList.setAdapter(listAdapter);
 
         if (useRoundBackground) {
             LinearLayout llRoot = viewHolder.getView(R.id.llRoot);
@@ -128,13 +133,13 @@ public class BottomListDialog extends BaseDialog {
         return this;
     }
 
-    public BottomListDialog hideCancelBtn() {
-        this.hideCancelBtn = true;
+    public BottomListDialog setShowCancelBtn(boolean showCancelBtn) {
+        this.showCancelBtn = showCancelBtn;
         return this;
     }
 
-    public BottomListDialog useRoundBackground() {
-        this.useRoundBackground = true;
+    public BottomListDialog setRoundBackground(boolean useRoundBackground) {
+        this.useRoundBackground = useRoundBackground;
         return this;
     }
 
@@ -143,8 +148,8 @@ public class BottomListDialog extends BaseDialog {
         return this;
     }
 
-    public void show(AppCompatActivity activity) {
-        this.show(activity.getSupportFragmentManager(), "");
+    public void show(FragmentActivity activity) {
+        this.show(activity.getSupportFragmentManager(), getClass().getName());
     }
 
 

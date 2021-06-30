@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_color_line_e5">#e5e5e5</color>
+    <color name="widget_color_line_cc">#cccccc</color>
+    <color name="widget_color_positive">#03A9F4</color>
+    <color name="widget_color_negative">#999999</color>
+</resources>

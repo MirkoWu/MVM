@@ -32,7 +32,7 @@ import static android.view.View.VISIBLE;
  * 网络Url下载更新版本
  */
 public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
-    protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
+    private static final int DEFAULT_WIDTH = 280; //默认宽度 dp
 
 
     public static void show(FragmentManager manager, @NonNull IUpgradeInfo upgradeInfo) {
@@ -59,6 +59,12 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     protected BaseDownloadTask downloadTask;
     public IUpgradeInfo upgradeInfo;
     protected File apkFile;
+
+    public UpgradeDialog() {
+        setWidth(DEFAULT_WIDTH);
+        setTouchOutCancel(false);
+        setDialogCancelable(false);
+    }
 
     @Override
     protected int getLayoutResId() {
@@ -93,10 +99,6 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         tvPositive.setVisibility(VISIBLE);
         tvPositive.setText(R.string.up_upgrade);
         tvNegative.setText(R.string.up_next_time);
-
-        setWidth(DEFAULT_WIDTH);
-        setDialogCancelable(false);
-        setTouchOutCancel(false);
     }
 
     @Override

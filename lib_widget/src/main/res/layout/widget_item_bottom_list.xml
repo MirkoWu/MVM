@@ -3,7 +3,7 @@
     android:id="@+id/tvContent"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:foreground="?android:selectableItemBackground"
+    android:foreground="?selectableItemBackground"
     android:background="@drawable/widget_card_bg_6dp"
     android:gravity="center"
     android:orientation="vertical"

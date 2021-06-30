@@ -17,6 +17,12 @@ import com.mirkowu.lib_widget.R;
 public class LoadingDialog extends BaseDialog {
     private String mMessage;
 
+    public LoadingDialog() {
+        setDimAmount(0f);
+        setTouchOutCancel(false);
+        setDialogCancelable(true);
+    }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.widget_dialog_loading;
@@ -31,9 +37,6 @@ public class LoadingDialog extends BaseDialog {
         } else {
             mLoadingTextView.setVisibility(View.GONE);
         }
-        setTouchOutCancel(false);
-        setDialogCancelable(true);
-        setDimAmount(0f);
     }
 
     @Override

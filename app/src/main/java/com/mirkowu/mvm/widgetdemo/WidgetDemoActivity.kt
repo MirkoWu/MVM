@@ -10,6 +10,7 @@ import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.lib_widget.dialog.BottomListDialog
+import com.mirkowu.lib_widget.dialog.InputDialog
 import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
@@ -36,7 +37,6 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
         binding.btnPrompt.click {
             PromptDialog().setTitle("温馨提示")
                 .setContent("确认关闭吗？")
-                .setUseDefaultButton()
                 .setIcon(R.mipmap.ic_launcher)
                 .show(supportFragmentManager)
 //            showLoadingDialog("Toast测试")
@@ -44,7 +44,6 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
         binding.btnPrompt2.click {
             PromptDialog().setTitle("温馨提示")
                 .setContent("确认关闭吗？")
-                .setUseDefaultButton()
                 .show(supportFragmentManager)
 //            showLoadingDialog("Toast测试")
         }
@@ -52,7 +51,14 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
             BottomListDialog()
                 .setData(mutableListOf("测试环境", "测试环境", "测试环境", "测试环境"))
                 //.setTitle("标题")
-                .useRoundBackground().setMarginHor(20).setMarginVer(20)
+//                .setMarginHor(20).setMarginVer(20)
+                .show(supportFragmentManager)
+        }
+        binding.btnInput.click {
+            InputDialog()
+                .setTitle("标题")
+                .setInputHint("提示文字")
+                .setInputMaxCharLength(3)
                 .show(supportFragmentManager)
         }
         binding.btnBinding.click {

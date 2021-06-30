@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/widget_card_bg_6dp"
@@ -10,34 +11,45 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:textColor="#333333"
-        android:textSize="16sp" />
-
-    <ImageView
-        android:id="@+id/ivIcon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:textColor="#222222"
+        android:textSize="15sp"
+        tools:text="标题" />
 
     <TextView
-        android:id="@+id/tvContent"
+        android:id="@+id/tvHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:lineSpacingExtra="6dp"
-        android:minHeight="36dp"
         android:textColor="#666666"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="提示" />
+
+    <EditText
+        android:id="@+id/etContent"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/widget_shape_edit_bg"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textColorHint="#666666"
+        android:textSize="14sp"
+        tools:hint="提示"
+        tools:text="输入内容" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/widget_color_line_e5" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/widget_shape_line_ver" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,6 +64,7 @@
             android:layout_weight="1"
             android:background="?selectableItemBackground"
             android:gravity="center"
+            android:text="@string/widget_btn_cancel"
             android:textColor="@color/widget_color_negative"
             android:textSize="14sp" />
 
@@ -62,6 +75,7 @@
             android:layout_weight="1"
             android:background="?selectableItemBackground"
             android:gravity="center"
+            android:text="@string/widget_btn_confirm"
             android:textColor="@color/widget_color_positive"
             android:textSize="14sp" />
     </LinearLayout>

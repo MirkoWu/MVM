@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.mirkowu.lib_widget.R;
 
@@ -16,7 +16,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class PromptDialog extends BaseDialog implements View.OnClickListener {
-    protected static final int DEFAULT_WIDTH = 280; //默认宽度 dp
+    private static final int DEFAULT_WIDTH = 280; //默认宽度 dp
     private int mIconResId;
     private String mTitle;
     private String mContent;
@@ -24,8 +24,11 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     private String mNegativeText;
     private int mPositiveTextColorResId;
     private int mNegativeTextColorResId;
-    private boolean mUseDefaultButton;
     protected OnButtonClickListener mOnButtonClickListener;
+
+    public PromptDialog() {
+        setWidth(DEFAULT_WIDTH);
+    }
 
     @Override
     protected int getLayoutResId() {
@@ -56,7 +59,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         tvTitle.setVisibility(TextUtils.isEmpty(mTitle) ? GONE : VISIBLE);
         tvContent.setVisibility(TextUtils.isEmpty(mContent) ? GONE : VISIBLE);
 
-        if (!mUseDefaultButton) {
+        if (!TextUtils.isEmpty(mPositiveText) || !TextUtils.isEmpty(mNegativeText)) {
             tvPositive.setText(mPositiveText);
             tvNegative.setText(mNegativeText);
             tvPositive.setVisibility(TextUtils.isEmpty(mPositiveText) ? GONE : VISIBLE);
@@ -72,8 +75,6 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
             tvPositive.setText(R.string.widget_btn_confirm);
             tvNegative.setText(R.string.widget_btn_cancel);
         }
-
-        setWidth(DEFAULT_WIDTH);
     }
 
     @Override
@@ -113,16 +114,6 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
 
     public PromptDialog setContent(String content) {
         this.mContent = content;
-        return this;
-    }
-
-    /**
-     * 使用 默认的 按钮 （取消 和 确认）
-     *
-     * @return
-     */
-    public PromptDialog setUseDefaultButton() {
-        mUseDefaultButton = true;
         return this;
     }
 
@@ -170,7 +161,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     /**
      * 显示Dialog
      */
-    public void show(AppCompatActivity activity) {
+    public void show(FragmentActivity activity) {
         this.show(activity.getSupportFragmentManager(), getClass().getName());
     }
 
