@@ -67,12 +67,4 @@ public class BoldTextView extends AppCompatTextView {
         setBoldWith(STYLE_MEDIUM);
     }
 
-//    @Override
-//    public boolean isFocused() {
-//        if (getEllipsize() == TextUtils.TruncateAt.MARQUEE) {
-//            return true;
-//        } else {
-//            return super.isFocused();
-//        }
-//    }
 }
