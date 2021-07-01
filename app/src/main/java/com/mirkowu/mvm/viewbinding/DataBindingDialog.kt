@@ -3,6 +3,7 @@ package com.mirkowu.mvm.viewbinding
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.mvm.databinding.DialogDatabindingBinding
 
 class DataBindingDialog(context: Context) : Dialog(context) {

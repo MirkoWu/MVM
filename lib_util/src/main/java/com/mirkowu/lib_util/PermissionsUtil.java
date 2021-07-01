@@ -46,9 +46,11 @@ public class PermissionsUtil {
     };
     /**
      * 蓝牙权限（需要粗略定位权限 ）
+     * 编译版本10及以上 需要 ACCESS_FINE_LOCATION
+     * 9以下 有 ACCESS_COARSE_LOCATION 或 ACCESS_FINE_LOCATION 任一个都行
      */
     public static final String[] GROUP_BLUETOOTH = new String[]{
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BLUETOOTH
     };
     /**

@@ -1,6 +1,7 @@
 package com.mirkowu.mvm.download
 
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_network.download.Downloader
 import com.mirkowu.lib_network.download.OnDownloadListener
 import com.mirkowu.lib_util.FileUtil
@@ -11,7 +12,6 @@ import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDownloadBinding
-import com.mirkowu.mvm.viewbinding.bindingView
 import java.io.File
 
 class DownloadActivity : BaseActivity<EmptyMediator>() {

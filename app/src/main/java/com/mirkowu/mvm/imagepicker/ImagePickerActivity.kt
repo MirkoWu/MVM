@@ -3,6 +3,7 @@ package com.mirkowu.mvm.imagepicker
 import android.graphics.Color
 import android.util.Log
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_photo.ImagePicker
 import com.mirkowu.lib_photo.PickerConfig
 import com.mirkowu.lib_photo.mediaLoader.ResultModel
@@ -15,7 +16,6 @@ import com.mirkowu.lib_util.utilcode.util.BarUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityImagePickerBinding
-import com.mirkowu.mvm.viewbinding.bindingView
 
 class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_screen.AutoSizeManager
 import com.mirkowu.lib_screen.internal.CustomAdapt
 import com.mirkowu.lib_util.ktxutil.click
@@ -16,7 +17,6 @@ import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityWidgetDemoBinding
 import com.mirkowu.mvm.viewbinding.DataBindingDialog
-import com.mirkowu.mvm.viewbinding.bindingView
 
 class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
     companion object {

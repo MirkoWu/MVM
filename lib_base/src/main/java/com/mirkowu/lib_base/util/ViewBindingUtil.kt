@@ -1,4 +1,4 @@
-package com.mirkowu.mvm.viewbinding
+package com.mirkowu.lib_base.util
 
 import android.app.Dialog
 import android.view.LayoutInflater

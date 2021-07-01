@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
@@ -16,7 +17,6 @@ import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
-import com.mirkowu.mvm.viewbinding.bindingView
 
 class MainActivity : BaseActivity<EmptyMediator>() {
     companion object {

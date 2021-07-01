@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_upgrade.IUpgradeInfo
