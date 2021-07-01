@@ -10,10 +10,11 @@
 - [x] 支持播放音效
 - [ ] 待优化
 
-### 更新日志
-- v1.0.7
-    2021/06/17 发布QR第一版
-
 ### 感谢
 
 [ZXingLite](https://github.com/jenly1314/ZXingLite)
+
+引用版本
+```
+implementation 'com.king.zxing:zxing-lite:2.0.3'
+```

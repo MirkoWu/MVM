@@ -20,5 +20,13 @@ WebViewUtil.initMultiProcess(this);
 - [x] 支持多进程，预启动
 - [ ] 待更新
 
-### 更新日志
-- 2021/06/09 发布稳定版1.0.2
+### 感谢
+[X5浏览器](https://x5.tencent.com/docs/index.html)
+[JsBridge](https://github.com/lzyzsd/JsBridge)
+
+引用版本
+```
+implementation 'com.tencent.tbs.tbssdk:sdk:43939'
+
+implementation 'com.github.lzyzsd:jsbridge:1.0.4'
+```

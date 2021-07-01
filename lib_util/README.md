@@ -13,9 +13,6 @@ LogUtil.init(BuildConfig.DEBUG);
 - [x] 支持Log
 - [ ] 等
 
-### 更新日志
-- 2021/06/09 发布稳定版1.0.2
-
 
 ### 感谢
 [AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
