@@ -1,11 +1,18 @@
 package com.mirkowu.lib_network.download;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_util.utilcode.util.Utils;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -82,10 +89,10 @@ public class Downloader {
 //        return this;
 //    }
 
-    public Downloader setIsDebug(boolean isDebug) {
-        this.isDebug = isDebug;
-        return this;
-    }
+//    public Downloader setIsDebug(boolean isDebug) {
+//        this.isDebug = isDebug;
+//        return this;
+//    }
 
     public Downloader setUrl(String url) {
         this.url = url;
@@ -143,7 +150,12 @@ public class Downloader {
                 try {
                     Response response = call.execute();
                     if (response.isSuccessful()) {
-                        File file = saveFile(response, filePath);
+                        File file;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            file = saveFileOnAndroidR(response, filePath);
+                        } else {
+                            file = saveFile(response, filePath);
+                        }
                         emitter.onNext(file);
                         emitter.onComplete();
                     } else {
@@ -159,7 +171,7 @@ public class Downloader {
 
             @Override
             public void onNext(@NonNull File file) {
-                LogUtil.e("下载成功" + file.getAbsolutePath());
+                LogUtil.e("下载成功：" + file.getAbsolutePath());
                 if (downloadListener != null) {
                     downloadListener.onSuccess(file);
                 }
@@ -168,7 +180,7 @@ public class Downloader {
             @Override
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
-                LogUtil.e("下载失败" + e.getMessage());
+                LogUtil.e("下载失败：" + e.getMessage());
                 if (downloadListener != null) {
                     downloadListener.onFailure(e);
                 }
@@ -185,6 +197,28 @@ public class Downloader {
         observable.subscribe(observer);
         sRequestMap.put(id, this);
         return id;
+    }
+
+    private File saveFileOnAndroidR(Response response, String path) throws Throwable {
+        File file = new File(path);
+        // 创建ContentValues, 并加入信息
+        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.DESCRIPTION, file.getName());
+        values.put(MediaStore.Files.FileColumns.DISPLAY_NAME, file.getName());
+//        values.put(MediaStore.Images.Media.MIME_TYPE, file.ty());
+//        values.put(MediaStore.Images.Media.TITLE, file.getName());
+        values.put(MediaStore.Files.FileColumns.RELATIVE_PATH, file.getParentFile().getName());
+
+        // 插入到ContentResolver，并返回Uri
+        ContentResolver resolver = Utils.getApp().getContentResolver();
+        Uri insertUri = resolver.insert(MediaStore.Files.getContentUri("external"), values);
+        // 获取OutputStream
+        OutputStream outputStream = resolver.openOutputStream(insertUri);
+        Sink sink = Okio.sink(outputStream);
+        BufferedSink buffer = Okio.buffer(sink);
+        buffer.writeAll(response.body().source());
+        buffer.flush();
+        return file;
     }
 
     private File saveFile(Response response, String path) throws Throwable {

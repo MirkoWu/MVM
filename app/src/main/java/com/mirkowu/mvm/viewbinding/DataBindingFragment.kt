@@ -1,7 +1,11 @@
 package com.mirkowu.mvm.viewbinding
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +18,7 @@ import com.mirkowu.lib_upgrade.IUpgradeInfo
 import com.mirkowu.lib_upgrade.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
+import com.mirkowu.lib_util.PermissionsUtil.REQUEST_CODE
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
@@ -24,7 +29,6 @@ import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import com.mirkowu.mvm.widgetdemo.WidgetDemoActivity
-import java.lang.RuntimeException
 import java.util.*
 
 
@@ -70,6 +74,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnZh.click { LanguageUtils.applyLanguage(Locale.SIMPLIFIED_CHINESE, true) }
         binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, true) }
         binding.btnPermission.click {
+            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+            intent.data = Uri.parse("package:" + context!!.packageName)
+            startActivityForResult(intent, REQUEST_CODE)
+
             PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
                     object : PermissionsUtil.OnPermissionsListener {
                         override fun onPermissionGranted(requestCode: Int) {
@@ -88,6 +96,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     })
         }
         binding.btnImagePicker.click {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ToastUtils.showShort("isExternalStorageLegacy = "+Environment.isExternalStorageLegacy())
+            }
             startActivity(Intent(context, ImagePickerActivity::class.java))
 
         }

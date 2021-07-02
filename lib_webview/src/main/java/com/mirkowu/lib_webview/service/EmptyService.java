@@ -10,10 +10,12 @@ import com.mirkowu.lib_util.LogUtil;
 
 
 /**
- * 为了提前开启多进程，防止Activity跳转时白屏
+ * 为了提前开启多进程，防止多进程Activity跳转时白屏
  * 启动对应空Service 然后自动关闭
  */
 public class EmptyService extends Service {
+    private static final String TAG = EmptyService.class.getSimpleName();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,6 +40,6 @@ public class EmptyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogUtil.e("EmptyService 服务已自动停止");
+        LogUtil.e(TAG, "EmptyService 服务已自动停止");
     }
 }
