@@ -78,7 +78,7 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
             Log.d("TAG", "onPermissionGranted: ")
         }
 
-        override fun onPermissionShowRationale(requestCode: Int, permissions: Array<out String>?) {
+        override fun onPermissionShowRationale(requestCode: Int, permissions: Array<out String>) {
             Log.d("TAG", "onPermissionShowRationale: ")
 
         }

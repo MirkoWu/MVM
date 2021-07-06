@@ -38,12 +38,12 @@ public class FileUtil {
     /**
      * 得到图片uri的实际地址
      */
-    public static String getRealFilePath(Context context,final Uri uri) {
+    public static String getRealFilePath(Context context, final Uri uri) {
         if (null == uri) {
             return null;
         }
 
-        return UriUtil.uri2Path(context,uri);
+        return UriUtil.uri2Path(context, uri);
     }
 
     /**
@@ -62,18 +62,25 @@ public class FileUtil {
      *
      * @return
      */
-    public static String getDiskExternalPath(String path) {
+    public static String getDiskExternalPath(final String path) {
         try {
             //判断是否有SD卡
             if (hasSDCard()) {
-                File rootDir = new File(Environment.getExternalStorageDirectory(), path);
-                if (!rootDir.exists()) {
-                    rootDir.mkdirs();
+                if (TextUtils.isEmpty(path)) {
+                    return Environment.getExternalStorageDirectory().getAbsolutePath();
+                } else {
+                    File rootDir = new File(Environment.getExternalStorageDirectory(), path);
+                    if (!rootDir.exists()) {
+                        rootDir.mkdirs();
+                    }
+                    return rootDir.getAbsolutePath(); // /mnt/sdcard/path...
                 }
-                return rootDir.getAbsolutePath();// /mnt/sdcard/path...
             }
         } catch (Throwable e) {
             e.printStackTrace();
+        }
+        if (TextUtils.isEmpty(path)) {
+            return "";
         }
         return path;
     }
@@ -231,7 +238,7 @@ public class FileUtil {
         if ((filename != null) && (filename.length() > 0)) {
             int dot = filename.lastIndexOf('.');
             if ((dot > -1) && (dot < (filename.length() - 1))) {
-                return filename.substring(dot);//带上点 ，dot + 1 不带点
+                return filename.substring(dot); //带上点 ，dot + 1 不带点
             }
         }
         return filename;

@@ -85,28 +85,28 @@ public class MediaCollectionLoader implements LoaderManager.LoaderCallbacks<Curs
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         CursorLoader cursorLoader = null;
         Uri contentUri = MediaStore.Files.getContentUri("external");
-        if (id == LOADER_ALL) { //加载所有
-            String selection;
-            String[] selectionArgs;
-            if (mIsOnlyVideo || !mIsShowVideo) {
-                selection = selectionSingle;
-                if (mIsOnlyVideo) {
-                    selectionArgs = selectionArgsVideo;
-                } else {
-                    selectionArgs = selectionArgsImage;
-                }
+        //  if (id == LOADER_ALL) { //加载所有
+        String selection;
+        String[] selectionArgs;
+        if (mIsOnlyVideo || !mIsShowVideo) {
+            selection = selectionSingle;
+            if (mIsOnlyVideo) {
+                selectionArgs = selectionArgsVideo;
             } else {
-                selection = selectionAll;
-                selectionArgs = selectionAllArgs;
+                selectionArgs = selectionArgsImage;
             }
-
-            cursorLoader = new CursorLoader(mContext,
-                    contentUri,
-                    IMAGE_PROJECTION,
-                    selection,
-                    selectionArgs,
-                    IMAGE_PROJECTION[2] + " DESC");
+        } else {
+            selection = selectionAll;
+            selectionArgs = selectionAllArgs;
         }
+
+        cursorLoader = new CursorLoader(mContext,
+                contentUri,
+                IMAGE_PROJECTION,
+                selection,
+                selectionArgs,
+                IMAGE_PROJECTION[2] + " DESC");
+        //   }
         mLoadFinished = false;
         mHasFolderGenerated = false;
         return cursorLoader;

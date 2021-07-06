@@ -129,7 +129,6 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
                 takePhoto();
                 break;
             case ACCEPT_TYPE_VIDEO:
-
                 takeVideo();
                 break;
         }

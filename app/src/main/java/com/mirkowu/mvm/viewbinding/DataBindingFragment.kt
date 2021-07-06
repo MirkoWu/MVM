@@ -74,30 +74,59 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.btnZh.click { LanguageUtils.applyLanguage(Locale.SIMPLIFIED_CHINESE, true) }
         binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, true) }
         binding.btnPermission.click {
-            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-            intent.data = Uri.parse("package:" + context!!.packageName)
-            startActivityForResult(intent, REQUEST_CODE)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                if (!Environment.isExternalStorageLegacy()) {//是否传统的存储
+//                }
+//                //判断有没有完全的外部存储访问权限
+//                if (!Environment.isExternalStorageManager()) {
+//                    //没有就申请权限，需要用户手动授权
+//                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+//                    intent.data = Uri.parse("package:" + context!!.packageName)
+//                    startActivityForResult(intent, REQUEST_CODE)
+//                }
+//            }
+            PermissionsUtil.getInstance().requestStorageManage(this,
+                object : PermissionsUtil.OnPermissionsListener {
+                    override fun onPermissionGranted(requestCode: Int) {
+                        ToastUtils.showShort("已授权------")
+                    }
 
-            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
-                    object : PermissionsUtil.OnPermissionsListener {
-                        override fun onPermissionGranted(requestCode: Int) {
-                            Log.d(TAG, "onPermissionGranted: ")
-                        }
+                    override fun onPermissionShowRationale(
+                        requestCode: Int,
+                        permissions: Array<out String>
+                    ) {
+                        ToastUtils.showShort("已拒绝")
+                    }
 
-                        override fun onPermissionShowRationale(requestCode: Int, permissions: Array<out String>?) {
-                            Log.d(TAG, "onPermissionShowRationale: ")
+                    override fun onPermissionDenied(requestCode: Int) {
+                        ToastUtils.showShort("已拒绝")
+                    }
 
-                        }
+                })
 
-                        override fun onPermissionDenied(requestCode: Int) {
-                            Log.d(TAG, "onPermissionDenied: ")
-
-                        }
-                    })
+//            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
+//                object : PermissionsUtil.OnPermissionsListener {
+//                    override fun onPermissionGranted(requestCode: Int) {
+//                        Log.d(TAG, "onPermissionGranted: ")
+//                    }
+//
+//                    override fun onPermissionShowRationale(
+//                        requestCode: Int,
+//                        permissions: Array<out String>
+//                    ) {
+//                        Log.d(TAG, "onPermissionShowRationale: ")
+//
+//                    }
+//
+//                    override fun onPermissionDenied(requestCode: Int) {
+//                        Log.d(TAG, "onPermissionDenied: ")
+//
+//                    }
+//                })
         }
         binding.btnImagePicker.click {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ToastUtils.showShort("isExternalStorageLegacy = "+Environment.isExternalStorageLegacy())
+                ToastUtils.showShort("isExternalStorageLegacy = " + Environment.isExternalStorageLegacy())
             }
             startActivity(Intent(context, ImagePickerActivity::class.java))
 
@@ -106,8 +135,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             startActivity(Intent(context, DownloadActivity::class.java))
         }
         binding.btnUpgrade.click {
-           // BuglyManager.checkUpgrade(true, false)
-            val url = "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
+            // BuglyManager.checkUpgrade(true, false)
+            val url =
+                "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
 
             UpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
                 override fun getTitle(): String {
@@ -140,15 +170,16 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             })
         }
         binding.btnQr.click {
-            QRScanner.getInstance().setScanConfig(ScanConfig()
+            QRScanner.getInstance().setScanConfig(
+                ScanConfig()
                     .setShowFlashlight(true)
                     .setShowAlbumPick(true)
                     .setCameraAutoZoom(true)
             )
-                    .setOnScanResultListener {
-                        ToastUtils.showShort("扫描结果：" + it)
-                        LogUtil.e("扫描结果：" + it)
-                    }.start(context)
+                .setOnScanResultListener {
+                    ToastUtils.showShort("扫描结果：" + it)
+                    LogUtil.e("扫描结果：" + it)
+                }.start(context)
         }
         binding.btnCrash.click {
             throw RuntimeException("测试BUG")
@@ -160,7 +191,11 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         Log.d(TAG, "onCreateView: $position")
         return super.onCreateView(inflater, container, savedInstanceState)
 

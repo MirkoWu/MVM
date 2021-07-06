@@ -25,11 +25,11 @@ import java.lang.reflect.Method;
  */
 public class UriUtil {
 
-    public static String uri2Path(Context context,final Uri uri) {
+    public static String uri2Path(Context context, final Uri uri) {
         if (null == uri) {
             return null;
         }
-        File file = UriUtil.uri2File(context,uri);
+        File file = UriUtil.uri2File(context, uri);
         if (file == null) return null;
         return file.getAbsolutePath();
     }

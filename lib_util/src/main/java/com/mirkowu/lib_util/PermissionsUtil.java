@@ -5,8 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -44,6 +49,9 @@ public class PermissionsUtil {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
+    public static final String[] MANAGE_EXTERNAL_STORAGE = new String[]{
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+    };
     /**
      * 蓝牙权限（需要粗略定位权限 ）
      * 编译版本10及以上 需要 ACCESS_FINE_LOCATION
@@ -70,7 +78,7 @@ public class PermissionsUtil {
     public static interface OnPermissionsListener {
         void onPermissionGranted(int requestCode);
 
-        void onPermissionShowRationale(int requestCode, String[] permissions);
+        void onPermissionShowRationale(int requestCode, @NonNull String[] permissions);
 
         void onPermissionDenied(int requestCode);
     }
@@ -80,7 +88,75 @@ public class PermissionsUtil {
     private static OnPermissionsListener mOnPermissionsListener;
     public static final int REQUEST_CODE = 2488;
     public static final int REQUEST_CODE_DETAIL_SETTING = 1022;
+    public static final int REQUEST_CODE_STORAGE_MANAGE = 1023;
 
+
+    /**
+     * Android 11及以上申请完全的外部存储权限
+     */
+    public void requestStorageManage(@NonNull Activity activity, @NonNull OnPermissionsListener listener) {
+        requestStorageManage(activity, REQUEST_CODE_STORAGE_MANAGE, listener);
+    }
+
+    private void requestStorageManage(@NonNull Activity activity, int requestCode,
+                                      @NonNull OnPermissionsListener listener) {
+        String[] permissions = MANAGE_EXTERNAL_STORAGE;
+        mRequestPermissions = permissions;
+        mOnPermissionsListener = listener;
+        // mRequestCode = requestCode;
+
+        if (mRequestPermissions == null || mOnPermissionsListener == null) {
+            throw new IllegalArgumentException("permissions or onPermissionsListener is null");
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                listener.onPermissionGranted(requestCode);
+            } else {
+                startAppAllFilesManage(activity);
+            }
+        } else {
+            if (hasPermissions(activity, permissions)) {
+                listener.onPermissionGranted(requestCode);
+            } else {
+                //没权限就去请求
+                ActivityCompat.requestPermissions(activity, permissions, requestCode);
+            }
+        }
+    }
+
+    /**
+     * Android 11及以上申请完全的外部存储权限
+     */
+    public void requestStorageManage(@NonNull Fragment fragment, @NonNull OnPermissionsListener listener) {
+        requestStorageManage(fragment, REQUEST_CODE_STORAGE_MANAGE, listener);
+    }
+
+    private void requestStorageManage(@NonNull Fragment fragment, int requestCode,
+                                      @NonNull OnPermissionsListener listener) {
+        String[] permissions = MANAGE_EXTERNAL_STORAGE;
+        mRequestPermissions = permissions;
+        mOnPermissionsListener = listener;
+        // mRequestCode = requestCode;
+
+        if (mRequestPermissions == null || mOnPermissionsListener == null) {
+            throw new IllegalArgumentException("permissions or onPermissionsListener is null");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                listener.onPermissionGranted(requestCode);
+            } else {
+                startAppAllFilesManage(fragment);
+            }
+        } else {
+            if (hasPermissions(fragment.getContext(), permissions)) {
+                listener.onPermissionGranted(requestCode);
+            } else {
+                //没权限就去请求
+                fragment.requestPermissions(permissions, requestCode);
+            }
+        }
+    }
 
     /**
      * 请求权限
@@ -89,6 +165,7 @@ public class PermissionsUtil {
                                    @NonNull OnPermissionsListener listener) {
         requestPermissions(activity, permissions, REQUEST_CODE, listener);
     }
+
 
     public void requestPermissions(@NonNull Activity activity, @NonNull String[] permissions, int requestCode,
                                    @NonNull OnPermissionsListener listener) {
@@ -134,6 +211,18 @@ public class PermissionsUtil {
         }
     }
 
+
+//    public static boolean isStorageManagePermissions(String manageExternalStorage) {
+//        return TextUtils.equals(manageExternalStorage, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+//        for (String perms : permissions) {
+//            if (TextUtils.equals(perms, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+//                    || TextUtils.equals(perms, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                    || TextUtils.equals(perms, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean hasPermissions(Context context, String[] permissions) {
         for (String perms : permissions) {
@@ -212,7 +301,17 @@ public class PermissionsUtil {
 
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
+        if (requestCode == REQUEST_CODE_STORAGE_MANAGE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (mOnPermissionsListener != null) {
+                    if (Environment.isExternalStorageManager()) {
+                        mOnPermissionsListener.onPermissionGranted(requestCode);
+                    } else {
+                        mOnPermissionsListener.onPermissionDenied(requestCode);
+                    }
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
             if (mOnPermissionsListener != null) {
                 requestPermissions(activity, mRequestPermissions, requestCode, mOnPermissionsListener);
             }
@@ -220,7 +319,17 @@ public class PermissionsUtil {
     }
 
     public void onActivityResult(Fragment fragment, int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
+        if (requestCode == REQUEST_CODE_STORAGE_MANAGE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (mOnPermissionsListener != null) {
+                    if (Environment.isExternalStorageManager()) {
+                        mOnPermissionsListener.onPermissionGranted(requestCode);
+                    } else {
+                        mOnPermissionsListener.onPermissionDenied(requestCode);
+                    }
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
             if (mOnPermissionsListener != null) {
                 requestPermissions(fragment, mRequestPermissions, requestCode, mOnPermissionsListener);
             }
@@ -230,6 +339,20 @@ public class PermissionsUtil {
     public void removeListener() {
         mRequestPermissions = null;
         mOnPermissionsListener = null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    public static void startAppAllFilesManage(Activity context) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+        intent.setData(Uri.parse("package:" + context.getPackageName()));
+        context.startActivityForResult(intent, REQUEST_CODE_STORAGE_MANAGE);
+    }
+
+    public static void startAppAllFilesManage(Fragment fragment) {
+        final Context context = fragment.getContext();
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+        intent.setData(Uri.parse("package:" + context.getPackageName()));
+        fragment.startActivityForResult(intent, REQUEST_CODE_STORAGE_MANAGE);
     }
 
     /**

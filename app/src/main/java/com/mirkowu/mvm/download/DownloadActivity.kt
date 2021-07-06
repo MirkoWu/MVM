@@ -38,7 +38,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
 
                 override fun onPermissionShowRationale(
                     requestCode: Int,
-                    permissions: Array<out String>?
+                    permissions: Array<out String>
                 ) {
 
                 }
@@ -54,11 +54,12 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         val url2 = "https://dw.fjweite.cn/syt/windows_10_professional_x64_2020.iso"
         binding.btnDown.click {
             //外部存储
-            val filePath = FileUtil.getDiskExternalPath() + "/IMG_YYY" + System.currentTimeMillis() + ".jpg"
+//            val filePath = FileUtil.getDiskExternalPath("DCIM") + "/IMG_YYY" + System.currentTimeMillis() + ".jpg"
+            val filePath = FileUtil.getDiskExternalPath("Download") + "/test/IMG_YYY" + System.currentTimeMillis() + ".jpg"
             //内部存储
 //            val filePath = FileUtil.getAppCachePath(context) + "/" + System.currentTimeMillis() + ".jpg"
             //公共存储
-//            val filePath = "${Environment.DIRECTORY_PICTURES}/IMG_XXX_${System.currentTimeMillis()}.jpg"
+//            val filePath = "${Environment.DIRECTORY_DOWNLOADS}/test/IMG_XXX_${System.currentTimeMillis()}.jpg"
 
             id = Downloader.create(url)
                 .setFilePath(filePath)
