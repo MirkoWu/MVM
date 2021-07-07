@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="network_connect_failed_please_check">Network connection failed, please check the network!</string>
+    <string name="network_request_timeout_please_retry">Request timeout, please try again later!</string>
+    <string name="network_request_failed_cant_connect_server">Request failed, unable to connect to server!</string>
+    <string name="network_request_failed_">Request failed, </string>
+</resources>

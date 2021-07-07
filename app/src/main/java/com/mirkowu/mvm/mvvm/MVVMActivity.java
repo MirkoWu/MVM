@@ -81,7 +81,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
             } else if (responseData.isFailure()) {
                 refreshHelper.finishLoad();
                 ErrorBean errorBean = responseData.error;
-                if (errorBean.isNetError()) {
+                if (errorBean.isNetError() && refreshHelper.isFirstPage()) {
                     binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
                 } else if (errorBean.isApiError()) {
                     Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();

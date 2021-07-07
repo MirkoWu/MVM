@@ -1,6 +1,7 @@
 package com.mirkowu.lib_network;
 
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_util.utilcode.util.StringUtils;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -46,13 +47,13 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
             HttpException httpException = (HttpException) e;
             onFailure(ErrorType.NET, httpException.code(), httpException.message());
         } else if (e instanceof ConnectException) {
-            onFailure(ErrorType.NET, ErrorCode.NET_CONNECT, "网络连接失败，请检查网络！");
+            onFailure(ErrorType.NET, ErrorCode.NET_CONNECT, StringUtils.getString(R.string.network_connect_failed_please_check));
         } else if (e instanceof SocketTimeoutException) {
-            onFailure(ErrorType.NET, ErrorCode.NET_TIMEOUT, "请求超时，请稍候重试！");
+            onFailure(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry));
         } else if (e instanceof UnknownHostException) {
-            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWNHOST, "请求失败，无法连接到服务器！");
+            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWNHOST, StringUtils.getString(R.string.network_request_failed_cant_connect_server));
         } else {
-            onFailure(ErrorType.UNKONW, ErrorCode.UNKNOW, "请求失败，" + e.getMessage());
+            onFailure(ErrorType.UNKONW, ErrorCode.UNKNOW, StringUtils.getString(R.string.network_request_failed_) + e.getMessage());
         }
     }
 

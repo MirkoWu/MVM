@@ -24,7 +24,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
     /*** 起始页下标*/
     private int FIRST_PAGE = 0;
     /*** 当前页*/
-    protected int mPage = FIRST_PAGE;
+    protected int mCurPage = FIRST_PAGE;
 
     public RefreshHelper(@NonNull RecyclerView mInnerContainer, OnRefreshListener onRefreshListener) {
         this(null, mInnerContainer, onRefreshListener);
@@ -57,6 +57,18 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
 
     public int getFirstPageIndex() {
         return FIRST_PAGE;
+    }
+
+    public int getCurPage() {
+        return mCurPage;
+    }
+
+    public void setCurPage(int curPage) {
+        mCurPage = curPage;
+    }
+
+    public boolean isFirstPage() {
+        return mCurPage == FIRST_PAGE;
     }
 
     /**
@@ -101,7 +113,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
             mRefreshLayout.finishRefresh();
         }
 
-        if (mPage == FIRST_PAGE) {
+        if (mCurPage == FIRST_PAGE) {
             adapter.setData(list);
 
             if (mOnRefreshListener != null) {
@@ -137,14 +149,14 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        mPage = FIRST_PAGE;
+        mCurPage = FIRST_PAGE;
         loadData();
     }
 
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
-        mPage++;
+        mCurPage++;
         loadData();
     }
 
@@ -153,7 +165,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
      */
     public void loadData() {
         if (mOnRefreshListener != null) {
-            mOnRefreshListener.onLoadData(mPage);
+            mOnRefreshListener.onLoadData(mCurPage);
         }
     }
 

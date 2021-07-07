@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="network_connect_failed_please_check">网络连接失败，请检查网络！</string>
+    <string name="network_request_timeout_please_retry">请求超时，请稍候重试！</string>
+    <string name="network_request_failed_cant_connect_server">请求失败，无法连接到服务器！</string>
+    <string name="network_request_failed_">请求失败，</string>
+</resources>
