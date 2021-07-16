@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class Toolbar extends RelativeLayout {
     private View vLine;
     private boolean mShowLine;
     private int mTitleColorId;
+    private int mTitleTextSize;
     private int mRightColorId;
     private Drawable mBackIconDrawable;
     private Drawable mCloseIconDrawable;
@@ -60,6 +62,8 @@ public class Toolbar extends RelativeLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Toolbar);
         String title = ta.getString(R.styleable.Toolbar_title);
         mTitleColorId = ta.getColor(R.styleable.Toolbar_titleColor, Color.parseColor("#222222"));
+        mTitleTextSize = ta.getDimensionPixelSize(R.styleable.Toolbar_titleTextSize, SizeUtils.dp2px(17f));
+        // int mTextSizeUnit = ta.peekValue(R.styleable.Toolbar_titleTextSize).getComplexUnit();
         mRightColorId = ta.getColor(R.styleable.Toolbar_rightColor, Color.parseColor("#333333"));
         mBackIconDrawable = ta.getDrawable(R.styleable.Toolbar_backIcon);
         mCloseIconDrawable = ta.getDrawable(R.styleable.Toolbar_closeIcon);
@@ -77,6 +81,7 @@ public class Toolbar extends RelativeLayout {
 
         setTitle(title);
         setTitleColor(mTitleColorId);
+        setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
         setRightTextColor(mRightColorId);
         setBackIcon(mBackIconDrawable);
         setCloseIcon(mCloseIconDrawable);
@@ -103,6 +108,26 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+
+    public Toolbar setTitle(@StringRes int titleResId) {
+        tvTitle.setText(titleResId);
+        return this;
+    }
+
+    public Toolbar setTitleColor(@ColorInt int colorId) {
+        tvTitle.setTextColor(colorId);
+        return this;
+    }
+
+    public Toolbar setTitleTextSize(int sizeSp) {
+        return setTitleTextSize(TypedValue.COMPLEX_UNIT_SP, sizeSp);
+    }
+
+    public Toolbar setTitleTextSize(int unit, float size) {
+        tvTitle.setTextSize(unit, size);
+        return this;
+    }
+
     /**
      * 设置标题缩略格式 或 跑马灯
      *
@@ -117,21 +142,6 @@ public class Toolbar extends RelativeLayout {
             tvTitle.setFocusable(true);
             tvTitle.setSelected(true);
         }
-        return this;
-    }
-
-    public Toolbar setTitle(@StringRes int titleResId) {
-        tvTitle.setText(titleResId);
-        return this;
-    }
-
-    public Toolbar setTitleColor(@ColorInt int colorId) {
-        tvTitle.setTextColor(colorId);
-        return this;
-    }
-
-    public Toolbar setTitleSize(int sizeSp) {
-        tvTitle.setTextSize(sizeSp);
         return this;
     }
 

@@ -15,9 +15,16 @@ import com.mirkowu.lib_util.LogUtil;
 
 import java.io.File;
 
+/**
+ * 图片加载器
+ * 支持自定义加载库
+ */
 public class ImageLoader {
 
     private volatile static ILoader sILoader;
+
+    private ImageLoader() {
+    }
 
     /**
      * 设置加载引擎
@@ -30,6 +37,7 @@ public class ImageLoader {
 
     /**
      * 默认用 Glide
+     *
      * @return
      */
     public static ILoader getLoader() {

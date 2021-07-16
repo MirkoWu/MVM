@@ -9,6 +9,7 @@
     <declare-styleable name="Toolbar">
         <attr name="title" format="string" />
         <attr name="titleColor" format="color" />
+        <attr name="titleTextSize" format="dimension" />
         <attr name="titleEllipsize" format="enum">
             <enum name="start" value="0" />
             <enum name="middle" value="1" />
