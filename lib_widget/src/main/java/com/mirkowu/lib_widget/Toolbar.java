@@ -63,7 +63,6 @@ public class Toolbar extends RelativeLayout {
         String title = ta.getString(R.styleable.Toolbar_title);
         mTitleColorId = ta.getColor(R.styleable.Toolbar_titleColor, Color.parseColor("#222222"));
         mTitleTextSize = ta.getDimensionPixelSize(R.styleable.Toolbar_titleTextSize, SizeUtils.dp2px(17f));
-        // int mTextSizeUnit = ta.peekValue(R.styleable.Toolbar_titleTextSize).getComplexUnit();
         mRightColorId = ta.getColor(R.styleable.Toolbar_rightColor, Color.parseColor("#333333"));
         mBackIconDrawable = ta.getDrawable(R.styleable.Toolbar_backIcon);
         mCloseIconDrawable = ta.getDrawable(R.styleable.Toolbar_closeIcon);

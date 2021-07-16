@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         app:showLine="true"
-        app:title="@string/app_name"
-        app:titleTextSize="18sp" />
+        app:title="@string/app_name" />
 
     <com.mirkowu.lib_widget.NoScrollViewPager
         android:id="@+id/vp_home"
