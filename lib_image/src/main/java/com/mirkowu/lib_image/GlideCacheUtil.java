@@ -27,7 +27,7 @@ public class GlideCacheUtil {
     /**
      * 清除图片内存缓存
      */
-    public void clearImageMemoryCache(Context context) {
+    public void clearMemoryCache(Context context) {
         try {
             if (Looper.myLooper() == Looper.getMainLooper()) { //只能在主线程执行
                 Glide.get(context).clearMemory();
@@ -41,7 +41,7 @@ public class GlideCacheUtil {
     /**
      * 清除图片所有缓存
      */
-    public void clearImageAllCache(Context context) {
+    public void clearAllCache(Context context) {
 //        clearImageDiskCache(context);
 //        clearImageMemoryCache(context);
         String imageExternalCatchDir = context.getExternalCacheDir() + ExternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;

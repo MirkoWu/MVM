@@ -107,7 +107,6 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
-
     public Toolbar setTitle(@StringRes int titleResId) {
         tvTitle.setText(titleResId);
         return this;
@@ -118,10 +117,23 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置标题字体
+     *
+     * @param sizeSp 单位sp
+     * @return
+     */
     public Toolbar setTitleTextSize(int sizeSp) {
         return setTitleTextSize(TypedValue.COMPLEX_UNIT_SP, sizeSp);
     }
 
+    /**
+     * 设置标题字体
+     *
+     * @param unit 单位
+     * @param size 大小
+     * @return
+     */
     public Toolbar setTitleTextSize(int unit, float size) {
         tvTitle.setTextSize(unit, size);
         return this;
@@ -144,6 +156,12 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置是否显示返回键
+     *
+     * @param isShow
+     * @return
+     */
     public Toolbar setShowBackIcon(boolean isShow) {
         if (isShow) {
             setBackIcon(mBackIconDrawable);
@@ -176,6 +194,12 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置是否显示关闭按钮，一般多用于WebView
+     *
+     * @param isShow
+     * @return
+     */
     public Toolbar setShowCloseIcon(boolean isShow) {
         if (isShow) {
             setCloseIcon(mCloseIconDrawable);
@@ -208,6 +232,13 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置右功能键 图片资源
+     *
+     * @param resId
+     * @param clickListener
+     * @return
+     */
     public Toolbar setRightIcon(@DrawableRes int resId, OnClickListener clickListener) {
         ivRight.setVisibility(VISIBLE);
         ivRight.setImageResource(resId);
@@ -231,6 +262,13 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置右功能键 文字内容
+     *
+     * @param rightText
+     * @param clickListener
+     * @return
+     */
     public Toolbar setRightText(String rightText, OnClickListener clickListener) {
         tvRight.setVisibility(VISIBLE);
         tvRight.setText(rightText);
@@ -251,6 +289,13 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    /**
+     * 设置是否显示底部分割线
+     *
+     * @param showLine
+     * @param colorId
+     * @return
+     */
     public Toolbar setShowLine(boolean showLine, @ColorInt int colorId) {
         mShowLine = showLine;
         vLine.setVisibility(showLine ? VISIBLE : GONE);
