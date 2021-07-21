@@ -34,8 +34,6 @@ import okio.Okio;
 import okio.Sink;
 
 public class Downloader {
-
-
     private static Map<Long, Downloader> sRequestMap = new ArrayMap();
 
     private boolean isDebug;
@@ -173,7 +171,7 @@ public class Downloader {
 //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && isExternalMediaDir(filePath)) {
 //                            file = saveFileOnAndroidQ(response, filePath);
 //                        } else {
-                            file = saveFile(response, filePath);
+                        file = saveFile(response, filePath);
 //                        }
                         emitter.onNext(file);
                         emitter.onComplete();
@@ -343,6 +341,10 @@ public class Downloader {
 
     private File saveFile(Response response, String path) throws Throwable {
         File file = new File(path);
+        File parentFile = file.getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
         Sink sink = Okio.sink(file);
         BufferedSink buffer = Okio.buffer(sink);
         buffer.writeAll(response.body().source());

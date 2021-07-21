@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <item name="key_holder" type="id" tools:ignore="ResourceName" />
+    <item name="tag_rv_holder" type="id" tools:ignore="ResourceName" />
 </resources>

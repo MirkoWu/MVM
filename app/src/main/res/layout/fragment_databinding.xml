@@ -33,6 +33,15 @@
         app:layout_constraintVertical_bias="0.282" />
 
     <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="mvcClick"
+        android:text="MVP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -173,6 +182,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".mvc.MVCActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_mvc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
@@ -23,4 +28,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -198,7 +198,6 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
         if (view instanceof Checkable) {
             ((Checkable) view).setChecked(checked);
         }
-
         return this;
     }
 

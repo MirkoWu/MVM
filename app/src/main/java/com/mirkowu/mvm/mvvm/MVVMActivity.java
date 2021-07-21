@@ -58,6 +58,13 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
 
             }
         });
+        imageAdapter.setOnItemChildLongClickListener(new BaseRVAdapter.OnItemChildLongClickListener() {
+            @Override
+            public boolean onItemChildLongClick(View view, Object item, int position) {
+                LogUtil.i("TAG", "onItemChildLongClick: " + position);
+                return false;
+            }
+        });
 
 //        LiveDataUtilKt.observerRequest(mMediator.mRequestImageListData, this,
 //                () -> null, () -> null,
