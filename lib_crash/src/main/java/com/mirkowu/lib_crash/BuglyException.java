@@ -14,6 +14,4 @@ public class BuglyException extends Exception {
     public BuglyException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
-
-
 }
