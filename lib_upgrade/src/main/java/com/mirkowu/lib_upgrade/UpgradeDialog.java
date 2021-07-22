@@ -87,7 +87,6 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         tvNegative.setOnClickListener(this);
         ivIcon.setVisibility(GONE);
 
-
         if (TextUtils.isEmpty(upgradeInfo.getTitle())) {
             tvTitle.setText(R.string.up_check_new_version);
         } else {
@@ -96,9 +95,9 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         HtmlUtil.setTextViewHtml(tvContent, upgradeInfo.getContent()); //支持html
 
         tvNegative.setVisibility(upgradeInfo.isForceUpgrade() == 1 ? GONE : VISIBLE);
+        tvNegative.setText(R.string.up_next_time);
         tvPositive.setVisibility(VISIBLE);
         tvPositive.setText(R.string.up_upgrade);
-        tvNegative.setText(R.string.up_next_time);
     }
 
     @Override
@@ -124,14 +123,14 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
                 IntentUtil.startInstall(getContext(), apkFile);
             } else {
                 if (PermissionsUtil.hasPermissions(getContext(), PermissionsUtil.GROUP_STORAGE)) {
-                    downloadApk();
+                    startDownloadTask();
                 } else {
                     LogUtil.e("没有存储权限");
                     if (listener != null) {
                         listener.onNeedPermission(this);
                     } else {
                         LogUtil.e("下载到默认路径");
-                        downloadApk();
+                        startDownloadTask();
                     }
                 }
             }
@@ -168,16 +167,16 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         }
     }
 
-    public void downloadApk() {
+    public void startDownloadTask() {
         llProgress.setVisibility(VISIBLE);
         tvPositive.setVisibility(GONE);
         tvNegative.setVisibility(VISIBLE);
-        if (upgradeInfo.isForceUpgrade() != 1) {
-            tvNegative.setText(R.string.up_cancel);
-            tvNegative.setEnabled(true);
-        } else {
+        if (upgradeInfo.isForceUpgrade() == 1) {
             tvNegative.setText(R.string.up_downloading);
             tvNegative.setEnabled(false);
+        } else {
+            tvNegative.setText(R.string.up_cancel);
+            tvNegative.setEnabled(true);
         }
 
         if (TextUtils.isEmpty(upgradeInfo.getApkUrl())) {
@@ -205,6 +204,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
                 .setListener(new FileDownloadSampleListener() {
                     @Override
                     protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        if (!isAdded() || isDetached()) return;
                         int progress = (int) ((soFarBytes * 100.0) / totalBytes);
                         tvProgress.setText(String.format("%d%%", progress));
                         mProgressBar.setProgress(progress);

@@ -1,6 +1,5 @@
 package com.mirkowu.mvm.mvvm;
 
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.lib_image.ImageLoader;
+import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.bean.GankImageBean;
 import com.mirkowu.mvm.databinding.ItemGankImageBinding;
@@ -28,8 +27,8 @@ public class ImageAdapter extends BaseRVAdapter<GankImageBean, ImageAdapter.Hold
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Holder(ItemGankImageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    public Holder onCreateHolder(@NonNull ViewGroup parent, int viewType) {
+        return new Holder(ItemGankImageBinding.inflate(mLayoutInflater, parent, false));
     }
 
     class Holder extends RecyclerView.ViewHolder {

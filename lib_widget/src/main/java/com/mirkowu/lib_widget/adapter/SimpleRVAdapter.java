@@ -1,6 +1,5 @@
 package com.mirkowu.lib_widget.adapter;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,16 +10,25 @@ import androidx.annotation.NonNull;
 public abstract class SimpleRVAdapter<T> extends BaseRVAdapter<T, BaseRVHolder> {
     private int mLayoutResId;
 
-
     public SimpleRVAdapter(@LayoutRes int layoutResId) {
         mLayoutResId = layoutResId;
     }
 
-
     @NonNull
     @Override
-    public BaseRVHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new BaseRVHolder(LayoutInflater.from(parent.getContext()).inflate(mLayoutResId, parent, false));
+    public BaseRVHolder onCreateHolder(@NonNull ViewGroup parent, int viewType) {
+        return onCreateBaseRVHolder(parent, viewType);
+    }
+
+    /**
+     * 创建默认的holder
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
+    protected BaseRVHolder onCreateBaseRVHolder(@NonNull ViewGroup parent, int viewType) {
+        return new BaseRVHolder(mLayoutInflater.inflate(mLayoutResId, parent, false));
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.mirkowu.lib_widget.dialog;
 
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,8 +15,6 @@ import com.mirkowu.lib_widget.R;
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.lib_widget.adapter.BaseRVHolder;
 import com.mirkowu.lib_widget.decoration.LinearDecoration;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -160,17 +157,16 @@ public class BottomListDialog extends BaseDialog {
     }
 
     public static class ListAdapter extends BaseRVAdapter<String, BaseRVHolder> {
-
-        @Override
-        public void onBindHolder(@NonNull @NotNull BaseRVHolder holder, String item, int position) {
-            TextView tvContent = holder.getView(R.id.tvContent);
-            tvContent.setText(item);
-        }
-
         @NonNull
         @Override
-        public BaseRVHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new BaseRVHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.widget_item_bottom_list, parent, false));
+        public BaseRVHolder onCreateHolder(@NonNull ViewGroup parent, int viewType) {
+            return new BaseRVHolder(mLayoutInflater.inflate(R.layout.widget_item_bottom_list, parent, false));
+        }
+
+        @Override
+        public void onBindHolder(@NonNull BaseRVHolder holder, String item, int position) {
+            TextView tvContent = holder.getView(R.id.tvContent);
+            tvContent.setText(item);
         }
     }
 

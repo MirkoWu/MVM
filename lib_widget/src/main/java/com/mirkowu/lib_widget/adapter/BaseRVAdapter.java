@@ -1,6 +1,9 @@
 package com.mirkowu.lib_widget.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,8 @@ import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     private List<T> mData = new ArrayList<>();
+    protected Context mContext;
+    protected LayoutInflater mLayoutInflater;
 
     public BaseRVAdapter() {
     }
@@ -173,6 +178,16 @@ public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> exten
         return this.mData.size();
     }
 
+    @NonNull
+    @Override
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        mLayoutInflater = LayoutInflater.from(mContext);
+        return onCreateHolder(parent, viewType);
+    }
+
+    @NonNull
+    public abstract VH onCreateHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
