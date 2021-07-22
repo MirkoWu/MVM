@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +17,7 @@ import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
-public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends RecyclerView.Adapter<VH> {
     private List<T> mData = new ArrayList<>();
     protected Context mContext;
     protected LayoutInflater mLayoutInflater;
@@ -189,18 +191,144 @@ public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> exten
     @NonNull
     public abstract VH onCreateHolder(@NonNull ViewGroup parent, int viewType);
 
+    protected View getHolderView(@NonNull ViewGroup parent, @LayoutRes int layoutResId) {
+        return mLayoutInflater.inflate(layoutResId, parent, false);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         T item = this.mData.get(position);
-
-        //添加点击事件
+        //添加Item点击事件
         addOnItemClickListener(holder);
-
         onBindHolder(holder, item, position);
     }
 
     public abstract void onBindHolder(@NonNull VH holder, T item, int position);
 
+
+//    protected VH createBaseRVHolder(@NonNull ViewGroup parent, @LayoutRes int layoutResId) {
+//        return this.createBaseRVHolder(getHolderView(parent, layoutResId));
+//    }
+//
+//    protected VH createBaseRVHolder(View view) {
+//        Class temp = this.getClass();
+//
+//        Class z;
+//        for (z = null; z == null && null != temp; temp = temp.getSuperclass()) {
+//            z = this.getInstancedGenericKClass(temp);
+//        }
+//
+//        VH k;
+//        if (z == null) {
+//            k = (VH) new BaseRVHolder(view);
+//        } else {
+//            k = this.createGenericKInstance(z, view);
+//        }
+//
+//        return k != null ? k : (VH) new BaseRVHolder(view);
+//    }
+//
+//    private VH createGenericKInstance(Class z, View view) {
+//        try {
+//            Constructor constructor;
+//            if (z.isMemberClass() && !Modifier.isStatic(z.getModifiers())) {
+//                constructor = z.getDeclaredConstructor(this.getClass(), View.class);
+//                constructor.setAccessible(true);
+//                return (VH) constructor.newInstance(this, view);
+//            }
+//
+//            constructor = z.getDeclaredConstructor(View.class);
+//            constructor.setAccessible(true);
+//            return (VH) constructor.newInstance(view);
+//        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException var4) {
+//            var4.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+//
+//    private Class getInstancedGenericKClass(Class z) {
+//        Type type = z.getGenericSuperclass();
+//        if (type instanceof ParameterizedType) {
+//            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+//            Type[] var4 = types;
+//            int var5 = types.length;
+//
+//            for (int var6 = 0; var6 < var5; ++var6) {
+//                Type temp = var4[var6];
+//                if (temp instanceof Class) {
+//                    Class tempClass = (Class) temp;
+//                    if (BaseRVHolder.class.isAssignableFrom(tempClass)) {
+//                        return tempClass;
+//                    }
+//                } else if (temp instanceof ParameterizedType) {
+//                    Type rawType = ((ParameterizedType) temp).getRawType();
+//                    if (rawType instanceof Class && BaseRVHolder.class.isAssignableFrom((Class) rawType)) {
+//                        return (Class) rawType;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return null;
+//    }
+
+
+    /**
+     * Child添加点击事件
+     *
+     * @param resIds
+     * @return
+     */
+    protected void addOnClickListener(VH holder, @IdRes int... resIds) {
+        if (mOnItemChildClickListener != null) {
+            if (resIds != null && resIds.length > 0) {
+                for (int id : resIds) {
+                    View view = holder.getView(id);
+                    if (view != null) {
+                        addOnClickListener(holder, view);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void addOnClickListener(VH holder, @IdRes int resId) {
+        if (mOnItemChildClickListener != null) {
+            View view = holder.getView(resId);
+            if (view != null) {
+                addOnClickListener(holder, view);
+            }
+        }
+    }
+
+    /**
+     * Child添加点击事件
+     *
+     * @param resIds
+     * @return
+     */
+    protected void addOnLongClickListener(VH holder, @IdRes int... resIds) {
+        if (mOnItemChildLongClickListener != null) {
+            if (resIds != null && resIds.length > 0) {
+                for (int id : resIds) {
+                    View view = holder.getView(id);
+                    if (view != null) {
+                        addOnLongClickListener(holder, view);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void addOnLongClickListener(VH holder, @IdRes int resId) {
+        if (mOnItemChildLongClickListener != null) {
+            View view = holder.getView(resId);
+            if (view != null) {
+                addOnLongClickListener(holder, view);
+            }
+        }
+    }
 
     /**
      * Item添加点击事件
