@@ -348,9 +348,9 @@ public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> exten
         void onItemClick(View view, T item, int position);
     }
 
-    protected OnItemClickListener mOnItemClickListener;
+    protected OnItemClickListener<T> mOnItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<T> itemClickListener) {
         mOnItemClickListener = itemClickListener;
     }
 
@@ -361,9 +361,9 @@ public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> exten
         void onItemChildClick(View view, T item, int position);
     }
 
-    protected OnItemChildClickListener mOnItemChildClickListener;
+    protected OnItemChildClickListener<T> mOnItemChildClickListener;
 
-    public void setOnItemChildClickListener(OnItemChildClickListener itemChildClickListener) {
+    public void setOnItemChildClickListener(OnItemChildClickListener<T> itemChildClickListener) {
         mOnItemChildClickListener = itemChildClickListener;
     }
 
@@ -374,9 +374,9 @@ public abstract class BaseRVAdapter<T, VH extends RecyclerView.ViewHolder> exten
         boolean onItemChildLongClick(View view, T item, int position);
     }
 
-    protected OnItemChildLongClickListener mOnItemChildLongClickListener;
+    protected OnItemChildLongClickListener<T> mOnItemChildLongClickListener;
 
-    public void setOnItemChildLongClickListener(OnItemChildLongClickListener itemChildLongClickListener) {
+    public void setOnItemChildLongClickListener(OnItemChildLongClickListener<T> itemChildLongClickListener) {
         mOnItemChildLongClickListener = itemChildLongClickListener;
     }
 }

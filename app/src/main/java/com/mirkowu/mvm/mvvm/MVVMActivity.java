@@ -7,10 +7,10 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.lib_base.widget.RefreshHelper;
 import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
@@ -45,19 +45,8 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         imageAdapter = new ImageAdapter();
         binding.rvImage.setAdapter(imageAdapter);
         binding.rvImage.setLayoutManager(new LinearLayoutManager(this));
-        imageAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, Object item, int position) {
-                LogUtil.i("TAG", "onItemClick: " + position);
-            }
-        });
-        imageAdapter.setOnItemChildClickListener(new BaseRVAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(View view, Object item, int position) {
-                LogUtil.i("TAG", "onItemChildClick: " + position);
-
-            }
-        });
+        imageAdapter.setOnItemClickListener((view, item, position) -> LogUtil.i("TAG", "onItemClick: " + position));
+        imageAdapter.setOnItemChildClickListener((view, item, position) -> LogUtil.i("TAG", "onItemChildClick: " + position));
         imageAdapter.setOnItemChildLongClickListener(new BaseRVAdapter.OnItemChildLongClickListener() {
             @Override
             public boolean onItemChildLongClick(View view, Object item, int position) {
