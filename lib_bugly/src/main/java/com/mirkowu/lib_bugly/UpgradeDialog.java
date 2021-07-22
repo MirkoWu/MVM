@@ -33,12 +33,16 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     private boolean isForceUpgrade;
 
     public static void show(FragmentManager manager, UpgradeInfo upgradeInfo) {
-
         UpgradeDialog dialog = new UpgradeDialog();
         dialog.upgradeInfo = upgradeInfo;
         dialog.show(manager);
     }
 
+    public UpgradeDialog() {
+        setWidth(DEFAULT_WIDTH);
+        setTouchOutCancel(false);
+        setDialogCancelable(false);
+    }
 
     @Override
     protected int getLayoutResId() {
@@ -55,7 +59,6 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
         tvNegative = viewHolder.getView(R.id.tvNegative);
         tvPositive = viewHolder.getView(R.id.tvPositive);
         llButton = viewHolder.getView(R.id.llButton);
-
 
         tvPositive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,16 +82,13 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
             tvNegative.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dismiss();
+                    dismissAllowingStateLoss();
                 }
             });
         }
 
-        setTouchOutCancel(false);
-        setDialogCancelable(false);
-
-        BuglyManager.registerDownloadListener(this);
-        BuglyManager.setUpgradeStateListener(this);
+        UpgradeManager.registerDownloadListener(this);
+        UpgradeManager.setUpgradeStateListener(this);
     }
 
     private void startTask() {
@@ -99,16 +99,10 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 //            @Override
 //            public void onClick(View v) {
 //                BuglyManager.cancelDownload();
-//                dismiss();
+//                dismissAllowingStateLoss();
 //            }
 //        });
-        BuglyManager.startDownloadTask();
-
-        setWidth(DEFAULT_WIDTH);
-        setTouchOutCancel(false);
-        setDialogCancelable(false);
-        setCancelable(false);
-        getDialog().setCanceledOnTouchOutside(false);
+        UpgradeManager.startDownloadTask();
     }
 
     @Override
@@ -132,7 +126,6 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 
     @Override
     public void onCompleted(DownloadTask downloadTask) {
-
         if (!isForceUpgrade) {
             dismissAllowingStateLoss();
         } else {
@@ -150,8 +143,8 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        BuglyManager.unregisterDownloadListener();
-        BuglyManager.cancelDownload();
+        UpgradeManager.unregisterDownloadListener();
+        UpgradeManager.cancelDownload();
     }
 
     @Override

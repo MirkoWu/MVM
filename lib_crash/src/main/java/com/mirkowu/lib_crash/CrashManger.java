@@ -10,11 +10,22 @@ import com.tencent.bugly.crashreport.CrashReport;
 /**
  * Bugly异常上报
  */
-public class BuglyManager {
+public class CrashManger {
+    /**
+     * @param context
+     * @param appId   申请的应用ID
+     * @param isDebug 是否debug模式
+     */
     public static void init(Context context, String appId, boolean isDebug) {
         init(context, appId, null, isDebug);
     }
 
+    /**
+     * @param context
+     * @param appId   申请的应用ID
+     * @param channel 渠道
+     * @param isDebug 是否debug模式
+     */
     public static void init(Context context, String appId, String channel, boolean isDebug) {
 
         // 设置是否为上报进程

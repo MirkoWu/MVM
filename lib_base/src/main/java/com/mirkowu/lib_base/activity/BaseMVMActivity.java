@@ -106,7 +106,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
             @Override
             public void run() {
                 if (mLoadingDialog != null) {
-                    mLoadingDialog.dismiss();
+                    mLoadingDialog.dismissAllowingStateLoss();
                     mLoadingDialog = null;
                 }
             }

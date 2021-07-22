@@ -1,4 +1,4 @@
-package com.mirkowu.lib_bugly;
+package com.mirkowu.lib_crash;
 
 import androidx.annotation.Nullable;
 
@@ -14,6 +14,4 @@ public class BuglyException extends Exception {
     public BuglyException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
-
-
 }

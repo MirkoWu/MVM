@@ -230,7 +230,7 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
     @Override
     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && mKeyBack) {
-            dismiss();
+            dismissAllowingStateLoss();
             return true;
         }
         return true;

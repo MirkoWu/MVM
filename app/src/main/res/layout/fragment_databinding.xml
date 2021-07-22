@@ -4,186 +4,200 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="webLocalClick"
-        android:text="WebView本地"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.282" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="webNetClick"
-        android:text="WebView网络"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.282" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="mvcClick"
-        android:text="MVP"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="mvpClick"
-        android:text="MVP"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="mvvmClick"
-        android:text="MVVM"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.704" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="bindingClick"
-        android:text="Binding"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.869" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="listClick"
-        android:text="RecyclerView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.869" />
-
-
-    <com.mirkowu.lib_widget.BoldTextView
-        android:id="@+id/tv_bold_default"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加粗字体"
-        android:textColor="#333333" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加粗字体加粗字体加粗字体加粗字体"
-        android:textColor="#333333"
-        android:textStyle="bold" />
-
-    <com.mirkowu.lib_widget.BoldTextView
-        android:id="@+id/tv_bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加粗字体"
-        android:textColor="#333333"
-        app:boldStyle="bold" />
-
-    <com.mirkowu.lib_widget.BoldTextView
-        android:id="@+id/tv_bold_mid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加粗字体"
-        android:textColor="#333333"
-        app:boldStyle="medium" />
-
-    <TextView
-        android:id="@+id/tv_normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加粗字体"
-        android:textColor="#333333" />
-
-    <Button
-        android:id="@+id/btn_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_ui"
-        android:text="UI组件"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_zh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="中文" />
-
-    <Button
-        android:id="@+id/btn_en"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="英文" />
-
-    <Button
-        android:id="@+id/btn_permission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请求权限" />
-    <Button
-        android:id="@+id/btn_image_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="选择图片" />
-  <Button
-        android:id="@+id/btn_qr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="扫码" />
-   <Button
-        android:id="@+id/btn_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="下载" />
-  <Button
-        android:id="@+id/btn_upgrade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="更新版本" />
-  <Button
-        android:id="@+id/btn_crash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="测试Crash" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list"
-        android:visibility="gone"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="webLocalClick"
+            android:text="WebView本地"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.282" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="webNetClick"
+            android:text="WebView网络"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.282" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="mvcClick"
+            android:text="MVP"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="mvpClick"
+            android:text="MVP"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="mvvmClick"
+            android:text="MVVM"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.704" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="bindingClick"
+            android:text="Binding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.869" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="listClick"
+            android:text="RecyclerView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.869" />
+
+
+        <com.mirkowu.lib_widget.BoldTextView
+            android:id="@+id/tv_bold_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加粗字体"
+            android:textColor="#333333" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加粗字体加粗字体加粗字体加粗字体"
+            android:textColor="#333333"
+            android:textStyle="bold" />
+
+        <com.mirkowu.lib_widget.BoldTextView
+            android:id="@+id/tv_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加粗字体"
+            android:textColor="#333333"
+            app:boldStyle="bold" />
+
+        <com.mirkowu.lib_widget.BoldTextView
+            android:id="@+id/tv_bold_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加粗字体"
+            android:textColor="#333333"
+            app:boldStyle="medium" />
+
+        <TextView
+            android:id="@+id/tv_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加粗字体"
+            android:textColor="#333333" />
+
+        <Button
+            android:id="@+id/btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_ui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UI组件" />
+
+        <Button
+            android:id="@+id/btn_zh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中文" />
+
+        <Button
+            android:id="@+id/btn_en"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="英文" />
+
+        <Button
+            android:id="@+id/btn_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请求权限" />
+
+        <Button
+            android:id="@+id/btn_image_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择图片" />
+
+        <Button
+            android:id="@+id/btn_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫码" />
+
+        <Button
+            android:id="@+id/btn_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下载" />
+
+        <Button
+            android:id="@+id/btn_bugly_upgrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bugly更新版本" />
+
+        <Button
+            android:id="@+id/btn_upgrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更新版本" />
+
+        <Button
+            android:id="@+id/btn_crash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试Crash" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -2,7 +2,7 @@ package com.mirkowu.mvm;
 
 import android.app.Application;
 
-import com.mirkowu.lib_bugly.BuglyManager;
+import com.mirkowu.lib_bugly.UpgradeManager;
 import com.mirkowu.lib_screen.AutoSizeManager;
 import com.mirkowu.lib_stat.UmengManager;
 import com.mirkowu.lib_util.LogUtil;
@@ -28,7 +28,7 @@ public class MVMApplication extends Application {
 
 
         //换成你自己的bugly账号
-        BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
+        UpgradeManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
 
         //umeng
         UmengManager.preInit(this, "60d310388a102159db787693", "umeng", BuildConfig.DEBUG);

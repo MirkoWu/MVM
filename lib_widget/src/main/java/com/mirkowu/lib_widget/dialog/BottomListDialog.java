@@ -85,7 +85,7 @@ public class BottomListDialog extends BaseDialog {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomListDialog.this.dismiss();
+                BottomListDialog.this.dismissAllowingStateLoss();
             }
         });
         LinearDecoration decoration = new LinearDecoration(getContext())
@@ -104,7 +104,7 @@ public class BottomListDialog extends BaseDialog {
                 @Override
                 public void onItemClick(View view, Object item, int position) {
                     mOnItemClickListener.onItemClick(BottomListDialog.this, listAdapter.getItem(position), position);
-                    BottomListDialog.this.dismiss();
+                    BottomListDialog.this.dismissAllowingStateLoss();
                 }
             });
         }

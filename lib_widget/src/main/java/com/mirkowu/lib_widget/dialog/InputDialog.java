@@ -105,7 +105,7 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
                 mOnButtonClickListener.onButtonClick(this, "", false);
             }
         }
-        dismiss();
+        dismissAllowingStateLoss();
     }
 
 

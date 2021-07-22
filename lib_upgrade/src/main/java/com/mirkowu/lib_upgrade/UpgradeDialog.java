@@ -144,7 +144,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
                 FileDownloader.getImpl().clear(downloadTask.getId(), downloadTask.getTargetFilePath());
             }
 
-            dismiss();
+            dismissAllowingStateLoss();
         }
     }
 

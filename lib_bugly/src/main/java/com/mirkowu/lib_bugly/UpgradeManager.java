@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
-import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
@@ -18,47 +17,12 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.io.File;
 import java.util.List;
 
-public class BuglyManager {
-    public static final String TAG = BuglyManager.class.getSimpleName();
+public class UpgradeManager {
+    public static final String CHANNEL = "bugly";
+    public static final String TAG = UpgradeManager.class.getSimpleName();
     private static OnUpgradeListener sOnUpgradeListener;
     private static UpgradeStateListener sUpgradeStateListener;
 
-
-    public static void setUserId(Context context, String userId) {
-        CrashReport.setUserId(context, userId);
-    }
-
-    /**
-     * 主动上报异常信息
-     *
-     * @param e
-     */
-    public static void reportException(Throwable e) {
-        CrashReport.postCatchedException(e);
-    }
-
-
-    public static void reportException(BuglyException e) {
-        CrashReport.postCatchedException(e);
-    }
-
-    public static void reportException(String message, Throwable e) {
-        CrashReport.postCatchedException(new BuglyException(message, e));
-    }
-
-    /**
-     * 自定义Map参数可以保存发生Crash时的一些自定义的环境信息。在发生Crash时会随着异常信息一起上报并在页面展示。
-     * <p>
-     * 最多可以有9对自定义的key-value（超过则添加失败）；
-     * key限长50字节，value限长200字节，过长截断；
-     * key必须匹配正则：[a-zA-Z[0-9]]+。
-     *
-     * @param key
-     * @param value
-     */
-    public static void putUserData(String key, String value) {
-        CrashReport.putUserData(Utils.getApp(), key, value);
-    }
     /**
      * 初始化
      *
@@ -67,11 +31,11 @@ public class BuglyManager {
      * @param isDebug 是否开启debug模式，true表示打开debug模式，false表示关闭调试模式
      */
     public static void init(Context context, String appId, boolean isDebug) {
-        init(context, appId, null, isDebug);
+        init(context, appId, CHANNEL, isDebug);
     }
 
     public static void init(Context context, String appId, String channel, boolean isDebug) {
-        BuglyManager.setUpgradeListener(new UpgradeListener() {
+        UpgradeManager.setUpgradeListener(new UpgradeListener() {
             @Override
             public void onUpgrade(int i, UpgradeInfo upgradeInfo, boolean isManual, boolean isSilence) {
                 LogUtil.e(TAG, "onUpgrade: 是否有新版本 =" + (upgradeInfo != null));
@@ -118,7 +82,7 @@ public class BuglyManager {
             }
         };
         Beta.autoCheckUpgrade = true; //是否自动检查更新
-        Beta.initDelay = 5000L; //置启动延时为5s（默认延时3s），APP启动5s后初始化SDK，避免影响APP启动速度;
+        Beta.initDelay = 5000L; //设置启动延时为5s（默认延时3s），APP启动5s后初始化SDK，避免影响APP启动速度;
 
         // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
@@ -166,7 +130,7 @@ public class BuglyManager {
     }
 
     public static void checkUpgrade(boolean isManual) {
-        Beta.checkUpgrade(isManual, true);
+        checkUpgrade(isManual, true);
     }
 
     /*

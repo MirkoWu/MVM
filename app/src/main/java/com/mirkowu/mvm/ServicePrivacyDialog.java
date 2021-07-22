@@ -90,14 +90,14 @@
 //        if (listener != null) {
 //            int i = v.getId();
 //            if (i == R.id.tvPositive) {
-//                dismiss();
+//                dismissAllowingStateLoss();
 //                listener.onButtonClick(this, true);
 //            } else if (i == R.id.tvNegative) {
 //                if (!isRefuseOnce) {
 //                    isRefuseOnce = true;
 //                    updateUI();
 //                } else {
-//                    dismiss();
+//                    dismissAllowingStateLoss();
 //                    listener.onButtonClick(this, false);
 //                }
 //            }

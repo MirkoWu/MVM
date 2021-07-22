@@ -8,8 +8,8 @@ import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
-import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
+import com.mirkowu.lib_bugly.UpgradeManager
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             Manifest.permission.READ_PHONE_STATE
         )
 
-        BuglyManager.setOnUpgradeListener { upgradeInfo, isManual ->
+        UpgradeManager.setOnUpgradeListener { upgradeInfo, isManual ->
             Log.e(DataBindingFragment.TAG, "setUpgradeListener:   upgradeInfo=$upgradeInfo")
 
             if (upgradeInfo != null) {
@@ -65,8 +65,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
                 ToastUtils.showShort("当前已是最新版本!")
             }
         }
-        // Beta.upgradeStateListener
-        // BuglyManager.checkUpgrade(false,false)
+        UpgradeManager.checkUpgrade(false, false)
     }
 
     fun webLocalClick(view: View?) {

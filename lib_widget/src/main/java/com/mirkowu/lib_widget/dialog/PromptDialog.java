@@ -99,7 +99,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
                 mOnButtonClickListener.onButtonClick(this, false);
             }
         }
-        dismiss();
+        dismissAllowingStateLoss();
     }
 
     public PromptDialog setIcon(@DrawableRes int iconResId) {
