@@ -171,6 +171,20 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
         llProgress.setVisibility(VISIBLE);
         tvProgress.setText(String.format("%d%%", progress));
         mProgressBar.setProgress(progress);
+
+        //重置状态
+        if (tvPositive.getVisibility() == VISIBLE) {
+            tvPositive.setVisibility(GONE);
+            tvNegative.setVisibility(VISIBLE);
+
+            if (isForceUpgrade) {
+                tvNegative.setText(com.mirkowu.lib_upgrade.R.string.up_downloading);
+                tvNegative.setEnabled(false);
+            } else {
+                tvNegative.setText(com.mirkowu.lib_upgrade.R.string.up_cancel);
+                tvNegative.setEnabled(true);
+            }
+        }
     }
 
     @Override
