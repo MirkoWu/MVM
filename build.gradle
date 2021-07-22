@@ -2,12 +2,14 @@
 buildscript {
     ext.kotlin_version = '1.5.0'
     repositories {
-        google()
         // 阿里云镜像
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+        google()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
         //友盟
         maven { url 'https://repo1.maven.org/maven2/' }
@@ -25,12 +27,14 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         // 阿里云镜像
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+        google()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
         //友盟
         maven { url 'https://repo1.maven.org/maven2/' }
