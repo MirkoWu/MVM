@@ -14,7 +14,8 @@ import com.mirkowu.mvm.bean.GankImageBean;
 import com.mirkowu.mvm.databinding.ItemGankImageBinding;
 
 public class ImageAdapter extends BaseRVAdapter<GankImageBean, ImageAdapter.Holder> {
-    private RequestOptions glideOptions = RequestOptions.placeholderOf(R.mipmap.ic_launcher).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+    private RequestOptions glideOptions = RequestOptions.placeholderOf(R.mipmap.ic_launcher)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
     @Override
     public void onBindHolder(@NonNull Holder holder, GankImageBean item, int position) {

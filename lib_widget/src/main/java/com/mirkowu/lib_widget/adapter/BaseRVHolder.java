@@ -228,7 +228,7 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
                 for (int id : resIds) {
                     View view = getView(id);
                     if (view != null) {
-                        mAdapter.addOnClickListener(this,view);
+                        mAdapter.addOnClickListener(this, view);
                     }
                 }
             }
@@ -240,10 +240,26 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
         if (mAdapter != null && mAdapter.getOnItemChildClickListener() != null) {
             View view = getView(resId);
             if (view != null) {
-                mAdapter.addOnClickListener(this,view);
+                mAdapter.addOnClickListener(this, view);
             }
         }
         return this;
+    }
+
+    public void addOnClickListener(View... views) {
+        if (mAdapter != null && mAdapter.getOnItemChildClickListener() != null) {
+            if (views != null && views.length > 0) {
+                for (View view : views) {
+                    mAdapter.addOnClickListener(this, view);
+                }
+            }
+        }
+    }
+
+    public void addOnClickListener(View view) {
+        if (mAdapter != null && mAdapter.getOnItemChildClickListener() != null) {
+            mAdapter.addOnClickListener(this, view);
+        }
     }
 
     /**
@@ -258,7 +274,7 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
                 for (int id : resIds) {
                     View view = getView(id);
                     if (view != null) {
-                        mAdapter.addOnLongClickListener(this,view);
+                        mAdapter.addOnLongClickListener(this, view);
                     }
                 }
             }
@@ -270,11 +286,26 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
         if (mAdapter != null && mAdapter.getOnItemChildLongClickListener() != null) {
             View view = getView(resId);
             if (view != null) {
-                mAdapter.addOnLongClickListener(this,view);
+                mAdapter.addOnLongClickListener(this, view);
             }
         }
         return this;
     }
 
 
+    public void addOnLongClickListener(View... views) {
+        if (mAdapter != null && mAdapter.getOnItemChildLongClickListener() != null) {
+            if (views != null && views.length > 0) {
+                for (View view : views) {
+                    mAdapter.addOnLongClickListener(this, view);
+                }
+            }
+        }
+    }
+
+    public void addOnLongClickListener(View view) {
+        if (mAdapter != null && mAdapter.getOnItemChildLongClickListener() != null) {
+            mAdapter.addOnLongClickListener(this, view);
+        }
+    }
 }
