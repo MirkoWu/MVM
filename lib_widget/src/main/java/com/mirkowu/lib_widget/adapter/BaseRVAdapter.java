@@ -185,7 +185,9 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         mLayoutInflater = LayoutInflater.from(mContext);
-        return onCreateHolder(parent, viewType);
+        VH holder = onCreateHolder(parent, viewType);
+        holder.setAdapter(this);
+        return holder;
     }
 
     @NonNull
@@ -273,78 +275,21 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
 //        return null;
 //    }
 
-
-    /**
-     * Child添加点击事件
-     *
-     * @param resIds
-     * @return
-     */
-    protected void addOnClickListener(VH holder, @IdRes int... resIds) {
-        if (mOnItemChildClickListener != null) {
-            if (resIds != null && resIds.length > 0) {
-                for (int id : resIds) {
-                    View view = holder.getView(id);
-                    if (view != null) {
-                        addOnClickListener(holder, view);
-                    }
-                }
-            }
-        }
-    }
-
-    protected void addOnClickListener(VH holder, @IdRes int resId) {
-        if (mOnItemChildClickListener != null) {
-            View view = holder.getView(resId);
-            if (view != null) {
-                addOnClickListener(holder, view);
-            }
-        }
-    }
-
-    /**
-     * Child添加点击事件
-     *
-     * @param resIds
-     * @return
-     */
-    protected void addOnLongClickListener(VH holder, @IdRes int... resIds) {
-        if (mOnItemChildLongClickListener != null) {
-            if (resIds != null && resIds.length > 0) {
-                for (int id : resIds) {
-                    View view = holder.getView(id);
-                    if (view != null) {
-                        addOnLongClickListener(holder, view);
-                    }
-                }
-            }
-        }
-    }
-
-    protected void addOnLongClickListener(VH holder, @IdRes int resId) {
-        if (mOnItemChildLongClickListener != null) {
-            View view = holder.getView(resId);
-            if (view != null) {
-                addOnLongClickListener(holder, view);
-            }
-        }
-    }
-
     /**
      * Item添加点击事件
      *
      * @param holder
      */
-    private void addOnItemClickListener(VH holder) {
+    protected void addOnItemClickListener(VH holder) {
         if (mOnItemClickListener != null) {
             holder.itemView.setTag(R.id.tag_rv_holder, holder);
-            holder.itemView.setOnClickListener(getOnItemClickListener());
+            holder.itemView.setOnClickListener(getDelegateOnItemClickListener());
         }
     }
 
-    private View.OnClickListener mDelegateOnItemClickListener;
+    protected View.OnClickListener mDelegateOnItemClickListener;
 
-    private View.OnClickListener getOnItemClickListener() {
+    protected View.OnClickListener getDelegateOnItemClickListener() {
         if (mDelegateOnItemClickListener == null) {
             mDelegateOnItemClickListener = new View.OnClickListener() {
                 @Override
@@ -374,27 +319,27 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
      * @param views
      * @return
      */
-    protected void addOnClickListener(VH holder, View... views) {
+    public void addOnClickListener(VH holder, View... views) {
         if (mOnItemChildClickListener != null) {
             if (views != null && views.length > 0) {
                 for (View view : views) {
                     view.setTag(R.id.tag_rv_holder, holder);
-                    view.setOnClickListener(getOnItemChildClickListener());
+                    view.setOnClickListener(getDelegateOnItemChildClickListener());
                 }
             }
         }
     }
 
-    protected void addOnClickListener(VH holder, View view) {
+    public void addOnClickListener(VH holder, View view) {
         if (mOnItemChildClickListener != null) {
             view.setTag(R.id.tag_rv_holder, holder);
-            view.setOnClickListener(getOnItemChildClickListener());
+            view.setOnClickListener(getDelegateOnItemChildClickListener());
         }
     }
 
-    private View.OnClickListener mDelegateOnItemChildClickListener;
+    protected View.OnClickListener mDelegateOnItemChildClickListener;
 
-    private View.OnClickListener getOnItemChildClickListener() {
+    protected View.OnClickListener getDelegateOnItemChildClickListener() {
         if (mDelegateOnItemChildClickListener == null) {
             mDelegateOnItemChildClickListener = new View.OnClickListener() {
                 @Override
@@ -424,27 +369,27 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
      * @param views
      * @return
      */
-    protected void addOnLongClickListener(VH holder, View... views) {
+    public void addOnLongClickListener(VH holder, View... views) {
         if (mOnItemChildClickListener != null) {
             if (views != null && views.length > 0) {
                 for (View view : views) {
                     view.setTag(R.id.tag_rv_holder, holder);
-                    view.setOnLongClickListener(getOnItemChildLongClickListener());
+                    view.setOnLongClickListener(getDelegateOnItemChildLongClickListener());
                 }
             }
         }
     }
 
-    protected void addOnLongClickListener(VH holder, View view) {
+    public void addOnLongClickListener(VH holder, View view) {
         if (mOnItemChildClickListener != null) {
             view.setTag(R.id.tag_rv_holder, holder);
-            view.setOnLongClickListener(getOnItemChildLongClickListener());
+            view.setOnLongClickListener(getDelegateOnItemChildLongClickListener());
         }
     }
 
-    private View.OnLongClickListener mDelegateOnItemChildLongClickListener;
+    protected View.OnLongClickListener mDelegateOnItemChildLongClickListener;
 
-    private View.OnLongClickListener getOnItemChildLongClickListener() {
+    protected View.OnLongClickListener getDelegateOnItemChildLongClickListener() {
         if (mDelegateOnItemChildLongClickListener == null) {
             mDelegateOnItemChildLongClickListener = new View.OnLongClickListener() {
                 @Override
@@ -482,6 +427,10 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
         mOnItemClickListener = itemClickListener;
     }
 
+    public OnItemClickListener<T> getOnItemClickListener() {
+        return mOnItemClickListener;
+    }
+
     /**
      * childView 点击事件
      */
@@ -495,6 +444,10 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
         mOnItemChildClickListener = itemChildClickListener;
     }
 
+    public OnItemChildClickListener<T> getOnItemChildClickListener() {
+        return mOnItemChildClickListener;
+    }
+
     /**
      * childView 长按事件
      */
@@ -506,5 +459,9 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
 
     public void setOnItemChildLongClickListener(OnItemChildLongClickListener<T> itemChildLongClickListener) {
         mOnItemChildLongClickListener = itemChildLongClickListener;
+    }
+
+    public OnItemChildLongClickListener<T> getOnItemChildLongClickListener() {
+        return mOnItemChildLongClickListener;
     }
 }

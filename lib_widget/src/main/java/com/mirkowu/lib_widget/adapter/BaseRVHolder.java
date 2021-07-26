@@ -21,10 +21,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mirkowu.lib_widget.R;
+
 import org.jetbrains.annotations.NotNull;
 
 public class BaseRVHolder extends RecyclerView.ViewHolder {
     private final SparseArray<View> mViews = new SparseArray<>();
+    private BaseRVAdapter mAdapter;
 
     public BaseRVHolder(@NonNull @NotNull View itemView) {
         super(itemView);
@@ -206,4 +209,72 @@ public class BaseRVHolder extends RecyclerView.ViewHolder {
         view.setEnabled(enable);
         return this;
     }
+
+    public BaseRVHolder setAdapter(BaseRVAdapter adapter) {
+        mAdapter = adapter;
+        return this;
+    }
+
+
+    /**
+     * Child添加点击事件
+     *
+     * @param resIds
+     * @return
+     */
+    public BaseRVHolder addOnClickListener(@IdRes int... resIds) {
+        if (mAdapter != null && mAdapter.getOnItemChildClickListener() != null) {
+            if (resIds != null && resIds.length > 0) {
+                for (int id : resIds) {
+                    View view = getView(id);
+                    if (view != null) {
+                        mAdapter.addOnClickListener(this,view);
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    public BaseRVHolder addOnClickListener(@IdRes int resId) {
+        if (mAdapter != null && mAdapter.getOnItemChildClickListener() != null) {
+            View view = getView(resId);
+            if (view != null) {
+                mAdapter.addOnClickListener(this,view);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Child添加点击事件
+     *
+     * @param resIds
+     * @return
+     */
+    public BaseRVHolder addOnLongClickListener(@IdRes int... resIds) {
+        if (mAdapter != null && mAdapter.getOnItemChildLongClickListener() != null) {
+            if (resIds != null && resIds.length > 0) {
+                for (int id : resIds) {
+                    View view = getView(id);
+                    if (view != null) {
+                        mAdapter.addOnLongClickListener(this,view);
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    public BaseRVHolder addOnLongClickListener(@IdRes int resId) {
+        if (mAdapter != null && mAdapter.getOnItemChildLongClickListener() != null) {
+            View view = getView(resId);
+            if (view != null) {
+                mAdapter.addOnLongClickListener(this,view);
+            }
+        }
+        return this;
+    }
+
+
 }

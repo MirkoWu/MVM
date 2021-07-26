@@ -14,9 +14,9 @@ public class TestAdapter extends SimpleRVAdapter<String> {
     @Override
     public void onBindHolder(@NonNull BaseRVHolder holder, String item, int position) {
         holder.setText(R.id.tv_title, "标题" + position)
-                .setText(R.id.tv_content, "内容" + position);
+                .setText(R.id.tv_content, "内容" + position)
+                .addOnClickListener(R.id.tv_title, R.id.tv_content)
+                .addOnLongClickListener(R.id.tv_title, R.id.tv_content);
 
-        addOnClickListener(holder, R.id.tv_title, R.id.tv_content);
-        addOnLongClickListener(holder, R.id.tv_title, R.id.tv_content);
     }
 }
