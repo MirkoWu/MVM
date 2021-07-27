@@ -40,6 +40,7 @@ public class ImageLoader {
      *
      * @return
      */
+    @NonNull
     public static ILoader getLoader() {
         if (sILoader == null) {
             synchronized (ImageLoader.class) {

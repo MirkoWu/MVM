@@ -15,10 +15,6 @@ public abstract class SimpleRVAdapter<T> extends BaseRVAdapter<T, BaseRVHolder> 
     @NonNull
     @Override
     public BaseRVHolder onCreateHolder(@NonNull ViewGroup parent, int viewType) {
-        return createBaseRVHolder(parent, mLayoutResId);
-    }
-
-    protected BaseRVHolder createBaseRVHolder(@NonNull ViewGroup parent, int viewType) {
         return new BaseRVHolder(getHolderView(parent, mLayoutResId));
     }
 }

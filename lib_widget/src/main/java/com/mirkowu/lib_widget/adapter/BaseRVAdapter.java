@@ -5,13 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_widget.R;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,69 +215,69 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
 //    protected VH createBaseRVHolder(@NonNull ViewGroup parent, @LayoutRes int layoutResId) {
 //        return this.createBaseRVHolder(getHolderView(parent, layoutResId));
 //    }
-//
-//    protected VH createBaseRVHolder(View view) {
-//        Class temp = this.getClass();
-//
-//        Class z;
-//        for (z = null; z == null && null != temp; temp = temp.getSuperclass()) {
-//            z = this.getInstancedGenericKClass(temp);
-//        }
-//
-//        VH k;
-//        if (z == null) {
-//            k = (VH) new BaseRVHolder(view);
-//        } else {
-//            k = this.createGenericKInstance(z, view);
-//        }
-//
-//        return k != null ? k : (VH) new BaseRVHolder(view);
-//    }
-//
-//    private VH createGenericKInstance(Class z, View view) {
-//        try {
-//            Constructor constructor;
-//            if (z.isMemberClass() && !Modifier.isStatic(z.getModifiers())) {
-//                constructor = z.getDeclaredConstructor(this.getClass(), View.class);
-//                constructor.setAccessible(true);
-//                return (VH) constructor.newInstance(this, view);
-//            }
-//
-//            constructor = z.getDeclaredConstructor(View.class);
-//            constructor.setAccessible(true);
-//            return (VH) constructor.newInstance(view);
-//        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException var4) {
-//            var4.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-//
-//    private Class getInstancedGenericKClass(Class z) {
-//        Type type = z.getGenericSuperclass();
-//        if (type instanceof ParameterizedType) {
-//            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-//            Type[] var4 = types;
-//            int var5 = types.length;
-//
-//            for (int var6 = 0; var6 < var5; ++var6) {
-//                Type temp = var4[var6];
-//                if (temp instanceof Class) {
-//                    Class tempClass = (Class) temp;
-//                    if (BaseRVHolder.class.isAssignableFrom(tempClass)) {
-//                        return tempClass;
-//                    }
-//                } else if (temp instanceof ParameterizedType) {
-//                    Type rawType = ((ParameterizedType) temp).getRawType();
-//                    if (rawType instanceof Class && BaseRVHolder.class.isAssignableFrom((Class) rawType)) {
-//                        return (Class) rawType;
-//                    }
-//                }
-//            }
-//        }
-//
-//        return null;
-//    }
+
+    protected VH createBaseRVHolder(View view) {
+        Class temp = this.getClass();
+
+        Class z;
+        for (z = null; z == null && null != temp; temp = temp.getSuperclass()) {
+            z = this.getInstancedGenericKClass(temp);
+        }
+
+        VH k;
+        if (z == null) {
+            k = (VH) new BaseRVHolder(view);
+        } else {
+            k = this.createGenericKInstance(z, view);
+        }
+
+        return k != null ? k : (VH) new BaseRVHolder(view);
+    }
+
+    private VH createGenericKInstance(Class z, View view) {
+        try {
+            Constructor constructor;
+            if (z.isMemberClass() && !Modifier.isStatic(z.getModifiers())) {
+                constructor = z.getDeclaredConstructor(this.getClass(), View.class);
+                constructor.setAccessible(true);
+                return (VH) constructor.newInstance(this, view);
+            }
+
+            constructor = z.getDeclaredConstructor(View.class);
+            constructor.setAccessible(true);
+            return (VH) constructor.newInstance(view);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException var4) {
+            var4.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private Class getInstancedGenericKClass(Class z) {
+        Type type = z.getGenericSuperclass();
+        if (type instanceof ParameterizedType) {
+            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+            Type[] var4 = types;
+            int var5 = types.length;
+
+            for (int var6 = 0; var6 < var5; ++var6) {
+                Type temp = var4[var6];
+                if (temp instanceof Class) {
+                    Class tempClass = (Class) temp;
+                    if (BaseRVHolder.class.isAssignableFrom(tempClass)) {
+                        return tempClass;
+                    }
+                } else if (temp instanceof ParameterizedType) {
+                    Type rawType = ((ParameterizedType) temp).getRawType();
+                    if (rawType instanceof Class && BaseRVHolder.class.isAssignableFrom((Class) rawType)) {
+                        return (Class) rawType;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Item添加点击事件
