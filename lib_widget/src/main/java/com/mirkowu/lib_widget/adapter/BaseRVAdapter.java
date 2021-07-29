@@ -79,7 +79,7 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
      * @param item
      */
     public void addData(int position, T item) {
-        if (position < 0 || position >= this.mData.size()) {
+        if (position < 0 || position > this.mData.size()) {
             return;
         }
         this.mData.add(position, item);
