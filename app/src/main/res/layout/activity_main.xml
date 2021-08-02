@@ -15,6 +15,12 @@
         app:showLine="true"
         app:title="@string/app_name" />
 
+    <TextView
+        android:id="@+id/tv_network_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ff0000" />
+
     <com.mirkowu.lib_widget.NoScrollViewPager
         android:id="@+id/vp_home"
         android:layout_width="match_parent"

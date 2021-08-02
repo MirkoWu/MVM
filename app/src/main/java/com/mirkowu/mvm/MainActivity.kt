@@ -3,6 +3,7 @@ package com.mirkowu.mvm
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
@@ -10,6 +11,7 @@ import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_bugly.UpgradeManager
+import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
@@ -66,6 +68,20 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             }
         }
         UpgradeManager.checkUpgrade(false, false)
+
+        var time=System.currentTimeMillis();
+        NetworkUtils.isAvailableByPingAsync("baidu.com") {
+            time=System.currentTimeMillis()-time
+            if (it) {
+                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
+                binding.tvNetworkStatus.setTextColor(Color.GREEN)
+//                binding.tvNetworkStatus.visibility = View.GONE
+            } else {
+                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络不可用")
+                binding.tvNetworkStatus.setTextColor(Color.RED)
+                binding.tvNetworkStatus.visibility = View.VISIBLE
+            }
+        }
     }
 
     fun webLocalClick(view: View?) {
