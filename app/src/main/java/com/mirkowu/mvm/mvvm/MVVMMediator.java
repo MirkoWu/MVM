@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.mvvm;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.mirkowu.lib_network.ErrorBean;
@@ -36,7 +37,7 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(ErrorType type, int code, String msg) {
+                    public void onFailure(@NonNull ErrorType type, int code, String msg) {
                         mRequestImageListData.setValue(ResponseData.error(type, code, msg));
                     }
                 });
@@ -53,7 +54,7 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(ErrorType errorType, int code, String msg) {
+                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
                         mImageError.setValue(new ErrorBean(errorType, code, msg));
                     }
                 });
@@ -70,7 +71,7 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(ErrorType errorType, int code, String msg) {
+                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
 
 
 //                        mError.setValue(e);

@@ -21,11 +21,12 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         doOnSuccess(o);
     }
 
-    private void doOnSuccess(T o) {
+    protected void doOnSuccess(T o) {
         try {
             onFinish();
             onSuccess(o);
         } catch (Throwable t) {
+            t.printStackTrace();
             onFailure(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage());
         }
     }

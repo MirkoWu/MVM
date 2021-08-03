@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -95,7 +96,7 @@ public class MVCActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(ErrorType errorType, int code, String msg) {
+                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
 
                     }
 
