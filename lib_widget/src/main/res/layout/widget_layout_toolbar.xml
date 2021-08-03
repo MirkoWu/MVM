@@ -81,5 +81,5 @@
         android:layout_height="0.5dp"
         android:layout_alignBottom="@+id/btv_title"
         android:layout_gravity="bottom"
-        android:background="#1A000000" />
+        android:background="#10000000" />
 </RelativeLayout>
