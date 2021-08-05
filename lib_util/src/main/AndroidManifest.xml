@@ -5,14 +5,12 @@
     <application>
         <provider
             android:name=".UtilFileProvider"
-            android:authorities="${applicationId}.fileProvider"
+            android:authorities="${applicationId}.mvm.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/util_file_paths"
-                tools:replace="resource" />
+                android:resource="@xml/util_file_paths" />
         </provider>
         <!--工具类库需要-->
         <activity

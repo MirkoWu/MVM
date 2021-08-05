@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import com.mirkowu.lib_widget.R;
 
@@ -185,13 +184,6 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
     public InputDialog setOnButtonClickListener(OnButtonClickListener listener) {
         this.mOnButtonClickListener = listener;
         return this;
-    }
-
-    /**
-     * 显示Dialog
-     */
-    public void show(FragmentActivity activity) {
-        this.show(activity.getSupportFragmentManager(), getClass().getName());
     }
 
     public interface OnButtonClickListener {

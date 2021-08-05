@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -50,7 +51,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     private int mWidth;
     private int mHeight;
     private boolean mKeyBack;
-    private Runnable mRunnable;
+    private OnDismissListener mOnDismissListener;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -82,9 +83,14 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (mRunnable != null) {
-            mRunnable.run();
+        if (mOnDismissListener != null) {
+            mOnDismissListener.onDismiss(this);
         }
+    }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
     }
 
     private void initParams() {
@@ -134,17 +140,6 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
      */
     public BaseDialog setDimAmount(@FloatRange(from = 0, to = 1) float dimAmount) {
         mDimAmount = dimAmount;
-        return this;
-    }
-
-    /**
-     * 取消事件监听
-     *
-     * @param runnable
-     * @return
-     */
-    public BaseDialog setDismiss(Runnable runnable) {
-        mRunnable = runnable;
         return this;
     }
 
@@ -220,6 +215,17 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     }
 
     /**
+     * 取消事件监听
+     *
+     * @param listener
+     * @return
+     */
+    public BaseDialog setOnDismissListener(OnDismissListener listener) {
+        this.mOnDismissListener = listener;
+        return this;
+    }
+
+    /**
      * @param manager 展示弹框
      */
     public BaseDialog show(FragmentManager manager) {
@@ -227,6 +233,13 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
         return this;
     }
 
+    /**
+     * 显示Dialog
+     */
+    public BaseDialog show(FragmentActivity activity) {
+        this.show(activity.getSupportFragmentManager(), getClass().getName());
+        return this;
+    }
 
     /**
      * 防止Fragment在Activity 调用onSaveInstanceState() 后显示 造成的crash
@@ -290,6 +303,11 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     public BaseDialog setKeyBack(boolean keyBack) {
         mKeyBack = keyBack;
         return this;
+    }
+
+
+    public interface OnDismissListener {
+        void onDismiss(BaseDialog dialog);
     }
 
 

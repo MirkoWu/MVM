@@ -372,13 +372,22 @@ public class PermissionsUtil {
 
     /**
      * 前往应用设置详情界面
+     * <p>
+     * 没有后续行为
      *
-     * @param activity
+     * @param context
      */
-    public static void startAppSettingNoResult(Activity activity) {
-        AppSettingUtil.startAppSettingNoResult(activity);
+    public static void startAppSettingNoResult(Context context) {
+        AppSettingUtil.startAppSettingNoResult(context);
     }
 
+    /**
+     * 前往应用设置详情界面 ，
+     * 在设置界面返回后，会重新检测检测权限结果
+     *
+     * @param activity
+     * @return
+     */
     public static boolean startAppSettingForResult(Activity activity) {
         return AppSettingUtil.startAppSettingForResult(activity, REQUEST_CODE_DETAIL_SETTING);
     }

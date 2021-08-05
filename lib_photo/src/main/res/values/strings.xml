@@ -11,10 +11,10 @@
     <string name="ivp_photo_unit">Shot</string>
     <string name="ivp_tip_take_photo">Take photo</string>
     <string name="ivp_error_image_not_exist">Image error</string>
-    <string name="ivp_error_no_permission">Has no permission</string>
+    <string name="ivp_error_no_permission">No permission</string>
     <string name="ivp_permission_dialog_title">Permission Deny</string>
     <string name="ivp_permission_dialog_ok">OK</string>
-    <string name="ivp_permission_dialog_cancel">CANCEL</string>
+    <string name="ivp_permission_dialog_cancel">Cancel</string>
     <string name="ivp_lack_storage_permission">The app lacks "storage permission", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
     <string name="ivp_lack_camera_permission">The app lacks "camera or storage permission", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
     <string name="ivp_permission_rationale_storage_for_photo">Storage permission is needed to pick photos.</string>

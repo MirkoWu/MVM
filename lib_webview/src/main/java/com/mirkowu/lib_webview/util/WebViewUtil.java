@@ -43,6 +43,8 @@ public class WebViewUtil {
             map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
             QbSdk.initTbsSettings(map);
 
+            //屏蔽X5频繁收集手机敏感信息数据 imsi 和 imei
+            QbSdk.disableSensitiveApi();
             //初始化环境
             QbSdk.initX5Environment(application.getApplicationContext(), null);
             return;

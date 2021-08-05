@@ -73,7 +73,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         binding.tvNormal.apply { paint.isFakeBoldText = true }
 
         binding.btnZh.click { LanguageUtils.applyLanguage(Locale.SIMPLIFIED_CHINESE, true) }
-        binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, true) }
+        binding.btnEn.click { LanguageUtils.applyLanguage(Locale.ENGLISH, false) }
         binding.btnPermission.click {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //                if (!Environment.isExternalStorageLegacy()) {//是否传统的存储

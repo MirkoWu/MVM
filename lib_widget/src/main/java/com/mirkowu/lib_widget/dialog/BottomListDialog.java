@@ -145,11 +145,6 @@ public class BottomListDialog extends BaseDialog {
         return this;
     }
 
-    public void show(FragmentActivity activity) {
-        this.show(activity.getSupportFragmentManager(), getClass().getName());
-    }
-
-
     private OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener<T> {

@@ -7,9 +7,11 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
 
 import static android.view.View.GONE;
@@ -31,7 +33,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     }
 
     @Override
-    public  int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.widget_dialog_prompt;
     }
 
@@ -112,9 +114,17 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
+    public PromptDialog setTitle(@StringRes int resId) {
+        return setTitle(StringUtils.getString(resId));
+    }
+
     public PromptDialog setContent(String content) {
         this.mContent = content;
         return this;
+    }
+
+    public PromptDialog setContent(@StringRes int resId) {
+        return setContent(StringUtils.getString(resId));
     }
 
     /**
@@ -123,10 +133,14 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
      * @param negativeText
      * @return
      */
-    public PromptDialog setNegativeButton(String negativeText, @ColorRes int textColorInt) {
+    public PromptDialog setNegativeButton(String negativeText, @ColorRes int textColor) {
         this.mNegativeText = negativeText;
-        this.mNegativeTextColorResId = textColorInt;
+        this.mNegativeTextColorResId = textColor;
         return this;
+    }
+
+    public PromptDialog setNegativeButton(@StringRes int resId, @ColorRes int textColor) {
+        return setNegativeButton(StringUtils.getString(resId), textColor);
     }
 
 
@@ -135,15 +149,23 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
+    public PromptDialog setNegativeButton(@StringRes int resId) {
+        return setNegativeButton(StringUtils.getString(resId));
+    }
+
     /**
      * 右边的 （默认确定）
      *
      * @return
      */
-    public PromptDialog setPositiveButton(String positiveText, @ColorRes int textColorInt) {
+    public PromptDialog setPositiveButton(String positiveText, @ColorRes int textColor) {
         this.mPositiveText = positiveText;
-        this.mPositiveTextColorResId = textColorInt;
+        this.mPositiveTextColorResId = textColor;
         return this;
+    }
+
+    public PromptDialog setPositiveButton(@StringRes int resId, @ColorRes int textColor) {
+        return setPositiveButton(StringUtils.getString(resId), textColor);
     }
 
 
@@ -152,17 +174,13 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
+    public PromptDialog setPositiveButton(@StringRes int resId) {
+        return setPositiveButton(StringUtils.getString(resId));
+    }
 
     public PromptDialog setOnButtonClickListener(OnButtonClickListener listener) {
         this.mOnButtonClickListener = listener;
         return this;
-    }
-
-    /**
-     * 显示Dialog
-     */
-    public void show(FragmentActivity activity) {
-        this.show(activity.getSupportFragmentManager(), getClass().getName());
     }
 
     public interface OnButtonClickListener {
