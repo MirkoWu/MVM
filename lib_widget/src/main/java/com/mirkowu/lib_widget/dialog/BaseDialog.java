@@ -2,6 +2,7 @@ package com.mirkowu.lib_widget.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,21 +18,26 @@ import android.widget.TextView;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_widget.R;
+
+import java.lang.reflect.Field;
 
 
 /**
  * 基础弹框
  */
-public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyListener {
+public abstract class BaseDialog extends DialogFragment implements DialogInterface.OnKeyListener {
     private Context mContext;
     private float mDimAmount = 0.5f; //背景昏暗度
     private boolean mShowBottomEnable; //是否底部显示
@@ -117,9 +123,8 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
         getDialog().setCanceledOnTouchOutside(mTouchOutCancel);
     }
 
-    protected int getLayoutResId() {
-        return 0;
-    }
+    @LayoutRes
+    public abstract int getLayoutResId();
 
     /**
      * 设置背景昏暗度
@@ -218,13 +223,58 @@ public class BaseDialog extends DialogFragment implements DialogInterface.OnKeyL
      * @param manager 展示弹框
      */
     public BaseDialog show(FragmentManager manager) {
-        super.show(manager, String.valueOf(System.currentTimeMillis()));
+        show(manager, String.valueOf(System.currentTimeMillis()));
         return this;
+    }
+
+
+    /**
+     * 防止Fragment在Activity 调用onSaveInstanceState() 后显示 造成的crash
+     */
+    public BaseDialog showAllowingStateLoss(FragmentManager manager, String tag) {
+        try {
+            Field mDismissed = DialogFragment.class.getDeclaredField("mDismissed");
+            mDismissed.setAccessible(true);
+            mDismissed.set(this, false);
+            Field mShownByMe = DialogFragment.class.getDeclaredField("mShownByMe");
+            mShownByMe.setAccessible(true);
+            mShownByMe.set(this, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.add(this, tag);
+        ft.commitAllowingStateLoss();
+
+        return this;
+    }
+
+    public BaseDialog showAllowingStateLoss(FragmentManager manager) {
+        return showAllowingStateLoss(manager, getClass().getName());
     }
 
 
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
 
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

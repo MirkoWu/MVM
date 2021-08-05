@@ -83,13 +83,15 @@ public class PermissionsUtil {
         void onPermissionDenied(int requestCode);
     }
 
-    private static int mRequestCode;
-    private static String[] mRequestPermissions;
-    private static OnPermissionsListener mOnPermissionsListener;
+
+    public static final int REQUEST_NONE = -1; //默认状态
     public static final int REQUEST_CODE = 2488;
     public static final int REQUEST_CODE_DETAIL_SETTING = 1022;
     public static final int REQUEST_CODE_STORAGE_MANAGE = 1023;
 
+    private static int sRequestCode = REQUEST_NONE;
+    private static String[] sRequestPermissions;
+    private static OnPermissionsListener sOnPermissionsListener;
 
     /**
      * Android 11及以上申请完全的外部存储权限
@@ -100,28 +102,12 @@ public class PermissionsUtil {
 
     private void requestStorageManage(@NonNull Activity activity, int requestCode,
                                       @NonNull OnPermissionsListener listener) {
-        String[] permissions = MANAGE_EXTERNAL_STORAGE;
-        mRequestPermissions = permissions;
-        mOnPermissionsListener = listener;
-        // mRequestCode = requestCode;
-
-        if (mRequestPermissions == null || mOnPermissionsListener == null) {
-            throw new IllegalArgumentException("permissions or onPermissionsListener is null");
-        }
-
+        //大于等于 Android 11 设备上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                listener.onPermissionGranted(requestCode);
-            } else {
-                startAppAllFilesManage(activity);
-            }
+            requestStorageManageAboveAndroid11(activity, requestCode, listener);
         } else {
-            if (hasPermissions(activity, permissions)) {
-                listener.onPermissionGranted(requestCode);
-            } else {
-                //没权限就去请求
-                ActivityCompat.requestPermissions(activity, permissions, requestCode);
-            }
+            //Android 11 以前的逻辑
+            requestPermissions(activity, GROUP_STORAGE, requestCode, listener);
         }
     }
 
@@ -134,29 +120,52 @@ public class PermissionsUtil {
 
     private void requestStorageManage(@NonNull Fragment fragment, int requestCode,
                                       @NonNull OnPermissionsListener listener) {
-        String[] permissions = MANAGE_EXTERNAL_STORAGE;
-        mRequestPermissions = permissions;
-        mOnPermissionsListener = listener;
-        // mRequestCode = requestCode;
-
-        if (mRequestPermissions == null || mOnPermissionsListener == null) {
-            throw new IllegalArgumentException("permissions or onPermissionsListener is null");
-        }
+        //大于等于 Android 11 设备上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                listener.onPermissionGranted(requestCode);
-            } else {
-                startAppAllFilesManage(fragment);
-            }
+            requestStorageManageAboveAndroid11(fragment, requestCode, listener);
         } else {
-            if (hasPermissions(fragment.getContext(), permissions)) {
-                listener.onPermissionGranted(requestCode);
-            } else {
-                //没权限就去请求
-                fragment.requestPermissions(permissions, requestCode);
-            }
+            //Android 11 以前的逻辑
+            requestPermissions(fragment, GROUP_STORAGE, requestCode, listener);
         }
     }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void requestStorageManageAboveAndroid11(@NonNull Activity activity, int requestCode,
+                                                    @NonNull OnPermissionsListener listener) {
+        sRequestPermissions = MANAGE_EXTERNAL_STORAGE;
+        sOnPermissionsListener = listener;
+        sRequestCode = requestCode;
+
+        if (sOnPermissionsListener == null) {
+            throw new IllegalArgumentException("onPermissionsListener is null");
+        }
+        if (Environment.isExternalStorageManager()) {
+            sRequestCode = REQUEST_NONE;
+            listener.onPermissionGranted(requestCode);
+        } else {
+            startAppAllFilesManage(activity);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void requestStorageManageAboveAndroid11(@NonNull Fragment fragment, int requestCode,
+                                                    @NonNull OnPermissionsListener listener) {
+        sRequestPermissions = MANAGE_EXTERNAL_STORAGE;
+        sOnPermissionsListener = listener;
+        sRequestCode = requestCode;
+
+        if (sOnPermissionsListener == null) {
+            throw new IllegalArgumentException("onPermissionsListener is null");
+        }
+        if (Environment.isExternalStorageManager()) {
+            sRequestCode = REQUEST_NONE;
+            listener.onPermissionGranted(requestCode);
+        } else {
+            startAppAllFilesManage(fragment);
+        }
+    }
+
 
     /**
      * 请求权限
@@ -169,15 +178,16 @@ public class PermissionsUtil {
 
     public void requestPermissions(@NonNull Activity activity, @NonNull String[] permissions, int requestCode,
                                    @NonNull OnPermissionsListener listener) {
-        mRequestPermissions = permissions;
-        mOnPermissionsListener = listener;
-        mRequestCode = requestCode;
+        sRequestPermissions = permissions;
+        sOnPermissionsListener = listener;
+        sRequestCode = requestCode;
 
-        if (mRequestPermissions == null || mOnPermissionsListener == null) {
+        if (sRequestPermissions == null || sOnPermissionsListener == null) {
             throw new IllegalArgumentException("permissions or onPermissionsListener is null");
         }
 
         if (hasPermissions(activity, permissions)) {
+            sRequestCode = REQUEST_NONE;
             listener.onPermissionGranted(requestCode);
         } else {
             //没权限就去请求
@@ -195,15 +205,16 @@ public class PermissionsUtil {
 
     public void requestPermissions(@NonNull Fragment fragment, @NonNull String[] permissions, int requestCode,
                                    @NonNull OnPermissionsListener listener) {
-        mRequestPermissions = permissions;
-        mOnPermissionsListener = listener;
-        mRequestCode = requestCode;
+        sRequestPermissions = permissions;
+        sOnPermissionsListener = listener;
+        sRequestCode = requestCode;
 
-        if (mRequestPermissions == null || mOnPermissionsListener == null) {
+        if (sRequestPermissions == null || sOnPermissionsListener == null) {
             throw new IllegalArgumentException("permissions or onPermissionsListener is null");
         }
 
         if (hasPermissions(fragment.getContext(), permissions)) {
+            sRequestCode = REQUEST_NONE;
             listener.onPermissionGranted(requestCode);
         } else {
             //没权限就去请求
@@ -255,7 +266,7 @@ public class PermissionsUtil {
 
     public void onRequestPermissionsResult(Activity activity, int requestCode, String[] permissions, int[] grantResults) {
         //有可能会返回空数组,做下判断
-        if (requestCode == mRequestCode && grantResults != null && grantResults.length > 0) {
+        if (requestCode == sRequestCode && grantResults != null && grantResults.length > 0) {
             boolean isGranted = true;
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -264,13 +275,14 @@ public class PermissionsUtil {
                 }
             }
 
-            if (mOnPermissionsListener != null) {
+            if (sOnPermissionsListener != null) {
+                sRequestCode = REQUEST_NONE;
                 if (isGranted) {
-                    mOnPermissionsListener.onPermissionGranted(requestCode);
-                } else if (shouldRationale(activity, mRequestPermissions)) {
-                    mOnPermissionsListener.onPermissionShowRationale(requestCode, mRequestPermissions);
+                    sOnPermissionsListener.onPermissionGranted(requestCode);
+                } else if (shouldRationale(activity, sRequestPermissions)) {
+                    sOnPermissionsListener.onPermissionShowRationale(requestCode, sRequestPermissions);
                 } else {
-                    mOnPermissionsListener.onPermissionDenied(requestCode);
+                    sOnPermissionsListener.onPermissionDenied(requestCode);
                 }
             }
         }
@@ -278,7 +290,7 @@ public class PermissionsUtil {
 
     public void onRequestPermissionsResult(Fragment fragment, int requestCode, String[] permissions, int[] grantResults) {
         //有可能会返回空数组,做下判断
-        if (requestCode == mRequestCode && grantResults != null && grantResults.length > 0) {
+        if (requestCode == sRequestCode && grantResults != null && grantResults.length > 0) {
             boolean isGranted = true;
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -287,13 +299,14 @@ public class PermissionsUtil {
                 }
             }
 
-            if (mOnPermissionsListener != null) {
+            if (sOnPermissionsListener != null) {
+                sRequestCode = REQUEST_NONE;
                 if (isGranted) {
-                    mOnPermissionsListener.onPermissionGranted(requestCode);
-                } else if (shouldRationale(fragment, mRequestPermissions)) {
-                    mOnPermissionsListener.onPermissionShowRationale(requestCode, mRequestPermissions);
+                    sOnPermissionsListener.onPermissionGranted(requestCode);
+                } else if (shouldRationale(fragment, sRequestPermissions)) {
+                    sOnPermissionsListener.onPermissionShowRationale(requestCode, sRequestPermissions);
                 } else {
-                    mOnPermissionsListener.onPermissionDenied(requestCode);
+                    sOnPermissionsListener.onPermissionDenied(requestCode);
                 }
             }
         }
@@ -303,17 +316,18 @@ public class PermissionsUtil {
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_STORAGE_MANAGE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (mOnPermissionsListener != null) {
+                if (sOnPermissionsListener != null) {
+                    sRequestCode = REQUEST_NONE;
                     if (Environment.isExternalStorageManager()) {
-                        mOnPermissionsListener.onPermissionGranted(requestCode);
+                        sOnPermissionsListener.onPermissionGranted(requestCode);
                     } else {
-                        mOnPermissionsListener.onPermissionDenied(requestCode);
+                        sOnPermissionsListener.onPermissionDenied(requestCode);
                     }
                 }
             }
         } else if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
-            if (mOnPermissionsListener != null) {
-                requestPermissions(activity, mRequestPermissions, requestCode, mOnPermissionsListener);
+            if (sOnPermissionsListener != null) {
+                requestPermissions(activity, sRequestPermissions, requestCode, sOnPermissionsListener);
             }
         }
     }
@@ -321,24 +335,25 @@ public class PermissionsUtil {
     public void onActivityResult(Fragment fragment, int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_STORAGE_MANAGE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (mOnPermissionsListener != null) {
+                if (sOnPermissionsListener != null) {
+                    sRequestCode = REQUEST_NONE;
                     if (Environment.isExternalStorageManager()) {
-                        mOnPermissionsListener.onPermissionGranted(requestCode);
+                        sOnPermissionsListener.onPermissionGranted(requestCode);
                     } else {
-                        mOnPermissionsListener.onPermissionDenied(requestCode);
+                        sOnPermissionsListener.onPermissionDenied(requestCode);
                     }
                 }
             }
         } else if (requestCode == REQUEST_CODE_DETAIL_SETTING) {
-            if (mOnPermissionsListener != null) {
-                requestPermissions(fragment, mRequestPermissions, requestCode, mOnPermissionsListener);
+            if (sOnPermissionsListener != null) {
+                requestPermissions(fragment, sRequestPermissions, requestCode, sOnPermissionsListener);
             }
         }
     }
 
     public void removeListener() {
-        mRequestPermissions = null;
-        mOnPermissionsListener = null;
+        sRequestPermissions = null;
+        sOnPermissionsListener = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)

@@ -96,7 +96,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                         requestCode: Int,
                         permissions: Array<out String>
                     ) {
-                        ToastUtils.showShort("已拒绝")
+                        ToastUtils.showShort("询问")
                     }
 
                     override fun onPermissionDenied(requestCode: Int) {

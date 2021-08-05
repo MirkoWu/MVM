@@ -59,7 +59,7 @@ public class CameraUtil {
                     public void onPermissionDenied(int requestCode) {
                         new AlertDialog.Builder(activity)
                                 .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_permission_lack)
+                                .setMessage(R.string.ivp_lack_camera_permission)
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -104,7 +104,7 @@ public class CameraUtil {
                     public void onPermissionDenied(int requestCode) {
                         new AlertDialog.Builder(context)
                                 .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_permission_lack)
+                                .setMessage(R.string.ivp_lack_camera_permission)
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

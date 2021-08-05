@@ -126,7 +126,7 @@ public class ImagePickerFragment extends Fragment {
                     public void onPermissionShowRationale(int requestCode, String[] permissions) {
                         new AlertDialog.Builder(getContext())
                                 .setTitle(R.string.ivp_permission_dialog_title)
-                                .setMessage(R.string.ivp_permission_rationale)
+                                .setMessage(R.string.ivp_permission_rationale_storage_for_photo)
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -141,7 +141,7 @@ public class ImagePickerFragment extends Fragment {
                     public void onPermissionDenied(int requestCode) {
                         new AlertDialog.Builder(getContext())
                                 .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_permission_lack)
+                                .setMessage(R.string.ivp_lack_storage_permission)
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

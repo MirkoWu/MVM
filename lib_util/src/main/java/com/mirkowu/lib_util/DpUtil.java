@@ -1,6 +1,7 @@
 package com.mirkowu.lib_util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * Created by Administrator on 2016/8/8 0008.
@@ -13,7 +14,7 @@ public class DpUtil {
      * @return
      */
     public static int px2dip(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -24,7 +25,7 @@ public class DpUtil {
      * @return
      */
     public static int dip2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
@@ -35,7 +36,7 @@ public class DpUtil {
      * @return
      */
     public static int px2sp(Context context, float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
@@ -46,7 +47,7 @@ public class DpUtil {
      * @return
      */
     public static int sp2px(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 

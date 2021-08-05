@@ -29,8 +29,10 @@ import java.lang.reflect.Method;
 
 
 /**
- * description:
+ * 状态栏
+ * 建议使用 {@link com.mirkowu.lib_util.utilcode.util.BarUtils}
  */
+@Deprecated
 public class StatusBarUtil {
 
     public static final int DEFAULT_STATUS_BAR_ALPHA = 112;
@@ -565,7 +567,7 @@ public class StatusBarUtil {
         boolean mIUIResult = false;
         boolean meizuResult = false;
         mIUIResult = setMIUIStatusBarDarkIcon(activity, true);
-        meizuResult = MeizuStatusbarColorUtils.setStatusBarDarkIcon(activity, true);
+        meizuResult = setMeizuStatusBarDarkIcon(activity, true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         } else {
@@ -581,7 +583,7 @@ public class StatusBarUtil {
             boolean mIUIResult = false;
             boolean meizuResult = false;
             mIUIResult = setMIUIStatusBarDarkIcon(activity, true);
-            meizuResult = MeizuStatusbarColorUtils.setStatusBarDarkIcon(activity, true);
+            meizuResult = setMeizuStatusBarDarkIcon(activity, true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             } else {
@@ -606,7 +608,7 @@ public class StatusBarUtil {
             boolean mIUIResult = false;
             boolean meizuResult = false;
             mIUIResult = setMIUIStatusBarDarkIcon(activity, false);
-            meizuResult = MeizuStatusbarColorUtils.setStatusBarDarkIcon(activity, false);
+            meizuResult = setMeizuStatusBarDarkIcon(activity, false);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             } else {

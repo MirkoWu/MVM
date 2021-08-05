@@ -67,7 +67,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     }
 
     @Override
-    protected int getLayoutResId() {
+    public  int getLayoutResId() {
         return R.layout.up_dialog_upgrade;
     }
 

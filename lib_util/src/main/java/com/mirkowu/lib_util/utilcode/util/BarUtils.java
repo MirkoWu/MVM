@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static android.Manifest.permission.EXPAND_STATUS_BAR;
@@ -44,8 +45,8 @@ public final class BarUtils {
     ///////////////////////////////////////////////////////////////////////////
 
     private static final String TAG_STATUS_BAR = "TAG_STATUS_BAR";
-    private static final String TAG_OFFSET     = "TAG_OFFSET";
-    private static final int    KEY_OFFSET     = -123;
+    private static final String TAG_OFFSET = "TAG_OFFSET";
+    private static final int KEY_OFFSET = -123;
 
     private BarUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -122,6 +123,10 @@ public final class BarUtils {
      */
     public static void setStatusBarLightMode(@NonNull final Window window,
                                              final boolean isLightMode) {
+        //小米魅族 机型适配
+        setMIUIStatusBarDarkIcon(window, isLightMode);
+        setMeizuStatusBarDarkIcon(window, isLightMode);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View decorView = window.getDecorView();
             int vis = decorView.getSystemUiVisibility();
@@ -131,6 +136,51 @@ public final class BarUtils {
                 vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
             decorView.setSystemUiVisibility(vis);
+        }
+    }
+
+
+    /**
+     * 修改 MIUI V6  以上状态栏颜色
+     */
+    private static boolean setMIUIStatusBarDarkIcon(@NonNull Window window, boolean darkIcon) {
+        Class<? extends Window> clazz = window.getClass();
+        try {
+            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+            int darkModeFlag = field.getInt(layoutParams);
+            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+            extraFlagField.invoke(window, darkIcon ? darkModeFlag : 0, darkModeFlag);
+            return true;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 修改魅族状态栏字体颜色 Flyme 4.0
+     */
+    private static boolean setMeizuStatusBarDarkIcon(@NonNull Window window, boolean darkIcon) {
+        try {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+            Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
+            darkFlag.setAccessible(true);
+            meizuFlags.setAccessible(true);
+            int bit = darkFlag.getInt(null);
+            int value = meizuFlags.getInt(lp);
+            if (darkIcon) {
+                value |= bit;
+            } else {
+                value &= ~bit;
+            }
+            meizuFlags.setInt(lp, value);
+            window.setAttributes(lp);
+            return true;
+        } catch (Exception e) {
+//            e.printStackTrace();
+            return false;
         }
     }
 

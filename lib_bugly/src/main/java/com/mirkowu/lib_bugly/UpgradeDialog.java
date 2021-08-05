@@ -52,7 +52,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     }
 
     @Override
-    protected int getLayoutResId() {
+    public  int getLayoutResId() {
         return R.layout.up_dialog_upgrade;
     }
 

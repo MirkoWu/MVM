@@ -15,10 +15,11 @@
     <string name="ivp_permission_dialog_title">Permission Deny</string>
     <string name="ivp_permission_dialog_ok">OK</string>
     <string name="ivp_permission_dialog_cancel">CANCEL</string>
-    <string name="ivp_permission_rationale">Storage read permission is needed to pick files.</string>
-    <string name="ivp_permission_rationale_camera">Camera permission And Storage write permission is needed to take photo.</string>
-    <string name="ivp_permission_rationale_write_storage">Storage write permission is needed to save the images.</string>
-    <string name="ivp_permission_lack">The current application lacks the necessary permissions, which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
+    <string name="ivp_lack_storage_permission">The app lacks "storage permission", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
+    <string name="ivp_lack_camera_permission">The app lacks "camera or storage permission", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
+    <string name="ivp_permission_rationale_storage_for_photo">Storage permission is needed to pick photos.</string>
+    <string name="ivp_permission_rationale_storage_for_save">Storage permission is needed to save the images.</string>
+    <string name="ivp_permission_rationale_camera">Camera permission And Storage permission is needed to take photo.</string>
     <string name="ivp_save">Save</string>
     <string name="ivp_save_succeed">Saved to %s</string>
     <string name="ivp_save_failed">Save failed</string>
