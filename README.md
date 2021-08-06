@@ -48,16 +48,20 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 
        WebViewUtil.initMultiProcess(this);
 
-       //防止初始化多次，视项目情况设置
+        //换成你自己的bugly账号 请根据官方SDK对接，此处只做演示
+        BuglyManager.init(this, "buglyId", BuildConfig.DEBUG);
+
+      /*** 防止初始化多次，视项目情况设置
+       * 需要多进程初始化的方法此方法前面 不需要多进程处理的放在后面
+       */
        if (!ProcessUtils.isMainProcess()) {
             return;
        }
 
-        //换成你自己的bugly账号 请根据官方SDK对接，此处只做演示
-        BuglyManager.init(this, "buglyId", BuildConfig.DEBUG);
+
 
         //umeng 请根据官方SDK对接，此处只做演示
-        UmengManager.preInit(this, "60d310388a102159db787693", "umeng", BuildConfig.DEBUG);
+        UmengManager.preInit(this, "id", "umeng", BuildConfig.DEBUG);
         UmengManager.init(this, null);
 
         //屏幕适配
