@@ -42,8 +42,12 @@ public class UmengManager {
 
     public static void init(Context context, int deviceType, String pushSecret) {
         UMConfigure.init(context, deviceType, pushSecret);
+
         // 选用AUTO页面采集模式
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
+
+        //支持子进程事件统计
+        UMConfigure.setProcessEvent(true);
     }
 
     /**

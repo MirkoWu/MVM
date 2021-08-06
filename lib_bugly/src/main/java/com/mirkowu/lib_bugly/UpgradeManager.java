@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
@@ -89,7 +88,8 @@ public class UpgradeManager {
         if (!TextUtils.isEmpty(channel)) {
             strategy.setAppChannel(channel);  //设置渠道
         }
-        strategy.setUploadProcess(ProcessUtils.isMainProcess());
+        //
+        //strategy.setUploadProcess(ProcessUtils.isMainProcess());
 
         Bugly.init(context, appId, isDebug, strategy);
     }

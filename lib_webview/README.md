@@ -18,7 +18,11 @@ WebViewUtil.initMultiProcess(this);
 - [x] 支持定义标题栏
 - [x] 支持Fragment
 - [x] 支持多进程，预启动
-- [ ] 待更新
+
+
+### 已知问题
+- [ ] 多进程切换语言问题
+- [ ] 多进程相关问题
 
 ### 感谢
 [X5浏览器](https://x5.tencent.com/docs/index.html)

@@ -17,8 +17,8 @@ class WebActivity : CommonWebActivity() {
     companion object {
         fun start(context: Context, title: String, url: String) {
             val starter = Intent(context, WebActivity::class.java)
-                    .putExtra(KEY_TITLE, title)
-                    .putExtra(KEY_URL, url)
+                .putExtra(KEY_TITLE, title)
+                .putExtra(KEY_URL, url)
             context.startActivity(starter)
         }
     }
@@ -58,10 +58,14 @@ class WebActivity : CommonWebActivity() {
     }
 
     fun callJsFunc(view: View) {
-        mWebView.callHandler("changeText", "I`m changed " +System.currentTimeMillis(), object : CallBackFunction {
-            override fun onCallBack(data: String?) {
-                ToastUtils.showShort("Web返回数据 = $data")
-            }
-        })
+        mWebView.callHandler(
+            "changeText",
+            "I`m changed " + System.currentTimeMillis(),
+            object : CallBackFunction {
+                override fun onCallBack(data: String?) {
+                    ToastUtils.showShort("Web返回数据 = $data")
+                    throw RuntimeException("webview进程 异常测试")
+                }
+            })
     }
 }

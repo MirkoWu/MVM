@@ -14,6 +14,26 @@ import java.io.File;
  */
 public class IntentUtil {
     /**
+     * 打开Scheme意图
+     *
+     * @param context
+     * @param url
+     * @return
+     */
+    public static boolean openScheme(Context context, String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            return true;
+        } catch (Throwable e) {
+            LogUtil.e(e.toString());
+        }
+        return false;
+    }
+
+    /**
      * 打开浏览器
      *
      * @param context
@@ -31,7 +51,6 @@ public class IntentUtil {
             LogUtil.e(e.toString());
         }
         return false;
-
     }
 
     public static void openWeChatScan(Context context) {

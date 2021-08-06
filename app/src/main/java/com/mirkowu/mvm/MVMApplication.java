@@ -19,20 +19,24 @@ public class MVMApplication extends Application {
         // LeakCanary.INSTANCE(this);
         LogUtil.init(BuildConfig.DEBUG);
 
+        //WebView初始化多进程
         WebViewUtil.initMultiProcess(this);
-
-        //防止初始化多次，视项目情况设置
-        if (!ProcessUtils.isMainProcess()) {
-            return;
-        }
-
 
         //换成你自己的bugly账号
         UpgradeManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
 
+        /**
+         * 防止初始化多次，视项目情况设置
+         * 需要多进程初始化的方法此方法前面 不需要多进程处理的放在后面
+         */
+        if (!ProcessUtils.isMainProcess()) {
+            return;
+        }
+
         //umeng
         UmengManager.preInit(this, "60d310388a102159db787693", "umeng", BuildConfig.DEBUG);
         UmengManager.init(this, null);
+
 
         //屏幕适配
         AutoSizeManager.init(this);
