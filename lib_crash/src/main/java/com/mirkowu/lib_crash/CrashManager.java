@@ -10,30 +10,22 @@ import com.tencent.bugly.crashreport.CrashReport;
 /**
  * Bugly异常上报
  */
-public class CrashManger {
+public class CrashManager {
     /**
-     * 初始化
-     * 如果使用了 版本更新SDK 直接用 {@link com.mirkowu.lib_bugly.UpgradeManager} 初始化就行
-     *
      * @param context
      * @param appId   申请的应用ID
      * @param isDebug 是否debug模式
      */
-    @Deprecated
     public static void init(Context context, String appId, boolean isDebug) {
         init(context, appId, null, isDebug);
     }
 
     /**
-     * 初始化
-     * 如果使用了 版本更新SDK 直接用 {@link com.mirkowu.lib_bugly.UpgradeManager} 初始化就行
-     *
      * @param context
      * @param appId   申请的应用ID
      * @param channel 渠道
      * @param isDebug 是否debug模式
      */
-    @Deprecated
     public static void init(Context context, String appId, String channel, boolean isDebug) {
 
         // 设置是否为上报进程
@@ -55,16 +47,16 @@ public class CrashManger {
      *
      * @param e
      */
-    public static void reportException(Throwable e) {
+    public static void reportError(Throwable e) {
         CrashReport.postCatchedException(e);
     }
 
 
-    public static void reportException(BuglyException e) {
+    public static void reportError(BuglyException e) {
         CrashReport.postCatchedException(e);
     }
 
-    public static void reportException(String message, Throwable e) {
+    public static void reportError(String message, Throwable e) {
         CrashReport.postCatchedException(new BuglyException(message, e));
     }
 

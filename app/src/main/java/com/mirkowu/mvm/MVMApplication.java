@@ -3,6 +3,7 @@ package com.mirkowu.mvm;
 import android.app.Application;
 
 import com.mirkowu.lib_bugly.UpgradeManager;
+import com.mirkowu.lib_crash.CrashManager;
 import com.mirkowu.lib_screen.AutoSizeManager;
 import com.mirkowu.lib_stat.UmengManager;
 import com.mirkowu.lib_util.LogUtil;
@@ -46,6 +47,8 @@ public class MVMApplication extends Application {
             @Override
             public void accept(Throwable throwable) throws Throwable {
                 LogUtil.e(throwable, "RxJavaPlugins");
+                CrashManager.reportError(throwable);
+                UmengManager.reportError(throwable);
             }
         });
     }
