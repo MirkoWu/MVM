@@ -3,6 +3,7 @@ package com.mirkowu.lib_crash;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.mirkowu.lib_bugly.BuglyManager;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -13,7 +14,7 @@ import com.tencent.bugly.crashreport.CrashReport;
 public class CrashManager {
     /**
      * 初始化
-     * 如果使用了 版本更新SDK 直接用 {@link com.mirkowu.lib_bugly.UpgradeManager} 初始化就行
+     * 如果使用了 版本更新SDK 直接用 {@link BuglyManager} 初始化就行
      *
      * @param context
      * @param appId   申请的应用ID
@@ -26,7 +27,7 @@ public class CrashManager {
 
     /**
      * 初始化
-     * 如果使用了 版本更新SDK 直接用 {@link com.mirkowu.lib_bugly.UpgradeManager} 初始化就行
+     * 如果使用了 版本更新SDK 直接用 {@link BuglyManager} 初始化就行
      *
      * @param context
      * @param appId   申请的应用ID

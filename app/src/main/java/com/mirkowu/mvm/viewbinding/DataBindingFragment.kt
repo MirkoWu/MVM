@@ -1,25 +1,22 @@
 package com.mirkowu.mvm.viewbinding
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
-import com.mirkowu.lib_bugly.UpgradeManager
+import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_upgrade.IUpgradeInfo
 import com.mirkowu.lib_upgrade.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
-import com.mirkowu.lib_util.PermissionsUtil.REQUEST_CODE
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
@@ -135,7 +132,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             startActivity(Intent(context, DownloadActivity::class.java))
         }
         binding.btnBuglyUpgrade.click {
-            UpgradeManager.checkUpgrade(true, true)
+            BuglyManager.checkUpgrade(true, true)
         }
         binding.btnUpgrade.click {
             // BuglyManager.checkUpgrade(true, false)

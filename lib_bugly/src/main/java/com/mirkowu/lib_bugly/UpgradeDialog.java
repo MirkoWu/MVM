@@ -81,8 +81,8 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
         initButtonText();
 
 
-        UpgradeManager.registerDownloadListener(this);
-        UpgradeManager.setUpgradeStateListener(this);
+        BuglyManager.registerDownloadListener(this);
+        BuglyManager.setUpgradeStateListener(this);
     }
 
     private void initButtonText() {
@@ -141,7 +141,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
             if (listener != null) {
                 listener.onButtonClick(this, true);
             }
-            UpgradeManager.cancelDownload();
+            BuglyManager.cancelDownload();
             dismissAllowingStateLoss();
         }
     }
@@ -160,7 +160,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
             tvNegative.setEnabled(true);
         }
 
-        UpgradeManager.startDownloadTask();
+        BuglyManager.startDownloadTask();
     }
 
 
@@ -213,8 +213,8 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 
     @Override
     public void onDestroyView() {
-        UpgradeManager.unregisterDownloadListener();
-        UpgradeManager.cancelDownload();
+        BuglyManager.unregisterDownloadListener();
+        BuglyManager.cancelDownload();
         super.onDestroyView();
     }
 

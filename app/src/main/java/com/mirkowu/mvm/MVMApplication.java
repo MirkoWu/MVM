@@ -2,7 +2,7 @@ package com.mirkowu.mvm;
 
 import android.app.Application;
 
-import com.mirkowu.lib_bugly.UpgradeManager;
+import com.mirkowu.lib_bugly.BuglyManager;
 import com.mirkowu.lib_crash.CrashManager;
 import com.mirkowu.lib_screen.AutoSizeManager;
 import com.mirkowu.lib_stat.UmengManager;
@@ -24,7 +24,7 @@ public class MVMApplication extends Application {
         WebViewUtil.initMultiProcess(this);
 
         //换成你自己的bugly账号
-        UpgradeManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
+        BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
 
         /**
          * 防止初始化多次，视项目情况设置

@@ -16,9 +16,9 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.io.File;
 import java.util.List;
 
-public class UpgradeManager {
+public class BuglyManager {
     public static final String CHANNEL = "bugly";
-    public static final String TAG = UpgradeManager.class.getSimpleName();
+    public static final String TAG = BuglyManager.class.getSimpleName();
     private static OnUpgradeListener sOnUpgradeListener;
     private static UpgradeStateListener sUpgradeStateListener;
 
@@ -34,7 +34,7 @@ public class UpgradeManager {
     }
 
     public static void init(Context context, String appId, String channel, boolean isDebug) {
-        UpgradeManager.setUpgradeListener(new UpgradeListener() {
+        BuglyManager.setUpgradeListener(new UpgradeListener() {
             @Override
             public void onUpgrade(int i, UpgradeInfo upgradeInfo, boolean isManual, boolean isSilence) {
                 LogUtil.e(TAG, "onUpgrade: 是否有新版本 =" + (upgradeInfo != null));
