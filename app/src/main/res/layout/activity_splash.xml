@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         app:timerDuration="3000"
-        app:timerFormatText="跳过%d"
+        app:timerFormatText="@string/skip_d"
         app:timerFinishText="跳过"
         app:timerHintText="跳过" />
 </FrameLayout>
