@@ -1,10 +1,15 @@
 package com.mirkowu.lib_widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.mirkowu.lib_util.CheckUtils;
 
 
 /**
@@ -14,9 +19,11 @@ import android.widget.TextView;
  */
 
 public class TimerTextView extends TextView {
-    private int COUNT_DOWN_TIME = 60; //倒计时 默认60s
-    private int mInterval = 1; //间隔 默认1s
-    private CountDownTimer downTimer;
+    public static final int DEFAULT_DURATION = 60000;
+    public static final int DEFAULT_INTERVAL = 1000;
+    private long mDuration = DEFAULT_DURATION; //倒计时 默认60s
+    private long mInterval = DEFAULT_INTERVAL; //间隔 默认1000ms
+    private CountDownTimer mDownTimer;
     private String hintText;
     private String formatText;
     private String finishText;
@@ -33,24 +40,29 @@ public class TimerTextView extends TextView {
 
     public TimerTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context);
+        initView(context, attrs);
     }
 
-    private void initView(Context context) {
-        hintText = context.getString(R.string.widget_timer_hint_text);
-        formatText = context.getString(R.string.widget_timer_count_format_text);
-        finishText = context.getString(R.string.widget_timer_finish_text);
+    private void initView(Context context, AttributeSet attrs) {
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TimerTextView);
+        hintText = array.getString(R.styleable.TimerTextView_timerHintText);
+        formatText = array.getString(R.styleable.TimerTextView_timerFormatText);
+        finishText = array.getString(R.styleable.TimerTextView_timerFinishText);
+        mDuration = array.getInteger(R.styleable.TimerTextView_timerDuration, DEFAULT_DURATION);
+        mInterval = array.getInteger(R.styleable.TimerTextView_timerInterval, DEFAULT_INTERVAL);
+        array.recycle();
 
-        setText(hintText);
+        setTimerHintText(hintText);
         setGravity(Gravity.CENTER);
     }
 
     private void createTimer() {
-        downTimer = new CountDownTimer(COUNT_DOWN_TIME * 1000L, mInterval * 1000L) {
+        CheckUtils.checkNotNull(formatText, "formatText must not be Null !");
+        mDownTimer = new CountDownTimer(mDuration, mInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //四舍五入 优化系统误差
-                setText(String.format(formatText, Math.round((double) millisUntilFinished / 1000L)));
+                setText(String.format(formatText, Math.round(millisUntilFinished / 1000.0)));
             }
 
             @Override
@@ -69,59 +81,60 @@ public class TimerTextView extends TextView {
      *
      * @param text
      */
-    public void setHintText(String text) {
+    public void setTimerHintText(String text) {
         hintText = text;
         setText(hintText);
     }
 
-    public String getHintText() {
+    public String getTimerHintText() {
         return hintText;
     }
 
     /**
      * 倒计时显示的文本 必须有一个 %d
      *
-     * @param formatStr
+     * @param formatText 不能为空NUll
      */
-    public void setFormatText(String formatStr) {
-        formatText = formatStr;
+    public void setTimerFormatText(@NonNull String formatText) {
+        CheckUtils.checkNotNull(formatText, "formatText must not be Null !");
+        this.formatText = formatText;
     }
 
-    public String getFormatText() {
+    public String getTimerFormatText() {
         return formatText;
     }
 
-    public void setFinishText(String text) {
+    public void setTimerFinishText(String text) {
         finishText = text;
     }
 
-    public String getFinishText() {
+    public String getTimerFinishText() {
         return finishText;
     }
 
     /**
-     * 设置倒计时的时间，单位 秒 默认60s
+     * 设置倒计时的总时长，单位 秒 默认60 000ms
      *
      * @param duration
      */
-    public void setTimerTime(int duration) {
-        COUNT_DOWN_TIME = duration;
+    public void setTimerDuration(long duration) {
+        mDuration = duration;
     }
 
-    public int getTimerTime() {
-        return COUNT_DOWN_TIME;
+    public long getTimerDuration() {
+        return mDuration;
     }
 
     /**
-     * 设置倒计时间隔 单位 秒 默认 1s
+     * 设置倒计时间隔 单位 秒 默认 1000ms
      *
      * @param interval
      */
-    public void setTimerInterval(int interval) {
+    public void setTimerInterval(long interval) {
         mInterval = interval;
     }
 
-    public int getTimerInterval() {
+    public long getTimerInterval() {
         return mInterval;
     }
 
@@ -136,11 +149,11 @@ public class TimerTextView extends TextView {
 
     public void start() {
         setEnabled(isEnableWhenCount);
-        if (downTimer != null) {
-            downTimer.cancel();
+        if (mDownTimer != null) {
+            mDownTimer.cancel();
         }
         createTimer();
-        downTimer.start();
+        mDownTimer.start();
     }
 
     private void finish() {
@@ -149,7 +162,9 @@ public class TimerTextView extends TextView {
     }
 
     public void cancel() {
-        if (downTimer != null) downTimer.cancel();
+        if (mDownTimer != null) {
+            mDownTimer.cancel();
+        }
     }
 
     @Override
@@ -168,5 +183,4 @@ public class TimerTextView extends TextView {
     public interface OnTimerListener {
         void onFinish();
     }
-
 }

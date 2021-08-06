@@ -12,5 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        app:timerDuration="3000"
+        app:timerFormatText="跳过%d"
+        app:timerFinishText="跳过"
+        app:timerHintText="跳过" />
 </FrameLayout>

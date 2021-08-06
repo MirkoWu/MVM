@@ -6,6 +6,7 @@
             <enum name="bold" value="2" />
         </attr>
     </declare-styleable>
+
     <declare-styleable name="Toolbar">
         <attr name="title" format="string" />
         <attr name="titleColor" format="color" />
@@ -22,6 +23,7 @@
         <attr name="closeIcon" format="reference" />
         <attr name="showBackIcon" format="boolean" />
     </declare-styleable>
+
     <declare-styleable name="StateView">
         <attr name="sv_loadingText" format="string" />
         <attr name="sv_loadingIcon" format="reference" />
@@ -31,6 +33,14 @@
         <attr name="sv_showIcon" format="reference" />
         <attr name="sv_refreshText" format="string" />
         <attr name="sv_refreshBackground" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="TimerTextView">
+        <attr name="timerHintText" format="string" />
+        <attr name="timerFormatText" format="string" />
+        <attr name="timerFinishText" format="string" />
+        <attr name="timerDuration" format="integer" />
+        <attr name="timerInterval" format="integer" />
     </declare-styleable>
 
 

@@ -13,10 +13,10 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         val timer = findViewById<TimerTextView>(R.id.mTimer)
-        timer.timerTime = 3
-        timer.hintText = "跳过"
-        timer.formatText = "跳过%d"
-        timer.finishText = "跳过"
+//        timer.timerDuration = 3
+//        timer.timerHintText = "跳过"
+//        timer.timerFormatText = "跳过%d"
+//        timer.timerFinishText = "跳过"
         timer.setEnableWhenCount(true)
         timer.setOnTimerListener { skip() }
         timer.click {
