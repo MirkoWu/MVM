@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.mirkowu.lib_widget.R;
 
@@ -45,7 +47,7 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
     }
 
     @Override
-    public  int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.widget_dialog_input;
     }
 
@@ -157,7 +159,6 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
-
     public InputDialog setNegativeButton(String negativeText) {
         this.mNegativeText = negativeText;
         return this;
@@ -174,16 +175,24 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
-
     public InputDialog setPositiveButton(String positiveText) {
         this.mPositiveText = positiveText;
         return this;
     }
 
-
     public InputDialog setOnButtonClickListener(OnButtonClickListener listener) {
         this.mOnButtonClickListener = listener;
         return this;
+    }
+
+    @Override
+    public InputDialog show(FragmentActivity activity) {
+        return (InputDialog) super.show(activity);
+    }
+
+    @Override
+    public InputDialog show(FragmentManager manager) {
+        return (InputDialog) super.show(manager);
     }
 
     public interface OnButtonClickListener {

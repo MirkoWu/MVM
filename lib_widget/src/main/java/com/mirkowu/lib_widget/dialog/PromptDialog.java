@@ -10,6 +10,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
@@ -181,6 +182,16 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     public PromptDialog setOnButtonClickListener(OnButtonClickListener listener) {
         this.mOnButtonClickListener = listener;
         return this;
+    }
+
+    @Override
+    public PromptDialog show(FragmentActivity activity) {
+        return (PromptDialog) super.show(activity);
+    }
+
+    @Override
+    public PromptDialog show(FragmentManager manager) {
+        return (PromptDialog) super.show(manager);
     }
 
     public interface OnButtonClickListener {

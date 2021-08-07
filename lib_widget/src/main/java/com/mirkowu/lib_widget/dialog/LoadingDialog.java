@@ -7,6 +7,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.mirkowu.lib_widget.R;
 
@@ -61,4 +63,13 @@ public class LoadingDialog extends BaseDialog {
         return this;
     }
 
+    @Override
+    public LoadingDialog show(FragmentActivity activity) {
+        return (LoadingDialog) super.show(activity);
+    }
+
+    @Override
+    public LoadingDialog show(FragmentManager manager) {
+        return (LoadingDialog) super.show(manager);
+    }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_widget.R;
@@ -143,6 +144,16 @@ public class BottomListDialog extends BaseDialog {
     public BottomListDialog setOnItemClickListener(OnItemClickListener<String> mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
         return this;
+    }
+
+    @Override
+    public BottomListDialog show(FragmentManager manager) {
+        return (BottomListDialog) super.show(manager);
+    }
+
+    @Override
+    public BottomListDialog show(FragmentActivity activity) {
+        return (BottomListDialog) super.show(activity);
     }
 
     private OnItemClickListener mOnItemClickListener;
