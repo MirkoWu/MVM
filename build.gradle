@@ -2,6 +2,7 @@
 buildscript {
     ext.kotlin_version = '1.5.0'
     repositories {
+        //jitpack发布版本时不要带阿里云镜像，会很慢经常超时
         // 阿里云镜像
 //        maven { url 'https://maven.aliyun.com/repository/public' }
 //        maven { url 'https://maven.aliyun.com/repository/google' }
@@ -28,6 +29,7 @@ buildscript {
 
 allprojects {
     repositories {
+        //jitpack发布版本时不要带阿里云镜像，会很慢经常超时
         // 阿里云镜像
 //        maven { url 'https://maven.aliyun.com/repository/public' }
 //        maven { url 'https://maven.aliyun.com/repository/google' }
