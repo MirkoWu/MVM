@@ -3,8 +3,11 @@
 ### 使用
 
 ```
-//初始化WebView
-WebViewUtil.initMultiProcess(this);
+//初始化WebView, 默认在当前进程
+WebViewUtil.init(this);
+
+//初始化WebView, 启用新的进程
+WebViewUtil.init(this,true);
 ```
 
 ### 功能

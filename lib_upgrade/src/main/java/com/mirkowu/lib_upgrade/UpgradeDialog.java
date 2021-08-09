@@ -40,7 +40,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
         UpgradeDialog dialog = new UpgradeDialog();
         dialog.upgradeInfo = upgradeInfo;
-        dialog.show(manager);
+        dialog.showAllowingStateLoss(manager);
     }
 
 

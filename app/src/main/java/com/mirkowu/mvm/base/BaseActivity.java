@@ -71,6 +71,6 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
 
 
     protected void adaptScreenSize(@NonNull Resources superResources) {
-        AutoSizeManager.autoConvertActivity(superResources, this);
+        AutoSizeManager.autoConvertActivity(super.getResources(), this); //如果没有自定义需求用这个方法
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import com.mirkowu.lib_screen.internal.CustomAdapt;
 import com.mirkowu.lib_screen.internal.IAutoAdapt;
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_util.utilcode.util.ThreadUtils;
 
 import java.util.Locale;
 
@@ -57,6 +58,9 @@ public class AutoSizeManager {
      * @param activity
      */
     public static void autoConvertStrategy(Object target, Activity activity) {
+        if (!ThreadUtils.isMainThread()) {
+            return;
+        }
         //如果 target 实现 CustomAdapt 接口表示该 target 想自定义一些用于适配的参数, 从而改变最终的适配效果
         if (target instanceof IAutoAdapt && target instanceof CustomAdapt) {
             LogUtil.d(TAG, String.format(Locale.ENGLISH, "%s implemented by %s!", target.getClass().getName(), CustomAdapt.class.getName()));
@@ -80,6 +84,9 @@ public class AutoSizeManager {
      * @param activity
      */
     public static void autoConvertActivity(Resources superResources, Activity activity) {
+        if (!ThreadUtils.isMainThread()) {
+            return;
+        }
         if (activity instanceof IAutoAdapt && activity instanceof CustomAdapt) {
             AutoSizeCompat.autoConvertDensityOfCustomAdapt(superResources, (CustomAdapt) activity);
         } else if (activity instanceof IAutoAdapt) {
@@ -96,6 +103,9 @@ public class AutoSizeManager {
      * @param fragment
      */
     public static void autoConvertFragment(Resources superResources, Fragment fragment) {
+        if (!ThreadUtils.isMainThread()) {
+            return;
+        }
         if (fragment instanceof IAutoAdapt && fragment instanceof CustomAdapt) {
             AutoSizeCompat.autoConvertDensityOfCustomAdapt(superResources, (CustomAdapt) fragment);
         } else if (fragment instanceof IAutoAdapt) {

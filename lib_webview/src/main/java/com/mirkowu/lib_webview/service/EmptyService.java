@@ -19,9 +19,6 @@ public class EmptyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            startForeground(1, new Notification());
-//        }
     }
 
     @Nullable
@@ -33,8 +30,14 @@ public class EmptyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            Notification notification = NotificationUtils.getNotification(
+//                    NotificationUtils.ChannelConfig.DEFAULT_CHANNEL_CONFIG, null
+//            );
+//            startForeground(1, notification);
+//        }
         stopSelf();
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     @Override

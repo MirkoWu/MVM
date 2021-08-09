@@ -35,7 +35,7 @@
         <activity
             android:name=".WebActivity"
             android:launchMode="singleTask"
-            android:process=":webview"
+            android:process="@string/webview_process"
             android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
         <activity android:name=".recycelerview.GridListActivity" />

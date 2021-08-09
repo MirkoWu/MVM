@@ -49,7 +49,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
         }
         binding.btnBottomList.click {
             BottomListDialog()
-                .setData(mutableListOf("测试环境", "测试环境", "测试环境", "测试环境"))
+                .setData(mutableListOf<CharSequence>("测试环境", "测试环境", "测试环境", "测试环境"))
                 //.setTitle("标题")
 //                .setMarginHor(20).setMarginVer(20)
                 .show(supportFragmentManager)

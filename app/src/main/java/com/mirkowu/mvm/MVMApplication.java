@@ -21,7 +21,7 @@ public class MVMApplication extends Application {
         LogUtil.init(BuildConfig.DEBUG);
 
         //WebView初始化多进程
-        WebViewUtil.initMultiProcess(this);
+        WebViewUtil.init(this, true);
 
         //换成你自己的bugly账号
         BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);

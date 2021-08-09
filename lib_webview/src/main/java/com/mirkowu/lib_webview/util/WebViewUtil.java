@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.CommonWebView;
+import com.mirkowu.lib_webview.R;
 import com.mirkowu.lib_webview.service.EmptyService;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.CookieManager;
@@ -24,36 +25,89 @@ import com.tencent.smtt.sdk.WebViewDatabase;
 import java.util.HashMap;
 
 /**
- * 这个处理webview初始化、cookie同步、删除缓存清除等。
+ * 这个处理WebView初始化、cookie同步、删除缓存清除等。
  */
 public class WebViewUtil {
-    private static final String DOMAIN_URL = "xxx.xxx.com";
+    private static boolean sUseMultiProcess = false; //该静态参数，可在多进程模式下使用，因为会赋值
 
     /**
-     * 初始化
+     * 初始化WebView 保证只初始化一次
+     * 建议在onCreate 中调用
      *
      * @param application
      */
-    public static void initMultiProcess(Application application) {
-        configWebViewCacheDirWithAndroidP(application);
-        if (!ProcessUtils.isMainProcess()) {
-            //首次初始化冷启动优化  在调用TBS初始化、创建WebView之前进行如下配置
-            HashMap map = new HashMap();
-            map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
-            map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
-            QbSdk.initTbsSettings(map);
-
-            //屏蔽X5频繁收集手机敏感信息数据 imsi 和 imei
-            QbSdk.disableSensitiveApi();
-            //初始化环境
-            QbSdk.initX5Environment(application.getApplicationContext(), null);
-            return;
-        }
-        startMultiProcess(application);
+    public static void init(Application application) {
+        init(application, false);
     }
 
     /**
-     * 提前启动多进程
+     * 初始化WebView 保证只初始化一次
+     * 建议在onCreate 中调用
+     * <p>
+     * 如果要使用多进程 则需要调用此方法初始化进程，否则第一次打开会白屏一会
+     *
+     * @param application
+     * @param useMultiProcess 是否使用多进程
+     */
+    public static void init(Application application, boolean useMultiProcess) {
+        String mainProcessName = application.getPackageName();
+        init(application, useMultiProcess, mainProcessName + application.getString(R.string.webview_process));
+    }
+
+    /**
+     * 可自定义进程名称
+     *
+     * @param application
+     * @param useMultiProcess 是否使用多进程
+     * @param processName     指定进程名  默认: 包名:webview ,如需自定义，记得在AndroidManifest.xlm中注册process
+     */
+    public static void init(Application application, boolean useMultiProcess, String processName) {
+        sUseMultiProcess = useMultiProcess;
+        configWebViewCacheDirWithAndroidP(application);
+        String curProcessName = ProcessUtils.getCurrentProcessName();
+        String mainProcessName = application.getPackageName();
+        boolean isMainProcess = TextUtils.equals(curProcessName, mainProcessName);
+        if (useMultiProcess && TextUtils.equals(curProcessName, processName)) { //web进程初始化
+            sUseMultiProcess = true;
+            initX5Web(application);
+        }
+        if (isMainProcess) { //主进程初始化
+            initX5Web(application);
+        }
+        if (isMainProcess && useMultiProcess) {
+            startMultiProcess(application);
+        }
+    }
+
+    /**
+     * 获取是否使用了多进程
+     *
+     * @return
+     */
+    public static boolean getUseMultiProcess() {
+        return sUseMultiProcess;
+    }
+
+    /**
+     * 初始化X5浏览器
+     *
+     * @param application
+     */
+    private static void initX5Web(Application application) {
+        //首次初始化冷启动优化  在调用TBS初始化、创建WebView之前进行如下配置
+        HashMap map = new HashMap();
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
+        QbSdk.initTbsSettings(map);
+
+        //屏蔽X5频繁收集手机敏感信息数据 imsi 和 imei
+        QbSdk.disableSensitiveApi();
+        //初始化环境
+        QbSdk.initX5Environment(application.getApplicationContext(), null);
+    }
+
+    /**
+     * 提前创建新的进程，防止WebView第一次启动时白屏
      *
      * @param context
      */

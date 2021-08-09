@@ -42,7 +42,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     public static void show(FragmentManager manager, UpgradeInfo upgradeInfo) {
         UpgradeDialog dialog = new UpgradeDialog();
         dialog.upgradeInfo = upgradeInfo;
-        dialog.show(manager);
+        dialog.showAllowingStateLoss(manager);
     }
 
     public UpgradeDialog() {

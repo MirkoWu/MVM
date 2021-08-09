@@ -21,6 +21,7 @@ import com.mirkowu.lib_webview.client.BaseWebChromeClient;
 import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
 import com.mirkowu.lib_webview.setting.WebSettingUtil;
+import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.tencent.smtt.sdk.WebSettings;
 
@@ -29,19 +30,31 @@ import com.tencent.smtt.sdk.WebSettings;
  * 通用的WebView
  * 1.支持X5
  * 2.支持JsBridge
+ *
+ * 如果需要自定义的，可继承此Activity 或使用 {@link CommonWebFragment}
+ * 如需开启多进程，请记得在AndroidManifest.xlm中注册 process
  */
 public class CommonWebActivity extends BaseMVMActivity {
     public static final String KEY_TITLE = "title";
     public static final String KEY_URL = "url";
 
     public static void start(Context context, String title, String url) {
+        start(context, title, url, WebViewUtil.getUseMultiProcess());
+    }
+
+    public static void start(Context context, String title, String url, boolean newProcess) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
-        Intent starter = new Intent(context, CommonWebActivity.class);
+        Intent starter;
+        if (newProcess) {
+            starter = new Intent(context, CommonWebMultiProcessActivity.class);
+            starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            starter = new Intent(context, CommonWebActivity.class);
+        }
         starter.putExtra(KEY_TITLE, title);
         starter.putExtra(KEY_URL, url);
-        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(starter);
     }
 

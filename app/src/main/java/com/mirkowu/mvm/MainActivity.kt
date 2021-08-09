@@ -9,10 +9,11 @@ import android.view.View
 import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
-import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_bugly.BuglyManager
+import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
+import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
@@ -93,7 +94,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     fun webNetClick(view: View?) {
 //        CommonWebActivity.start(context, "ces", "http://www.baid")
 //        WebViewActivity.start(context, "ces", "https://x5.tencent.com/docs/questions.html")
-        WebActivity.start(
+        CommonWebActivity.start(
             context,
             "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题",
             "http://www.baidu.com/"

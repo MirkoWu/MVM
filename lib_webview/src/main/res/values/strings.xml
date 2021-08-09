@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="webview_process" tools:ignore="MissingTranslation">:webview</string>
     <string name="webview_chooser_camera">Take Photo</string>
     <string name="webview_chooser_album">Choose From Album</string>
     <string name="webview_lack_storage_permission">The app lacks "storage permission", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
