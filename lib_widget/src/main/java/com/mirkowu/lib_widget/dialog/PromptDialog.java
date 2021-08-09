@@ -21,10 +21,10 @@ import static android.view.View.VISIBLE;
 public class PromptDialog extends BaseDialog implements View.OnClickListener {
     private static final int DEFAULT_WIDTH = 280; //默认宽度 dp
     private int mIconResId;
-    private String mTitle;
-    private String mContent;
-    private String mPositiveText;
-    private String mNegativeText;
+    private CharSequence mTitle;
+    private CharSequence mContent;
+    private CharSequence mPositiveText;
+    private CharSequence mNegativeText;
     private int mPositiveTextColorResId;
     private int mNegativeTextColorResId;
     protected OnButtonClickListener mOnButtonClickListener;
@@ -110,7 +110,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
-    public PromptDialog setTitle(String title) {
+    public PromptDialog setTitle(CharSequence title) {
         this.mTitle = title;
         return this;
     }
@@ -119,7 +119,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return setTitle(StringUtils.getString(resId));
     }
 
-    public PromptDialog setContent(String content) {
+    public PromptDialog setContent(CharSequence content) {
         this.mContent = content;
         return this;
     }
@@ -134,7 +134,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
      * @param negativeText
      * @return
      */
-    public PromptDialog setNegativeButton(String negativeText, @ColorRes int textColor) {
+    public PromptDialog setNegativeButton(CharSequence negativeText, @ColorRes int textColor) {
         this.mNegativeText = negativeText;
         this.mNegativeTextColorResId = textColor;
         return this;
@@ -145,7 +145,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     }
 
 
-    public PromptDialog setNegativeButton(String negativeText) {
+    public PromptDialog setNegativeButton(CharSequence negativeText) {
         this.mNegativeText = negativeText;
         return this;
     }
@@ -159,7 +159,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
      *
      * @return
      */
-    public PromptDialog setPositiveButton(String positiveText, @ColorRes int textColor) {
+    public PromptDialog setPositiveButton(CharSequence positiveText, @ColorRes int textColor) {
         this.mPositiveText = positiveText;
         this.mPositiveTextColorResId = textColor;
         return this;
@@ -170,7 +170,7 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     }
 
 
-    public PromptDialog setPositiveButton(String positiveText) {
+    public PromptDialog setPositiveButton(CharSequence positiveText) {
         this.mPositiveText = positiveText;
         return this;
     }

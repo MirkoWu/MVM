@@ -27,8 +27,8 @@ public class BottomListDialog extends BaseDialog {
 
     private boolean showCancelBtn; //是否显示取消按钮
     private boolean useRoundBackground; // 是否使用圆角背景
-    private String title;
-    private List<String> data;
+    private CharSequence title;
+    private List<CharSequence> data;
 
     public BottomListDialog() {
         setShowBottom(true);
@@ -121,12 +121,12 @@ public class BottomListDialog extends BaseDialog {
         setShowBottom(true);
     }
 
-    public BottomListDialog setTitle(String title) {
+    public BottomListDialog setTitle(CharSequence title) {
         this.title = title;
         return this;
     }
 
-    public BottomListDialog setData(List<String> data) {
+    public BottomListDialog setData(List<CharSequence> data) {
         this.data = data;
         return this;
     }
@@ -162,7 +162,7 @@ public class BottomListDialog extends BaseDialog {
         void onItemClick(BottomListDialog dialog, T data, int position);
     }
 
-    public static class ListAdapter extends BaseRVAdapter<String, BaseRVHolder> {
+    public static class ListAdapter extends BaseRVAdapter<CharSequence, BaseRVHolder> {
         @NonNull
         @Override
         public BaseRVHolder onCreateHolder(@NonNull ViewGroup parent, int viewType) {
@@ -170,7 +170,7 @@ public class BottomListDialog extends BaseDialog {
         }
 
         @Override
-        public void onBindHolder(@NonNull BaseRVHolder holder, String item, int position) {
+        public void onBindHolder(@NonNull BaseRVHolder holder, CharSequence item, int position) {
             TextView tvContent = holder.getView(R.id.tvContent);
             tvContent.setText(item);
         }

@@ -28,12 +28,12 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
     private TextView tvPositive;
     private TextView tvNegative;
 
-    private String title;
-    private String hint;
-    private String content;
-    private String inputHint;
-    private String mPositiveText;
-    private String mNegativeText;
+    private CharSequence title;
+    private CharSequence hint;
+    private CharSequence content;
+    private CharSequence inputHint;
+    private CharSequence mPositiveText;
+    private CharSequence mNegativeText;
     private int hintTextColor;
     private int positiveTextColor;
     private int negativeTextColor;
@@ -110,28 +110,28 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
     }
 
 
-    public InputDialog setTitle(String title) {
+    public InputDialog setTitle(CharSequence title) {
         this.title = title;
         return this;
     }
 
-    public InputDialog setHint(String hint) {
+    public InputDialog setHint(CharSequence hint) {
         this.hint = hint;
         return this;
     }
 
-    public InputDialog setHint(String hint, @ColorRes int textColorInt) {
+    public InputDialog setHint(CharSequence hint, @ColorRes int textColorInt) {
         this.hint = hint;
         this.hintTextColor = textColorInt;
         return this;
     }
 
-    public InputDialog setContent(String content) {
+    public InputDialog setContent(CharSequence content) {
         this.content = content;
         return this;
     }
 
-    public InputDialog setInputHint(String hint) {
+    public InputDialog setInputHint(CharSequence hint) {
         this.inputHint = hint;
         return this;
     }
@@ -153,13 +153,13 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
      * @param negativeText
      * @return
      */
-    public InputDialog setNegativeButton(String negativeText, @ColorRes int textColorInt) {
+    public InputDialog setNegativeButton(CharSequence negativeText, @ColorRes int textColorInt) {
         this.mNegativeText = negativeText;
         this.negativeTextColor = textColorInt;
         return this;
     }
 
-    public InputDialog setNegativeButton(String negativeText) {
+    public InputDialog setNegativeButton(CharSequence negativeText) {
         this.mNegativeText = negativeText;
         return this;
     }
@@ -169,13 +169,13 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
      *
      * @return
      */
-    public InputDialog setPositiveButton(String positiveText, @ColorRes int textColorInt) {
+    public InputDialog setPositiveButton(CharSequence positiveText, @ColorRes int textColorInt) {
         this.mPositiveText = positiveText;
         this.positiveTextColor = textColorInt;
         return this;
     }
 
-    public InputDialog setPositiveButton(String positiveText) {
+    public InputDialog setPositiveButton(CharSequence positiveText) {
         this.mPositiveText = positiveText;
         return this;
     }

@@ -10,6 +10,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
 
 
@@ -17,7 +18,7 @@ import com.mirkowu.lib_widget.R;
  * 加载弹窗
  */
 public class LoadingDialog extends BaseDialog {
-    private String mMessage;
+    protected CharSequence mMessage;
 
     public LoadingDialog() {
         setDimAmount(0f);
@@ -25,8 +26,18 @@ public class LoadingDialog extends BaseDialog {
         setDialogCancelable(true);
     }
 
+    public LoadingDialog(CharSequence message) {
+        this();
+        setMessage(message);
+    }
+
+    public LoadingDialog(@StringRes int resId) {
+        this();
+        setMessage(resId);
+    }
+
     @Override
-    public  int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.widget_dialog_loading;
     }
 
@@ -53,14 +64,13 @@ public class LoadingDialog extends BaseDialog {
         }
     }
 
-    public LoadingDialog setMessage(String message) {
+    public LoadingDialog setMessage(CharSequence message) {
         this.mMessage = message;
         return this;
     }
 
     public LoadingDialog setMessage(@StringRes int resId) {
-        this.mMessage = getContext().getString(resId);
-        return this;
+        return setMessage(StringUtils.getString(resId));
     }
 
     @Override
