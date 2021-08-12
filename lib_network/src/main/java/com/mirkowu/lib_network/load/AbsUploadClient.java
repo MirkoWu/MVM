@@ -1,11 +1,6 @@
-package com.mirkowu.lib_network.upload;
-
-import androidx.annotation.NonNull;
+package com.mirkowu.lib_network.load;
 
 import com.mirkowu.lib_network.AbsRetrofitClient;
-import com.mirkowu.lib_network.download.OnProgressListener;
-
-import java.io.File;
 
 import okhttp3.OkHttpClient;
 
@@ -16,20 +11,6 @@ public abstract class AbsUploadClient extends AbsRetrofitClient {
         public void onProgress(long readBytes, long totalBytes) {
             if (mProgressListener != null) {
                 mProgressListener.onProgress(readBytes, totalBytes);
-            }
-        }
-
-        @Override
-        public void onSuccess(@NonNull File file) {
-            if (mProgressListener != null) {
-                mProgressListener.onSuccess(file);
-            }
-        }
-
-        @Override
-        public void onFailure(Throwable e) {
-            if (mProgressListener != null) {
-                mProgressListener.onFailure(e);
             }
         }
     };

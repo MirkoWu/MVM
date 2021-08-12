@@ -1,6 +1,4 @@
-package com.mirkowu.lib_network.upload;
-
-import com.mirkowu.lib_network.download.OnProgressListener;
+package com.mirkowu.lib_network.load;
 
 import java.io.IOException;
 

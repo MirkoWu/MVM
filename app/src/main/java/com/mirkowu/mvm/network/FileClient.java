@@ -1,22 +1,22 @@
 package com.mirkowu.mvm.network;
 
-import com.mirkowu.lib_network.load.AbsUploadClient;
+import com.mirkowu.lib_network.AbsRetrofitClient;
 
-public class UploadFileClient extends AbsUploadClient {
+public class FileClient extends AbsRetrofitClient {
     @Override
     public String getBaseUrl() {
         return "http://192.168.182.1:8080/";
     }
 
     private static class Singleton {
-        private static final UploadFileClient INSTANCE = new UploadFileClient();
+        private static final FileClient INSTANCE = new FileClient();
     }
 
-    public static UploadFileClient getInstance() {
+    public static FileClient getInstance() {
         return Singleton.INSTANCE;
     }
 
-    private UploadFileClient() {
+    private FileClient() {
     }
 
     private static <T> T getAPIService(Class<T> service) {

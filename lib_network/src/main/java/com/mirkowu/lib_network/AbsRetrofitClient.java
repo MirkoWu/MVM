@@ -18,24 +18,45 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class AbsRetrofitClient extends AbsOkHttpClient {
     protected static Map<String, Retrofit> sRetrofitMap = new ArrayMap();
 
+    private boolean isCacheClient = true;
+
+    public boolean isCacheClient() {
+        return isCacheClient;
+    }
+
+    public AbsRetrofitClient setCacheClient(boolean cacheClient) {
+        isCacheClient = cacheClient;
+        return this;
+    }
+
     public abstract String getBaseUrl();
+
 
     public Retrofit getRetrofit() {
         final String baseUrl = getBaseUrl();
-        Preconditions.checkArgument(!TextUtils.isEmpty(baseUrl), "baseUrl can not be null or empty !");
-
-        if (sRetrofitMap.containsKey(baseUrl)) {
-            return sRetrofitMap.get(baseUrl);
+        Preconditions.checkArgument(!TextUtils.isEmpty(baseUrl),
+                "baseUrl can not be null or empty !");
+        if (isCacheClient()) {
+            String key = String.format("%s@%s", getClass().getSimpleName(), baseUrl);
+            if (sRetrofitMap.containsKey(key)) {
+                return sRetrofitMap.get(key);
+            } else {
+                Retrofit retrofit = newRetrofit(baseUrl);
+                sRetrofitMap.put(key, retrofit);
+                return retrofit;
+            }
         } else {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .client(getOkHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                    .build();
-            sRetrofitMap.put(baseUrl, retrofit);
-            return retrofit;
+            return newRetrofit(baseUrl);
         }
+    }
+
+    protected Retrofit newRetrofit(String baseUrl) {
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .build();
     }
 
     /**

@@ -1,10 +1,10 @@
-package com.mirkowu.lib_network.download;
+package com.mirkowu.lib_network.load;
 
 import okhttp3.Request;
 
 public class RequestConfig {
     private Request request;
-    private OnProgressListener downloadListener;
+    private OnDownloadListener downloadListener;
 
     public Request getRequest() {
         return request;
@@ -16,11 +16,11 @@ public class RequestConfig {
     }
 
 
-    public OnProgressListener getDownloadListener() {
+    public OnDownloadListener getDownloadListener() {
         return downloadListener;
     }
 
-    public RequestConfig setDownloadListener(OnProgressListener downloadListener) {
+    public RequestConfig setDownloadListener(OnDownloadListener downloadListener) {
         this.downloadListener = downloadListener;
         return this;
     }
@@ -28,7 +28,7 @@ public class RequestConfig {
     public RequestConfig() {
     }
 
-    public RequestConfig(Request request, OnProgressListener downloadListener) {
+    public RequestConfig(Request request, OnDownloadListener downloadListener) {
         this.request = request;
         this.downloadListener = downloadListener;
     }

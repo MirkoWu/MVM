@@ -22,17 +22,19 @@
 
     <Button
         android:id="@+id/btn_down"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="下载"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="下载" />
+
     <Button
         android:id="@+id/btn_cancel"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="取消"
-        android:layout_height="wrap_content" />
-  <TextView
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="取消" />
+
+    <TextView
         android:id="@+id/tv_progress2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,27 +49,43 @@
 
     <Button
         android:id="@+id/btn_down2"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="下载"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="下载" />
+
     <Button
         android:id="@+id/btn_cancel2"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="取消"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="取消" />
+    <ProgressBar
+        android:id="@+id/pb_upload"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-  <Button
+
+
+    <Button
         android:id="@+id/btn_upload"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="上传"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="上传" />
+
+    <Button
+        android:id="@+id/btn_upload2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Retrofit上传" />
+
     <Button
         android:id="@+id/btn_cancel3"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:text="取消"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="取消" />
 
 </LinearLayout>

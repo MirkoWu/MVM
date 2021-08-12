@@ -1,4 +1,4 @@
-package com.mirkowu.lib_network.download;
+package com.mirkowu.lib_network.load;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -40,7 +40,7 @@ public class Downloader {
     private String mUrl;
     private String mFilePath;
     private Map<String, String> mHeader;
-    private OnProgressListener mDownloadListener;
+    private OnDownloadListener mDownloadListener;
     private DisposableObserver<File> mObserver;
     private Call mCall;
 
@@ -81,7 +81,7 @@ public class Downloader {
         }
     }
 
-    public Downloader setOnProgressListener(OnProgressListener downloadListener) {
+    public Downloader setOnProgressListener(OnDownloadListener downloadListener) {
         this.mDownloadListener = downloadListener;
         return this;
     }

@@ -1,13 +1,10 @@
-package com.mirkowu.lib_network.upload;
+package com.mirkowu.lib_network.load;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
-
-import com.mirkowu.lib_network.download.OnProgressListener;
-import com.mirkowu.lib_network.download.ProgressBean;
 
 import java.io.IOException;
 
@@ -90,7 +87,7 @@ public class ProgressRequestBody extends RequestBody {
                 bytesWritten += byteCount;
 
                 long time = System.currentTimeMillis();
-                if (time - lastUpdateTime > INTERVAL || bytesWritten == byteCount) {
+                if (time - lastUpdateTime > INTERVAL || bytesWritten == contentLength) {
                     Message message = Message.obtain();
                     message.obj = new ProgressBean(bytesWritten, contentLength);
                     mHandler.sendMessage(message);

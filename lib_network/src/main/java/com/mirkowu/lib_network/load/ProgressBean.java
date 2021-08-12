@@ -1,4 +1,4 @@
-package com.mirkowu.lib_network.download;
+package com.mirkowu.lib_network.load;
 
 import android.os.Parcel;
 import android.os.Parcelable;

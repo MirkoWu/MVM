@@ -1,4 +1,4 @@
-package com.mirkowu.lib_network.download;
+package com.mirkowu.lib_network.load;
 
 import androidx.annotation.NonNull;
 
@@ -23,7 +23,7 @@ public class DownloadClient extends AbsOkHttpClient {
         return getOkHttpClient(config.getDownloadListener()).newCall(config.getRequest());
     }
 
-    public OkHttpClient getOkHttpClient(OnProgressListener downloadListener) {
+    public OkHttpClient getOkHttpClient(OnDownloadListener downloadListener) {
         //带进度的拦截器
         if (downloadListener != null) {
             addInterceptor(new DownloadInterceptor(downloadListener));
