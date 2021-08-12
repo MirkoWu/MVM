@@ -57,5 +57,17 @@
         android:layout_width="wrap_content"
         android:text="取消"
         android:layout_height="wrap_content" />
+  <Button
+        android:id="@+id/btn_upload"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:text="上传"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_cancel3"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:text="取消"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

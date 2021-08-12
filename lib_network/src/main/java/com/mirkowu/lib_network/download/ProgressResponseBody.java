@@ -20,16 +20,16 @@ import okio.Source;
 
 public class ProgressResponseBody extends ResponseBody {
 
-    private ResponseBody responseBody;
-    private OnDownloadListener progressListener;
-    private BufferedSource bufferedSource;
-    private Handler handler;
+    private final Handler mHandler;
+    private final ResponseBody mResponseBody;
+    private BufferedSource mBufferedSource;
+    private OnProgressListener mProgressListener;
     private static final long INTERVAL = 100L; //回调间隔
 
-    public ProgressResponseBody(@NonNull ResponseBody responseBody, OnDownloadListener progressListener) {
-        this.responseBody = responseBody;
-        this.progressListener = progressListener;
-        this.handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+    public ProgressResponseBody(@NonNull ResponseBody responseBody, OnProgressListener progressListener) {
+        this.mResponseBody = responseBody;
+        this.mProgressListener = progressListener;
+        this.mHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message message) {
                 if (message.obj instanceof ProgressBean) {
@@ -45,20 +45,20 @@ public class ProgressResponseBody extends ResponseBody {
 
     @Override
     public MediaType contentType() {
-        return responseBody.contentType();
+        return mResponseBody.contentType();
     }
 
     @Override
     public long contentLength() {
-        return responseBody.contentLength();
+        return mResponseBody.contentLength();
     }
 
     @Override
     public BufferedSource source() {
-        if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()));
+        if (mBufferedSource == null) {
+            mBufferedSource = Okio.buffer(source(mResponseBody.source()));
         }
-        return bufferedSource;
+        return mBufferedSource;
     }
 
     private Source source(Source source) {
@@ -76,7 +76,7 @@ public class ProgressResponseBody extends ResponseBody {
                 if (time - lastUpdateTime > INTERVAL || byteRead == -1) {
                     Message message = Message.obtain();
                     message.obj = new ProgressBean(totalBytesRead, contentLength());
-                    handler.sendMessage(message);
+                    mHandler.sendMessage(message);
                     lastUpdateTime = time;
                 }
 

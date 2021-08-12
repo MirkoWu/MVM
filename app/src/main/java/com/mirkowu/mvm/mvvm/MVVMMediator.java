@@ -41,6 +41,7 @@ public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
                         mRequestImageListData.setValue(ResponseData.error(type, code, msg));
                     }
                 });
+        loadImage2();
     }
 
     public void loadImage2() {

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.File;
 
-public interface OnDownloadListener {
+public interface OnProgressListener {
     void onProgress(long readBytes, long totalBytes);
 
     void onSuccess(@NonNull File file);

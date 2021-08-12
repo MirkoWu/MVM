@@ -2,12 +2,12 @@ package com.mirkowu.mvm.network;
 
 import com.mirkowu.lib_network.AbsRetrofitClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Interceptor;
-
 public class GankClient extends AbsRetrofitClient {
+
+    @Override
+    public String getBaseUrl() {
+        return HostUrl.HOST;
+    }
 
     private static class Singleton {
         private static final GankClient INSTANCE = new GankClient();
@@ -18,27 +18,7 @@ public class GankClient extends AbsRetrofitClient {
     }
 
     private GankClient() {
-    }
-
-    @Override
-    protected boolean isDebug() {
-        return HostUrl.isDebug;
-    }
-
-    @Override
-    protected String getHost() {
-        return HostUrl.HOST;
-    }
-
-    @Override
-    protected boolean isUseSSLVerifier() {
-        return super.isUseSSLVerifier();
-    }
-
-    @Override
-    protected List<Interceptor> getInterceptor() {
-        List<Interceptor> list = new ArrayList<>();
-        return list;
+        setDebug(HostUrl.isDebug);
     }
 
 

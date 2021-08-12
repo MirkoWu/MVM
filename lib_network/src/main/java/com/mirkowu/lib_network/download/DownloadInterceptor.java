@@ -6,15 +6,15 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 public class DownloadInterceptor implements Interceptor {
-    public OnDownloadListener progressListener;
+    public OnProgressListener mProgressListener;
 
-    public DownloadInterceptor(OnDownloadListener progressListener) {
-        this.progressListener = progressListener;
+    public DownloadInterceptor(OnProgressListener progressListener) {
+        this.mProgressListener = progressListener;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
-        return response.newBuilder().body(new ProgressResponseBody(response.body(), progressListener)).build();
+        return response.newBuilder().body(new ProgressResponseBody(response.body(), mProgressListener)).build();
     }
 }

@@ -37,18 +37,18 @@ public class Downloader {
     private static Map<Long, Downloader> sRequestMap = new ArrayMap();
 
     private boolean isDebug;
-    private String url;
-    private String filePath;
-    private Map<String, String> header;
-    private OnDownloadListener downloadListener;
-    private DisposableObserver<File> observer;
-    private Call call;
+    private String mUrl;
+    private String mFilePath;
+    private Map<String, String> mHeader;
+    private OnProgressListener mDownloadListener;
+    private DisposableObserver<File> mObserver;
+    private Call mCall;
 
     private Downloader() {
     }
 
     private Downloader(String url) {
-        this.url = url;
+        this.mUrl = url;
     }
 
     public static Downloader create(String url) {
@@ -76,13 +76,13 @@ public class Downloader {
     }
 
     private void disposeTask() {
-        if (observer != null && !observer.isDisposed()) {
-            observer.dispose();
+        if (mObserver != null && !mObserver.isDisposed()) {
+            mObserver.dispose();
         }
     }
 
-    public Downloader setOnProgressListener(OnDownloadListener downloadListener) {
-        this.downloadListener = downloadListener;
+    public Downloader setOnProgressListener(OnProgressListener downloadListener) {
+        this.mDownloadListener = downloadListener;
         return this;
     }
 
@@ -96,8 +96,8 @@ public class Downloader {
 //        return this;
 //    }
 
-    public Downloader setUrl(String url) {
-        this.url = url;
+    public Downloader setUrl(String mUrl) {
+        this.mUrl = mUrl;
         return this;
     }
 
@@ -116,62 +116,63 @@ public class Downloader {
      * @return
      */
     public Downloader setFilePath(@NonNull String path) {
-        this.filePath = path;
+        this.mFilePath = path;
         return this;
     }
 
 
-    public Downloader setHeader(Map<String, String> header) {
-        this.header = header;
+    public Downloader setHeader(Map<String, String> mHeader) {
+        this.mHeader = mHeader;
         return this;
     }
 
     private boolean isCanceled() {
-        return call != null && call.isCanceled();
+        return mCall != null && mCall.isCanceled();
     }
 
     public void cancel() {
-        if (call != null) {
-            call.cancel();
+        if (mCall != null) {
+            mCall.cancel();
         }
     }
 
     public long start() {
-        if (TextUtils.isEmpty(filePath)) {
-            if (downloadListener != null) {
-                downloadListener.onFailure(new IllegalArgumentException("filePath 不能为空！"));
+        if (TextUtils.isEmpty(mFilePath)) {
+            if (mDownloadListener != null) {
+                mDownloadListener.onFailure(new IllegalArgumentException("filePath 不能为空！"));
             }
             return -1;
         }
-        if (TextUtils.isEmpty(url)) {
-            if (downloadListener != null) {
-                downloadListener.onFailure(new IllegalArgumentException("url 不能为空！"));
+        if (TextUtils.isEmpty(mUrl)) {
+            if (mDownloadListener != null) {
+                mDownloadListener.onFailure(new IllegalArgumentException("url 不能为空！"));
             }
             return -1;
         }
         Request.Builder builder = new Request.Builder();
-        builder.url(url).get();
-        if (header != null && !header.isEmpty()) {
-            for (Map.Entry<String, String> entry : header.entrySet()) {
+        builder.url(mUrl).get();
+        if (mHeader != null && !mHeader.isEmpty()) {
+            for (Map.Entry<String, String> entry : mHeader.entrySet()) {
                 builder.header(entry.getKey(), entry.getValue());
             }
         }
 
-        RequestConfig config = new RequestConfig(builder.build(), downloadListener);
-        call = DownloadClient.getInstance().createCall(config);
+        RequestConfig config = new RequestConfig(builder.build(), mDownloadListener);
+        mCall = DownloadClient.getInstance()
+                .createCall(config);
 
         Observable<File> observable = Observable.create(new ObservableOnSubscribe<File>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<File> emitter) throws Throwable {
                 try {
-                    Response response = call.execute();
+                    Response response = mCall.execute();
                     if (response.isSuccessful()) {
                         File file;
                         //大于等于android10,且存在外部存储
 //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && isExternalMediaDir(filePath)) {
 //                            file = saveFileOnAndroidQ(response, filePath);
 //                        } else {
-                        file = saveFile(response, filePath);
+                        file = saveFile(response, mFilePath);
 //                        }
                         emitter.onNext(file);
                         emitter.onComplete();
@@ -184,13 +185,13 @@ public class Downloader {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        observer = new DisposableObserver<File>() {
+        mObserver = new DisposableObserver<File>() {
 
             @Override
             public void onNext(@NonNull File file) {
                 LogUtil.e("下载成功：" + file.getAbsolutePath());
-                if (downloadListener != null) {
-                    downloadListener.onSuccess(file);
+                if (mDownloadListener != null) {
+                    mDownloadListener.onSuccess(file);
                 }
             }
 
@@ -198,8 +199,8 @@ public class Downloader {
             public void onError(@NonNull Throwable e) {
                 e.printStackTrace();
                 LogUtil.e("下载失败：" + e.getMessage());
-                if (downloadListener != null) {
-                    downloadListener.onFailure(e);
+                if (mDownloadListener != null) {
+                    mDownloadListener.onFailure(e);
                 }
                 disposeTask();
             }
@@ -211,7 +212,7 @@ public class Downloader {
         };
 
         long id = System.currentTimeMillis();
-        observable.subscribe(observer);
+        observable.subscribe(mObserver);
         sRequestMap.put(id, this);
         return id;
     }

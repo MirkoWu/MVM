@@ -3,9 +3,9 @@ package com.mirkowu.lib_network.download;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ProgressBean implements Parcelable  {
-    long readBytes;
-    long totalBytes;
+public class ProgressBean implements Parcelable {
+    public long readBytes;
+    public long totalBytes;
 
     public ProgressBean(long readBytes, long totalBytes) {
         this.readBytes = readBytes;

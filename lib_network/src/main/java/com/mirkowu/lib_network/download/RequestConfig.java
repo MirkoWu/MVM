@@ -4,7 +4,7 @@ import okhttp3.Request;
 
 public class RequestConfig {
     private Request request;
-    private OnDownloadListener downloadListener;
+    private OnProgressListener downloadListener;
 
     public Request getRequest() {
         return request;
@@ -16,11 +16,11 @@ public class RequestConfig {
     }
 
 
-    public OnDownloadListener getDownloadListener() {
+    public OnProgressListener getDownloadListener() {
         return downloadListener;
     }
 
-    public RequestConfig setDownloadListener(OnDownloadListener downloadListener) {
+    public RequestConfig setDownloadListener(OnProgressListener downloadListener) {
         this.downloadListener = downloadListener;
         return this;
     }
@@ -28,7 +28,7 @@ public class RequestConfig {
     public RequestConfig() {
     }
 
-    public RequestConfig(Request request, OnDownloadListener downloadListener) {
+    public RequestConfig(Request request, OnProgressListener downloadListener) {
         this.request = request;
         this.downloadListener = downloadListener;
     }

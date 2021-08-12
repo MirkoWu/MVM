@@ -5,8 +5,8 @@ import android.os.Looper;
 /**
  * 检查各参数
  */
-public class CheckUtils {
-    private CheckUtils() {
+public class Preconditions {
+    private Preconditions() {
         throw new IllegalStateException("you can't instantiate me!");
     }
 

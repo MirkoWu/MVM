@@ -1,9 +1,10 @@
 package com.mirkowu.mvm.download
 
 import com.mirkowu.lib_base.mediator.EmptyMediator
+import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_network.download.Downloader
-import com.mirkowu.lib_network.download.OnDownloadListener
+import com.mirkowu.lib_network.download.OnProgressListener
 import com.mirkowu.lib_util.FileUtil
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
@@ -12,6 +13,8 @@ import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDownloadBinding
+import com.mirkowu.mvm.network.UploadFileClient
+import okhttp3.MultipartBody
 import java.io.File
 
 class DownloadActivity : BaseActivity<EmptyMediator>() {
@@ -63,7 +66,8 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
 
             id = Downloader.create(url)
                 .setFilePath(filePath)
-                .setOnProgressListener(object : OnDownloadListener {
+                .setOnProgressListener(object :
+                    OnProgressListener {
                     override fun onProgress(readBytes: Long, totalBytes: Long) {
                         val size = ConvertUtils.byte2FitMemorySize(totalBytes)
                         LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
@@ -91,7 +95,8 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
             id2 = Downloader.create(url2)
                 .setUrl(url2)
                 .setFilePath(filePath)
-                .setOnProgressListener(object : OnDownloadListener {
+                .setOnProgressListener(object :
+                    OnProgressListener {
                     override fun onProgress(readBytes: Long, totalBytes: Long) {
                         val size = ConvertUtils.byte2FitMemorySize(totalBytes)
                         LogUtil.e("readBytes :" + readBytes + "  总大小：" + size)
@@ -113,5 +118,28 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         binding.btnCancel2.click {
             Downloader.cancel(id2)
         }
+
+        binding.btnUpload.click {
+            val body=MultipartBody.Builder().addPart().build()
+            UploadFileClient.getInstance().onProgressListener= object : OnProgressListener {
+                override fun onProgress(readBytes: Long, totalBytes: Long) {
+
+                }
+
+                override fun onSuccess(file: File) {
+
+                }
+
+                override fun onFailure(e: Throwable?) {
+
+                }
+            }
+            UploadFileClient.getUploadFileApi()
+                .uploadFile(body)
+                .compose(RxScheduler.ioToMain())
+                .subscribe()
+        }
+
+        binding.btnCancel3.click {  }
     }
 }
