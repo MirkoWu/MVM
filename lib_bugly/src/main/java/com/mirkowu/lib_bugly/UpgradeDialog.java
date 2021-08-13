@@ -40,6 +40,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     private boolean isForceUpgrade;
 
     public static void show(FragmentManager manager, UpgradeInfo upgradeInfo) {
+        if (upgradeInfo == null) return;
         UpgradeDialog dialog = new UpgradeDialog();
         dialog.upgradeInfo = upgradeInfo;
         dialog.showAllowingStateLoss(manager);
@@ -52,7 +53,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     }
 
     @Override
-    public  int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.up_dialog_upgrade;
     }
 

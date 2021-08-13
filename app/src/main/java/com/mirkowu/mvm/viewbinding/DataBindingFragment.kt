@@ -13,8 +13,6 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
-import com.mirkowu.lib_upgrade.IUpgradeInfo
-import com.mirkowu.lib_upgrade.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
@@ -132,42 +130,63 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             startActivity(Intent(context, DownloadActivity::class.java))
         }
         binding.btnBuglyUpgrade.click {
-            BuglyManager.checkUpgrade(true, true)
+            showLoadingDialog("检查新版本")
+            BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
+                Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo  ")
+                hideLoadingDialog()
+                if (upgradeInfo != null) {
+                    com.mirkowu.lib_bugly.UpgradeDialog.show(childFragmentManager, upgradeInfo)
+                } else {
+                    ToastUtils.showShort("当前已是最新版本!")
+                }
+            }
         }
         binding.btnUpgrade.click {
             // BuglyManager.checkUpgrade(true, false)
             val url =
                 "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
 
-            UpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
-                override fun getTitle(): String {
-                    return "title"
-                }
+//            UpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
+//                override fun getTitle(): String {
+//                    return "title"
+//                }
+//
+//                override fun getContent(): String {
+//                    return "getContent"
+//                }
+//
+//                override fun getApkUrl(): String {
+//                    return url;
+//                }
+//
+//                override fun getVersionName(): String {
+//                    return "1.0.1"
+//                }
+//
+//                override fun getSavePath(): String {
+//                    return ""
+//                }
+//
+//                override fun getVersionCode(): Int {
+//                    return 1001
+//                }
+//
+//                override fun isForceUpgrade(): Int {
+//                    return 0
+//                }
+//            })
 
-                override fun getContent(): String {
-                    return "getContent"
-                }
+            BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
+                Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo  ")
 
-                override fun getApkUrl(): String {
-                    return url;
-                }
 
-                override fun getVersionName(): String {
-                    return "1.0.1"
+                if (upgradeInfo != null) {
+                    com.mirkowu.lib_bugly.UpgradeDialog.show(childFragmentManager, upgradeInfo)
+                } else {
+                    ToastUtils.showShort("当前已是最新版本!")
                 }
+            }
 
-                override fun getSavePath(): String {
-                    return ""
-                }
-
-                override fun getVersionCode(): Int {
-                    return 1001
-                }
-
-                override fun isForceUpgrade(): Int {
-                    return 0
-                }
-            })
         }
         binding.btnQr.click {
             QRScanner.getInstance().setScanConfig(

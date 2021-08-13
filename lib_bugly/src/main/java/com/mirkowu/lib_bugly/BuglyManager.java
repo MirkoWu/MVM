@@ -40,16 +40,21 @@ public class BuglyManager {
                 LogUtil.e(TAG, "onUpgrade: 是否有新版本 =" + (upgradeInfo != null));
 
                 if (sOnUpgradeListener != null) {
-                    sOnUpgradeListener.onUpgrade(upgradeInfo, isManual);
+                    sOnUpgradeListener.onUpgrade(upgradeInfo != null, upgradeInfo);
                 }
             }
         });
         Beta.upgradeStateListener = new UpgradeStateListener() {
             @Override
             public void onUpgradeFailed(boolean b) {
+                LogUtil.e(TAG, "onUpgradeFailed !");
+                if (sOnUpgradeListener != null) {
+                    sOnUpgradeListener.onError();
+                }
                 if (sUpgradeStateListener != null) {
                     sUpgradeStateListener.onUpgradeFailed(b);
                 }
+
             }
 
             @Override
@@ -61,9 +66,13 @@ public class BuglyManager {
 
             @Override
             public void onUpgradeNoVersion(boolean b) {
+                if (sOnUpgradeListener != null) {
+                    sOnUpgradeListener.onUpgrade(false, null);
+                }
                 if (sUpgradeStateListener != null) {
                     sUpgradeStateListener.onUpgradeNoVersion(b);
                 }
+
             }
 
             @Override
@@ -80,8 +89,8 @@ public class BuglyManager {
                 }
             }
         };
-        Beta.autoCheckUpgrade = true; //是否自动检查更新
-        Beta.initDelay = 5000L; //设置启动延时为5s（默认延时3s），APP启动5s后初始化SDK，避免影响APP启动速度;
+        Beta.autoCheckUpgrade = false; //是否自动检查更新
+//        Beta.initDelay = 5000L; //设置启动延时为5s（默认延时3s），APP启动5s后初始化SDK，避免影响APP启动速度;
 
         // 设置是否为上报进程
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
@@ -94,13 +103,6 @@ public class BuglyManager {
         Bugly.init(context, appId, isDebug, strategy);
     }
 
-    public interface OnUpgradeListener {
-        void onUpgrade(/*boolean hasNewVer,*/ UpgradeInfo upgradeInfo, boolean isManual);
-    }
-
-    public static void setOnUpgradeListener(OnUpgradeListener onUpgradeListener) {
-        sOnUpgradeListener = onUpgradeListener;
-    }
 
     public static void registerDownloadListener(DownloadListener downloadListener) {
         Beta.registerDownloadListener(downloadListener);
@@ -122,16 +124,28 @@ public class BuglyManager {
     /**
      * 检测更新
      *
-     * @param isManual  用户手动点击检查，非用户点击操作请传false
-     * @param isSilence 是否显示弹窗等交互，[true:没有弹窗和toast] [false:有弹窗或toast]
+     * @param isManual          用户手动点击检查，非用户点击操作请传false
+     * @param isSilence         是否静默更新，不显示弹窗等交互，[true:没有弹窗和toast] [false:有弹窗或toast]
+     * @param onUpgradeListener 回调结果
      */
-    public static void checkUpgrade(boolean isManual, boolean isSilence) {
-        Beta.checkUpgrade(isManual, isSilence);
+    public static void checkUpgrade(OnUpgradeListener onUpgradeListener) {
+        Beta.checkUpgrade(true, true);
+        sOnUpgradeListener = onUpgradeListener;
     }
 
-    public static void checkUpgrade(boolean isManual) {
-        checkUpgrade(isManual, true);
+    public interface OnUpgradeListener {
+        /**
+         * @param hasNewVersion 是否有新版本
+         * @param upgradeInfo
+         */
+        void onUpgrade(boolean hasNewVersion, UpgradeInfo upgradeInfo/*, boolean isManual*/);
+
+        //        void onNoVersion();
+
+        default void onError() {
+        }
     }
+
 
     /*
      * true表示app启动自动初始化升级模块;

@@ -59,20 +59,16 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             Manifest.permission.READ_PHONE_STATE
         )
 
-        BuglyManager.setOnUpgradeListener { upgradeInfo, isManual ->
-            Log.e(DataBindingFragment.TAG, "setUpgradeListener:   upgradeInfo=$upgradeInfo")
-
+        BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
+            Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo")
             if (upgradeInfo != null) {
                 UpgradeDialog.show(supportFragmentManager, upgradeInfo)
-            } else if (isManual) {
-                ToastUtils.showShort("当前已是最新版本!")
             }
         }
-        BuglyManager.checkUpgrade(false, false)
 
-        var time=System.currentTimeMillis();
+        var time = System.currentTimeMillis();
         NetworkUtils.isAvailableByPingAsync("baidu.com") {
-            time=System.currentTimeMillis()-time
+            time = System.currentTimeMillis() - time
             if (it) {
                 binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
                 binding.tvNetworkStatus.setTextColor(Color.GREEN)
