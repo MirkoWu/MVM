@@ -230,6 +230,7 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
                         @Override
                         public void onAnimationEnd(View view) {
                             mIsHidden = true;
+                            BarUtils.setStatusBarVisibility(PreviewActivity.this, false);
                         }
                     }).start();
         }
@@ -237,8 +238,6 @@ public class PreviewActivity extends AppCompatActivity implements OnPageChangeLi
         if (!TextUtils.isEmpty(mSavePath) && mRlBottom != null) {
             ViewCompat.animate(mRlBottom).alpha(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
-
-        BarUtils.setStatusBarVisibility(this, false);
     }
 
     @Override

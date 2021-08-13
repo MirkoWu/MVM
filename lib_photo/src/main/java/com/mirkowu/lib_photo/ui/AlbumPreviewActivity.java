@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +25,6 @@ import com.mirkowu.lib_photo.adapter.PreviewImageAdapter;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.mediaLoader.MediaModel;
 import com.mirkowu.lib_photo.mediaLoader.ResultModel;
-import com.mirkowu.lib_photo.photoview.OnViewTapListener;
 import com.mirkowu.lib_photo.view.ViewPagerFixed;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
@@ -225,6 +221,7 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
                         @Override
                         public void onAnimationEnd(View view) {
                             mIsHidden = true;
+                            BarUtils.setStatusBarVisibility(AlbumPreviewActivity.this, false);
                         }
                     }).start();
         }
@@ -233,7 +230,7 @@ public class AlbumPreviewActivity extends AppCompatActivity implements OnPageCha
             ViewCompat.animate(mRlBottom).alpha(0).setInterpolator(new DecelerateInterpolator(2)).start();
         }
 
-        BarUtils.setStatusBarVisibility(this, false);
+
     }
 
     @Override

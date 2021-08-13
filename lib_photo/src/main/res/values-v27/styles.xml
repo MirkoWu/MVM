@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ivp_theme_preview" parent="Theme.AppCompat.NoActionBar">
+        <item name="isLightTheme">false</item>
+<!--        <item name="android:isLightTheme">false</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="actionBarSize">42dp</item>
+        <item name="android:actionBarSize">42dp</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--适配Android P刘海屏-->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+</resources>

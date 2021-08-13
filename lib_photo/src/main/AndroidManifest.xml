@@ -17,7 +17,7 @@
         <activity
             android:name=".ui.AlbumPreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/ivp_theme" />
+            android:theme="@style/ivp_theme_preview" />
         <activity
             android:name=".ui.PreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
