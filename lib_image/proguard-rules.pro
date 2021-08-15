@@ -20,6 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_image.** {*;}
+-keep interface com.mirkowu.lib_image.** { *; }
+-keep public class * extends com.mirkowu.lib_image.**
+-dontwarn com.mirkowu.lib_image.**
+
 # ==================glide start===================
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule

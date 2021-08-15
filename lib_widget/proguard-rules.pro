@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_widget.** {*;}
+-keep interface com.mirkowu.lib_widget.** { *; }
+-keep public class * extends com.mirkowu.lib_widget.**
+-dontwarn com.mirkowu.lib_widget.**

@@ -64,7 +64,6 @@ class WebActivity : CommonWebActivity() {
             object : CallBackFunction {
                 override fun onCallBack(data: String?) {
                     ToastUtils.showShort("Web返回数据 = $data")
-                    throw RuntimeException("webview进程 异常测试")
                 }
             })
     }

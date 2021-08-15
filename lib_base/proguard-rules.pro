@@ -222,7 +222,9 @@
 
 # <<<<<<<<<<<<<<<----------基本不用动区域----------<<<<<<<<<<<<<<<
 
-# >>>>>>>>>>>>>>>----------实体类混淆配置---------->>>>>>>>>>>>>>>
--keep class com.mirkowu.lib_base.event.** {*;}
--dontwarn com.mirkowu.lib_base.event.**
-# <<<<<<<<<<<<<<<----------实体类混淆配置----------<<<<<<<<<<<<<<<
+
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_base.** {*;}
+-keep interface com.mirkowu.lib_base.** { *; }
+-keep public class * extends com.mirkowu.lib_base.**
+-dontwarn com.mirkowu.lib_base.**

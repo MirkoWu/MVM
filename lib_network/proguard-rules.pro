@@ -20,10 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# >>>>>>>>>>>>>>>----------网络lib混淆配置---------->>>>>>>>>>>>>>>
+# 保留本库不被混淆
 -keep class com.mirkowu.lib_network.** {*;}
+-keep interface com.mirkowu.lib_network.** { *; }
+-keep public class * extends com.mirkowu.lib_network.**
 -dontwarn com.mirkowu.lib_network.**
-# <<<<<<<<<<<<<<<----------网络lib混淆配置----------<<<<<<<<<<<<<<<
+
 
 # ==================okhttp start===================
 -dontwarn okhttp3.**

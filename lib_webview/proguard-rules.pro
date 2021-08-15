@@ -20,6 +20,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_webview.** {*;}
+-keep interface com.mirkowu.lib_webview.** { *; }
+-keep public class * extends com.mirkowu.lib_webview.**
+-dontwarn com.mirkowu.lib_webview.**
+
+
 # ==================X5浏览器 start=====================
 -dontwarn dalvik.**
 -dontwarn com.tencent.smtt.**

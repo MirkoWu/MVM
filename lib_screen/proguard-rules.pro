@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.mirkowu.lib_screen.** { *; }
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_screen.** {*;}
 -keep interface com.mirkowu.lib_screen.** { *; }
+-keep public class * extends com.mirkowu.lib_screen.**
 -dontwarn com.mirkowu.lib_screen.**

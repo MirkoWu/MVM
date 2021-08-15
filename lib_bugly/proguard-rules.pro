@@ -20,11 +20,14 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_bugly.** {*;}
+-keep interface com.mirkowu.lib_bugly.** { *; }
+-keep public class * extends com.mirkowu.lib_bugly.**
+-dontwarn com.mirkowu.lib_bugly.**
+
 # ==================bugly start===================
 -keep public class com.tencent.bugly.**{*;}
 -dontwarn com.tencent.bugly.**
 -keep class android.support.**{*;}
 # ==================bugly end===================
-
--keep public class com.mirkowu.lib_bugly.**{*;}
--dontwarn com.mirkowu.lib_bugly.**

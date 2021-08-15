@@ -20,5 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class com.mirkowu.lib_upgrade.** { *; }
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_upgrade.** {*;}
+-keep interface com.mirkowu.lib_upgrade.** { *; }
+-keep public class * extends com.mirkowu.lib_upgrade.**
 -dontwarn com.mirkowu.lib_upgrade.**

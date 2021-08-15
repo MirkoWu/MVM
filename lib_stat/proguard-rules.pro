@@ -20,6 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_stat.** {*;}
+-keep interface com.mirkowu.lib_stat.** { *; }
+-keep public class * extends com.mirkowu.lib_stat.**
+-dontwarn com.mirkowu.lib_stat.**
+
 # ==================友盟Stat start===================
 -keep class com.umeng.** {*;}
 
