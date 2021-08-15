@@ -26,6 +26,12 @@
 -keep public class * extends com.mirkowu.lib_bugly.**
 -dontwarn com.mirkowu.lib_bugly.**
 
+# 保留本库不被混淆
+-keep class com.mirkowu.lib_crash.** {*;}
+-keep interface com.mirkowu.lib_crash.** { *; }
+-keep public class * extends com.mirkowu.lib_crash.**
+-dontwarn com.mirkowu.lib_crash.**
+
 # ==================bugly start===================
 -keep public class com.tencent.bugly.**{*;}
 -dontwarn com.tencent.bugly.**
