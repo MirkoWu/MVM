@@ -2,10 +2,10 @@
 <resources>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_bg</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
         <!--适配Android P刘海屏-->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <!--        防止图片被虚拟导航栏遮住-->

@@ -10,6 +10,12 @@ import com.mirkowu.mvm.R
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //解决系统bug，检测启动页是否在栈底，防止重复启动界面
+        if (!isTaskRoot()) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_splash)
 
         val timer = findViewById<TimerTextView>(R.id.mTimer)
