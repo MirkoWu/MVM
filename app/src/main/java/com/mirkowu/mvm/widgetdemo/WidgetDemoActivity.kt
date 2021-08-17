@@ -38,6 +38,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
             PromptDialog().setTitle("温馨提示")
                 .setContent("确认关闭吗？")
                 .setIcon(R.mipmap.ic_launcher)
+                .setNegativeButton("取消")
                 .show(supportFragmentManager)
 //            showLoadingDialog("Toast测试")
         }

@@ -219,7 +219,7 @@ public class SimCardUtil {
                     break;
             }
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return str;
@@ -263,7 +263,7 @@ public class SimCardUtil {
                     break;
             }
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return str;
@@ -302,7 +302,7 @@ public class SimCardUtil {
             Method method = manager.getClass().getMethod("getImei", int.class);
             String imei = (String) method.invoke(manager, slotId);
             return imei;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return "";
         }
     }
@@ -321,7 +321,7 @@ public class SimCardUtil {
             Method method = manager.getClass().getMethod("getMeid", int.class);
             String imei = (String) method.invoke(manager, slotId);
             return imei;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return "";
         }
     }

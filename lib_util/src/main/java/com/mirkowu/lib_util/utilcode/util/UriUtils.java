@@ -65,6 +65,22 @@ public final class UriUtils {
     }
 
     /**
+     * Uri to file path.
+     * @param uri
+     * @return
+     */
+    public static String uri2Path(final Uri uri) {
+        if (null == uri) {
+            return null;
+        }
+        File file = uri2File(uri);
+        if (file == null) {
+            return null;
+        }
+        return file.getAbsolutePath();
+    }
+
+    /**
      * Uri to file.
      *
      * @param uri The uri.

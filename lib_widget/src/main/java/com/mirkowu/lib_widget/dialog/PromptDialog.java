@@ -28,6 +28,8 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
     private int mPositiveTextColorResId;
     private int mNegativeTextColorResId;
     protected OnButtonClickListener mOnButtonClickListener;
+//    protected OnClickListener mPositiveClickListener;
+//    protected OnClickListener mNegativeClickListener;
 
     public PromptDialog() {
         setWidth(DEFAULT_WIDTH);
@@ -94,14 +96,23 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (mOnButtonClickListener != null) {
-            int i = v.getId();
-            if (i == R.id.tvPositive) {
+        int i = v.getId();
+        if (i == R.id.tvPositive) {
+//            if (mPositiveClickListener != null) {
+//                mPositiveClickListener.onClick(this);
+//            }
+            if (mOnButtonClickListener != null) {
                 mOnButtonClickListener.onButtonClick(this, true);
-            } else if (i == R.id.tvNegative) {
+            }
+        } else if (i == R.id.tvNegative) {
+//            if (mPositiveClickListener != null) {
+//                mPositiveClickListener.onClick(this);
+//            }
+            if (mOnButtonClickListener != null) {
                 mOnButtonClickListener.onButtonClick(this, false);
             }
         }
+
         dismissAllowingStateLoss();
     }
 
@@ -150,6 +161,12 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         return this;
     }
 
+//    public PromptDialog setNegativeButton(CharSequence negativeText, OnClickListener listener) {
+//        this.mNegativeText = negativeText;
+//        this.mNegativeClickListener = listener;
+//        return this;
+//    }
+
     public PromptDialog setNegativeButton(@StringRes int resId) {
         return setNegativeButton(StringUtils.getString(resId));
     }
@@ -174,6 +191,12 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
         this.mPositiveText = positiveText;
         return this;
     }
+
+//    public PromptDialog setPositiveButton(CharSequence positiveText, OnClickListener listener) {
+//        this.mPositiveText = positiveText;
+//        this.mPositiveClickListener = listener;
+//        return this;
+//    }
 
     public PromptDialog setPositiveButton(@StringRes int resId) {
         return setPositiveButton(StringUtils.getString(resId));
@@ -204,4 +227,14 @@ public class PromptDialog extends BaseDialog implements View.OnClickListener {
          */
         void onButtonClick(PromptDialog dialog, boolean isPositiveClick);
     }
+
+//    public interface OnClickListener {
+//
+//        /**
+//         * 当窗口按钮被点击
+//         *
+//         * @param dialog
+//         */
+//        void onClick(PromptDialog dialog);
+//    }
 }

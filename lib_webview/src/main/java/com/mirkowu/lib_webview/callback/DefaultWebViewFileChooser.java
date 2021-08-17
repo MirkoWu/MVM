@@ -62,7 +62,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
             case REQ_FILES:
                 Uri uri = data.getData();
                 if (uri != null) {
-                    String absolutePath = FileUtil.getRealFilePath(mActivityWeakReference.get(), uri);
+                    String absolutePath = FileUtil.getRealFilePath(uri);
                     if (absolutePath != null) {
                         File file = new File(absolutePath);
                         onReceiveValue(file);

@@ -10,6 +10,9 @@ import android.text.TextUtils;
 
 import androidx.core.content.FileProvider;
 
+import com.mirkowu.lib_util.utilcode.util.UriUtils;
+import com.mirkowu.lib_util.utilcode.util.Utils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,7 +28,7 @@ import java.nio.file.Paths;
  */
 public class FileUtil {
     public static final String TAG = FileUtil.class.getName();
-    public static final String FILE_NAME = "Mirko";
+//    public static final String FILE_NAME = "Mirko";
 
     public static Uri createUri(Context context, File file) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -38,12 +41,12 @@ public class FileUtil {
     /**
      * 得到图片uri的实际地址
      */
-    public static String getRealFilePath(Context context, final Uri uri) {
+    public static String getRealFilePath(final Uri uri) {
         if (null == uri) {
             return null;
         }
 
-        return UriUtil.uri2Path(context, uri);
+        return UriUtils.uri2Path(uri);
     }
 
     /**
@@ -75,19 +78,52 @@ public class FileUtil {
                     }
                     return rootDir.getAbsolutePath(); // /mnt/sdcard/path...
                 }
+            } else {
+                if (TextUtils.isEmpty(path)) {
+                    return Utils.getApp().getExternalCacheDir().getAbsolutePath();
+                }
+
+                File file = new File(Utils.getApp().getExternalCacheDir().getAbsolutePath(), path);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                return file.getAbsolutePath(); // /mnt/sdcard/path...
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        if (TextUtils.isEmpty(path)) {
-            return "";
-        }
-        return path;
+        return "";
     }
 
-    public static String getDiskExternalPath() {
-        return getDiskExternalPath(FILE_NAME);
+    public static File getDiskExternalFile(final String path) {
+        try {
+            //判断是否有SD卡
+            if (hasSDCard()) {
+                if (TextUtils.isEmpty(path)) {
+                    return Environment.getExternalStorageDirectory();
+                } else {
+                    File rootDir = new File(Environment.getExternalStorageDirectory(), path);
+                    if (!rootDir.exists()) {
+                        rootDir.mkdirs();
+                    }
+                    return rootDir; // /mnt/sdcard/path...
+                }
+            } else {
+                if (TextUtils.isEmpty(path)) {
+                    return Utils.getApp().getExternalCacheDir();
+                }
+                File file = new File(Utils.getApp().getExternalCacheDir().getAbsolutePath(), path);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                return file;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
     /**
      * 获取缓存路径 会跟随app卸载一起删除

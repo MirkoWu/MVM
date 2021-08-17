@@ -14,6 +14,7 @@ import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
+import com.mirkowu.mvm.Constant
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDownloadBinding
 import com.mirkowu.mvm.network.FileClient
@@ -102,7 +103,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         binding.btnDown2.click {
             //外部存储
             filePath =
-                FileUtil.getDiskExternalPath() + "/" + System.currentTimeMillis() + ".jpg"
+                FileUtil.getDiskExternalPath(Constant.FILE_SAVE_DIR) + "/" + System.currentTimeMillis() + ".jpg"
             id2 = Downloader.create(url2)
                 .setUrl(url2)
                 .setFilePath(filePath)

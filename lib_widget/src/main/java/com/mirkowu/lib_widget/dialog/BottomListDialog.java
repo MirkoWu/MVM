@@ -25,10 +25,10 @@ import java.util.List;
 
 public class BottomListDialog extends BaseDialog {
 
-    private boolean showCancelBtn; //是否显示取消按钮
-    private boolean useRoundBackground; // 是否使用圆角背景
-    private CharSequence title;
-    private List<CharSequence> data;
+    private CharSequence mTitle;
+    private boolean mShowCancelBtn; //是否显示取消按钮
+    private boolean mUseRoundBackground; // 是否使用圆角背景
+    private List<CharSequence> mData;
 
     public BottomListDialog() {
         setShowBottom(true);
@@ -77,9 +77,9 @@ public class BottomListDialog extends BaseDialog {
         TextView tvCancel = (TextView) viewHolder.getView(R.id.tvCancel);
         RecyclerView rvList = (RecyclerView) viewHolder.getView(R.id.mRecyclerView);
 
-        tvTitle.setText(title);
-        tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
-        tvCancel.setVisibility(showCancelBtn ? View.VISIBLE : View.GONE);
+        tvTitle.setText(mTitle);
+        tvTitle.setVisibility(TextUtils.isEmpty(mTitle) ? View.GONE : View.VISIBLE);
+        tvCancel.setVisibility(mShowCancelBtn ? View.VISIBLE : View.GONE);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,14 +89,14 @@ public class BottomListDialog extends BaseDialog {
         LinearDecoration decoration = new LinearDecoration(getContext())
                 .setSpaceColor(ContextCompat.getColor(getContext(), R.color.widget_color_line_e5))
                 .setSpace(0.5f);
-        if (!TextUtils.isEmpty(title)) {
+        if (!TextUtils.isEmpty(mTitle)) {
             decoration.setTopSpace(0.5f);
         }
         rvList.addItemDecoration(decoration);
 
 
         ListAdapter listAdapter = new ListAdapter();
-        listAdapter.setData(data);
+        listAdapter.setData(mData);
         if (mOnItemClickListener != null) {
             listAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
                 @Override
@@ -109,7 +109,7 @@ public class BottomListDialog extends BaseDialog {
 
         rvList.setAdapter(listAdapter);
 
-        if (useRoundBackground) {
+        if (mUseRoundBackground) {
             LinearLayout llRoot = viewHolder.getView(R.id.llRoot);
             LinearLayout llContent = viewHolder.getView(R.id.llContent);
             llContent.setBackgroundResource(R.drawable.widget_card_bg_6dp);
@@ -122,22 +122,22 @@ public class BottomListDialog extends BaseDialog {
     }
 
     public BottomListDialog setTitle(CharSequence title) {
-        this.title = title;
+        this.mTitle = title;
         return this;
     }
 
     public BottomListDialog setData(List<CharSequence> data) {
-        this.data = data;
+        this.mData = data;
         return this;
     }
 
     public BottomListDialog setShowCancelBtn(boolean showCancelBtn) {
-        this.showCancelBtn = showCancelBtn;
+        this.mShowCancelBtn = showCancelBtn;
         return this;
     }
 
     public BottomListDialog setRoundBackground(boolean useRoundBackground) {
-        this.useRoundBackground = useRoundBackground;
+        this.mUseRoundBackground = useRoundBackground;
         return this;
     }
 
