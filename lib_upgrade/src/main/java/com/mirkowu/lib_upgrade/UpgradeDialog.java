@@ -227,11 +227,10 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
                     @Override
                     protected void error(BaseDownloadTask task, Throwable e) {
-                        LogUtil.e("下载失败:" + e);
+                        LogUtil.e("下载失败:" + e.toString());
                         FileDownloader.getImpl().clear(task.getId(), path);
                         ToastUtils.showShort(R.string.up_download_failure);
                         dismissAllowingStateLoss();
-                        e.printStackTrace();
                     }
                 });
 

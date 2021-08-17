@@ -23,11 +23,13 @@ public class AppSettingUtil {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            try {
+                intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception e1) {
+                LogUtil.e("startNetworkSetting", e);
+            }
         }
     }
 
@@ -42,7 +44,7 @@ public class AppSettingUtil {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.e(e, e.getMessage());
+            LogUtil.e("startAppSettingNoResult", e);
         }
         return false;
     }
@@ -57,7 +59,7 @@ public class AppSettingUtil {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.e(e, e.getMessage());
+            LogUtil.e("Activity startAppSettingForResult", e);
         }
         return false;
     }
@@ -72,8 +74,7 @@ public class AppSettingUtil {
             fragment.startActivityForResult(intent, requestCode);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            LogUtil.e(e, e.getMessage());
+            LogUtil.e("Fragment startAppSettingForResult", e);
         }
         return false;
     }
@@ -96,7 +97,6 @@ public class AppSettingUtil {
 //            //  UMManager.reportError(e);
 //        }
 //    }
-
 
 
 }

@@ -253,7 +253,6 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
             mShownByMe.setAccessible(true);
             mShownByMe.set(this, true);
         } catch (Exception e) {
-            e.printStackTrace();
         }
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);

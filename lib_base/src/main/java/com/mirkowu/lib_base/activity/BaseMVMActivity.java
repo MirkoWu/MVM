@@ -164,7 +164,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
             isTranslucentOrFloating = (boolean) m.invoke(null, ta);
             m.setAccessible(false);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(e);
         }
 
         return isTranslucentOrFloating;

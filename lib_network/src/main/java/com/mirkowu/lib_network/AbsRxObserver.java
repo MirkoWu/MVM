@@ -26,7 +26,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
             onFinish();
             onSuccess(o);
         } catch (Throwable t) {
-            t.printStackTrace();
+            LogUtil.e("onSuccess业务异常", t);
             onFailure(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage());
         }
     }
@@ -35,7 +35,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
     public void onError(@NonNull Throwable e) {
         onFinish();
         if (!(e instanceof RxJava2NullException)) {
-            LogUtil.e(e, "AbsRxObserver 网络请求Error");
+            LogUtil.e("AbsRxObserver 网络请求Error", e);
         }
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);

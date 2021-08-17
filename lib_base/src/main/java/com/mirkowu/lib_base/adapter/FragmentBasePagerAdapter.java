@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.mirkowu.lib_base.fragment.BaseMVMFragment;
+import com.mirkowu.lib_util.LogUtil;
 
 
 /**
@@ -31,7 +32,7 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
             try {
                 fragments[i] = cls.newInstance();
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.e(e);
             }
         }
     }
@@ -41,7 +42,7 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         try {
             super.restoreState(state, loader);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(e);
         }
     }
 

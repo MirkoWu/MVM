@@ -247,7 +247,6 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
             constructor.setAccessible(true);
             return (VH) constructor.newInstance(view);
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException var4) {
-            var4.printStackTrace();
         }
 
         return null;

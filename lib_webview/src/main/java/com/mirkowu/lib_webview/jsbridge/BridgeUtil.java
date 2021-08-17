@@ -3,6 +3,8 @@ package com.mirkowu.lib_webview.jsbridge;
 import android.content.Context;
 import android.webkit.WebView;
 
+import com.mirkowu.lib_util.LogUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +93,7 @@ public class BridgeUtil {
 
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(e);
         } finally {
             if (in != null) {
                 try {

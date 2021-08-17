@@ -2,6 +2,8 @@ package com.mirkowu.lib_util;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.mirkowu.lib_util.utilcode.util.CrashUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -44,25 +46,31 @@ public class LogUtil {
         }
     }
 
-    public static void i(String msg) {
+    public static void i(@NonNull String msg) {
         if (sIsDebug) {
             Logger.i(msg);
         }
     }
 
-    public static void d(String msg) {
+    public static void d(@NonNull String msg) {
         if (sIsDebug) {
             Logger.d(msg);
         }
     }
 
-    public static void e(String msg) {
+    public static void e(@NonNull String msg) {
         if (sIsDebug) {
             Logger.e(msg);
         }
     }
 
-    public static void e(Throwable t, String msg) {
+    public static void e(Throwable e) {
+        if (sIsDebug) {
+            Logger.e(e, e.toString());
+        }
+    }
+
+    public static void e(@NonNull String msg, Throwable t) {
         if (sIsDebug) {
             Logger.e(t, msg);
         }
@@ -80,15 +88,15 @@ public class LogUtil {
         }
     }
 
-    public static void e(String tag, String args) {
+    public static void e(String tag, String msg) {
         if (sIsDebug) {
-            Log.e(tag, args);
+            Log.e(tag, msg);
         }
     }
 
-    public static void e(String tag, String args, Throwable t) {
+    public static void e(String tag, String msg, Throwable t) {
         if (sIsDebug) {
-            Log.e(tag, args, t);
+            Log.e(tag, msg, t);
         }
     }
 

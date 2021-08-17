@@ -25,6 +25,7 @@ import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import com.mirkowu.mvm.widgetdemo.WidgetDemoActivity
+import java.lang.Exception
 import java.util.*
 
 
@@ -145,37 +146,6 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             // BuglyManager.checkUpgrade(true, false)
             val url =
                 "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
-
-//            UpgradeDialog.show(childFragmentManager, object : IUpgradeInfo {
-//                override fun getTitle(): String {
-//                    return "title"
-//                }
-//
-//                override fun getContent(): String {
-//                    return "getContent"
-//                }
-//
-//                override fun getApkUrl(): String {
-//                    return url;
-//                }
-//
-//                override fun getVersionName(): String {
-//                    return "1.0.1"
-//                }
-//
-//                override fun getSavePath(): String {
-//                    return ""
-//                }
-//
-//                override fun getVersionCode(): Int {
-//                    return 1001
-//                }
-//
-//                override fun isForceUpgrade(): Int {
-//                    return 0
-//                }
-//            })
-
             BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
                 Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo  ")
 

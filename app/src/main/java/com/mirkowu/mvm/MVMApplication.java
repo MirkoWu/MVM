@@ -46,7 +46,7 @@ public class MVMApplication extends Application {
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Throwable {
-                LogUtil.e(throwable, "RxJavaPlugins");
+                LogUtil.e("RxJavaPlugins", throwable);
                 CrashManager.reportError(throwable);
                 UmengManager.reportError(throwable);
             }

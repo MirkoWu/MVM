@@ -116,13 +116,13 @@ public class WebViewUtil {
             Intent intent = new Intent(context, EmptyService.class);
             context.startService(intent);
         } catch (Throwable e) {
-            LogUtil.e(e, "startMultiProcess  try");
+            LogUtil.e("startMultiProcess  try", e);
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(new Intent(context, EmptyService.class));
                 }
             } catch (Throwable e1) {
-                LogUtil.e(e1, "startMultiProcess failed");
+                LogUtil.e("startMultiProcess failed", e1);
             }
         }
     }

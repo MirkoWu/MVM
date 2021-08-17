@@ -197,8 +197,7 @@ public class Downloader {
 
             @Override
             public void onError(@NonNull Throwable e) {
-                e.printStackTrace();
-                LogUtil.e("下载失败：" + e.getMessage());
+                LogUtil.e("下载失败"+ e.toString());
                 if (mDownloadListener != null) {
                     mDownloadListener.onFailure(e);
                 }

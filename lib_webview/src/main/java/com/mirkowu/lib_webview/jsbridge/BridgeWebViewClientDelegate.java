@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
+import com.mirkowu.lib_util.LogUtil;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -22,7 +24,7 @@ public class BridgeWebViewClientDelegate {
         try {
             url = URLDecoder.decode(url, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LogUtil.e(e);
         }
 
         if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据

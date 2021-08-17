@@ -1,5 +1,7 @@
 package com.mirkowu.lib_util.utilcode.util;
 
+import com.mirkowu.lib_util.LogUtil;
+
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -29,7 +31,7 @@ public final class CloseUtils {
                 try {
                     closeable.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LogUtil.e(e);
                 }
             }
         }
