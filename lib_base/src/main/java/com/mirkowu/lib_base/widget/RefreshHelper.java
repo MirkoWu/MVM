@@ -26,12 +26,12 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
     /*** 当前页*/
     protected int mCurPage = FIRST_PAGE;
 
-    public RefreshHelper(@NonNull RecyclerView mInnerContainer, OnRefreshListener onRefreshListener) {
-        this(null, mInnerContainer, onRefreshListener);
+    public RefreshHelper(@NonNull RecyclerView recyclerView, OnRefreshListener onRefreshListener) {
+        this(null, recyclerView, onRefreshListener);
     }
 
-    public RefreshHelper(SmartRefreshLayout refreshLayout, @NonNull RecyclerView innerContainer, OnRefreshListener onRefreshListener) {
-        this(refreshLayout, (ViewGroup) innerContainer, onRefreshListener);
+    public RefreshHelper(SmartRefreshLayout refreshLayout, @NonNull RecyclerView recyclerView, OnRefreshListener onRefreshListener) {
+        this(refreshLayout, (ViewGroup) recyclerView, onRefreshListener);
     }
 
     public RefreshHelper(SmartRefreshLayout refreshLayout, @NonNull ViewGroup innerContainer, OnRefreshListener onRefreshListener) {

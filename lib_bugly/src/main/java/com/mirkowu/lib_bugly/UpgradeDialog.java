@@ -35,14 +35,17 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     RelativeLayout llProgress;
     LinearLayout llButton;
 
-    protected OnButtonClickListener listener;
-    private UpgradeInfo upgradeInfo;
-    private boolean isForceUpgrade;
+    protected OnButtonClickListener mClickListener;
+    protected UpgradeInfo mUpgradeInfo;
+    protected boolean mIsForceUpgrade;
 
     public static void show(FragmentManager manager, UpgradeInfo upgradeInfo) {
-        if (upgradeInfo == null) return;
+        if (upgradeInfo == null) {
+            LogUtil.e("UpgradeDialog upgradeInfo == null");
+            return;
+        }
         UpgradeDialog dialog = new UpgradeDialog();
-        dialog.upgradeInfo = upgradeInfo;
+        dialog.setUpgradeInfo(upgradeInfo);
         dialog.showAllowingStateLoss(manager);
     }
 
@@ -70,14 +73,14 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 
         tvPositive.setOnClickListener(this);
 
-        if (upgradeInfo == null) {
+        if (mUpgradeInfo == null) {
             dismissAllowingStateLoss();
             return;
         }
 
-        tvTitle.setText(upgradeInfo.title);
-        tvContent.setText(upgradeInfo.newFeature);
-        isForceUpgrade = upgradeInfo.upgradeType == 2;
+        tvTitle.setText(mUpgradeInfo.title);
+        tvContent.setText(mUpgradeInfo.newFeature);
+        mIsForceUpgrade = mUpgradeInfo.upgradeType == 2;
 
         initButtonText();
 
@@ -87,14 +90,14 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     }
 
     private void initButtonText() {
-        if (isForceUpgrade = upgradeInfo.upgradeType == 2) { //强制
+        if (mIsForceUpgrade = mUpgradeInfo.upgradeType == 2) { //强制
             tvNegative.setVisibility(View.GONE);
         } else {
             tvNegative.setVisibility(View.VISIBLE);
             tvNegative.setOnClickListener(this);
         }
 
-        tvNegative.setVisibility(isForceUpgrade ? GONE : VISIBLE);
+        tvNegative.setVisibility(mIsForceUpgrade ? GONE : VISIBLE);
         tvNegative.setText(com.mirkowu.lib_upgrade.R.string.up_next_time);
         tvPositive.setVisibility(VISIBLE);
         tvPositive.setText(com.mirkowu.lib_upgrade.R.string.up_upgrade);
@@ -124,23 +127,23 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.tvPositive) {
-            if (listener != null) {
-                listener.onButtonClick(this, true);
+            if (mClickListener != null) {
+                mClickListener.onButtonClick(this, true);
             }
             if (PermissionsUtil.hasPermissions(getContext(), PermissionsUtil.GROUP_STORAGE)) {
                 startDownloadTask();
             } else {
                 LogUtil.e("没有存储权限");
-                if (listener != null) {
-                    listener.onNeedPermission(this);
+                if (mClickListener != null) {
+                    mClickListener.onNeedPermission(this);
                 } else {
                     LogUtil.e("下载到默认路径");
                     startDownloadTask();
                 }
             }
         } else if (i == R.id.tvNegative) {
-            if (listener != null) {
-                listener.onButtonClick(this, true);
+            if (mClickListener != null) {
+                mClickListener.onButtonClick(this, true);
             }
             BuglyManager.cancelDownload();
             dismissAllowingStateLoss();
@@ -153,7 +156,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
         tvPositive.setVisibility(GONE);
         tvNegative.setVisibility(VISIBLE);
 
-        if (isForceUpgrade) {
+        if (mIsForceUpgrade) {
             tvNegative.setText(com.mirkowu.lib_upgrade.R.string.up_downloading);
             tvNegative.setEnabled(false);
         } else {
@@ -178,7 +181,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
             tvPositive.setVisibility(GONE);
             tvNegative.setVisibility(VISIBLE);
 
-            if (isForceUpgrade) {
+            if (mIsForceUpgrade) {
                 tvNegative.setText(com.mirkowu.lib_upgrade.R.string.up_downloading);
                 tvNegative.setEnabled(false);
             } else {
@@ -191,7 +194,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     @Override
     public void onCompleted(DownloadTask downloadTask) {
         if (!isAdded() || isDetached()) return;
-        if (isForceUpgrade) {
+        if (mIsForceUpgrade) {
             llButton.setVisibility(View.VISIBLE);
             tvNegative.setVisibility(View.GONE);
             tvPositive.setVisibility(View.VISIBLE);
@@ -239,9 +242,13 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     public void onDownloadCompleted(boolean b) {
     }
 
+    public UpgradeDialog setUpgradeInfo(UpgradeInfo upgradeInfo) {
+        this.mUpgradeInfo = upgradeInfo;
+        return this;
+    }
 
     public UpgradeDialog setOnButtonClickListener(UpgradeDialog.OnButtonClickListener listener) {
-        this.listener = listener;
+        this.mClickListener = listener;
         return this;
     }
 
