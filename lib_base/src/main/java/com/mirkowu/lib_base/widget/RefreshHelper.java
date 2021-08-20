@@ -96,6 +96,10 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
             mRefreshLayout.finishRefresh();
         }
         adapter.setData(list);
+
+        if (mOnRefreshListener != null) {
+            mOnRefreshListener.onEmptyChange(list == null || list.isEmpty());
+        }
     }
 
     /**

@@ -101,6 +101,15 @@ public class StateView extends LinearLayout {
         return mState;
     }
 
+    public ImageView getLoadingView() {
+        return ivLoading;
+    }
+
+    public Button getRefreshButton() {
+        return btnRefresh;
+    }
+
+
     private void setState(int state) {
         mState = state;
         setVisibility(VISIBLE);

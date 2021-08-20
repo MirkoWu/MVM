@@ -21,7 +21,7 @@
         android:id="@+id/flDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:paddingLeft="8dp"
         android:paddingTop="4dp"
         android:paddingRight="4dp"
@@ -33,7 +33,6 @@
             android:layout_height="26dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="2dp"
-            android:padding="2dp"
             android:src="@drawable/ivp_delete" />
     </FrameLayout>
 

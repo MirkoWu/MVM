@@ -28,5 +28,6 @@
     <com.mirkowu.lib_widget.stateview.StateView
         android:id="@+id/stateview"
         android:layout_width="match_parent"
+        app:sv_loadingIcon="@drawable/anim_loading"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
