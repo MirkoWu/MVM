@@ -5,6 +5,6 @@ import com.mirkowu.lib_widget.adapter.IMultiType;
 public class FirstBean implements IMultiType {
     @Override
     public int getItemViewType() {
-        return GridAdapter.TYPE_FIRST;
+        return LinearAdapter.TYPE_FIRST;
     }
 }

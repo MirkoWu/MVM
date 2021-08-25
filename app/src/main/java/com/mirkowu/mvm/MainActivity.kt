@@ -12,13 +12,13 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
-import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
+import com.mirkowu.mvm.recycelerview.LinearListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
 
@@ -115,6 +115,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     }
 
     fun listClick(view: View?) {
+//        LinearListActivity.start(this)
         GridListActivity.start(this)
     }
 

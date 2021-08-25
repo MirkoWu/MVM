@@ -3,54 +3,65 @@ package com.mirkowu.mvm.recycelerview
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_widget.adapter.IMultiType
-import com.mirkowu.lib_widget.decoration.GridDecoration
+import com.mirkowu.lib_widget.decoration.LinearDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
-import com.mirkowu.mvm.databinding.ActivityGridListBinding
-import com.mirkowu.mvm.widgetdemo.SpaceItemDecoration
+import com.mirkowu.mvm.databinding.ActivityLinearListBinding
 
-class GridListActivity : BaseActivity<EmptyMediator>() {
+class LinearListActivity : BaseActivity<EmptyMediator>() {
     companion object {
         @JvmStatic
         fun start(context: Context) {
-            val starter = Intent(context, GridListActivity::class.java)
+            val starter = Intent(context, LinearListActivity::class.java)
 //                    .putExtra()
             context.startActivity(starter)
         }
     }
 
-    val binding by bindingView(ActivityGridListBinding::inflate)
+    val binding by bindingView(ActivityLinearListBinding::inflate)
     override fun bindContentView() {
 //        super.bindContentView()
         binding.root
     }
 
-    override fun getLayoutId() = R.layout.activity_grid_list
+    override fun getLayoutId() = R.layout.activity_linear_list
 
     override fun initialize() {
 
-        val list = mutableListOf<FirstBean>()
+        val list = mutableListOf<IMultiType>()
         for (index in 0 until 40) {
-            list.add(FirstBean())
+            if (index % 2 == 0) {
+                list.add(SecondBean())
+            } else if (index % 3 == 0) {
+                list.add(ThirdBean())
+            } else {
+                list.add(FirstBean())
+                list.add(FourBean())
+            }
         }
-        val gridAdapter = GridAdapter()
+        val gridAdapter = LinearAdapter()
         binding.rvGrid.apply {
-            layoutManager = GridLayoutManager(context, 4)
+            layoutManager = LinearLayoutManager(context)
             adapter = gridAdapter
             addItemDecoration(
-                GridDecoration(context).setSpace(20f)/*.setEdgeSpace(10f)*//*.setTopSpace(10f)
-                    .setBottomSpace(10f)*/.setSpaceColor(Color.parseColor("#20000000"))
+                LinearDecoration(context).setSpace(10f)/*.setEdgeSpace(10f)*/.setTopSpace(20f)
+                    .setBottomSpace(50f).setSpaceColor(Color.parseColor("#90FF0000"))
             )
         }
         gridAdapter.data = list
         gridAdapter.setOnItemChildClickListener { view, item, position ->
             when (view.id) {
-
+                R.id.tv_title -> {
+                    gridAdapter.removeData(position)
+                }
+                R.id.tv_content -> {
+                    // gridAdapter.addData(1, "A")
+                }
             }
         }
         gridAdapter.setOnItemClickListener { view, item, position ->

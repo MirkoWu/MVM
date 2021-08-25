@@ -107,6 +107,8 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
     }
 
     private void setGrid(int orientation, int spanCount, Rect outRect, int childPosition, int itemCount) {
+        float totalSpace = mSpace * (spanCount - 1) /*+ mEdgeSpace * 2*/;
+        float eachSpace = totalSpace / spanCount;
         int column = childPosition % spanCount;
         int row = childPosition / spanCount;
 
@@ -138,14 +140,15 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                 left = 0;
                 right = 0;
             } else {
-                left = mSpace / 2f;
-                right = left;
-                //取消最二边的间隔
-                if (column == 0) {
-                    left = 0;
-                } else if (column == spanCount - 1) {
-                    right = 0;
-                }
+
+                left = column * (eachSpace /*- mEdgeSpace *2*/) / (spanCount - 1) /*+ mEdgeSpace*/;
+                right = eachSpace - left;
+//                //取消最二边的间隔
+//                if (column == 0) {
+//                    left = 0;
+//                } else if (column == spanCount - 1) {
+//                    right = 0;
+//                }
             }
         } else {
             left = 0;
@@ -162,14 +165,14 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                 top = 0;
                 bottom = 0;
             } else {
-                top = mSpace / 2f;
-                bottom = top;
-                //取消最二边的间隔
-                if (column == 0) {
-                    top = 0;
-                } else if (column == spanCount - 1) {
-                    bottom = 0;
-                }
+                top = column * (eachSpace /*- mEdgeSpace *2*/) / (spanCount - 1) /*+ mEdgeSpace*/;
+                bottom = eachSpace - top;
+//                //取消最二边的间隔
+//                if (column == 0) {
+//                    top = 0;
+//                } else if (column == spanCount - 1) {
+//                    bottom = 0;
+//                }
             }
         }
         outRect.set((int) left, (int) top, (int) right, (int) bottom);
