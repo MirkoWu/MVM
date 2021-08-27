@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_util.LogUtil
@@ -46,7 +47,7 @@ class LinearListActivity : BaseActivity<EmptyMediator>() {
         }
         val gridAdapter = LinearAdapter()
         binding.rvGrid.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             adapter = gridAdapter
             addItemDecoration(
                 LinearDecoration(context).setSpace(10f)/*.setEdgeSpace(10f)*/.setTopSpace(20f)

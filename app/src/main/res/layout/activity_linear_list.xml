@@ -10,11 +10,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_grid"
         android:layout_width="match_parent"
-        android:paddingBottom="20dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="40dp" />
 
-<!--    <LinearLayout-->
+    <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="10dp"-->
 <!--        android:orientation="horizontal">-->

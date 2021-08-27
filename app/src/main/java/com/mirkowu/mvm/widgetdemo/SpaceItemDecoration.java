@@ -139,13 +139,9 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
                 bottom = eachSpace - top;
             }
         }
-        outRect.set(toInt(left), toInt(top), toInt(right), toInt(bottom));
+        outRect.set((int) left, (int) top, (int) right, (int) bottom);
     }
 
-    private int toInt(float value) {
-        return (int) (value + 0.5f);
-
-    }
 
     private void drawLinear(int orientation, Canvas c, RecyclerView parent) {
         if (orientation == LinearLayoutManager.VERTICAL) {

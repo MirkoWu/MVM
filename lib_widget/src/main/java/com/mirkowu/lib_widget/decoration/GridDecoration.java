@@ -107,7 +107,7 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
     }
 
     private void setGrid(int orientation, int spanCount, Rect outRect, int childPosition, int itemCount) {
-        float totalSpace = mSpace * (spanCount - 1) /*+ mEdgeSpace * 2*/;
+        float totalSpace = mSpace * (spanCount - 1);
         float eachSpace = totalSpace / spanCount;
         int column = childPosition % spanCount;
         int row = childPosition / spanCount;
@@ -140,15 +140,8 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                 left = 0;
                 right = 0;
             } else {
-
-                left = column * (eachSpace /*- mEdgeSpace *2*/) / (spanCount - 1) /*+ mEdgeSpace*/;
+                left = column * eachSpace / (spanCount - 1);
                 right = eachSpace - left;
-//                //取消最二边的间隔
-//                if (column == 0) {
-//                    left = 0;
-//                } else if (column == spanCount - 1) {
-//                    right = 0;
-//                }
             }
         } else {
             left = 0;
@@ -165,14 +158,8 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                 top = 0;
                 bottom = 0;
             } else {
-                top = column * (eachSpace /*- mEdgeSpace *2*/) / (spanCount - 1) /*+ mEdgeSpace*/;
+                top = column * eachSpace / (spanCount - 1);
                 bottom = eachSpace - top;
-//                //取消最二边的间隔
-//                if (column == 0) {
-//                    top = 0;
-//                } else if (column == spanCount - 1) {
-//                    bottom = 0;
-//                }
             }
         }
         outRect.set((int) left, (int) top, (int) right, (int) bottom);
@@ -196,7 +183,8 @@ public class GridDecoration extends RecyclerView.ItemDecoration {
                 int ty = Math.round(ViewCompat.getTranslationY(child));
 
                 //横线
-                int top = child.getBottom() + ty + params.bottomMargin;
+//                int top = child.getBottom() + ty + params.bottomMargin;
+                int top = child.getBottom()+20;
                 int bottom = top + mSpace;
                 int left = child.getLeft() + tx - params.leftMargin;
                 int right = child.getRight() + tx + params.rightMargin;

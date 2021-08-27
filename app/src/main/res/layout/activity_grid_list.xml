@@ -10,7 +10,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_grid"
         android:layout_width="match_parent"
-        android:paddingBottom="20dp"
+        android:paddingHorizontal="60dp"
+        android:paddingVertical="60dp"
         android:layout_height="match_parent" />
 
 <!--    <LinearLayout-->

@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_widget.adapter.IMultiType
 import com.mirkowu.lib_widget.decoration.GridDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityGridListBinding
-import com.mirkowu.mvm.widgetdemo.SpaceItemDecoration
 
 class GridListActivity : BaseActivity<EmptyMediator>() {
     companion object {
@@ -35,7 +33,7 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
     override fun initialize() {
 
         val list = mutableListOf<FirstBean>()
-        for (index in 0 until 40) {
+        for (index in 0 until 400) {
             list.add(FirstBean())
         }
         val gridAdapter = GridAdapter()
@@ -43,14 +41,13 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
             layoutManager = GridLayoutManager(context, 4)
             adapter = gridAdapter
             addItemDecoration(
-                GridDecoration(context).setSpace(20f)/*.setEdgeSpace(10f)*//*.setTopSpace(10f)
-                    .setBottomSpace(10f)*/.setSpaceColor(Color.parseColor("#20000000"))
+                GridDecoration(context).setSpace(60f)/*.setEdgeSpace(10f)*//*.setTopSpace(10f)
+                    .setBottomSpace(10f)*/.setSpaceColor(Color.parseColor("#90000000"))
             )
         }
         gridAdapter.data = list
         gridAdapter.setOnItemChildClickListener { view, item, position ->
             when (view.id) {
-
             }
         }
         gridAdapter.setOnItemClickListener { view, item, position ->
