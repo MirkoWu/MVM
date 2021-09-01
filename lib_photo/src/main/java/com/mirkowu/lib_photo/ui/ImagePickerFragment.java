@@ -73,7 +73,7 @@ public class ImagePickerFragment extends Fragment {
 
     private MediaCollectionLoader mLoaderCallback;
     private RecyclerView.OnScrollListener mOnScrollListener;
-    private PickerConfig mConfig = ImagePicker.getInstance().getPickerConfig();
+    private PickerConfig mConfig;
 
     public static ImagePickerFragment newInstance() {
         ImagePickerFragment fragment = new ImagePickerFragment();
@@ -87,8 +87,15 @@ public class ImagePickerFragment extends Fragment {
     }
 
     @Override
+    public void setInitialSavedState(@Nullable @org.jetbrains.annotations.Nullable SavedState state) {
+        super.setInitialSavedState(state);
+    }
+
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mConfig = ImagePicker.getInstance().getPickerConfig();
         mMaxPickCount = mConfig.getMaxPickCount();
         mSpanCount = mConfig.getSpanCount();
         mIsShowCamera = mConfig.isShowCamera();
