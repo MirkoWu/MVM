@@ -67,7 +67,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
     }
 
     @Override
-    public  int getLayoutResId() {
+    public int getLayoutResId() {
         return R.layout.up_dialog_upgrade;
     }
 
@@ -154,7 +154,8 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
     public interface OnButtonClickListener {
 
-        void onNeedPermission(UpgradeDialog dialog);
+        default void onNeedPermission(UpgradeDialog dialog) {
+        }
 
         /**
          * 当窗口按钮被点击

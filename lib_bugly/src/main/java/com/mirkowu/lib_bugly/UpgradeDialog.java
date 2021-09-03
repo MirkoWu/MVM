@@ -254,7 +254,8 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
 
     public interface OnButtonClickListener {
 
-        void onNeedPermission(UpgradeDialog dialog);
+        default void onNeedPermission(UpgradeDialog dialog) {
+        }
 
         /**
          * 当窗口按钮被点击
