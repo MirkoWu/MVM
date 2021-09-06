@@ -129,8 +129,8 @@ public class BuglyManager {
      * @param onUpgradeListener 回调结果
      */
     public static void checkUpgrade(OnUpgradeListener onUpgradeListener) {
-        Beta.checkUpgrade(true, true);
         sOnUpgradeListener = onUpgradeListener;
+        Beta.checkUpgrade(true, true);
     }
 
     public interface OnUpgradeListener {
