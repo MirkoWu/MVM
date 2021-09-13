@@ -34,6 +34,8 @@ public class BuglyManager {
     }
 
     public static void init(Context context, String appId, String channel, boolean isDebug) {
+        //注意这些设置在bugly init之前
+        Beta.upgradeDialogLayoutId = R.layout.up_dialog_upgrade;
         BuglyManager.setUpgradeListener(new UpgradeListener() {
             @Override
             public void onUpgrade(int i, UpgradeInfo upgradeInfo, boolean isManual, boolean isSilence) {
