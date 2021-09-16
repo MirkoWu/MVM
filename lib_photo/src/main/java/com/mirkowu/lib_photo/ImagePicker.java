@@ -91,7 +91,10 @@ public class ImagePicker {
 
     public OnPickResultListener getOnPickResultListener() {
         return mOnPickResultListener;
+    }
 
+    public void removeAllListener() {
+        mOnPickResultListener = null;
     }
 
     /**

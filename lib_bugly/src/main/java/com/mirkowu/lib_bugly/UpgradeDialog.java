@@ -218,6 +218,7 @@ public class UpgradeDialog extends BaseDialog implements DownloadListener, Upgra
     @Override
     public void onDestroyView() {
         BuglyManager.unregisterDownloadListener();
+        BuglyManager.removeUpgradeStateListener();
         BuglyManager.cancelDownload();
         super.onDestroyView();
     }

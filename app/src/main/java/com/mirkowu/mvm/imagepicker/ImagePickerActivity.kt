@@ -115,4 +115,9 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ImagePicker.getInstance().removeAllListener()
+    }
 }

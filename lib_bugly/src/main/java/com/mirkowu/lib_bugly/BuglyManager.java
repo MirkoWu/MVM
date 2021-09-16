@@ -298,10 +298,11 @@ public class BuglyManager {
      *
      * @param listener
      */
-//    public static void setUpgradeStateListener(UpgradeStateListener listener) {
-//        Beta.upgradeStateListener = listener;
-//    }
     public static void setUpgradeStateListener(UpgradeStateListener listener) {
         sUpgradeStateListener = listener;
+    }
+
+    public static void removeUpgradeStateListener() {
+        sUpgradeStateListener = null;
     }
 }
