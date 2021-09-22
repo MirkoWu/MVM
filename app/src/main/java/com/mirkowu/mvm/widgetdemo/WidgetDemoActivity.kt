@@ -8,6 +8,7 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_screen.AutoSizeManager
 import com.mirkowu.lib_screen.internal.CustomAdapt
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.pattern.InterceptChainManager
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.lib_widget.dialog.BottomListDialog
@@ -16,6 +17,9 @@ import com.mirkowu.lib_widget.dialog.PromptDialog
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityWidgetDemoBinding
+import com.mirkowu.mvm.interceptchain.FirstInterceptChain
+import com.mirkowu.mvm.interceptchain.SecondInterceptChain
+import com.mirkowu.mvm.interceptchain.ThirdInterceptChain
 import com.mirkowu.mvm.viewbinding.DataBindingDialog
 
 class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
@@ -75,6 +79,19 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
             ToastUtils.make().setMode(ToastUtils.MODE.LIGHT)
                 .setLeftIcon(R.mipmap.ic_launcher)
                 .show("下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到下载成功，已保存到")
+        }
+
+        val manager2 =
+            InterceptChainManager<String>()
+        manager2.add(/*"A1",*/ FirstInterceptChain(this))
+        manager2.add(/*"A2",*/ SecondInterceptChain(this))
+        manager2.add(/*"A3",*/ ThirdInterceptChain(this))
+        manager2.add(/*"A4",*/ SecondInterceptChain(this))
+
+
+        binding.btnInterceptChain.click {
+            manager2.reset()
+            manager2.start("开始")
         }
     }
 

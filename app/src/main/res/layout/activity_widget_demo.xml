@@ -55,6 +55,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Toast亮色" />
+      <Button
+            android:id="@+id/btn_intercept_chain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="责任链模式" />
 
 
 
