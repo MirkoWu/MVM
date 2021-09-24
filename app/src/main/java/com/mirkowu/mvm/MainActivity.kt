@@ -30,7 +30,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     }
 
     val binding by bindingView(com.mirkowu.mvm.databinding.ActivityMainBinding::inflate)
-
+lateinit var pagerAdapter: FragmentBasePagerAdapter
 
     override fun initMediator(): EmptyMediator {
         return super.initMediator()
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     override fun getLayoutId() = R.layout.activity_main
 
     override fun initialize() {
-        val pagerAdapter =
+          pagerAdapter =
             FragmentBasePagerAdapter(
                 supportFragmentManager,
                 DataBindingFragment.newInstance(),
@@ -118,5 +118,10 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 //        GridListActivity.start(this)
     }
 
+    override fun onDestroy() {
+        pagerAdapter.clear()
+        BuglyManager.removeUpgradeListener()
+        super.onDestroy()
+    }
 
 }

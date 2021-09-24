@@ -45,7 +45,6 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
         ivAlbum.setOnClickListener(this);
 
 
-
         ScanConfig config = QRScanner.getInstance().getScanConfig();
 
         if (!TextUtils.isEmpty(config.getTitle())) {
@@ -132,5 +131,11 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
     @Override
     public void onScanResultFailure() {
         onFailure();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImagePicker.getInstance().removeAllListener();
     }
 }

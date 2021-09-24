@@ -46,6 +46,11 @@ public class QRScanner {
         return mOnScanResultListener;
     }
 
+
+    public void removeOnScanResultListener() {
+        mOnScanResultListener = null;
+    }
+
     public void start(Context context) {
         QrScanActivity.start(context);
     }

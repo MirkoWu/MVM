@@ -97,15 +97,16 @@ public class BottomListDialog extends BaseDialog {
 
         ListAdapter listAdapter = new ListAdapter();
         listAdapter.setData(mData);
-        if (mOnItemClickListener != null) {
-            listAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, Object item, int position) {
+
+        listAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Object item, int position) {
+                if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(BottomListDialog.this, listAdapter.getItem(position), position);
-                    BottomListDialog.this.dismissAllowingStateLoss();
                 }
-            });
-        }
+                BottomListDialog.this.dismissAllowingStateLoss();
+            }
+        });
 
         rvList.setAdapter(listAdapter);
 

@@ -305,4 +305,8 @@ public class BuglyManager {
     public static void removeUpgradeStateListener() {
         sUpgradeStateListener = null;
     }
+
+    public static void removeUpgradeListener() {
+        sOnUpgradeListener = null;
+    }
 }

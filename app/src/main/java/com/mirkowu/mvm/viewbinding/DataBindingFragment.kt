@@ -25,7 +25,6 @@ import com.mirkowu.mvm.download.DownloadActivity
 import com.mirkowu.mvm.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.mvvm.MVVMMediator
 import com.mirkowu.mvm.widgetdemo.WidgetDemoActivity
-import java.lang.Exception
 import java.util.*
 
 
@@ -190,6 +189,11 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 
 //        _binding = FragmentDatabindingBinding.inflate(inflater, container, false)
 //        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        QRScanner.getInstance().removeOnScanResultListener()
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

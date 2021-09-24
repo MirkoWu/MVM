@@ -85,7 +85,7 @@ public class InterceptChainManager<T> {
     }
 
 
-    public void next(String key, T data) {
+    public synchronized void next(String key, T data) {
         if (!TextUtils.isEmpty(key) && mMap.containsKey(key)) {
             mCurIndex = mMap.indexOfKey(key);
         }

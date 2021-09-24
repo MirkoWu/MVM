@@ -57,6 +57,9 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
                 .setData(mutableListOf<CharSequence>("测试环境", "测试环境", "测试环境", "测试环境"))
                 //.setTitle("标题")
 //                .setMarginHor(20).setMarginVer(20)
+                .setOnItemClickListener { dialog, data, position ->
+
+                }
                 .show(supportFragmentManager)
         }
         binding.btnInput.click {

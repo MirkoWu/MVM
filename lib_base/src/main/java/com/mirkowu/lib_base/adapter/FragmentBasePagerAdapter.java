@@ -37,6 +37,10 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    public void clear() {
+        fragments = null;
+    }
+
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
         try {
