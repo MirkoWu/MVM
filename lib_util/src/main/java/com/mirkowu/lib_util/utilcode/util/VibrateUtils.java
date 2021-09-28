@@ -1,6 +1,8 @@
 package com.mirkowu.lib_util.utilcode.util;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.os.Build;
 import android.os.Vibrator;
 
 import androidx.annotation.RequiresPermission;
@@ -45,10 +47,31 @@ public final class VibrateUtils {
      */
     @RequiresPermission(VIBRATE)
     public static void vibrate(final long[] pattern, final int repeat) {
+        vibrateAbove10(pattern, repeat);
+    }
+
+    @RequiresPermission(VIBRATE)
+    private static void vibrateAbove10(final long[] pattern, final int repeat) {
         Vibrator vibrator = getVibrator();
         if (vibrator == null) return;
-        vibrator.vibrate(pattern, repeat);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes attributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+            vibrator.vibrate(pattern, repeat, attributes);
+        } else {
+            vibrator.vibrate(pattern, repeat);
+        }
     }
+
+    @RequiresPermission(VIBRATE)
+    public static void vibrate(final long[] pattern, final int repeat, final AudioAttributes attributes) {
+        Vibrator vibrator = getVibrator();
+        if (vibrator == null) return;
+        vibrator.vibrate(pattern, repeat, attributes);
+    }
+
 
     /**
      * Cancel vibrate.
