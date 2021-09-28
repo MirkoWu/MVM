@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +18,13 @@ import com.mirkowu.lib_util.utilcode.util.SizeUtils;
  * 仅对 LinearLayoutManager 样式的列表显示分割线
  */
 public class LinearDecoration extends RecyclerView.ItemDecoration {
-    private Paint mDividerPaint = new Paint();
+    private final Paint mDividerPaint = new Paint();
+    private final Rect mBounds = new Rect();
     private int mSpace;
-    private int mEdgeSpace;
     private int mTopSpace;
     private int mBottomSpace;
+    private int mLeftPadding;
+    private int mRightPadding;
 
     public LinearDecoration(Context context) {
         mDividerPaint.setColor(Color.TRANSPARENT);
@@ -52,16 +53,6 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
     }
 
     /**
-     * 设置头尾二端间隔 优先级EdgeSpace > TopSpace/BottomSpace 。一旦设置此属性则覆盖其他二端属性
-     *
-     * @param edgeSpace 间隔，单位dp
-     */
-    public LinearDecoration setEdgeSpace(float edgeSpace) {
-        mEdgeSpace = SizeUtils.dp2px(edgeSpace);
-        return this;
-    }
-
-    /**
      * 设置起始端间隔
      *
      * @param edgeSpace 间隔，单位dp
@@ -80,6 +71,51 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
      */
     public LinearDecoration setBottomSpace(float edgeSpace) {
         mBottomSpace = SizeUtils.dp2px(edgeSpace);
+        return this;
+    }
+
+    /**
+     * 设置头尾二端间隔 优先级EdgeSpace > TopSpace/BottomSpace 。一旦设置此属性则覆盖其他二端属性
+     *
+     * @param edgeSpace 间隔，单位dp
+     */
+    public LinearDecoration setEdgeSpace(float edgeSpace) {
+        setTopSpace(edgeSpace);
+        setBottomSpace(edgeSpace);
+        return this;
+    }
+
+    /**
+     * 设置左边间隔 仅支持LinearLayoutManager
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
+    public LinearDecoration setLeftPadding(float edgeSpace) {
+        mLeftPadding = SizeUtils.dp2px(edgeSpace);
+        return this;
+    }
+
+    /**
+     * 设置右边间隔 仅支持LinearLayoutManager
+     *
+     * @param edgeSpace 间隔，单位dp
+     * @return
+     */
+    public LinearDecoration setRightPadding(float edgeSpace) {
+        mRightPadding = SizeUtils.dp2px(edgeSpace);
+        return this;
+    }
+
+    /**
+     * 设置分割线缩进
+     *
+     * @param edgeSpace
+     * @return
+     */
+    public LinearDecoration setPadding(float edgeSpace) {
+        setLeftPadding(edgeSpace);
+        setRightPadding(edgeSpace);
         return this;
     }
 
@@ -108,92 +144,117 @@ public class LinearDecoration extends RecyclerView.ItemDecoration {
     private void setLinear(int orientation, Rect outRect, int childPosition, int itemCount) {
         if (orientation == LinearLayoutManager.VERTICAL) {
             if (childPosition == 0) {
-                outRect.set(0, mEdgeSpace != 0 ? mEdgeSpace : mTopSpace, 0, mSpace);
+                outRect.set(0, mTopSpace, 0, mSpace);
             } else if (childPosition == itemCount - 1) {
-                outRect.set(0, 0, 0, mEdgeSpace != 0 ? mEdgeSpace : mBottomSpace);
+                outRect.set(0, 0, 0, mBottomSpace);
             } else {
                 outRect.set(0, 0, 0, mSpace);
             }
         } else if (orientation == LinearLayoutManager.HORIZONTAL) {
             if (childPosition == 0) {
-                outRect.set(mEdgeSpace != 0 ? mEdgeSpace : mTopSpace, 0, mSpace, 0);
+                outRect.set(mTopSpace, 0, mSpace, 0);
             } else if (childPosition == itemCount - 1) {
-                outRect.set(0, 0, mEdgeSpace != 0 ? mEdgeSpace : mBottomSpace, 0);
+                outRect.set(0, 0, mBottomSpace, 0);
             } else {
                 outRect.set(0, 0, mSpace, 0);
             }
         }
     }
 
-    private void drawLinear(int orientation, Canvas c, RecyclerView parent) {
-        final int topSpace = mEdgeSpace != 0 ? mEdgeSpace : mTopSpace;
-        final int bottomSpace = mEdgeSpace != 0 ? mEdgeSpace : mBottomSpace;
 
+    private void drawLinear(int orientation, Canvas canvas, RecyclerView parent) {
         if (orientation == LinearLayoutManager.VERTICAL) {
+            canvas.save();
+            final int left;
+            final int right;
+            //裁剪绘制区域
+            if (parent.getClipToPadding()) {
+                left = parent.getPaddingLeft();
+                right = parent.getWidth() - parent.getPaddingRight();
+                canvas.clipRect(left, parent.getPaddingTop(), right,
+                        parent.getHeight() - parent.getPaddingBottom());
+            } else {
+                left = 0;
+                right = parent.getWidth();
+            }
+
             final int childCount = parent.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 final View child = parent.getChildAt(i);
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                        .getLayoutParams();
-                int tx = Math.round(ViewCompat.getTranslationX(child));
-                int ty = Math.round(ViewCompat.getTranslationY(child));
-                final int left = parent.getPaddingLeft() + tx;
-                final int right = parent.getWidth() - parent.getPaddingRight() + tx;
+                int tx = Math.round(child.getTranslationX());
+                int ty = Math.round(child.getTranslationY());
+                parent.getDecoratedBoundsWithMargins(child, mBounds);
 
-                final int top = child.getBottom() + params.bottomMargin + ty;
-                final int bottom = top + mSpace;
+                final int bottom = mBounds.bottom + ty;
+                final int top = bottom - mSpace;
+                final int finalLeft = left + mLeftPadding + tx;
+                final int finalRight = right - mRightPadding + tx;
+
                 if (i != childCount - 1) {
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    canvas.drawRect(finalLeft, top, finalRight, bottom, mDividerPaint);
                 }
 
                 //顶部和底部
                 if (i == 0) {
-                    if (topSpace != 0) {
-                        final int firstBottom = child.getTop() - params.topMargin + ty;
-                        final int firstTop = firstBottom - topSpace;
-                        c.drawRect(left, firstTop, right, firstBottom, mDividerPaint);
+                    if (mTopSpace != 0) {
+                        final int firstTop = mBounds.top + ty;
+                        final int firstBottom = firstTop + mTopSpace;
+                        canvas.drawRect(finalLeft, firstTop, finalRight, firstBottom, mDividerPaint);
                     }
                 } else if (i == childCount - 1) {
-                    if (bottomSpace != 0) {
-                        final int lastTop = child.getBottom() + params.bottomMargin + ty;
-                        final int lastBottom = lastTop + bottomSpace;
-                        c.drawRect(left, lastTop, right, lastBottom, mDividerPaint);
+                    if (mBottomSpace != 0) {
+                        final int lastTop = bottom - mBottomSpace;
+                        canvas.drawRect(finalLeft, lastTop, finalRight, bottom, mDividerPaint);
                     }
                 }
             }
-
+            canvas.restore();
         } else if (orientation == LinearLayoutManager.HORIZONTAL) {
+            canvas.save();
+            final int top;
+            final int bottom;
+            //裁剪绘制区域
+            if (parent.getClipToPadding()) {
+                top = parent.getPaddingTop();
+                bottom = parent.getHeight() - parent.getPaddingBottom();
+                canvas.clipRect(parent.getPaddingLeft(), top,
+                        parent.getWidth() - parent.getPaddingRight(), bottom);
+            } else {
+                top = 0;
+                bottom = parent.getHeight();
+            }
 
             final int childCount = parent.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 final View child = parent.getChildAt(i);
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                        .getLayoutParams();
-                int tx = Math.round(ViewCompat.getTranslationX(child));
-                int ty = Math.round(ViewCompat.getTranslationY(child));
-                final int top = parent.getPaddingTop() + ty;
-                final int bottom = parent.getHeight() - parent.getPaddingBottom() + ty;
+                int tx = Math.round(child.getTranslationX());
+                int ty = Math.round(child.getTranslationY());
+                parent.getDecoratedBoundsWithMargins(child, mBounds);
 
-                final int left = child.getRight() + params.rightMargin + tx;
-                final int right = left + mSpace;
+                final int right = mBounds.right + tx;
+                final int left = right - mSpace;
+                final int finalTop = top + mRightPadding + ty;
+                final int finalBottom = bottom - mLeftPadding + ty;
+
                 if (i != childCount - 1) {
-                    c.drawRect(left, top, right, bottom, mDividerPaint);
+                    canvas.drawRect(left, finalTop, right, finalBottom, mDividerPaint);
                 }
+
                 //顶部和底部
                 if (i == 0) {
-                    if (topSpace != 0) {
-                        final int firstRight = child.getLeft() - params.leftMargin + tx;
-                        final int firstLeft = firstRight - topSpace;
-                        c.drawRect(firstLeft, top, firstRight, bottom, mDividerPaint);
+                    if (mTopSpace != 0) {
+                        final int firstLeft = mBounds.left + tx;
+                        final int firstRight = firstLeft + mTopSpace;
+                        canvas.drawRect(firstLeft, finalTop, firstRight, finalBottom, mDividerPaint);
                     }
                 } else if (i == childCount - 1) {
-                    if (bottomSpace != 0) {
-                        final int lastLeft = child.getRight() + params.rightMargin + tx;
-                        final int lastRight = lastLeft + bottomSpace;
-                        c.drawRect(lastLeft, top, lastRight, bottom, mDividerPaint);
+                    if (mBottomSpace != 0) {
+                        final int lastLeft = right - mBottomSpace;
+                        canvas.drawRect(lastLeft, finalTop, right, finalBottom, mDividerPaint);
                     }
                 }
             }
+            canvas.restore();
         }
     }
 }

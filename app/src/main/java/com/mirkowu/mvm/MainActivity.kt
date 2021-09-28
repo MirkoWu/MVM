@@ -17,7 +17,7 @@ import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
-import com.mirkowu.mvm.recycelerview.LinearListActivity
+import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
 
@@ -114,8 +114,8 @@ lateinit var pagerAdapter: FragmentBasePagerAdapter
     }
 
     fun listClick(view: View?) {
-        LinearListActivity.start(this)
-//        GridListActivity.start(this)
+//        LinearListActivity.start(this)
+        GridListActivity.start(this)
     }
 
     override fun onDestroy() {

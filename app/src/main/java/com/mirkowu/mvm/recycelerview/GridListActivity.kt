@@ -11,6 +11,7 @@ import com.mirkowu.lib_widget.decoration.GridDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityGridListBinding
+import me.ele.uetool.UETool
 
 class GridListActivity : BaseActivity<EmptyMediator>() {
     companion object {
@@ -38,11 +39,13 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
         }
         val gridAdapter = GridAdapter()
         binding.rvGrid.apply {
-            layoutManager = GridLayoutManager(context, 4)
+            layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
             adapter = gridAdapter
             addItemDecoration(
-                GridDecoration(context).setSpace(60f)/*.setEdgeSpace(10f)*//*.setTopSpace(10f)
-                    .setBottomSpace(10f)*/.setSpaceColor(Color.parseColor("#90000000"))
+                GridDecoration(context).setSpace(30f)/*.setEdgeSpace(10f)*/
+                    .setTopSpace(20f).setBottomSpace(10f)
+//                    .setSideSpace(20f)
+                    .setSpaceColor(Color.parseColor("#40000000"))
             )
         }
         gridAdapter.data = list
@@ -59,5 +62,7 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
                 }"
             )
         }
+
+        UETool.showUETMenu();
     }
 }

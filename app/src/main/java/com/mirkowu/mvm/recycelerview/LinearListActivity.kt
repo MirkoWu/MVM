@@ -36,22 +36,25 @@ class LinearListActivity : BaseActivity<EmptyMediator>() {
 
         val list = mutableListOf<IMultiType>()
         for (index in 0 until 40) {
-            if (index % 2 == 0) {
-                list.add(SecondBean())
-            } else if (index % 3 == 0) {
-                list.add(ThirdBean())
-            } else {
-                list.add(FirstBean())
-                list.add(FourBean())
-            }
+            list.add(FirstBean())
+//            if (index % 2 == 0) {
+//                list.add(SecondBean())
+//            } else if (index % 3 == 0) {
+//                list.add(ThirdBean())
+//            } else {
+//                list.add(FirstBean())
+//                list.add(FourBean())
+//            }
         }
         val gridAdapter = LinearAdapter()
         binding.rvGrid.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             adapter = gridAdapter
             addItemDecoration(
-                LinearDecoration(context).setSpace(10f)/*.setEdgeSpace(10f)*/.setTopSpace(20f)
-                    .setBottomSpace(50f).setSpaceColor(Color.parseColor("#90FF0000"))
+                LinearDecoration(context).setSpace(10f)/*.setEdgeSpace(10f)*/
+//                    .setTopSpace(20f).setBottomSpace(50f)
+                    .setLeftPadding(10f).setRightPadding(60f)
+                    .setSpaceColor(Color.parseColor("#90FF0000"))
             )
         }
         gridAdapter.data = list
