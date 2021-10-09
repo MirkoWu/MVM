@@ -252,7 +252,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
             Field mShownByMe = DialogFragment.class.getDeclaredField("mShownByMe");
             mShownByMe.setAccessible(true);
             mShownByMe.set(this, true);
-        } catch (Exception e) {
+        } catch (Throwable e) {
         }
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
@@ -265,6 +265,13 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
         return showAllowingStateLoss(manager, getClass().getName());
     }
 
+    @Override
+    public void dismissAllowingStateLoss() {
+        try {
+            super.dismissAllowingStateLoss();
+        } catch (Throwable e) {
+        }
+    }
 
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
 

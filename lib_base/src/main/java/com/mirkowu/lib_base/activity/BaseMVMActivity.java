@@ -42,7 +42,11 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         initStatusBar();
         bindContentView();
         bindMediator();
+        initialize(savedInstanceState);
         initialize();
+    }
+
+    protected void initialize(@Nullable Bundle savedInstanceState) {
     }
 
     /*** 绑定布局 */
