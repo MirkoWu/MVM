@@ -6,7 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.view.View
-import com.mirkowu.lib_base.adapter.FragmentBasePagerAdapter
+import androidx.fragment.app.Fragment
+import com.mirkowu.lib_base.adapter.BaseFragmentPagerAdapter
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
@@ -30,7 +31,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     }
 
     val binding by bindingView(com.mirkowu.mvm.databinding.ActivityMainBinding::inflate)
-lateinit var pagerAdapter: FragmentBasePagerAdapter
+    lateinit var pagerAdapter: BaseFragmentPagerAdapter
 
     override fun initMediator(): EmptyMediator {
         return super.initMediator()
@@ -39,13 +40,15 @@ lateinit var pagerAdapter: FragmentBasePagerAdapter
     override fun getLayoutId() = R.layout.activity_main
 
     override fun initialize() {
-          pagerAdapter =
-            FragmentBasePagerAdapter(
+        pagerAdapter =
+            BaseFragmentPagerAdapter(
                 supportFragmentManager,
-                DataBindingFragment.newInstance(),
-                DataBindingFragment.newInstance(),
-                DataBindingFragment.newInstance(),
-                DataBindingFragment.newInstance()
+                mutableListOf<Fragment>(
+                    DataBindingFragment.newInstance(),
+                    DataBindingFragment.newInstance(),
+                    DataBindingFragment.newInstance(),
+                    DataBindingFragment.newInstance()
+                )
             )
         binding.vpHome.apply {
             adapter = pagerAdapter

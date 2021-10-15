@@ -13,7 +13,9 @@ import com.mirkowu.lib_util.LogUtil;
 
 /**
  * FragmentStatePagerAdapter 基类 配合ViewPager使用 简单快捷
+ * 已启用，请使用{@link BaseFragmentPagerAdapter}代替
  */
+@Deprecated
 public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
     private Fragment[] fragments;
     private String[] titles;
@@ -32,7 +34,6 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
             try {
                 fragments[i] = cls.newInstance();
             } catch (Exception e) {
-                LogUtil.e(e);
             }
         }
     }
@@ -46,7 +47,6 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         try {
             super.restoreState(state, loader);
         } catch (Exception e) {
-            LogUtil.e(e);
         }
     }
 
@@ -54,11 +54,9 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = fragments[position];
         if (fragment instanceof BaseMVMFragment) {
-            ((BaseMVMFragment) fragment).setPosition(position);
             CharSequence pageTitle = getPageTitle(position);
-            if (!TextUtils.isEmpty(pageTitle)) {
-                ((BaseMVMFragment) fragment).setTitle(pageTitle.toString());
-            }
+            ((BaseMVMFragment) fragment).setTitle(pageTitle.toString());
+            ((BaseMVMFragment) fragment).setPosition(position);
         }
 
         return fragment;

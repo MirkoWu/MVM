@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.viewbinding
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -196,7 +197,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         QRScanner.getInstance().removeOnScanResultListener()
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        Log.d(TAG, "onViewCreated: $position")
 //        super.onViewCreated(view, savedInstanceState)
 //    }
@@ -206,44 +207,52 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 //        super.onActivityCreated(savedInstanceState)
 //    }
 //
-//    override fun onAttach(context: Context) {
-//        Log.d(TAG, "onAttach: $position")
-//        super.onAttach(context)
-//    }
-//
+    override fun onAttach(context: Context) {
+        Log.d(TAG, "onAttach: $position")
+        super.onAttach(context)
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart: $position")
+        super.onStart()
+    }
+
+    //
 //    override fun onAttachFragment(childFragment: Fragment) {
 //        Log.d(TAG, "onAttachFragment: $position")
 //        super.onAttachFragment(childFragment)
 //    }
 //
-//    override fun onResume() {
-//        Log.d(TAG, "onResume: $position")
-//        super.onResume()
-//    }
+    override fun onResume() {
+        Log.d(TAG, "onResume: $position")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause: $position")
+        super.onPause()
+    }
 //
-//    override fun onPause() {
-//        Log.d(TAG, "onPause: $position")
-//        super.onPause()
-//    }
-//
-//    override fun onStop() {
-//        Log.d(TAG, "onStop: $position")
-//        super.onStop()
-//    }
-//
+    override fun onStop() {
+        Log.d(TAG, "onStop: $position")
+        super.onStop()
+    }
+
+    //
 //    override fun onDestroyView() {
 //        Log.d(TAG, "onDestroyView: $position")
 ////        _binding = null
 //        super.onDestroyView()
 //    }
 //
-//    override fun onDestroy() {
-//        Log.d(TAG, "onDestroy: $position")
-//        super.onDestroy()
-//    }
-//
-//    override fun onDetach() {
-//        Log.d(TAG, "onDetach: $position")
-//        super.onDetach()
-//    }
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy: $position")
+        super.onDestroy()
+    }
+
+    //
+    override fun onDetach() {
+        Log.d(TAG, "onDetach: $position")
+        super.onDetach()
+    }
 }
