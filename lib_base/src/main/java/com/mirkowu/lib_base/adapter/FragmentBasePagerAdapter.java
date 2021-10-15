@@ -33,7 +33,7 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
         for (int i = 0; i < titles.length; i++) {
             try {
                 fragments[i] = cls.newInstance();
-            } catch (Exception e) {
+            } catch (Throwable e) {
             }
         }
     }
@@ -46,7 +46,7 @@ public class FragmentBasePagerAdapter extends FragmentStatePagerAdapter {
     public void restoreState(Parcelable state, ClassLoader loader) {
         try {
             super.restoreState(state, loader);
-        } catch (Exception e) {
+        } catch (Throwable e) {
         }
     }
 
