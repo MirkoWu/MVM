@@ -13,3 +13,4 @@ include ':lib_widget'
 include ':lib_base'
 include ':app'
 rootProject.name = "MVM"
+include ':lib_camera'

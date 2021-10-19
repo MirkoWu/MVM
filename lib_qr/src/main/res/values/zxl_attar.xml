@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <color name="viewfinder_corner" >#FF1FB3E2</color>
+    <color name="viewfinder_frame">#7F1FB3E2</color>
+    <color name="viewfinder_laser">#FF1FB3E2</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="viewfinder_text_color">#FFC0C0C0</color>
+    <color name="zxl_capture_navigation_bar_color">#00000000</color>
+    <color name="zxl_capture_status_bar_color">#00000000</color>
+    <dimen name="zxl_flashlight_margin_top">80dp</dimen>
+    <style name="CaptureTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@android:color/black</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@color/zxl_capture_status_bar_color</item>
+        <item name="android:navigationBarColor">@color/zxl_capture_navigation_bar_color</item>
+    </style>
+    <declare-styleable name="ViewfinderView">
+        <attr format="color" name="maskColor"/>
+        <attr format="color" name="frameColor"/>
+        <attr format="color" name="cornerColor"/>
+        <attr format="color" name="laserColor"/>
+        <attr format="string" name="labelText"/>
+        <attr format="color" name="labelTextColor"/>
+        <attr format="dimension" name="labelTextSize"/>
+        <attr format="dimension" name="labelTextPadding"/>
+        <attr format="dimension" name="labelTextWidth"/>
+        <attr format="enum" name="labelTextLocation">
+            <enum name="top" value="0"/>
+            <enum name="bottom" value="1"/>
+        </attr>
+        <attr format="dimension" name="frameWidth"/>
+        <attr format="dimension" name="frameHeight"/>
+        <attr format="integer" name="gridColumn"/>
+        <attr format="dimension" name="gridHeight"/>
+        <attr format="enum" name="laserStyle">
+            <enum name="none" value="0"/>
+            <enum name="line" value="1"/>
+            <enum name="grid" value="2"/>
+        </attr>
+        <attr format="dimension" name="cornerRectWidth"/>
+        <attr format="dimension" name="cornerRectHeight"/>
+        <attr format="dimension" name="scannerLineMoveDistance"/>
+        <attr format="dimension" name="scannerLineHeight"/>
+        <attr format="dimension" name="frameLineWidth"/>
+        <attr format="integer" name="scannerAnimationDelay"/>
+        <attr format="float" name="frameRatio"/>
+        <attr format="dimension" name="framePaddingLeft"/>
+        <attr format="dimension" name="framePaddingTop"/>
+        <attr format="dimension" name="framePaddingRight"/>
+        <attr format="dimension" name="framePaddingBottom"/>
+        <attr format="enum" name="frameGravity">
+            <enum name="center" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="top" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="bottom" value="4"/>
+        </attr>
+    </declare-styleable>
+</resources>

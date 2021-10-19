@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
+import com.mirkowu.lib_camera.PreviewActivity
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
@@ -170,6 +171,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     LogUtil.e("扫描结果：" + it)
                 }.start(context)
         }
+        binding.btnCamera.click {
+            startActivity(Intent(context, PreviewActivity::class.java))
+        }
         binding.btnCrash.click {
             throw RuntimeException("测试BUG")
         }
@@ -232,7 +236,8 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         Log.d(TAG, "onPause: $position")
         super.onPause()
     }
-//
+
+    //
     override fun onStop() {
         Log.d(TAG, "onStop: $position")
         super.onStop()

@@ -146,6 +146,7 @@ dependencies {
         implementation project(path: ':lib_image')
         implementation project(path: ':lib_photo')
         implementation project(path: ':lib_qr')
+        implementation project(path: ':lib_camera')
         implementation project(path: ':lib_stat')
         implementation project(path: ':lib_upgrade')
         implementation project(path: ':lib_screen')

@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
-import com.king.zxing.util.CodeUtils;
 import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.callback.OnPickResultListener;
+import com.king.zxing.util.CodeUtils;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_widget.Toolbar;
 
