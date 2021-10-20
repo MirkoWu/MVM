@@ -42,7 +42,7 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
 
     //gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.8'
 
     //引用版本
     //api 'com.blankj:utilcodex:1.30.6'

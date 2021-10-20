@@ -302,7 +302,7 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
                     if (holder == null) {
                         return;
                     }
-                    int position = holder.getBindingAdapterPosition();
+                    int position = holder.getAdapterPosition();
                     if (position == NO_POSITION) {
                         return;
                     }
@@ -352,7 +352,7 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
                     if (holder == null) {
                         return;
                     }
-                    int position = holder.getBindingAdapterPosition();
+                    int position = holder.getAdapterPosition();
                     if (position == NO_POSITION) {
                         return;
                     }
@@ -402,7 +402,7 @@ public abstract class BaseRVAdapter<T, VH extends BaseRVHolder> extends Recycler
                     if (holder == null) {
                         return false;
                     }
-                    int position = holder.getBindingAdapterPosition();
+                    int position = holder.getAdapterPosition();
                     if (position == NO_POSITION) {
                         return false;
                     }

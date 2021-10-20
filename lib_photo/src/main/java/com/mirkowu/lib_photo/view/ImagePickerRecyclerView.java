@@ -351,7 +351,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = holder.getBindingAdapterPosition();
+                        int position = holder.getAdapterPosition();
                         if (position == NO_POSITION) {
                             return;
                         }
@@ -361,7 +361,7 @@ public class ImagePickerRecyclerView extends RecyclerView {
                 holder.flDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = holder.getBindingAdapterPosition();
+                        int position = holder.getAdapterPosition();
                         if (position == NO_POSITION) {
                             return;
                         }

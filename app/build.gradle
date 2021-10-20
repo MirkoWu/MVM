@@ -115,7 +115,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-
     //是否使用本地lib
     def useLocalModule = true
     if (!useLocalModule) {
@@ -161,8 +160,4 @@ dependencies {
 
     //UE
     debugImplementation 'me.ele:uetool:1.2.9'
-}
-repositories {
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    mavenCentral()
 }
