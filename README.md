@@ -35,6 +35,7 @@ MVVM或衍生出来的变种其行为目的都是一致的。
     implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version" //X5 + JsBridge 的WebView
     implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version" //相册选择库
     implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version" //二维码扫描
+    implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version" //摄像头
     implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version" //版本更新(弹窗和下载安装功能)
     implementation "com.github.mirkowu.mvm:lib_stat:$ext.mvm_version" //umeng统计
     implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version" //屏幕适配
@@ -91,6 +92,8 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 ### [Photo组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_photo)
 
 ### [QR组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qr)
+
+### [Camerax组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_camera)
 
 ### [Upgrade组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_upgrade)
 
