@@ -27,20 +27,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
-    implementation "com.google.android.material:material:$ext.material_version"
 
-//    def camerax_version = '1.1.0-alpha03'目前最新版，但是为了稳定我们还是选择rc版
     api "androidx.camera:camera-core:$ext.camerax_version"
-    // CameraX Camera2 extensions[可选]拓展库可实现人像、HDR、夜间和美颜、滤镜但依赖于OEM
     api "androidx.camera:camera-camera2:$ext.camerax_version"
-    // CameraX Lifecycle library[可选]避免手动在生命周期释放和销毁数据
     api "androidx.camera:camera-lifecycle:$ext.camerax_version"
-    // CameraX View class[可选]最佳实践，最好用里面的PreviewView，它会自行判断用SurfaceView还是TextureView来实现
-    api 'androidx.camera:camera-view:1.0.0-alpha30'
-
-//    implementation project(':lib_util')
-//    implementation project(':lib_widget')
-//    implementation project(':lib_upgrade')
-
-
+    api "androidx.camera:camera-view:$ext.camerax_view_version"
 }
