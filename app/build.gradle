@@ -131,6 +131,7 @@ dependencies {
         implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
+        implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_stat:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version"
