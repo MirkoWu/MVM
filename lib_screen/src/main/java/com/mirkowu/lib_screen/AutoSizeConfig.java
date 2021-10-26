@@ -28,6 +28,7 @@ import android.util.DisplayMetrics;
 import com.mirkowu.lib_screen.external.ExternalAdaptManager;
 import com.mirkowu.lib_screen.unit.Subunits;
 import com.mirkowu.lib_screen.unit.UnitsManager;
+import com.mirkowu.lib_screen.utils.AutoSizeLog;
 import com.mirkowu.lib_screen.utils.Preconditions;
 import com.mirkowu.lib_screen.utils.ScreenUtils;
 import com.mirkowu.lib_util.LogUtil;
@@ -701,5 +702,10 @@ public final class AutoSizeConfig {
                 }
             }
         }).start();
+    }
+
+    public AutoSizeConfig setDebug(boolean isDebug){
+        AutoSizeLog.setDebug(isDebug);
+        return this;
     }
 }

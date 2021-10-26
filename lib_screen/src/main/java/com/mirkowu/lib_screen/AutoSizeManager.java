@@ -43,6 +43,7 @@ public class AutoSizeManager {
     public static void init(Application application) {
         AutoSize.checkAndInit(application); //先初始化，防止多进程
         AutoSizeConfig.getInstance()
+                .setDebug(false)
                 .setBaseOnWidth(true)
                 .setUseDeviceSize(false)
                 .setDesignWidthInDp(DESIGN_WIDTH_IN_DP)

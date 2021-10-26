@@ -58,6 +58,12 @@ public class LogUtil {
         }
     }
 
+    public static void w(@NonNull String msg) {
+        if (sIsDebug) {
+            Logger.w(msg);
+        }
+    }
+
     public static void e(@NonNull String msg) {
         if (sIsDebug) {
             Logger.e(msg);
@@ -85,6 +91,12 @@ public class LogUtil {
     public static void d(String tag, String msg) {
         if (sIsDebug) {
             Log.d(tag, msg);
+        }
+    }
+
+    public static void w(String tag, String msg) {
+        if (sIsDebug) {
+            Log.w(tag, msg);
         }
     }
 
