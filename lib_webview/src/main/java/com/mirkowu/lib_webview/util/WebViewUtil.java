@@ -94,16 +94,19 @@ public class WebViewUtil {
      * @param application
      */
     private static void initX5Web(Application application) {
-        //首次初始化冷启动优化  在调用TBS初始化、创建WebView之前进行如下配置
-        HashMap map = new HashMap();
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
-        QbSdk.initTbsSettings(map);
+        try {
+            //首次初始化冷启动优化  在调用TBS初始化、创建WebView之前进行如下配置
+            HashMap map = new HashMap();
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+            map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
+            QbSdk.initTbsSettings(map);
 
-        //屏蔽X5频繁收集手机敏感信息数据 imsi 和 imei
-        QbSdk.disableSensitiveApi();
-        //初始化环境
-        QbSdk.initX5Environment(application.getApplicationContext(), null);
+            //屏蔽X5频繁收集手机敏感信息数据 imsi 和 imei
+            QbSdk.disableSensitiveApi();
+            //初始化环境
+            QbSdk.initX5Environment(application.getApplicationContext(), null);
+        } catch (Throwable e) {
+        }
     }
 
     /**
@@ -116,7 +119,7 @@ public class WebViewUtil {
             Intent intent = new Intent(context, EmptyService.class);
             context.startService(intent);
         } catch (Throwable e) {
-            LogUtil.e("startMultiProcess  try", e);
+            LogUtil.e("startMultiProcess  retry", e);
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(new Intent(context, EmptyService.class));
