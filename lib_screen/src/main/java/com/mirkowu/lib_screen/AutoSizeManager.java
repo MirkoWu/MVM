@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import com.mirkowu.lib_screen.internal.CustomAdapt;
 import com.mirkowu.lib_screen.internal.IAutoAdapt;
-import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_screen.utils.AutoSizeLog;
 import com.mirkowu.lib_util.utilcode.util.ThreadUtils;
 
 import java.util.Locale;
@@ -64,16 +64,16 @@ public class AutoSizeManager {
         }
         //如果 target 实现 CustomAdapt 接口表示该 target 想自定义一些用于适配的参数, 从而改变最终的适配效果
         if (target instanceof IAutoAdapt && target instanceof CustomAdapt) {
-            LogUtil.d(TAG, String.format(Locale.ENGLISH, "%s implemented by %s!", target.getClass().getName(), CustomAdapt.class.getName()));
+            AutoSizeLog.d(TAG, String.format(Locale.ENGLISH, "%s implemented by %s!", target.getClass().getName(), CustomAdapt.class.getName()));
             AutoSize.autoConvertDensityOfCustomAdapt(activity, (CustomAdapt) target);
         } else if (target instanceof IAutoAdapt) {
-            LogUtil.d(TAG, String.format(Locale.ENGLISH, "%s used the global configuration.", target.getClass().getName()));
+            AutoSizeLog.d(TAG, String.format(Locale.ENGLISH, "%s used the global configuration.", target.getClass().getName()));
             AutoSize.autoConvertDensityOfGlobal(activity);
         } else if (target instanceof CustomAdapt) {
-            LogUtil.d(TAG, String.format(Locale.ENGLISH, "%s implemented by %s!", target.getClass().getName(), CustomAdapt.class.getName()));
+            AutoSizeLog.d(TAG, String.format(Locale.ENGLISH, "%s implemented by %s!", target.getClass().getName(), CustomAdapt.class.getName()));
             AutoSize.autoConvertDensityOfCustomAdapt(activity, (CustomAdapt) target);
         } else { //默认不适配
-            LogUtil.i(TAG, String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
+            AutoSizeLog.i(TAG, String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
             AutoSize.cancelAdapt(activity);
         }
     }

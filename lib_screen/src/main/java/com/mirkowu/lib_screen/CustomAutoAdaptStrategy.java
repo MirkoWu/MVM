@@ -5,7 +5,7 @@ import android.app.Application;
 
 import com.mirkowu.lib_screen.external.ExternalAdaptInfo;
 import com.mirkowu.lib_screen.internal.CancelAdapt;
-import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_screen.utils.AutoSizeLog;
 
 import java.util.Locale;
 
@@ -28,14 +28,14 @@ public class CustomAutoAdaptStrategy implements AutoAdaptStrategy {
         //检查是否开启了外部三方库的适配模式, 只要不主动调用 ExternalAdaptManager 的方法, 下面的代码就不会执行
         if (AutoSizeConfig.getInstance().getExternalAdaptManager().isRun()) {
             if (AutoSizeConfig.getInstance().getExternalAdaptManager().isCancelAdapt(target.getClass())) {
-                LogUtil.i(String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
+                AutoSizeLog.i(String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
                 AutoSize.cancelAdapt(activity);
                 return;
             } else {
                 ExternalAdaptInfo info = AutoSizeConfig.getInstance().getExternalAdaptManager()
                         .getExternalAdaptInfoOfActivity(target.getClass());
                 if (info != null) {
-                    LogUtil.d(String.format(Locale.ENGLISH, "%s used %s for adaptation!", target.getClass().getName(), ExternalAdaptInfo.class.getName()));
+                    AutoSizeLog.d(String.format(Locale.ENGLISH, "%s used %s for adaptation!", target.getClass().getName(), ExternalAdaptInfo.class.getName()));
                     AutoSize.autoConvertDensityOfExternalAdaptInfo(activity, info);
                     return;
                 }
@@ -44,7 +44,7 @@ public class CustomAutoAdaptStrategy implements AutoAdaptStrategy {
 
         //如果 target 实现 CancelAdapt 接口表示放弃适配, 所有的适配效果都将失效
         if (target instanceof CancelAdapt) {
-            LogUtil.i(String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
+            AutoSizeLog.i(String.format(Locale.ENGLISH, "%s canceled the adaptation!", target.getClass().getName()));
             AutoSize.cancelAdapt(activity);
             return;
         }

@@ -40,15 +40,45 @@ public class AutoSizeLog {
         AutoSizeLog.sDebug = debug;
     }
 
+    public static void i(String tag, String message) {
+        if (sDebug) {
+            LogUtil.i(tag, message);
+        }
+    }
+
+    public static void i(String message) {
+        if (sDebug) {
+            LogUtil.i(TAG, message);
+        }
+    }
+
+    public static void d(String tag, String message) {
+        if (sDebug) {
+            LogUtil.d(tag, message);
+        }
+    }
+
     public static void d(String message) {
         if (sDebug) {
             LogUtil.d(TAG, message);
         }
     }
 
+    public static void w(String tag, String message) {
+        if (sDebug) {
+            LogUtil.w(tag, message);
+        }
+    }
+
     public static void w(String message) {
         if (sDebug) {
             LogUtil.w(TAG, message);
+        }
+    }
+
+    public static void e(String tag, String message) {
+        if (sDebug) {
+            LogUtil.e(tag, message);
         }
     }
 

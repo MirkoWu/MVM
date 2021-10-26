@@ -31,7 +31,6 @@ import com.mirkowu.lib_screen.unit.UnitsManager;
 import com.mirkowu.lib_screen.utils.AutoSizeLog;
 import com.mirkowu.lib_screen.utils.Preconditions;
 import com.mirkowu.lib_screen.utils.ScreenUtils;
-import com.mirkowu.lib_util.LogUtil;
 
 import java.lang.reflect.Field;
 
@@ -250,7 +249,7 @@ public final class AutoSizeConfig {
         mScreenWidth = screenSize[0];
         mScreenHeight = screenSize[1];
         mStatusBarHeight = ScreenUtils.getStatusBarHeight();
-        LogUtil.d("designWidthInDp = " + mDesignWidthInDp + ", designHeightInDp = " + mDesignHeightInDp + ", screenWidth = " + mScreenWidth + ", screenHeight = " + mScreenHeight);
+        AutoSizeLog.d("designWidthInDp = " + mDesignWidthInDp + ", designHeightInDp = " + mDesignHeightInDp + ", screenWidth = " + mScreenWidth + ", screenHeight = " + mScreenHeight);
 
         mInitDensity = displayMetrics.density;
         mInitDensityDpi = displayMetrics.densityDpi;
@@ -265,7 +264,7 @@ public final class AutoSizeConfig {
                     if (newConfig.fontScale > 0) {
                         mInitScaledDensity =
                                 Resources.getSystem().getDisplayMetrics().scaledDensity;
-                        LogUtil.d("initScaledDensity = " + mInitScaledDensity + " on ConfigurationChanged");
+                        AutoSizeLog.d("initScaledDensity = " + mInitScaledDensity + " on ConfigurationChanged");
                     }
                     isVertical = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT;
                     int[] screenSize = ScreenUtils.getScreenSize(application);
@@ -279,7 +278,7 @@ public final class AutoSizeConfig {
 
             }
         });
-        LogUtil.d("initDensity = " + mInitDensity + ", initScaledDensity = " + mInitScaledDensity);
+        AutoSizeLog.d("initDensity = " + mInitDensity + ", initScaledDensity = " + mInitScaledDensity);
         mActivityLifecycleCallbacks = new ActivityLifecycleCallbacksImpl(new WrapperAutoAdaptStrategy(strategy == null ? new DefaultAutoAdaptStrategy() : strategy));
         application.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         if ("MiuiResources".equals(application.getResources().getClass().getSimpleName()) || "XResources".equals(application.getResources().getClass().getSimpleName())) {
