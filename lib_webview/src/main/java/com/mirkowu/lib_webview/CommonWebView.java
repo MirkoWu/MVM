@@ -11,9 +11,11 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.mirkowu.lib_util.LogUtil;
+import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.jsbridge.BridgeHandler;
 import com.mirkowu.lib_webview.jsbridge.BridgeWebViewDelegate;
 import com.mirkowu.lib_webview.jsbridge.CallBackFunction;
+import com.mirkowu.lib_webview.jsbridge.JSCallNativeBridge;
 import com.mirkowu.lib_webview.jsbridge.WebViewJavascriptBridge;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.tencent.smtt.sdk.ValueCallback;
@@ -74,27 +76,23 @@ public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJ
      * @param callBack
      * @param jsObjectNameArrays
      */
-//    public void addJavascriptInterface(@NonNull IWebViewCallBack callBack, @NonNull String... jsObjectNameArrays) {
-//        if (callBack == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
-//            return;
-//        }
-//        mJsObjectNameArrays = jsObjectNameArrays;
-//        JSCallNativeBridge jsCallNativeBridge = new JSCallNativeBridge(callBack);
-//
-//        for (String jsObjectName : jsObjectNameArrays) {
-//            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
-//        }
-//    }
-//    public void addJavascriptInterface(@NonNull JSCallNativeBridge jsCallNativeBridge, @NonNull String... jsObjectNameArrays) {
-//        if (jsCallNativeBridge == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
-//            return;
-//        }
-//        mJsObjectNameArrays = jsObjectNameArrays;
-//
-//        for (String jsObjectName : jsObjectNameArrays) {
-//            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
-//        }
-//    }
+    public void addJavascriptInterface(@NonNull IWebViewCallBack callBack, @NonNull String... jsObjectNameArrays) {
+        if (callBack == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
+            return;
+        }
+        JSCallNativeBridge jsCallNativeBridge = new JSCallNativeBridge(callBack);
+        addJavascriptInterface(jsCallNativeBridge, jsObjectNameArrays);
+    }
+
+    public void addJavascriptInterface(@NonNull JSCallNativeBridge jsCallNativeBridge, @NonNull String... jsObjectNameArrays) {
+        if (jsCallNativeBridge == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
+            return;
+        }
+        mJsObjectNameArrays = jsObjectNameArrays;
+        for (String jsObjectName : jsObjectNameArrays) {
+            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
+        }
+    }
 
     /**
      * 移除所有的Js注入

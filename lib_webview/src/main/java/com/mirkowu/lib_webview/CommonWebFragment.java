@@ -107,9 +107,10 @@ public class CommonWebFragment extends BaseMVMFragment {
 
     protected void configWebSettings(@NonNull WebConfig webConfig) {
         mWebViewCallBack = webConfig.getWebViewCallBack();
-
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
+
+        mWebView.addJavascriptInterface(mWebViewCallBack, webConfig.getJsInjectionArrays());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
 
         mFileChooser = new DefaultWebViewFileChooser(getActivity());
@@ -124,7 +125,7 @@ public class CommonWebFragment extends BaseMVMFragment {
                 .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
-//                .setJsInjectionArrays(new String[]{"android"})
+                .setJsInjectionArrays(new String[]{WebConfig.DEFAULT_JS_OBJECT_NAME})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
@@ -149,7 +150,7 @@ public class CommonWebFragment extends BaseMVMFragment {
                     }
 
                     @Override
-                    public <T> T jsCallAndroid(String action, Object content, Class<T> t) {
+                    public <T> T jsCallNative(String action, String content, Class<T> t) {
                         return null;
                     }
 

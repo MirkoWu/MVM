@@ -17,5 +17,5 @@ public interface IWebViewCallBack {
 
     boolean shouldOverrideUrlLoading(CommonWebView webView, String url);
 
-    <T> T jsCallAndroid(String action, Object content, Class<T> t);
+    <T> T jsCallNative(String action, String content, Class<T> t);
 }

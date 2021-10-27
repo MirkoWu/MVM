@@ -30,7 +30,7 @@ import com.tencent.smtt.sdk.WebSettings;
  * 通用的WebView
  * 1.支持X5
  * 2.支持JsBridge
- *
+ * <p>
  * 如果需要自定义的，可继承此Activity 或使用 {@link CommonWebFragment}
  * 如需开启多进程，请记得在AndroidManifest.xlm中注册 process
  */
@@ -113,6 +113,8 @@ public class CommonWebActivity extends BaseMVMActivity {
         mWebViewCallBack = webConfig.getWebViewCallBack();
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
+
+        mWebView.addJavascriptInterface(mWebViewCallBack, webConfig.getJsInjectionArrays());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
 
         mFileChooser = new DefaultWebViewFileChooser(this);
@@ -137,7 +139,7 @@ public class CommonWebActivity extends BaseMVMActivity {
                 .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
-//                .setJsInjectionArrays(new String[]{"android"})
+                .setJsInjectionArrays(new String[]{WebConfig.DEFAULT_JS_OBJECT_NAME})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
@@ -162,7 +164,7 @@ public class CommonWebActivity extends BaseMVMActivity {
                     }
 
                     @Override
-                    public <T> T jsCallAndroid(String action, Object content, Class<T> t) {
+                    public <T> T jsCallNative(String action, String content, Class<T> t) {
                         return null;
                     }
 

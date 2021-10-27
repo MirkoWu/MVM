@@ -11,12 +11,9 @@ import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 /**
  * js调安卓的逻辑，统一在这个处理。
  */
-public abstract class JSCallNativeBridge {
+public class JSCallNativeBridge {
     private static final String TAG = JSCallNativeBridge.class.getSimpleName();
     private IWebViewCallBack mIWebViewCallBack;
-
-    public JSCallNativeBridge() {
-    }
 
     public JSCallNativeBridge(@NonNull IWebViewCallBack callBack) {
         mIWebViewCallBack = callBack;
@@ -29,17 +26,11 @@ public abstract class JSCallNativeBridge {
      * @param content js 给移动端的具体请求参数。
      */
     @JavascriptInterface
-    public String jsCallNative(final String action, final String content) {
-        LogUtil.e("addJavascriptInterface", String.format("jsCallNative：action = %s ，content = %s", action, content));
-        return "";
+    public void jsCallNative(final String action, final String content) {
+        LogUtil.e(TAG, String.format("jsCallNative：action = %s ，content = %s", action, content));
+        if (mIWebViewCallBack != null) {
+            mIWebViewCallBack.jsCallNative(action, content, null);
+        }
     }
-//    @JavascriptInterface
-//    public abstract void jsCallNative(final String action, final String content) {
-//        System.out.println("jsCallNative action = " + action + ", content = " + content);
-//        LogUtil.e(TAG, String.format("jsCallNative：action = %s ，content = %s", action, content));
-//        if (mIWebViewCallBack != null) {
-//            mIWebViewCallBack.jsCallAndroid(action, content, null);
-//        }
-//    }
 
 }

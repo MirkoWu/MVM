@@ -9,6 +9,7 @@ import java.util.Map;
  * 处理可配置的业务逻辑。但这些逻辑webView有可能用不到。所以是可用可不用的。
  */
 public class WebConfig {
+    public static final String DEFAULT_JS_OBJECT_NAME = "JsBridge";
     //    private String mTitleText; //标题文案
     private boolean mShowToolbar; //设置是否需要标题栏，true表示需要，false表示不需要
     private boolean mShowBack; //设置是否需要返回键，true表示需要，false表示不需要
@@ -119,6 +120,7 @@ public class WebConfig {
     public boolean isShowBack() {
         return mShowBack;
     }
+
     public boolean isShowClose() {
         return mShowClose;
     }
