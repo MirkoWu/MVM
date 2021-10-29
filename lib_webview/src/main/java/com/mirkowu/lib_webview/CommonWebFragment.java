@@ -110,11 +110,9 @@ public class CommonWebFragment extends BaseMVMFragment {
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
 
-        mWebView.addJavascriptInterface(mWebViewCallBack, webConfig.getJsInjectionArrays());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
-
         mFileChooser = new DefaultWebViewFileChooser(getActivity());
-        mWebView.setWebChromeClient(new BaseWebChromeClient(mFileChooser, mProgressBar));
+        mWebView.setWebChromeClient(new BaseWebChromeClient(getContext(), mFileChooser, mProgressBar));
     }
 
     @NonNull
@@ -125,7 +123,6 @@ public class CommonWebFragment extends BaseMVMFragment {
                 .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
-                .setJsInjectionArrays(new String[]{WebConfig.DEFAULT_JS_OBJECT_NAME})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
@@ -138,7 +135,7 @@ public class CommonWebFragment extends BaseMVMFragment {
                     }
 
                     @Override
-                    public void onReceivedError(BaseWebViewClient client, CommonWebView view, int errorCode, String description, String failingUrl) {
+                    public void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl) {
                     }
 
                     @Override
@@ -148,12 +145,6 @@ public class CommonWebFragment extends BaseMVMFragment {
                         }
                         return false;
                     }
-
-                    @Override
-                    public <T> T jsCallNative(String action, String content, Class<T> t) {
-                        return null;
-                    }
-
                 });
     }
 

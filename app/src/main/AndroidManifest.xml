@@ -33,7 +33,7 @@
         <activity android:name=".download.DownloadActivity" />
         <activity android:name=".imagepicker.ImagePickerActivity" />
         <activity
-            android:name=".WebActivity"
+            android:name=".webview.WebActivity"
             android:launchMode="singleTask"
             android:process="@string/webview_process"
             android:screenOrientation="portrait"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".WebActivity">
+    tools:context=".webview.WebActivity">
 
     <include
         layout="@layout/webview_layout_common_web_view"
@@ -17,12 +17,73 @@
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="0dp"-->
     <!--        android:layout_weight="1" />-->
-
-    <Button
-        android:id="@+id/btn_call_js"
-        android:layout_width="wrap_content"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:onClick="callJsFunc"
-        android:text="调用JS函数" />
+        android:layout_marginLeft="200dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="原生调用Js" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="synCall"
+                android:text="同步调用" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="synCallNoResult"
+                android:text="同步调用无返回参" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="asynCall"
+                android:text="异步调用" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="isRegisterSynFun"
+                android:text="判断是注册方法synCall" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="isRegisterAysnFun"
+                android:text="判断是注册方法asynCall" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="isRegisterXX"
+                android:text="判断是注册某方法XX" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="startTimer"
+                android:text="计时器" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </RelativeLayout>

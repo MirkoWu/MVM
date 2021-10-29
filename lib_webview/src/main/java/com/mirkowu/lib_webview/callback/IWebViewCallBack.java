@@ -1,7 +1,6 @@
 package com.mirkowu.lib_webview.callback;
 
 import com.mirkowu.lib_webview.CommonWebView;
-import com.mirkowu.lib_webview.client.BaseWebViewClient;
 
 /**
  * WebView回调统一处理
@@ -13,9 +12,9 @@ public interface IWebViewCallBack {
 
     void pageFinished(CommonWebView webView, String url);
 
-    void onReceivedError(BaseWebViewClient client, CommonWebView view, int errorCode, String description, String failingUrl);
+//    void onProgressChanged(WebView webView, int newProgress);
+
+    void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl);
 
     boolean shouldOverrideUrlLoading(CommonWebView webView, String url);
-
-    <T> T jsCallNative(String action, String content, Class<T> t);
 }

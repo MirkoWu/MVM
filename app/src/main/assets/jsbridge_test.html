@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>DSBridge Test</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+    <!--require dsbridge init js-->
+    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
+</head>
+<body>
+<p><input type="button" id="text1" value="结果" /></p>
+<p><input type="button" id="enter1" value="callSyn" onclick="callSyn();"/></p>
+<p><input type="button" id="enter2" value="callAsyn" onclick="callAsyn();"/></p>
+<p><input type="button" id="enter3" value="callAsyn_" onclick="callAsyn_();"/></p>
+<p><input type="button" id="enter222" value="callNoArgSyn" onclick="callNoArgSyn();"/></p>
+<p><input type="button" id="enter23" value="callNoArgAsyn" onclick="callNoArgAsyn();"/></p>
+<p><input type="button" id="enter24" value="callNever" onclick="callNever();"/></p>
+<p><input type="button" id="enter25" value="echoSyn" onclick="echoSyn();"/></p>
+<p><input type="button" id="enter26" value="echoAsyn" onclick="echoAsyn();"/></p>
+<p><input type="button" id="enter27" value="callProgress" onclick="callProgress();"/></p>
+<p><input type="button" id="enter28" value="hasNativeMethod(testAsyn)" onclick="hasNativeMethod('testAsyn');"/></p>
+
+<p><input type="file" accept="image/*" value="选择图片"/></p>
+<p><input type="file" accept="video/*" value="选择视频"/></p>
+<p>
+    <input type="file" value="打开文件"/>
+</p>
+<script>
+// 原生调用JS ---------------------
+    dsBridge.register('synCall', function (r, l) {
+    document.getElementById("text1").value = r + l;
+        return r + l;
+    })
+    dsBridge.register('synCallNoResult',function(){
+    alert("synCallNoResult");
+    })
+
+    dsBridge.registerAsyn('asynCall', function (arg1, arg2, arg3, responseCallback) {
+    document.getElementById("text1").value = arg1 + " " + arg2 + " " + arg3;
+        responseCallback(arg1 + " " + arg2 + " " + arg3);
+    })
+
+    dsBridge.registerAsyn('startTimer', function (responseCallback) {
+        var t = 0;
+        var timer = setInterval(function () {
+            if (t == 5) {
+                responseCallback(t)
+                clearInterval(timer)
+            } else {
+                // if the 2nd argument is false,  the java callback handler will be not removed!
+                responseCallback(t++, false)
+            }
+        }, 1000)
+
+    })
+
+    // namespace test for syn functions
+    dsBridge.register("syn", {
+        tag: "syn",
+        addValue:function (r,l) {
+            return r+l;
+        },
+        getInfo: function () {
+            return {tag: this.tag, value:8}
+        }
+    })
+
+    // namespace test for asyn functions
+    dsBridge.registerAsyn("asyn", {
+        tag: "asyn",
+        addValue:function (r,l, responseCallback) {
+            responseCallback(r+l);
+        },
+        getInfo: function (responseCallback) {
+            responseCallback({tag: this.tag, value:8})
+        }
+    })
+
+    // JS调用原生的 ------------------------------
+
+     function callSyn() {
+    let time1 = new Date().getTime();
+    for (var i = 0; i < 1000; i++) {
+        dsBridge.call("testSyn", "testSyn")
+    }
+      let time2 = new Date().getTime();
+      alert(i+'次JS同步1000次耗时='+(time2-time1));
+    }
+
+    function callAsyn() {
+    let time1 = new Date().getTime();
+        for (var i = 0; i < 1000; i++) {
+        dsBridge.call("testAsyn","testAsyn", function (v) {
+
+        })
+        }
+         let time2 = new Date().getTime();
+         alert('JS异步1000次耗时='+(time2-time1));
+    }
+
+    function callAsyn_() {
+        for (var i = 0; i < 2000; i++) {
+            dsBridge.call("testAsyn", "js+" + i, function (v) {
+                if (v == "js+1999 [ asyn call]") {
+                    alert("All tasks completed!")
+                }
+            })
+        }
+    }
+
+    function callNoArgSyn() {
+        alert(dsBridge.call("testNoArgSyn"));
+    }
+
+    function callNoArgAsyn() {
+        dsBridge.call("testNoArgAsyn", function (v) {
+            alert(v)
+        });
+    }
+
+    function callNever() {
+        alert(dsBridge.call("testNever", {msg: "testSyn"}))
+    }
+
+    function echoSyn() {
+        // call function with namespace
+        var ret=dsBridge.call("echo.syn",{msg:" I am echoSyn call", tag:1});
+        alert(JSON.stringify(ret))
+    }
+
+    function echoAsyn() {
+        // call function with namespace
+        dsBridge.call("echo.asyn",{msg:" I am echoAsyn call",tag:2},function (ret) {
+            alert(JSON.stringify(ret));
+        })
+    }
+
+    function callProgress() {
+        dsBridge.call("callProgress", function (v) {
+            if(v==0) v="";
+            document.getElementById("text1").value = v
+        })
+    }
+
+    function hasNativeMethod(name) {
+        alert(dsBridge.hasNativeMethod(name))
+    }
+
+
+</script>
+</body>
+</html>

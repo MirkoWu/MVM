@@ -37,7 +37,7 @@ import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.config.CameraConfig;
 import com.king.zxing.manager.AmbientLightManager;
 import com.king.zxing.manager.BeepManager;
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 
 import java.util.concurrent.Executors;
 
@@ -153,7 +153,7 @@ public class DefaultCameraScan extends CameraScan {
         mScreenWidth = displayMetrics.widthPixels;
         mScreenHeight = displayMetrics.heightPixels;
 
-        LogUtils.d(String.format("displayMetrics:%dx%d",mScreenWidth,mScreenHeight));
+        QrLogUtils.d(String.format("displayMetrics:%dx%d",mScreenWidth,mScreenHeight));
 
         mBeepManager = new BeepManager(mContext);
         mAmbientLightManager = new AmbientLightManager(mContext);
@@ -199,7 +199,7 @@ public class DefaultCameraScan extends CameraScan {
 
     private void startFocusAndMetering(float x, float y){
         if(mCamera != null){
-            LogUtils.d("startFocusAndMetering:" + x + "," + y);
+            QrLogUtils.d("startFocusAndMetering:" + x + "," + y);
             MeteringPoint point = mPreviewView.getMeteringPointFactory().createPoint(x,y);
             mCamera.getCameraControl().startFocusAndMetering(new FocusMeteringAction.Builder(point).build());
         }
@@ -255,7 +255,7 @@ public class DefaultCameraScan extends CameraScan {
                 //绑定到生命周期
                 mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
             }catch (Exception e){
-                LogUtils.e(e);
+                QrLogUtils.e(e);
             }
 
         },ContextCompat.getMainExecutor(mContext));
@@ -331,7 +331,7 @@ public class DefaultCameraScan extends CameraScan {
             try {
                 mCameraProviderFuture.get().unbindAll();
             }catch (Exception e){
-                LogUtils.e(e);
+                QrLogUtils.e(e);
             }
         }
     }

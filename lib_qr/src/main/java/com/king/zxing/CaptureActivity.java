@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
 
 import com.google.zxing.Result;
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 import com.king.zxing.util.PermissionUtils;
 import com.mirkowu.lib_qr.R;
 
@@ -97,7 +97,7 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
             if(PermissionUtils.checkPermission(this,Manifest.permission.CAMERA)){
                 mCameraScan.startCamera();
             }else{
-                LogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
+                QrLogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
                 PermissionUtils.requestPermission(this,Manifest.permission.CAMERA,CAMERA_PERMISSION_REQUEST_CODE);
             }
         }

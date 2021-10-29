@@ -1,9 +1,19 @@
 package com.mirkowu.lib_webview.client;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
@@ -18,27 +28,139 @@ import com.tencent.smtt.sdk.WebView;
 public class BaseWebChromeClient extends WebChromeClient {
     private static final int PROGRESS_LENGTH = 100;
     private static final String TAG = BaseWebChromeClient.class.getSimpleName();
+    private Context mContext;
     private ProgressBar mProgressBar;
-    private IWebViewFileChooser mWebViewCallBack; //WebView回调统一处理
+    private IWebViewFileChooser mWebViewFileChooser; //WebView回调统一处理
+    private boolean mAlertBoxBlock;
 
-    public BaseWebChromeClient(IWebViewFileChooser webViewCallBack, ProgressBar progressBar) {
-        mWebViewCallBack = webViewCallBack;
+    public BaseWebChromeClient(@NonNull Context context, IWebViewFileChooser fileChooser, ProgressBar progressBar) {
+        mContext = context;
+        mWebViewFileChooser = fileChooser;
         mProgressBar = progressBar;
     }
 
-    @Override
-    public boolean onJsAlert(WebView webView, String s, String s1, JsResult jsResult) {
-        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel
-        //这里要返回true否则内核会进行提示
-        return super.onJsAlert(webView, s, s1, jsResult);
+    public boolean isAlertBoxBlock() {
+        return mAlertBoxBlock;
+    }
+
+    public void setAlertBoxBlock(boolean alertBoxBlock) {
+        this.mAlertBoxBlock = alertBoxBlock;
     }
 
     @Override
-    public boolean onJsConfirm(WebView webView, String s, String s1, JsResult jsResult) {
-        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel
-//        jsResult.confirm();
-        return super.onJsConfirm(webView, s, s1, jsResult);
+    public boolean onJsAlert(WebView view, String url, final String message, final JsResult result) {
+        if (!mAlertBoxBlock) {
+            result.confirm();
+        }
+
+        Dialog alertDialog = new AlertDialog.Builder(mContext).
+                setMessage(message).
+                setCancelable(false).
+                setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (mAlertBoxBlock) {
+                            result.confirm();
+                        }
+                    }
+                })
+                .create();
+        alertDialog.show();
+        return true;
     }
+
+    @Override
+    public boolean onJsConfirm(WebView view, String url, String message,
+                               final JsResult result) {
+        if (!mAlertBoxBlock) {
+            result.confirm();
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mAlertBoxBlock) {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        result.confirm();
+                    } else {
+                        result.cancel();
+                    }
+                }
+            }
+        };
+        new AlertDialog.Builder(mContext)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, listener)
+                .setNegativeButton(android.R.string.cancel, listener).show();
+        return true;
+    }
+
+    @Override
+    public boolean onJsPrompt(WebView view, String url, final String message,
+                              String defaultValue, final JsPromptResult result) {
+        if (!mAlertBoxBlock) {
+            result.confirm();
+        }
+
+        final EditText editText = new EditText(mContext);
+        editText.setText(defaultValue);
+        if (defaultValue != null) {
+            editText.setSelection(defaultValue.length());
+        }
+        float dpi = mContext.getResources().getDisplayMetrics().density;
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mAlertBoxBlock) {
+                    if (which == Dialog.BUTTON_POSITIVE) {
+                        result.confirm(editText.getText().toString());
+                    } else {
+                        result.cancel();
+                    }
+                }
+            }
+        };
+        new AlertDialog.Builder(mContext)
+                .setTitle(message)
+                .setView(editText)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, listener)
+                .setNegativeButton(android.R.string.cancel, listener)
+                .show();
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        int t = (int) (dpi * 16);
+        layoutParams.setMargins(t, 0, t, 0);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        editText.setLayoutParams(layoutParams);
+        int padding = (int) (15 * dpi);
+        editText.setPadding(padding - (int) (5 * dpi), padding, padding, padding);
+        return true;
+    }
+//
+//    @Override
+//    public boolean onJsAlert(WebView webView, String s, String s1, JsResult jsResult) {
+//        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel
+//        //这里要返回true否则内核会进行提示
+//        return super.onJsAlert(webView, s, s1, jsResult);
+//    }
+//
+//    @Override
+//    public boolean onJsConfirm(WebView webView, String s, String s1, JsResult jsResult) {
+//        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel
+////        jsResult.confirm();
+//        return super.onJsConfirm(webView, s, s1, jsResult);
+//    }
+//
+//    @Override
+//    public boolean onJsPrompt(WebView webView, String s, String s1, String s2, JsPromptResult jsPromptResult) {
+//        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel，confirm可以将用户输入作为参数
+////        当页面有对应的js提示时会回调对应的方法；如果没有设置这些内核将会使用默认弹出样式提示用户
+//        return super.onJsPrompt(webView, s, s1, s2, jsPromptResult);
+//    }
 
     @Override
     public boolean onJsBeforeUnload(WebView webView, String s, String s1, JsResult jsResult) {
@@ -46,12 +168,6 @@ public class BaseWebChromeClient extends WebChromeClient {
         return super.onJsBeforeUnload(webView, s, s1, jsResult);
     }
 
-    @Override
-    public boolean onJsPrompt(WebView webView, String s, String s1, String s2, JsPromptResult jsPromptResult) {
-        //可以弹框或进行其它处理，但一定要回调result.confirm或者cancel，confirm可以将用户输入作为参数
-//        当页面有对应的js提示时会回调对应的方法；如果没有设置这些内核将会使用默认弹出样式提示用户
-        return super.onJsPrompt(webView, s, s1, s2, jsPromptResult);
-    }
 
 //    @Override
 //    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissionsCallback callback) {
@@ -94,9 +210,11 @@ public class BaseWebChromeClient extends WebChromeClient {
     public boolean onShowFileChooser(WebView webView,
                                      ValueCallback<Uri[]> filePathCallback,
                                      FileChooserParams fileChooserParams) {
-        if (mWebViewCallBack != null) {
-            return mWebViewCallBack.onShowFileChooser((CommonWebView) webView, filePathCallback, fileChooserParams);
+        if (mWebViewFileChooser != null) {
+            return mWebViewFileChooser.onShowFileChooser((CommonWebView) webView, filePathCallback, fileChooserParams);
         }
+
+
         return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
     }
 

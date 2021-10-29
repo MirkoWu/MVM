@@ -1,6 +1,7 @@
 package com.mirkowu.lib_webview;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -10,13 +11,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_webview.callback.IWebViewCallBack;
-import com.mirkowu.lib_webview.jsbridge.BridgeHandler;
-import com.mirkowu.lib_webview.jsbridge.BridgeWebViewDelegate;
-import com.mirkowu.lib_webview.jsbridge.CallBackFunction;
-import com.mirkowu.lib_webview.jsbridge.JSCallNativeBridge;
-import com.mirkowu.lib_webview.jsbridge.WebViewJavascriptBridge;
+import com.mirkowu.lib_webview.dsbridge.DSBridgeImp;
+import com.mirkowu.lib_webview.dsbridge.IDSBridge;
+import com.mirkowu.lib_webview.dsbridge.JavascriptCloseWindowListener;
+import com.mirkowu.lib_webview.dsbridge.OnReturnValue;
+import com.mirkowu.lib_webview.setting.WebSettingUtil;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebView;
@@ -28,12 +27,10 @@ import java.util.Map;
  * 1.支持腾讯X5浏览器
  * 2.支持jsBridge
  */
-public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJavascriptBridge {
+public class CommonWebView extends WebView implements IWebViewLifecycle, IDSBridge {
     private static final String TAG = CommonWebView.class.getSimpleName();
     private Map<String, String> mHeaders;
-    private String[] mJsObjectNameArrays;
-    //BridgeWebView代理
-    private BridgeWebViewDelegate mBridgeWebViewDelegate;
+    private DSBridgeImp mBridgeDelegate; //BridgeWebView代理
 
     public CommonWebView(@NonNull Context context) {
         this(context, null);
@@ -49,61 +46,7 @@ public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJ
     }
 
     private void init(Context context) {
-        mBridgeWebViewDelegate = new BridgeWebViewDelegate(this);
-    }
-
-    /**
-     * 调用js代码
-     *
-     * @param methodName    js方法名
-     * @param params        方法参数
-     * @param valueCallback js回调
-     */
-    public void loadJs(@NonNull String methodName, @Nullable String params, @Nullable ValueCallback<String> valueCallback) {
-        String jsCode;
-        if (params == null) {
-            jsCode = String.format("javascript:%s()", methodName);
-        } else {
-            jsCode = String.format("javascript:%s(%s)", methodName, params);
-        }
-        LogUtil.e(TAG, jsCode);
-        evaluateJavascript(jsCode, valueCallback);
-    }
-
-    /**
-     * 注入js对象
-     *
-     * @param callBack
-     * @param jsObjectNameArrays
-     */
-    public void addJavascriptInterface(@NonNull IWebViewCallBack callBack, @NonNull String... jsObjectNameArrays) {
-        if (callBack == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
-            return;
-        }
-        JSCallNativeBridge jsCallNativeBridge = new JSCallNativeBridge(callBack);
-        addJavascriptInterface(jsCallNativeBridge, jsObjectNameArrays);
-    }
-
-    public void addJavascriptInterface(@NonNull JSCallNativeBridge jsCallNativeBridge, @NonNull String... jsObjectNameArrays) {
-        if (jsCallNativeBridge == null || jsObjectNameArrays == null || jsObjectNameArrays.length == 0) {
-            return;
-        }
-        mJsObjectNameArrays = jsObjectNameArrays;
-        for (String jsObjectName : jsObjectNameArrays) {
-            addJavascriptInterface(jsCallNativeBridge, jsObjectName);
-        }
-    }
-
-    /**
-     * 移除所有的Js注入
-     */
-    public void removeAllJavascriptInterface() {
-        if (mJsObjectNameArrays == null || mJsObjectNameArrays.length == 0) {
-            return;
-        }
-        for (String jsObjectName : mJsObjectNameArrays) {
-            removeJavascriptInterface(jsObjectName);
-        }
+        mBridgeDelegate = new DSBridgeImp(this);
     }
 
     /**
@@ -234,57 +177,100 @@ public class CommonWebView extends WebView implements IWebViewDelegate, WebViewJ
     @Override
     public void onDestroyEvent() {
         WebViewUtil.clearWebView(this);
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.onDestroy();
+            mBridgeDelegate = null;
+        }
     }
+
 
     /*** >>>>>>>>>>>>>>>>>>> jsBridge 相关方法 >>>>>>>>>>>>>>>>>>> */
+
+
+    public void addJavascriptObject(Object object) {
+        addJavascriptObject(object, null);
+    }
+
     @Override
-    public void send(String data) {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.send(data);
+    public void addJavascriptObject(Object object, String namespace) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.addJavascriptObject(object, namespace);
         }
     }
 
     @Override
-    public void send(String data, CallBackFunction responseCallback) {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.send(data, responseCallback);
+    public void removeJavascriptObject(String namespace) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.removeJavascriptObject(namespace);
         }
     }
 
     @Override
-    public void registerHandler(String handlerName, BridgeHandler handler) {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.registerHandler(handlerName, handler);
+    public void removeAllJavascriptObject() {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.removeAllJavascriptObject();
         }
     }
 
     @Override
-    public void callHandler(String handlerName, String data, CallBackFunction callBack) {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.callHandler(handlerName, data, callBack);
+    public <T> void callHandler(String method, Object[] args, OnReturnValue<T> handler) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.callHandler(method, args, handler);
         }
     }
 
     @Override
-    public void handlerReturnData(String url) {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.handlerReturnData(url);
+    public void callHandler(String method, Object[] args) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.callHandler(method, args);
         }
     }
 
     @Override
-    public void flushMessageQueue() {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.flushMessageQueue();
+    public <T> void callHandler(String method, OnReturnValue<T> handler) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.callHandler(method, handler);
         }
     }
 
     @Override
-    public void loadLocalJS() {
-        if (mBridgeWebViewDelegate != null) {
-            mBridgeWebViewDelegate.loadLocalJS();
+    public void hasJavascriptMethod(String handlerName, OnReturnValue<Boolean> existCallback) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.hasJavascriptMethod(handlerName, existCallback);
         }
     }
 
+    @Override
+    public void clearCache(boolean includeDiskFiles) {
+        super.clearCache(includeDiskFiles);
+        WebSettingUtil.clearCache(includeDiskFiles);
+    }
+
+    @Override
+    public void setJavascriptCloseWindowListener(JavascriptCloseWindowListener listener) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.setJavascriptCloseWindowListener(listener);
+        }
+    }
+
+    @Override
+    public void evaluateJavascript(String script) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.evaluateJavascript(script);
+        }
+    }
+
+    @Override
+    public void disableJavascriptDialogBlock(boolean disable) {
+        if (mBridgeDelegate != null) {
+            mBridgeDelegate.disableJavascriptDialogBlock(disable);
+        }
+    }
+
+    public static void setWebContentsDebuggingEnabled(boolean enabled) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            DSBridgeImp.setWebContentsDebuggingEnabled(enabled);
+        }
+    }
     /*** <<<<<<<<<<<<<<<<<<<<<<< jsBridge 相关方法 <<<<<<<<<<<<<<<<<<<<<<< */
 }

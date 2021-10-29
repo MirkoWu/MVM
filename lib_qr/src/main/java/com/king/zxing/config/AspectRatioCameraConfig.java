@@ -9,7 +9,7 @@ import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 
 /**
  * 相机配置：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕比例
@@ -27,7 +27,7 @@ public final class AspectRatioCameraConfig extends CameraConfig {
         int height = displayMetrics.heightPixels;
 
         mAspectRatio = aspectRatio(width, height);
-        LogUtils.d("aspectRatio:" + mAspectRatio);
+        QrLogUtils.d("aspectRatio:" + mAspectRatio);
 
     }
 

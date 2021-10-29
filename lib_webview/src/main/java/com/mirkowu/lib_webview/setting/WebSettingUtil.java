@@ -8,9 +8,12 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_webview.BuildConfig;
+import com.mirkowu.lib_util.utilcode.util.Utils;
+import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
+
+import java.io.File;
 
 
 /**
@@ -20,7 +23,7 @@ public class WebSettingUtil {
     private static final int TEXT_ROOM = 100;
     private static final int DEFAULT_FONT_SIZE = 16;
     private static final int MINI_MUM_FONT_SIZE = 10;
-    private static final int APP_CACHE = 1024 * 1024 * 100;
+    private static final int WEB_CACHE_SIZE = 1024 * 1024 * 100;
     private static final String TAG = WebSettingUtil.class.getSimpleName();
 
 
@@ -46,8 +49,8 @@ public class WebSettingUtil {
         mWebSettings.setBlockNetworkImage(false);  //是否阻塞加载网络图片  协议http or https
         mWebSettings.setSupportMultipleWindows(false); //WebView是否支持多个窗口
 
-//        mWebSettings.setLoadWithOverviewMode(true); //设置WebView是否以概览模式加载页面，也就是说，缩放内容以适应屏幕的宽度
-//        mWebSettings.setUseWideViewPort(true); //设置WebView是否应该启用支持“viewport”HTML元标签或应该使用一个宽的viewport
+        mWebSettings.setLoadWithOverviewMode(true); //设置WebView是否以概览模式加载页面，也就是说，缩放内容以适应屏幕的宽度
+        mWebSettings.setUseWideViewPort(true); //设置WebView是否应该启用支持“viewport”HTML元标签或应该使用一个宽的viewport
 
         mWebSettings.setDatabaseEnabled(true); //设置是否启用数据库存储API。
         mWebSettings.setAppCacheEnabled(true); //设置是否应该启用应用程序缓存API。
@@ -69,16 +72,19 @@ public class WebSettingUtil {
 
         //5.0以上允许加载http和https混合的页面(5.0以下默认允许，5.0+默认禁止)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
             mWebSettings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        String cacheDir = webView.getContext().getDir("cache", Context.MODE_PRIVATE).getPath();
+        String cacheDir = getCachePath();
         LogUtil.e(TAG, "WebView cache dir =" + cacheDir);
         //设置应用程序缓存文件的路径。
         mWebSettings.setDatabasePath(cacheDir);
         mWebSettings.setAppCachePath(cacheDir);
-        mWebSettings.setAppCacheMaxSize(APP_CACHE);
-        //是否开发调试模式
-        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
+        mWebSettings.setAppCacheMaxSize(WEB_CACHE_SIZE);
+    }
+
+    public static String getCachePath() {
+        return Utils.getApp().getDir("cache", Context.MODE_PRIVATE).getPath();
     }
 
     private static boolean isNetworkConnected(Context context) {
@@ -91,5 +97,44 @@ public class WebSettingUtil {
             return false;
         }
 
+    }
+
+    public static void clearCache(boolean includeDiskFiles) {
+        CookieManager.getInstance().removeAllCookie();
+        Context context = Utils.getApp();
+        try {
+            context.deleteDatabase("webview.db");
+            context.deleteDatabase("webviewCache.db");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String cacheDir = getCachePath();
+        File appCacheDir = new File(cacheDir);
+        File webviewCacheDir = new File(cacheDir);
+
+        if (webviewCacheDir.exists()) {
+            deleteFile(webviewCacheDir);
+        }
+
+        if (appCacheDir.exists()) {
+            deleteFile(appCacheDir);
+        }
+    }
+
+    public static void deleteFile(File file) {
+        try {
+            if (file.exists()) {
+                if (file.isFile()) {
+                    file.delete();
+                } else if (file.isDirectory()) {
+                    File files[] = file.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        deleteFile(files[i]);
+                    }
+                }
+                file.delete();
+            }
+        } catch (Throwable e) {
+        }
     }
 }

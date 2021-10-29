@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.camera.core.ImageProxy;
 
 import com.google.zxing.Result;
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 
 import java.nio.ByteBuffer;
 
@@ -48,7 +48,7 @@ public abstract class ImageAnalyzer implements Analyzer {
             }
             return analyze(data,width,height);
         }
-        LogUtils.w("imageFormat: " + image.getFormat());
+        QrLogUtils.w("imageFormat: " + image.getFormat());
         return null;
     }
 

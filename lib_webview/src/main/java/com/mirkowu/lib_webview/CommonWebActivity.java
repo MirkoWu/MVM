@@ -114,11 +114,9 @@ public class CommonWebActivity extends BaseMVMActivity {
         WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
 
-        mWebView.addJavascriptInterface(mWebViewCallBack, webConfig.getJsInjectionArrays());
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
-
         mFileChooser = new DefaultWebViewFileChooser(this);
-        mWebView.setWebChromeClient(new BaseWebChromeClient(mFileChooser, mProgressBar));
+        mWebView.setWebChromeClient(new BaseWebChromeClient(this,mFileChooser, mProgressBar));
     }
 
     protected void loadUrl(String url) {
@@ -139,7 +137,6 @@ public class CommonWebActivity extends BaseMVMActivity {
                 .setShowClose(showClose)
                 .setShowToolbar(true)
                 .setShowProgress(true)
-                .setJsInjectionArrays(new String[]{WebConfig.DEFAULT_JS_OBJECT_NAME})
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
@@ -152,7 +149,7 @@ public class CommonWebActivity extends BaseMVMActivity {
                     }
 
                     @Override
-                    public void onReceivedError(BaseWebViewClient client, CommonWebView view, int errorCode, String description, String failingUrl) {
+                    public void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl) {
                     }
 
                     @Override
@@ -161,11 +158,6 @@ public class CommonWebActivity extends BaseMVMActivity {
                             return IntentUtil.openScheme(getContext(), url);
                         }
                         return false;
-                    }
-
-                    @Override
-                    public <T> T jsCallNative(String action, String content, Class<T> t) {
-                        return null;
                     }
 
                 });

@@ -16,6 +16,7 @@ import com.mirkowu.lib_util.PermissionsUtil;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.R;
 import com.mirkowu.lib_widget.dialog.PromptDialog;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
 
 
     @Override
-    public boolean onShowFileChooser(CommonWebView webView, com.tencent.smtt.sdk.ValueCallback<Uri[]> valueCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+    public boolean onShowFileChooser(CommonWebView webView, ValueCallback<Uri[]> valueCallback, WebChromeClient.FileChooserParams fileChooserParams) {
         mFilePathCallback = valueCallback;
         String[] types = fileChooserParams.getAcceptTypes();
         String type = ((types != null) && (types.length > 0)) ? types[0] : null;

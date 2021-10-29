@@ -227,24 +227,25 @@ public class WebViewUtil {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             return;
         }
+        try {
 //        clearData(webView.getContext());
-        webView.stopLoading();
-        if (webView.getHandler() != null) {
-            webView.getHandler().removeCallbacksAndMessages(null);
+            webView.stopLoading();
+            if (webView.getHandler() != null) {
+                webView.getHandler().removeCallbacksAndMessages(null);
+            }
+            webView.removeAllViews();
+            ViewGroup mViewGroup = null;
+            if ((mViewGroup = ((ViewGroup) webView.getParent())) != null) {
+                mViewGroup.removeView(webView);
+            }
+            webView.setWebChromeClient(null);
+            webView.setWebViewClient(null);
+            webView.setTag(null);
+            webView.clearHistory();
+            webView.destroy();
+            webView = null;
+        } catch (Throwable e) {
         }
-        webView.removeAllViews();
-        ViewGroup mViewGroup = null;
-        if ((mViewGroup = ((ViewGroup) webView.getParent())) != null) {
-            mViewGroup.removeView(webView);
-        }
-        webView.setWebChromeClient(null);
-        webView.setWebViewClient(null);
-        webView.setTag(null);
-        webView.clearHistory();
-        webView.removeAllJavascriptInterface();
-        webView.destroy();
-        webView = null;
-
         //请求回收
         Runtime.getRuntime().gc();
     }

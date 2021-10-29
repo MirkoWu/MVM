@@ -22,7 +22,7 @@ import android.util.Log;
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class LogUtils {
+public class QrLogUtils {
 
     public static final String TAG = "ZXingLite";
 
@@ -71,13 +71,13 @@ public class LogUtils {
 
     public static final String TAG_FORMAT = "%s.%s(%s:%d)";
 
-    private LogUtils(){
+    private QrLogUtils(){
         throw new AssertionError();
     }
 
     public static void setShowLog(boolean isShowLog) {
 
-        LogUtils.isShowLog = isShowLog;
+        QrLogUtils.isShowLog = isShowLog;
     }
 
     public static boolean isShowLog() {
@@ -92,7 +92,7 @@ public class LogUtils {
 
     public static void setPriority(int priority) {
 
-        LogUtils.priority = priority;
+        QrLogUtils.priority = priority;
     }
 
     /**

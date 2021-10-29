@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 
-public interface IWebViewDelegate extends LifecycleObserver {
+public interface IWebViewLifecycle extends LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
     void onAnyEvent(LifecycleOwner owner, Lifecycle.Event event);
 

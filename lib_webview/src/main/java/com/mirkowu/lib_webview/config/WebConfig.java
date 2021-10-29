@@ -17,7 +17,7 @@ public class WebConfig {
     private boolean mShowProgress; //设置是否需要进度条，true表示需要，false表示不需要
     private IWebViewCallBack mWebViewCallBack; //WebView回调统一处理
     private String mUserAgent;
-    private String[] mJsInjectionObjectNameArrays; //js注入对象
+//    private String[] mJsInjectionObjectNameArrays; //js注入对象
     private Map<String, String> mHeaders; // webView 添加header
 
 //    /**
@@ -92,22 +92,22 @@ public class WebConfig {
         return this;
     }
 
-    /**
-     * @param jsInjectionArrays 设置js注入对象
-     * @return
-     */
-    public WebConfig setJsInjectionArrays(String[] jsInjectionArrays) {
-        this.mJsInjectionObjectNameArrays = jsInjectionArrays;
-        return this;
-    }
-
     public Map<String, String> getHeaders() {
         return mHeaders;
     }
+//    /**
+//     * @param jsInjectionArrays 设置js注入对象
+//     * @return
+//     */
+//    public WebConfig setJsInjectionArrays(String[] jsInjectionArrays) {
+//        this.mJsInjectionObjectNameArrays = jsInjectionArrays;
+//        return this;
+//    }
 
-    public String[] getJsInjectionArrays() {
-        return mJsInjectionObjectNameArrays;
-    }
+
+//    public String[] getJsInjectionArrays() {
+//        return mJsInjectionObjectNameArrays;
+//    }
 
 //    public String getTitleText() {
 //        return mTitleText;

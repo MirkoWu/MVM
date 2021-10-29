@@ -27,7 +27,7 @@ import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.Result;
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 import com.king.zxing.util.PermissionUtils;
 import com.mirkowu.lib_qr.R;
 
@@ -109,7 +109,7 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
             if(PermissionUtils.checkPermission(getContext(), Manifest.permission.CAMERA)){
                 mCameraScan.startCamera();
             }else{
-                LogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
+                QrLogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
                 PermissionUtils.requestPermission(this,Manifest.permission.CAMERA,CAMERA_PERMISSION_REQUEST_CODE);
             }
         }

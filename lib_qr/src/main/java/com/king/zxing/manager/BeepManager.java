@@ -22,7 +22,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 import com.mirkowu.lib_qr.R;
 
 import java.io.Closeable;
@@ -83,7 +83,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             mediaPlayer.prepare();
             return mediaPlayer;
         } catch (Exception e) {
-            LogUtils.w(e);
+            QrLogUtils.w(e);
             mediaPlayer.release();
             return null;
         }
@@ -104,7 +104,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
                 mediaPlayer = null;
             }
         }catch (Exception e){
-            LogUtils.e(e);
+            QrLogUtils.e(e);
         }
     }
 

@@ -9,7 +9,7 @@ import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.QrLogUtils;
 
 /**
  * 相机配置：根据尺寸配置相机的目标图像，使输出分析的图像尽可能的接近屏幕尺寸
@@ -26,7 +26,7 @@ public class ResolutionCameraConfig extends CameraConfig {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        LogUtils.d(String.format("displayMetrics:%d x %d",width,height));
+        QrLogUtils.d(String.format("displayMetrics:%d x %d",width,height));
         //因为为了保持流畅性和性能，限制在1080p，在此前提下尽可能的找到屏幕接近的分辨率
         if(width < height){
             int size = Math.min(width, 1080);
@@ -45,7 +45,7 @@ public class ResolutionCameraConfig extends CameraConfig {
                 mTargetSize = new Size((int)(size / 9.0f * 16.0), size);
             }
         }
-        LogUtils.d("targetSize:" + mTargetSize);
+        QrLogUtils.d("targetSize:" + mTargetSize);
     }
 
 

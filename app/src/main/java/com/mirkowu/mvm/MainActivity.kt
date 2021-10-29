@@ -21,6 +21,7 @@ import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
 import com.mirkowu.mvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.viewbinding.DataBindingFragment
+import com.mirkowu.mvm.webview.WebActivity
 
 class MainActivity : BaseActivity<EmptyMediator>() {
     companion object {
@@ -85,7 +86,8 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 
     fun webLocalClick(view: View?) {
 //        MVCActivity.start(this)
-        WebActivity.start(context, "ces", "file:///android_asset/test.html")
+//        WebActivity.start(context, "ces", "file:///android_asset/test.html")
+        WebActivity.start(context, "ces", "file:///android_asset/jsbridge_test.html")
         Log.d("WebActivity", "start: ")
     }
 
