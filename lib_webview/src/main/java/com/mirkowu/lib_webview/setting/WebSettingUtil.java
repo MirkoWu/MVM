@@ -41,7 +41,7 @@ public class WebSettingUtil {
             mWebSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);  //覆盖缓存的使用方式。网络缓存模式
         }
 
-        userAgent = TextUtils.isEmpty(userAgent) ? mWebSettings.getUserAgentString() : userAgent + mWebSettings.getUserAgentString();
+        userAgent = TextUtils.isEmpty(userAgent) ? mWebSettings.getUserAgentString() : (userAgent + mWebSettings.getUserAgentString());
         LogUtil.e(TAG, "userAgent------------------=" + userAgent);
         mWebSettings.setUserAgentString(userAgent); //设置当前ua
 
