@@ -29,7 +29,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     private static final String ACCEPT_TYPE_VIDEO = "video/*";
     private static final int REQ_CAMERA = 0x001010;
     private static final int REQ_FILES = 0x001012;
-    private android.webkit.ValueCallback<Uri[]> mFilePathCallback;
+    private ValueCallback<Uri[]> mFilePathCallback;
     private WeakReference<FragmentActivity> mActivityWeakReference;
     private File mTempFle;
 
