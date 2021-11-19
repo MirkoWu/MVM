@@ -112,7 +112,7 @@ public class CommonWebFragment extends BaseMVMFragment {
 
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
         mFileChooser = new DefaultWebViewFileChooser(getActivity());
-        mWebView.setWebChromeClient(new BaseWebChromeClient(getContext(), mFileChooser, mProgressBar));
+        mWebView.setWebChromeClient(new BaseWebChromeClient(getContext(), mFileChooser, mWebViewCallBack));
     }
 
     @NonNull
@@ -135,6 +135,16 @@ public class CommonWebFragment extends BaseMVMFragment {
                     }
 
                     @Override
+                    public void onProgressChanged(CommonWebView webView, int newProgress) {
+                        BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                    }
+
+                    @Override
+                    public void onReceivedTitle(CommonWebView webView, String title) {
+                        mToolbar.setTitle(title);
+                    }
+
+                    @Override
                     public void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl) {
                     }
 
@@ -151,10 +161,10 @@ public class CommonWebFragment extends BaseMVMFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        handleWebResult(requestCode, resultCode, data);
+        handleWebFileChooserResult(requestCode, resultCode, data);
     }
 
-    protected void handleWebResult(int requestCode, int resultCode, Intent data) {
+    protected void handleWebFileChooserResult(int requestCode, int resultCode, Intent data) {
         if (mFileChooser != null) {
             mFileChooser.onActivityResult(mWebView, requestCode, resultCode, data);
         }

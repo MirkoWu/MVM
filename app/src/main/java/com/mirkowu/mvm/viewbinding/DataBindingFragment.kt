@@ -229,6 +229,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 //
     override fun onResume() {
         Log.d(TAG, "onResume: $position")
+        LogUtil.d("点击 跳过 fragment onResume")
         super.onResume()
     }
 

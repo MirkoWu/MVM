@@ -12,7 +12,9 @@ public interface IWebViewCallBack {
 
     void pageFinished(CommonWebView webView, String url);
 
-//    void onProgressChanged(WebView webView, int newProgress);
+    void onProgressChanged(CommonWebView webView, int newProgress);
+
+    void onReceivedTitle(CommonWebView webView, String title);
 
     void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl);
 

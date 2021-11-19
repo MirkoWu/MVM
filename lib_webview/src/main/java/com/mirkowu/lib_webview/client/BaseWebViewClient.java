@@ -59,6 +59,11 @@ public class BaseWebViewClient extends WebViewClient {
      * 支持电话、短信、邮件、地图跳转，跳转的都是手机系统自带的应用
      */
     private boolean handleLinked(String url) {
+        //先拦截
+        if (mWebViewCallBack != null && mWebViewCallBack.shouldOverrideUrlLoading(mWebView, url)) {
+            return true;
+        }
+
         if (url.startsWith(WebView.SCHEME_TEL)
                 || url.startsWith(SCHEME_SMS)
                 || url.startsWith(WebView.SCHEME_MAILTO)
@@ -68,15 +73,11 @@ public class BaseWebViewClient extends WebViewClient {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 mWebView.getContext().startActivity(intent);
+                return true;
             } catch (ActivityNotFoundException ignored) {
                 LogUtil.e(ignored.toString());
                 return false;
             }
-            return true;
-        }
-
-        if (mWebViewCallBack != null) {
-            return mWebViewCallBack.shouldOverrideUrlLoading(mWebView, url);
         }
         return false;
     }

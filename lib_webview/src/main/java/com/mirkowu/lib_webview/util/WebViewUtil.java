@@ -59,23 +59,25 @@ public class WebViewUtil {
      *
      * @param application
      * @param useMultiProcess 是否使用多进程
-     * @param processName     指定进程名  默认: 包名:webview ,如需自定义，记得在AndroidManifest.xlm中注册process
+     * @param webProcessName  指定进程名  默认: 包名:webview ,如需自定义，记得在AndroidManifest.xlm中注册process
      */
-    public static void init(Application application, boolean useMultiProcess, String processName) {
+    public static void init(Application application, boolean useMultiProcess, String webProcessName) {
         sUseMultiProcess = useMultiProcess;
         configWebViewCacheDirWithAndroidP(application);
         String curProcessName = ProcessUtils.getCurrentProcessName();
         String mainProcessName = application.getPackageName();
         boolean isMainProcess = TextUtils.equals(curProcessName, mainProcessName);
-        if (useMultiProcess && TextUtils.equals(curProcessName, processName)) { //web进程初始化
+
+        if (isMainProcess) { //主进程初始化X5
+            initX5Web(application);
+        }
+        if (isMainProcess && useMultiProcess) { //启动web进程
+            startMultiProcess(application);
+        }
+
+        if (useMultiProcess && TextUtils.equals(curProcessName, webProcessName)) { //web进程初始化X5
             sUseMultiProcess = true;
             initX5Web(application);
-        }
-        if (isMainProcess) { //主进程初始化
-            initX5Web(application);
-        }
-        if (isMainProcess && useMultiProcess) {
-            startMultiProcess(application);
         }
     }
 

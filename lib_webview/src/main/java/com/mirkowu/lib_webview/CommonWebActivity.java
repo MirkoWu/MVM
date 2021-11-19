@@ -116,7 +116,7 @@ public class CommonWebActivity extends BaseMVMActivity {
 
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
         mFileChooser = new DefaultWebViewFileChooser(this);
-        mWebView.setWebChromeClient(new BaseWebChromeClient(this,mFileChooser, mProgressBar));
+        mWebView.setWebChromeClient(new BaseWebChromeClient(this, mFileChooser, mWebViewCallBack));
     }
 
     protected void loadUrl(String url) {
@@ -149,6 +149,16 @@ public class CommonWebActivity extends BaseMVMActivity {
                     }
 
                     @Override
+                    public void onProgressChanged(CommonWebView webView, int newProgress) {
+                        BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                    }
+
+                    @Override
+                    public void onReceivedTitle(CommonWebView webView, String title) {
+                        mToolbar.setTitle(title);
+                    }
+
+                    @Override
                     public void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl) {
                     }
 
@@ -166,10 +176,10 @@ public class CommonWebActivity extends BaseMVMActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        handleWebResult(requestCode, resultCode, data);
+        handleWebFileChooserResult(requestCode, resultCode, data);
     }
 
-    protected void handleWebResult(int requestCode, int resultCode, Intent data) {
+    protected void handleWebFileChooserResult(int requestCode, int resultCode, Intent data) {
         if (mFileChooser != null) {
             mFileChooser.onActivityResult(mWebView, requestCode, resultCode, data);
         }

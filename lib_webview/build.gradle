@@ -37,8 +37,8 @@ dependencies {
     implementation project(':lib_widget')
 
     //X5浏览器
-    api 'com.tencent.tbs.tbssdk:sdk:43993'
-
+//    api 'com.tencent.tbs.tbssdk:sdk:43993'
+    api 'com.tencent.tbs:tbssdk:44085'
     //https://github.com/wendux/DSBridge-Android 3.0-x5版本
 
 }

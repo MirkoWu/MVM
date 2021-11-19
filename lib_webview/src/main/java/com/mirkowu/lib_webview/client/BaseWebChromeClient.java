@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
+import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.callback.IWebViewFileChooser;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
@@ -29,14 +30,14 @@ public class BaseWebChromeClient extends WebChromeClient {
     private static final int PROGRESS_LENGTH = 100;
     private static final String TAG = BaseWebChromeClient.class.getSimpleName();
     private Context mContext;
-    private ProgressBar mProgressBar;
     private IWebViewFileChooser mWebViewFileChooser; //WebView回调统一处理
+    private IWebViewCallBack mWebViewCallBack; //WebView回调统一处理
     private boolean mAlertBoxBlock;
 
-    public BaseWebChromeClient(@NonNull Context context, IWebViewFileChooser fileChooser, ProgressBar progressBar) {
+    public BaseWebChromeClient(@NonNull Context context, IWebViewFileChooser fileChooser, IWebViewCallBack webViewCallBack) {
         mContext = context;
         mWebViewFileChooser = fileChooser;
-        mProgressBar = progressBar;
+        mWebViewCallBack = webViewCallBack;
     }
 
     public boolean isAlertBoxBlock() {
@@ -210,8 +211,9 @@ public class BaseWebChromeClient extends WebChromeClient {
     public boolean onShowFileChooser(WebView webView,
                                      ValueCallback<Uri[]> filePathCallback,
                                      FileChooserParams fileChooserParams) {
-        if (mWebViewFileChooser != null) {
-            return mWebViewFileChooser.onShowFileChooser((CommonWebView) webView, filePathCallback, fileChooserParams);
+        if (mWebViewFileChooser != null &&
+                mWebViewFileChooser.onShowFileChooser((CommonWebView) webView, filePathCallback, fileChooserParams)) {
+            return true;
         }
 
 
@@ -248,6 +250,14 @@ public class BaseWebChromeClient extends WebChromeClient {
         super.onReceivedIcon(webView, bitmap);
     }
 
+    @Override
+    public void onReceivedTitle(WebView webView, String s) {
+        super.onReceivedTitle(webView, s);
+        if (mWebViewCallBack != null) {
+            mWebViewCallBack.onReceivedTitle((CommonWebView) webView, s);
+        }
+    }
+
     /**
      * 页面加载进度
      *
@@ -257,6 +267,13 @@ public class BaseWebChromeClient extends WebChromeClient {
     @Override
     public void onProgressChanged(WebView webView, int newProgress) {
         LogUtil.e(TAG, "newProgress---------=" + newProgress + ",thread=" + Thread.currentThread().getName());
+        if (mWebViewCallBack != null) {
+            mWebViewCallBack.onProgressChanged((CommonWebView) webView, newProgress);
+        }
+        //  updateProgress(mProgressBar,newProgress);
+    }
+
+    public static void updateProgress(ProgressBar mProgressBar, int newProgress) {
         if (mProgressBar != null) {
             if (newProgress < PROGRESS_LENGTH) {
                 if (mProgressBar.getVisibility() == View.VISIBLE) {

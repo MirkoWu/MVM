@@ -20,13 +20,14 @@ public class MVMApplication extends Application {
         super.onCreate();
         // LeakCanary.INSTANCE(this);
         LogUtil.init(BuildConfig.DEBUG);
+        LogUtil.d("点击 跳过 Application onCreate");
 
-        //WebView初始化多进程
+        //WebView初始化多进程 耗时200ms左右,建议延迟初始化
         WebViewUtil.init(this, true);
-
+        LogUtil.d("点击 跳过 WebViewUtil");
         //换成你自己的bugly账号
         BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
-
+        LogUtil.d("点击 跳过 BuglyManager");
         /**
          * 防止初始化多次，视项目情况设置
          * 需要多进程初始化的方法此方法前面 不需要多进程处理的放在后面
@@ -39,10 +40,10 @@ public class MVMApplication extends Application {
         UmengManager.preInit(this, "60d310388a102159db787693", "umeng", BuildConfig.DEBUG);
         UmengManager.init(this, null);
 
-
+        LogUtil.d("点击 跳过UmengManager");
         //屏幕适配
         AutoSizeManager.init(this);
-
+        LogUtil.d("点击 跳过 AutoSizeManager");
         //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -52,6 +53,8 @@ public class MVMApplication extends Application {
                 UmengManager.reportError(throwable);
             }
         });
+
+        LogUtil.d("点击 跳过 Application onCreate  end---");
     }
 
     /**

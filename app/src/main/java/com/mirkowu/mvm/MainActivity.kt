@@ -12,6 +12,7 @@ import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
+import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
@@ -41,16 +42,16 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     override fun getLayoutId() = R.layout.activity_main
 
     override fun initialize() {
+        LogUtil.d("点击 跳过 initialize")
         pagerAdapter =
             BaseFragmentPagerAdapter(
                 supportFragmentManager,
                 mutableListOf<Fragment>(
                     DataBindingFragment.newInstance(),
-                    DataBindingFragment.newInstance(),
-                    DataBindingFragment.newInstance(),
-                    DataBindingFragment.newInstance()
+//                    DataBindingFragment.newInstance(),
                 )
             )
+
         binding.vpHome.apply {
             adapter = pagerAdapter
             isScroll = true
@@ -82,6 +83,7 @@ class MainActivity : BaseActivity<EmptyMediator>() {
                 binding.tvNetworkStatus.visibility = View.VISIBLE
             }
         }
+        LogUtil.d("点击 跳过 initialize end---")
     }
 
     fun webLocalClick(view: View?) {
