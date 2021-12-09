@@ -62,7 +62,5 @@ class GridListActivity : BaseActivity<EmptyMediator>() {
                 }"
             )
         }
-
-        UETool.showUETMenu();
     }
 }

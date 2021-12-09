@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -152,9 +151,7 @@ public class ImagePickerFragment extends Fragment {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + getContext().getPackageName()));
-                                        startActivity(intent);
+                                        PermissionsUtil.startAppSettingForResult(ImagePickerFragment.this);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)

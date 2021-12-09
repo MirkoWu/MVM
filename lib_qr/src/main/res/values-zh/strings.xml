@@ -1,3 +1,11 @@
 <resources>
     <string name="qr_scan">扫码</string>
+    <string name="qr_error_no_permission">无权限</string>
+    <string name="qr_permission_dialog_title">权限拒绝</string>
+    <string name="qr_permission_dialog_ok">确定</string>
+    <string name="qr_permission_dialog_cancel">拒绝</string>
+    <string name="qr_lack_storage_permission">应用缺少“存储权限”，该功能暂时无法使用。如若需要，请点击【确定】按钮前往设置中心进行权限授权。</string>
+    <string name="qr_lack_camera_permission">应用缺少“相机或存储权限”，该功能暂时无法使用。如若需要，请点击【确定】按钮前往设置中心进行权限授权。</string>
+    <string name="qr_permission_rationale_storage_for_photo">浏览图片需要您提供浏览存储权限</string>
+    <string name="qr_permission_rationale_camera">扫码需要您提供相机和存储权限</string>
 </resources>

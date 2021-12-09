@@ -70,7 +70,7 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
             }
         }
         initCameraScan();
-        startCamera();
+       // startCamera();
     }
 
     /**

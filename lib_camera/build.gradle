@@ -32,4 +32,6 @@ dependencies {
     api "androidx.camera:camera-camera2:$ext.camerax_version"
     api "androidx.camera:camera-lifecycle:$ext.camerax_version"
     api "androidx.camera:camera-view:$ext.camerax_view_version"
+
+    implementation project(':lib_util')
 }

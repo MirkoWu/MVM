@@ -1,6 +1,8 @@
 package com.mirkowu.lib_camera;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,12 +10,14 @@ import android.view.View;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.view.PreviewView;
 
 import com.mirkowu.lib_camera.util.PermissionUtils;
+import com.mirkowu.lib_util.PermissionsUtil;
 
 import java.io.File;
 
@@ -34,6 +38,10 @@ public class PreviewActivity extends AppCompatActivity {
             setContentView(layoutId);
         }
         initUI();
+
+        initCameraScan();
+
+        checkPermission();
     }
 
     /**
@@ -55,10 +63,59 @@ public class PreviewActivity extends AppCompatActivity {
                 mFlashlight.setOnClickListener(v -> onClickFlashlight());
             }
         }
-        initCameraScan();
-        startCamera();
     }
 
+    private void checkPermission() {
+        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
+                new PermissionsUtil.OnPermissionsListener() {
+                    @Override
+                    public void onPermissionGranted(int requestCode) {
+                        startCamera();
+                    }
+
+                    @Override
+                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
+                        new AlertDialog.Builder(PreviewActivity.this)
+                                .setTitle(R.string.camera_permission_dialog_title)
+                                .setMessage(R.string.camera_permission_rationale_camera)
+                                .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkPermission(); //如果想继续同意权限 就重新调用改方法
+                                    }
+                                })
+                                .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
+                                .create().show();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(int requestCode) {
+                        new AlertDialog.Builder(PreviewActivity.this)
+                                .setTitle(R.string.camera_error_no_permission)
+                                .setMessage(R.string.camera_lack_camera_permission)
+                                .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PermissionsUtil.startAppSettingForResult(PreviewActivity.this);
+                                    }
+                                })
+                                .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
+                                .create().show();
+                    }
+                });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+    }
 
     private void onClickTakePhoto() {
         takePhoto();
@@ -130,28 +187,28 @@ public class PreviewActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            requestCameraPermissionResult(permissions, grantResults);
-        }
-    }
-
-    /**
-     * 请求Camera权限回调结果
-     *
-     * @param permissions
-     * @param grantResults
-     */
-    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
-            startCamera();
-        } else {
-            finish();
-        }
-    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+//            requestCameraPermissionResult(permissions, grantResults);
+//        }
+//    }
+//
+//    /**
+//     * 请求Camera权限回调结果
+//     *
+//     * @param permissions
+//     * @param grantResults
+//     */
+//    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
+//            startCamera();
+//        } else {
+//            finish();
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
