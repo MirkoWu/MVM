@@ -6,7 +6,7 @@ public interface ErrorCode {
     //请求超时
     int NET_TIMEOUT = 1002;
     //未知HOST
-    int NET_UNKNOWNHOST = 1003;
+    int NET_UNKNOWN_HOST = 1003;
     //1-1999 为网络错误码
     int NET_END = 1999;
 
@@ -14,5 +14,5 @@ public interface ErrorCode {
     //设置业务出错
     int ERROR_BIZ = 2001;
     //未知
-    int UNKNOW = 9999;
+    int UNKNOWN = 9999;
 }

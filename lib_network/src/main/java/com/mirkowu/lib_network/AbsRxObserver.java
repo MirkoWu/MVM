@@ -52,9 +52,9 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         } else if (e instanceof SocketTimeoutException) {
             onFailure(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry));
         } else if (e instanceof UnknownHostException) {
-            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWNHOST, StringUtils.getString(R.string.network_request_failed_cant_connect_server));
+            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_request_failed_cant_connect_server));
         } else {
-            onFailure(ErrorType.UNKONW, ErrorCode.UNKNOW, StringUtils.getString(R.string.network_request_failed_) + e.getMessage());
+            onFailure(ErrorType.UNKNOWN, ErrorCode.UNKNOWN, StringUtils.getString(R.string.network_request_failed_) + e.getMessage());
         }
     }
 
