@@ -98,7 +98,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
                 }
                 mLoadingDialog = new LoadingDialog().setMessage(msg);
                 if (!isFinishing() && !mLoadingDialog.isVisible()) {
-                    mLoadingDialog.show(getSupportFragmentManager());
+                    mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
                 }
             }
         });

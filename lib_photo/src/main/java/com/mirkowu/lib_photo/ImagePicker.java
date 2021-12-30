@@ -29,17 +29,17 @@ public class ImagePicker {
     private PickerConfig mPickerConfig;
     private PickerConfig mPickerConfigCache;
     private OnPickResultListener mOnPickResultListener;
-    private static volatile ImagePicker sSelector;
+    private static volatile ImagePicker sImagePicker;
 
     public static ImagePicker getInstance() {
-        if (sSelector == null) {
+        if (sImagePicker == null) {
             synchronized (ImagePicker.class) {
-                if (sSelector == null) {
-                    sSelector = new ImagePicker();
+                if (sImagePicker == null) {
+                    sImagePicker = new ImagePicker();
                 }
             }
         }
-        return sSelector;
+        return sImagePicker;
     }
 
     private ImagePicker() {
@@ -105,7 +105,7 @@ public class ImagePicker {
         mPickerConfigCache = null;
 
         if (mPickerConfig == null) {
-            setPickerConfig(new PickerConfig());
+            mPickerConfig = new PickerConfig();
         }
         if (mPickerConfig.getMaxPickCount() < 1) {
             LogUtil.e(TAG, "MaxPickCount must be greater than 0 ！");

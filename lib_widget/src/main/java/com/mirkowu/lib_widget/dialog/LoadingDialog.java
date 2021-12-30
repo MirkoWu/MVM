@@ -6,9 +6,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
@@ -81,5 +84,15 @@ public class LoadingDialog extends BaseDialog {
     @Override
     public LoadingDialog show(FragmentManager manager) {
         return (LoadingDialog) super.show(manager);
+    }
+
+    @Override
+    public LoadingDialog showAllowingStateLoss(FragmentManager manager) {
+        return (LoadingDialog) super.showAllowingStateLoss(manager);
+    }
+
+    @Override
+    public LoadingDialog showAllowingStateLoss(FragmentManager manager, String tag) {
+        return (LoadingDialog) super.showAllowingStateLoss(manager, tag);
     }
 }
