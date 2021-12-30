@@ -17,6 +17,11 @@ MVVM或衍生出来的变种其行为目的都是一致的。
 很鸡肋，完全没达到传说中的高内聚低耦合，具体代码还要看个人水平。
 
 ### 使用
+依赖jitpack
+```
+maven { url 'https://jitpack.io' }
+```
+
 //你可以直接使用
 ```
         implementation("com.github.mirkowu:mvm:$ext.mvm_version") { //总仓库
