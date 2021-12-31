@@ -26,6 +26,7 @@ import com.mirkowu.lib_screen.utils.AutoSizeLog;
 import java.util.Locale;
 
 /**
+ * * 默认适配所有节目，只有主动继承了CancelAdapt接口的Activity/Fragment 才不适配
  * ================================================
  * 屏幕适配逻辑策略默认实现类, 可通过 {@link AutoSizeConfig#init(Application, boolean, AutoAdaptStrategy)}
  * 和 {@link AutoSizeConfig#setAutoAdaptStrategy(AutoAdaptStrategy)} 切换策略

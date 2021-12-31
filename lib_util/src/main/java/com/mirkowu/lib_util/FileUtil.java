@@ -32,7 +32,8 @@ public class FileUtil {
 
     public static Uri createUri(Context context, File file) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            return FileProvider.getUriForFile(context, context.getPackageName() + ".mvm.fileProvider", file);
+            String authority = context.getPackageName() + ".mvm_util.fileProvider";
+            return FileProvider.getUriForFile(context, authority, file);
         } else {
             return Uri.fromFile(file);
         }

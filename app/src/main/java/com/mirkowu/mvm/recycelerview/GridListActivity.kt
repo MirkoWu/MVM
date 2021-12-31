@@ -11,7 +11,6 @@ import com.mirkowu.lib_widget.decoration.GridDecoration
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityGridListBinding
-import me.ele.uetool.UETool
 
 class GridListActivity : BaseActivity<EmptyMediator>() {
     companion object {

@@ -11,6 +11,7 @@ import java.util.Locale;
 
 
 /**
+ * 默认不适配，只有主动继承了IAutoAdapt接口的Activity/Fragment 才适配
  * ================================================
  * 屏幕适配逻辑策略默认实现类, 可通过 {@link AutoSizeConfig#init(Application, boolean, AutoAdaptStrategy)}
  * 和 {@link AutoSizeConfig#setAutoAdaptStrategy(AutoAdaptStrategy)} 切换策略
@@ -21,7 +22,7 @@ import java.util.Locale;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class CustomAutoAdaptStrategy implements AutoAdaptStrategy {
+public class DefaultNoAutoAdaptStrategy implements AutoAdaptStrategy {
     @Override
     public void applyAdapt(Object target, Activity activity) {
 

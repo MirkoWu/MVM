@@ -41,14 +41,18 @@ public class AutoSizeManager {
 
 
     public static void init(Application application) {
+        init(application, false);
+    }
+
+    public static void init(Application application, boolean isDebug) {
         AutoSize.checkAndInit(application); //先初始化，防止多进程
         AutoSizeConfig.getInstance()
-                .setDebug(false)
+                .setDebug(isDebug)
                 .setBaseOnWidth(true)
                 .setUseDeviceSize(false)
                 .setDesignWidthInDp(DESIGN_WIDTH_IN_DP)
                 .setDesignHeightInDp(DESIGN_HEIGHT_IN_DP)
-                .setAutoAdaptStrategy(new CustomAutoAdaptStrategy()); //自定义策略
+                .setAutoAdaptStrategy(new DefaultNoAutoAdaptStrategy()); //默认不自动适配策略
     }
 
 

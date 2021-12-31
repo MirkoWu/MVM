@@ -24,8 +24,8 @@
             android:theme="@style/ivp_theme" />
 
         <provider
-            android:name=".provider.IVPProvider"
-            android:authorities="${applicationId}.ivp.file_provider"
+            android:name=".provider.ImagePickerProvider"
+            android:authorities="${applicationId}.mvm_ivp.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

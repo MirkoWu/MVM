@@ -42,7 +42,7 @@ public class MVMApplication extends Application {
 
         LogUtil.d("点击 跳过UmengManager");
         //屏幕适配
-        AutoSizeManager.init(this);
+        AutoSizeManager.init(this, BuildConfig.DEBUG);
         LogUtil.d("点击 跳过 AutoSizeManager");
         //RxJava2 取消订阅后，抛出的异常无法捕获，导致程序崩溃
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
