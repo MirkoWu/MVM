@@ -21,7 +21,12 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         doOnSuccess(o);
     }
 
-    protected void doOnSuccess(T o) {
+    /**
+     * 处理成功
+     *
+     * @param o
+     */
+    public void doOnSuccess(T o) {
         try {
             onFinish();
             onSuccess(o);
@@ -33,9 +38,18 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onError(@NonNull Throwable e) {
+        doOnError(e);
+    }
+
+    /**
+     * 处理失败
+     *
+     * @param e
+     */
+    public void doOnError(Throwable e) {
         onFinish();
         if (!(e instanceof RxJava2NullException)) {
-            LogUtil.e("AbsRxObserver 网络请求Error", e);
+            LogUtil.e("AbsRxObserver 网络请求Error", e.toString());
         }
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);
@@ -46,13 +60,13 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         } else if (e instanceof HttpException) {
             //网络错误
             HttpException httpException = (HttpException) e;
-            onFailure(ErrorType.NET, httpException.code(), httpException.message());
+            onFailure(ErrorType.NET, httpException.code(), httpException.getMessage());
         } else if (e instanceof ConnectException) {
             onFailure(ErrorType.NET, ErrorCode.NET_CONNECT, StringUtils.getString(R.string.network_connect_failed_please_check));
+        } else if (e instanceof UnknownHostException) {
+            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_connect_failed_please_check));
         } else if (e instanceof SocketTimeoutException) {
             onFailure(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry));
-        } else if (e instanceof UnknownHostException) {
-            onFailure(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_request_failed_cant_connect_server));
         } else {
             onFailure(ErrorType.UNKNOWN, ErrorCode.UNKNOWN, StringUtils.getString(R.string.network_request_failed_) + e.getMessage());
         }

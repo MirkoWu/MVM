@@ -64,6 +64,7 @@ public class WebSettingUtil {
         mWebSettings.setAllowUniversalAccessFromFileURLs(false); //允许混合加载 允许通过 file url 加载的 Javascript 可以访问其他的源，包括其他的文件和 http，https 等其他的源
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true); //JS自动弹窗提示 在非用户操作情况下利用window.open打开窗口被称为自动弹窗，该功能默认关闭。
         mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebSettings.setMediaPlaybackRequiresUserGesture(false); //支持网页自动播放功能
 
         mWebSettings.setNeedInitialFocus(true); //当WebView#requestFocus(int, android.graphics.Rect)被调用时，告诉WebView是否需要设置一个节点来具有焦点
         mWebSettings.setDefaultTextEncodingName("utf-8"); //设置解码html页面时使用的默认文本编码名称

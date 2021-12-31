@@ -34,6 +34,11 @@ public abstract class RxObserver<T> extends AbsRxObserver<T> {
     }
 
     @Override
+    public void doOnError(Throwable e) {
+        super.doOnError(e);
+    }
+
+    @Override
     public void onFailure(@NonNull ErrorType type, int code, String msg) {
         ToastUtils.showShort(code + ":" + msg);
     }

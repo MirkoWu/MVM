@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mirkowu.lib_base.widget.RefreshHelper;
@@ -84,6 +85,14 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
                 } else {
                     Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        mMediator.mImageError.observe(this, new Observer<ErrorBean>() {
+            @Override
+            public void onChanged(ErrorBean errorBean) {
+                hideLoadingDialog();
+                refreshHelper.finishLoad();
+                binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
             }
         });
 

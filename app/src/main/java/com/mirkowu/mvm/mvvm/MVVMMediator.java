@@ -3,13 +3,13 @@ package com.mirkowu.mvm.mvvm;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_base.mediator.BaseMediator;
+import com.mirkowu.lib_base.util.RxLife;
 import com.mirkowu.lib_base.view.IBaseView;
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_network.ErrorType;
 import com.mirkowu.lib_network.state.ResponseData;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_base.util.RxLife;
 import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.bean.GankBaseBean;
 import com.mirkowu.mvm.bean.GankImageBean;

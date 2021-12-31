@@ -110,10 +110,10 @@ public class CommonWebActivity extends BaseMVMActivity {
     }
 
     protected void configWebSettings(@NonNull WebConfig webConfig) {
-        mWebViewCallBack = webConfig.getWebViewCallBack();
-        WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
+        WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
 
+        mWebViewCallBack = webConfig.getWebViewCallBack();
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
         mFileChooser = new DefaultWebViewFileChooser(this);
         mWebView.setWebChromeClient(new BaseWebChromeClient(this, mFileChooser, mWebViewCallBack));
