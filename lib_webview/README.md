@@ -70,10 +70,8 @@ DSBridge-Android 3.0-X5
 
 2. 添加API类实例到 DWebView .
 
-   ```javascript
-   import wendu.dsbridge.DWebView
-   ...
-   DWebView dwebView= (DWebView) findViewById(R.id.dwebview);
+   ```java
+   CommonWebView dwebView= (CommonWebView) findViewById(R.id.dwebview);
    dwebView.addJavascriptObject(new JsApi(), null);
    ```
 
@@ -148,7 +146,7 @@ DSBridge-Android 3.0-X5
 在调试模式时，发生一些错误时，将会以弹窗形式提示，并且原生API如果触发异常将不会被自动捕获，因为在调试阶段应该将问题暴露出来。如果调试模式关闭，错误将不会弹窗，并且会自动捕获API触发的异常，防止crash。强烈建议在开发阶段开启调试模式，可以通过如下代码开启调试模式
 
 ```java
-DWebView.setWebContentsDebuggingEnabled(true)
+CommonWebView.setWebContentsDebuggingEnabled(true)
 ```
 
 
@@ -311,7 +309,7 @@ dwebview.disableJavascriptDialogBlock(true);
 Example:
 
 ```java
-dwebview.setJavascriptCloseWindowListener(new DWebView.JavascriptCloseWindowListener() {
+dwebview.setJavascriptCloseWindowListener(new CommonWebView.JavascriptCloseWindowListener() {
     @Override
     public boolean onClose() {
         Log.d("jsbridge","window.close is called in Javascript");
@@ -340,7 +338,7 @@ dwebview.setJavascriptCloseWindowListener(new DWebView.JavascriptCloseWindowList
 
 
 
-##### `DWebView.setWebContentsDebuggingEnabled(boolean enabled)`
+##### `CommonWebView.setWebContentsDebuggingEnabled(boolean enabled)`
 
 设置调试模式。在调试模式时，发生一些错误时，将会以弹窗形式提示，并且原生API如果触发异常将不会被自动捕获，因为在调试阶段应该将问题暴露出来。如果调试模式关闭，错误将不会弹窗，并且会自动捕获API触发的异常，防止crash。强烈建议在开发阶段开启调试模式。
 
