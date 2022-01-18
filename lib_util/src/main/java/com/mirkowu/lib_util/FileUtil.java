@@ -166,6 +166,37 @@ public class FileUtil {
         return result;
     }
 
+    public static boolean addGraphToGallery(Context context, File file) {
+        boolean result = false;
+        try {
+
+            //刷新相册
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            context.sendBroadcast(mediaScanIntent);
+            result = true;
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean addGraphToGallery(Context context, Uri uri) {
+        boolean result = false;
+        try {
+
+            //刷新相册
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(uri);
+            context.sendBroadcast(mediaScanIntent);
+            result = true;
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public static void saveBitmapToJPEG(Bitmap bitmap, File file) throws IOException {
         FileOutputStream fos = null;

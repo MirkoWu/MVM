@@ -3,6 +3,7 @@ package com.mirkowu.lib_camera;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.view.PreviewView;
 
 import com.mirkowu.lib_camera.util.PermissionUtils;
+import com.mirkowu.lib_util.FileUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
 
 import java.io.File;
@@ -117,14 +119,14 @@ public class PreviewActivity extends AppCompatActivity {
         PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
-    private void onClickTakePhoto() {
+    public void onClickTakePhoto() {
         takePhoto();
     }
 
     /**
      * 点击手电筒
      */
-    protected void onClickFlashlight() {
+    public void onClickFlashlight() {
         toggleTorchState();
     }
 
@@ -136,13 +138,14 @@ public class PreviewActivity extends AppCompatActivity {
 //        mCameraScan.setOnScanResultCallback(this);
     }
 
-    private void takePhoto() {
+    public void takePhoto() {
         File photo = new File(getExternalCacheDir() + "/" + System.currentTimeMillis() + ".jpg");
         mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                Log.e("TAG", "onImageSaved ");
-                outputFileResults.getSavedUri();
+                Uri uri = outputFileResults.getSavedUri();
+                boolean result = FileUtil.addGraphToGallery(PreviewActivity.this, uri);
+                Log.e("TAG", "onImageSaved : " + result);
             }
 
             @Override
@@ -169,7 +172,7 @@ public class PreviewActivity extends AppCompatActivity {
     /**
      * 释放相机
      */
-    private void releaseCamera() {
+    public void releaseCamera() {
         if (mCameraScan != null) {
             mCameraScan.release();
         }
@@ -178,7 +181,7 @@ public class PreviewActivity extends AppCompatActivity {
     /**
      * 切换闪光灯状态（开启/关闭）
      */
-    protected void toggleTorchState() {
+    public void toggleTorchState() {
         if (mCameraScan != null) {
             boolean isTorch = mCameraScan.isTorchEnabled();
             mCameraScan.enableTorch(!isTorch);

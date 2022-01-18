@@ -13,16 +13,18 @@
 
     <ImageView
         android:id="@+id/mFlashlight"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:background="#FFFFFF" />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/camera_svg_flash_light" />
 
     <ImageView
         android:id="@+id/mTakePhoto"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#FFFFFF" />
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/camera_svg_shot" />
 
 </FrameLayout>
