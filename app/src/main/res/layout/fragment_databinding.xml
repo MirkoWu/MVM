@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         app:showLine="true"
-        app:showStatusBarHeight="false"
+        app:showStatusBarHeight="true"
         app:title="@string/app_name" />
 
     <androidx.core.widget.NestedScrollView
