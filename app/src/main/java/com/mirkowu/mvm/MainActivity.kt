@@ -3,7 +3,6 @@ package com.mirkowu.mvm
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.mvc.MVCActivity
@@ -70,26 +68,16 @@ class MainActivity : BaseActivity<EmptyMediator>() {
             }
         }
 
-        var time = System.currentTimeMillis();
-        NetworkUtils.isAvailableByPingAsync("baidu.com") {
-            time = System.currentTimeMillis() - time
-            if (it) {
-                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
-                binding.tvNetworkStatus.setTextColor(Color.GREEN)
-//                binding.tvNetworkStatus.visibility = View.GONE
-            } else {
-                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络不可用")
-                binding.tvNetworkStatus.setTextColor(Color.RED)
-                binding.tvNetworkStatus.visibility = View.VISIBLE
-            }
-        }
+
         LogUtil.d("点击 跳过 initialize end---")
+
     }
 
     fun webLocalClick(view: View?) {
 //        MVCActivity.start(this)
 //        WebActivity.start(context, "ces", "file:///android_asset/test.html")
         WebActivity.start(context, "ces", "file:///android_asset/jsbridge_test.html")
+//        WebActivity.start(context, "ces", "http://www.baidu.com")
         Log.d("WebActivity", "start: ")
     }
 

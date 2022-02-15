@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         val timer = findViewById<TimerTextView>(R.id.mTimer)
-//        timer.timerDuration = 3
+        timer.timerDuration = 3
 //        timer.timerHintText = "跳过"
 //        timer.timerFormatText = "跳过%d"
 //        timer.timerFinishText = "跳过"

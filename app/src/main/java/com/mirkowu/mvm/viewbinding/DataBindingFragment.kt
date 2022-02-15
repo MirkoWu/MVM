@@ -2,6 +2,7 @@ package com.mirkowu.mvm.viewbinding
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -19,6 +20,7 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
+import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
@@ -51,6 +53,16 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 
     override fun getLayoutId() = R.layout.fragment_databinding
     override fun initialize() {
+        LogUtil.e("测试 fragment initialize"  )
+//        BarUtils.transparentStatusBar(activity!!)
+//        BarUtils.setStatusBarLightMode(activity!!, true)
+//        BarUtils.setStatusBarColor(activity!!, Color.parseColor("#50000000"))
+
+        binding.btnStatusbar1.click {
+            binding.toolbar.setShowStatusBarHeight(!binding.toolbar.isShowStatusBarHeight)
+            LogUtil.e("toolbar paddingTop = " + binding.toolbar.paddingTop)
+        }
+
         binding.btnText.text = "这是fragment databinding"
         binding.btnText.setOnClickListener {
             binding.btnText.text = "点击了${System.currentTimeMillis()}"
@@ -176,6 +188,21 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
         binding.btnCrash.click {
             throw RuntimeException("测试BUG")
+        }
+
+
+        var time = System.currentTimeMillis();
+        NetworkUtils.isAvailableByPingAsync("baidu.com") {
+            time = System.currentTimeMillis() - time
+            if (it) {
+                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
+                binding.tvNetworkStatus.setTextColor(Color.GREEN)
+//                binding.tvNetworkStatus.visibility = View.GONE
+            } else {
+                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络不可用")
+                binding.tvNetworkStatus.setTextColor(Color.RED)
+                binding.tvNetworkStatus.visibility = View.VISIBLE
+            }
         }
     }
 

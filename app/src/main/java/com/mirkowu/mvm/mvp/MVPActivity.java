@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_widget.dialog.PromptDialog;
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.databinding.ActivityMVPBinding;
@@ -27,6 +26,12 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
     }
 
     @Override
+    protected void initStatusBar() {
+        super.initStatusBar();
+        BarUtils.transparentStatusBar(this);
+    }
+
+    @Override
     protected void bindContentView() {
         binding = ActivityMVPBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -35,7 +40,10 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
     @Override
     protected void initialize() {
 //        tvTime = findViewById(R.id.tvTime);
+        binding.btnStatusbar2.setOnClickListener(v -> {
+            binding.toolbar.setFitsSystemWindows(!binding.toolbar.getFitsSystemWindows());
 
+        });
         mMediator.getData();
 
     }

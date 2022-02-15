@@ -69,15 +69,18 @@ public class CommonWebActivity extends BaseMVMActivity {
         return null;
     }
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.webview_layout_common_web_view;
     }
 
     @Override
-    protected void initialize() {
+    protected void initStatusBar() {
         BarUtils.setStatusBarLightMode(this, true);
+    }
+
+    @Override
+    protected void initialize() {
         String title = getIntent().getStringExtra(KEY_TITLE);
         String url = getIntent().getStringExtra(KEY_URL);
 

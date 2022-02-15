@@ -58,7 +58,8 @@ public final class BarUtils {
      * @return the status bar's height
      */
     public static int getStatusBarHeight() {
-        Resources resources = Utils.getApp().getResources();
+        //这里要用Resources.getSystem,不然再适配屏幕时会有误差
+        Resources resources = Resources.getSystem();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
@@ -483,7 +484,7 @@ public final class BarUtils {
         TypedValue tv = new TypedValue();
         if (Utils.getApp().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             return TypedValue.complexToDimensionPixelSize(
-                    tv.data, Utils.getApp().getResources().getDisplayMetrics()
+                    tv.data, Resources.getSystem().getDisplayMetrics()
             );
         }
         return 0;
@@ -533,7 +534,7 @@ public final class BarUtils {
      * @return the navigation bar's height
      */
     public static int getNavBarHeight() {
-        Resources res = Utils.getApp().getResources();
+        Resources res = Resources.getSystem();
         int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
         if (resourceId != 0) {
             return res.getDimensionPixelSize(resourceId);
@@ -638,7 +639,7 @@ public final class BarUtils {
 
     private static String getResNameById(int id) {
         try {
-            return Utils.getApp().getResources().getResourceEntryName(id);
+            return Resources.getSystem().getResourceEntryName(id);
         } catch (Exception ignore) {
             return "";
         }

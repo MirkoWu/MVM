@@ -57,7 +57,7 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
     @Override
     public Resources getResources() {
         //这个地方慎用，可能会导致在不恰当的时间 调用
-    //    adaptScreenSize(super.getResources());
+        //    adaptScreenSize(super.getResources());
         return super.getResources();
     }
 

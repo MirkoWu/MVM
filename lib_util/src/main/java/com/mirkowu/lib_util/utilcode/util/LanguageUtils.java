@@ -172,13 +172,13 @@ public class LanguageUtils {
     }
 
     static void pollCheckAppContextLocal(final Locale destLocale, final int index, final Utils.Consumer<Boolean> consumer) {
-        Resources appResources = Utils.getApp().getResources();
+        Resources appResources = Resources.getSystem();
         Configuration appConfig = appResources.getConfiguration();
         Locale appLocal = getLocal(appConfig);
 
         setLocal(appConfig, destLocale);
 
-        Utils.getApp().getResources().updateConfiguration(appConfig, appResources.getDisplayMetrics());
+        Resources.getSystem().updateConfiguration(appConfig, appResources.getDisplayMetrics());
 
         if (consumer == null) return;
 

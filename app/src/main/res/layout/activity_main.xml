@@ -7,24 +7,11 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.mirkowu.lib_widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:showLine="true"
-        app:title="@string/app_name" />
-
-    <TextView
-        android:id="@+id/tv_network_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#ff0000" />
-
     <com.mirkowu.lib_widget.NoScrollViewPager
         android:id="@+id/vp_home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 
 </LinearLayout>

@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         app:backIcon="@drawable/widget_ic_back_white"
         app:showLine="false"
+        app:showStatusBarHeight="true"
         app:title="@string/qr_scan"
         app:titleColor="#FFFFFF" />
 

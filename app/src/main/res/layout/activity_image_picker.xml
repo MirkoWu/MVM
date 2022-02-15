@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backIcon="@drawable/widget_ic_back_black"
+        app:showStatusBarHeight="false"
         app:title="选取图片" />
 
     <com.mirkowu.lib_photo.view.ImagePickerRecyclerView

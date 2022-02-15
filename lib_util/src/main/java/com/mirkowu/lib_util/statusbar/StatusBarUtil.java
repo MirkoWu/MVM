@@ -853,10 +853,10 @@ public class StatusBarUtil {
     /**
      * Desc: 获取虚拟按键高度 放到工具类里面直接调用即可
      */
-    public static int getNavigationBarHeight(Context context) {
+    public static int getNavigationBarHeight() {
         int result = 0;
-        if (checkDeviceHasNavigationBar(context)) {
-            Resources res = context.getResources();
+        if (checkDeviceHasNavigationBar()) {
+            Resources res = Resources.getSystem();
             int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 result = res.getDimensionPixelSize(resourceId);
@@ -866,9 +866,9 @@ public class StatusBarUtil {
     }
 
     //获取是否存在NavigationBar
-    public static boolean checkDeviceHasNavigationBar(Context context) {
+    public static boolean checkDeviceHasNavigationBar() {
         boolean hasNavigationBar = false;
-        Resources rs = context.getResources();
+        Resources rs = Resources.getSystem();
         int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
         if (id > 0) {
             hasNavigationBar = rs.getBoolean(id);

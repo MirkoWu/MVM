@@ -22,6 +22,7 @@
         <attr name="backIcon" format="reference" />
         <attr name="closeIcon" format="reference" />
         <attr name="showBackIcon" format="boolean" />
+        <attr name="showStatusBarHeight" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="StateView">

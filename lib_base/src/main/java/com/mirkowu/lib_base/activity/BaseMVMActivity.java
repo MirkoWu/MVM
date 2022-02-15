@@ -39,9 +39,9 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     /*** onCreate代理 */
     protected void onCreateDelegate(@Nullable Bundle savedInstanceState) {
-        initStatusBar();
         bindContentView();
         bindMediator();
+        initStatusBar();
         initialize(savedInstanceState);
         initialize();
     }

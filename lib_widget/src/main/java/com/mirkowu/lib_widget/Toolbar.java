@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_util.utilcode.util.SizeUtils;
 
 /**
@@ -35,6 +36,7 @@ public class Toolbar extends RelativeLayout {
     private ImageView ivRight;
     private View vLine;
     private boolean mShowLine;
+    private boolean mShowStatusBarHeight;
     private int mTitleColorId;
     private int mTitleTextSize;
     private int mRightColorId;
@@ -53,8 +55,6 @@ public class Toolbar extends RelativeLayout {
     public Toolbar(final Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        setFitsSystemWindows(true);
-
         init(context, attrs);
     }
 
@@ -68,9 +68,10 @@ public class Toolbar extends RelativeLayout {
         mCloseIconDrawable = ta.getDrawable(R.styleable.Toolbar_closeIcon);
         mTitleEllipsize = ta.getInt(R.styleable.Toolbar_titleEllipsize, ELLIPSIZE_NONE);
         mShowLine = ta.getBoolean(R.styleable.Toolbar_showLine, true);
+        boolean showStatusBarHeight = ta.getBoolean(R.styleable.Toolbar_showStatusBarHeight, false);
         ta.recycle();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this);
+        View view = LayoutInflater.from(context).inflate(R.layout.widget_layout_toolbar, this, true);
         tvTitle = view.findViewById(R.id.btv_title);
         ivBack = view.findViewById(R.id.iv_back);
         ivClose = view.findViewById(R.id.iv_close);
@@ -85,6 +86,7 @@ public class Toolbar extends RelativeLayout {
         setBackIcon(mBackIconDrawable);
         setCloseIcon(mCloseIconDrawable);
         setShowLine(mShowLine);
+        setShowStatusBarHeight(showStatusBarHeight);
         initTitleEllipsize();
     }
 
@@ -283,17 +285,12 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
-    public Toolbar setShowLine(boolean showLine) {
-        mShowLine = showLine;
-        vLine.setVisibility(showLine ? VISIBLE : GONE);
-        return this;
-    }
 
     /**
      * 设置是否显示底部分割线
      *
-     * @param showLine
-     * @param colorId
+     * @param showLine 是否显示
+     * @param colorId  分割线颜色 默认 #10000000
      * @return
      */
     public Toolbar setShowLine(boolean showLine, @ColorInt int colorId) {
@@ -303,7 +300,40 @@ public class Toolbar extends RelativeLayout {
         return this;
     }
 
+    public Toolbar setShowLine(boolean showLine) {
+        return setShowLine(showLine, Color.parseColor("#10000000"));
+    }
+
     public boolean isShowLine() {
         return mShowLine;
+    }
+
+    /**
+     * 设置显示状态栏高度
+     *
+     * @param showStatusBarHeight
+     * @return
+     */
+    public Toolbar setShowStatusBarHeight(boolean showStatusBarHeight) {
+        int paddingTop = getPaddingTop();
+        int statusBarHeight = BarUtils.getStatusBarHeight();
+        if (showStatusBarHeight) {
+            //如果显示状态栏高度，FitsSystemWindows 就不要设置，否则会重复计算
+            setFitsSystemWindows(false);
+            if (!mShowStatusBarHeight) {
+                paddingTop += statusBarHeight;
+            }
+        } else {
+            if (mShowStatusBarHeight) {
+                paddingTop -= statusBarHeight;
+            }
+        }
+        setPadding(getPaddingLeft(), paddingTop, getPaddingRight(), getPaddingBottom());
+        mShowStatusBarHeight = showStatusBarHeight;
+        return this;
+    }
+
+    public boolean isShowStatusBarHeight() {
+        return mShowStatusBarHeight;
     }
 }

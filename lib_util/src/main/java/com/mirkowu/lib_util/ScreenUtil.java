@@ -5,6 +5,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -152,15 +153,15 @@ public class ScreenUtil {
     /**
      * 获取状态栏高度
      *
-     * @param context 上下文
      * @return 状态栏高度
      */
-    public static int getStatusBarHeight(Context context) {
+    public static int getStatusBarHeight() {
+        Resources resources = Resources.getSystem();
         int result = 0;
-        int resourceId = context.getResources()
+        int resourceId = resources
                 .getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
+            result = resources.getDimensionPixelSize(resourceId);
         }
         return result;
     }
@@ -275,7 +276,7 @@ public class ScreenUtil {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bmp = view.getDrawingCache();
-        int statusBarHeight = getStatusBarHeight(activity);
+        int statusBarHeight = getStatusBarHeight();
         int width = getScreenWidth(activity);
         int height = getScreenHeight(activity);
         Bitmap bp = Bitmap.createBitmap(bmp, 0, statusBarHeight, width, height - statusBarHeight);
