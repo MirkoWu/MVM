@@ -56,9 +56,10 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     /*** 初始化状态栏 setContentView 之前*/
     protected void initStatusBar() {
-//        //沉浸式状态栏 + 亮色模式
-//        StatusBarUtil.setTranslucent(this);
-//        StatusBarUtil.setLightMode(this);
+        //开启亮色模式
+//        BarUtils.setStatusBarLightMode(this,true);
+        //沉浸式状态栏
+//        BarUtils.transparentStatusBar(this);
     }
 
     /*** 绑定中间件 */
