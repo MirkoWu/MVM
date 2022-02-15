@@ -14,6 +14,7 @@
         android:visibility="gone"
         app:backIcon="@drawable/widget_ic_back_black"
         app:closeIcon="@drawable/widget_ic_close_black"
+        app:showStatusBarHeight="true"
         app:titleEllipsize="marquee" />
 
     <com.mirkowu.lib_webview.CommonWebView
