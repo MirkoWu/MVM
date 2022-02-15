@@ -92,6 +92,7 @@ public class CommonWebFragment extends BaseMVMFragment {
         mToolbar.setTitle(title);
         mToolbar.setShowBackIcon(webConfig.isShowBack());
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
+        mToolbar.setShowStatusBarHeight(webConfig.isShowToolbar());
         mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
     }
 
