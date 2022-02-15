@@ -33,7 +33,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
-    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.1'
+    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation project(':lib_util')
 
