@@ -35,9 +35,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     compileOnly 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
+    //appcompat不能使用compileOnly依赖，否则打包缺少资源导致失败
+    implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
     compileOnly "com.google.android.material:material:$ext.material_version"
     implementation 'com.orhanobut:logger:2.2.0'
 

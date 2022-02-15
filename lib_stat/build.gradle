@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':lib_util')
 
     // 下面各SDK根据宿主App是否使用相关业务按需引入。

@@ -25,8 +25,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
+    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
 
     api "androidx.camera:camera-core:$ext.camerax_version"
     api "androidx.camera:camera-camera2:$ext.camerax_version"

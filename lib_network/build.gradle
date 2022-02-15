@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
     compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
 
     implementation project(':lib_util')
