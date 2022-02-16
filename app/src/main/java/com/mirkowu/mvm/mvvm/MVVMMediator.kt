@@ -1,84 +1,97 @@
-package com.mirkowu.mvm.mvvm;
+package com.mirkowu.mvm.mvvm
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData
+import com.mirkowu.lib_base.mediator.BaseMediator
+import com.mirkowu.lib_base.util.RxLife
+import com.mirkowu.lib_base.util.RxScheduler
+import com.mirkowu.lib_base.view.IBaseView
+import com.mirkowu.lib_network.ErrorBean
+import com.mirkowu.lib_network.ErrorType
+import com.mirkowu.lib_network.state.ResponseData
+import com.mirkowu.lib_network.state.ResponseLiveData
+import com.mirkowu.lib_util.LogUtil
+import com.mirkowu.lib_util.utilcode.util.NetworkUtils
+import com.mirkowu.mvm.BizModel
+import com.mirkowu.mvm.bean.GankBaseBean
+import com.mirkowu.mvm.bean.GankImageBean
+import com.mirkowu.mvm.network.RxObserver
+import io.reactivex.rxjava3.core.Observable
 
-import com.mirkowu.lib_base.mediator.BaseMediator;
-import com.mirkowu.lib_base.util.RxLife;
-import com.mirkowu.lib_base.view.IBaseView;
-import com.mirkowu.lib_network.ErrorBean;
-import com.mirkowu.lib_network.ErrorType;
-import com.mirkowu.lib_network.state.ResponseData;
-import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.mvm.BizModel;
-import com.mirkowu.mvm.bean.GankBaseBean;
-import com.mirkowu.mvm.bean.GankImageBean;
-import com.mirkowu.mvm.network.RxObserver;
+class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
+    var mLiveData = MutableLiveData<Any>()
+    var mError = MutableLiveData<Throwable>()
+    @JvmField
+    var mRequestImageListData = MutableLiveData<ResponseData<List<GankImageBean>>>()
+    @JvmField
+    var mImageError = MutableLiveData<ErrorBean>()
 
-import java.util.List;
+    var mPingResult = ResponseLiveData<Boolean>()
 
-public class MVVMMediator extends BaseMediator<IBaseView, BizModel> {
 
-    MutableLiveData<Object> mLiveData = new MutableLiveData<>();
-    MutableLiveData<Throwable> mError = new MutableLiveData<>();
-    MutableLiveData<ResponseData<List<GankImageBean>>> mRequestImageListData = new MutableLiveData<>();
-    MutableLiveData<ErrorBean> mImageError = new MutableLiveData<>();
-
-    public void loadImage(int page, int pageSize) {
+    fun loadImage(page: Int, pageSize: Int) {
         mModel.loadImage(page, pageSize)
-                .doOnDispose(() -> LogUtil.d("RxJava 被解绑"))
-                .to(RxLife.bindLifecycle(mView))
-                .subscribe(new RxObserver<GankBaseBean<List<GankImageBean>>>() {
-                    @Override
-                    public void onSuccess(GankBaseBean<List<GankImageBean>> data) {
-                        if (data.isSuccess()) {
-                            mRequestImageListData.setValue(ResponseData.success(data.data));
-                        }
+            .doOnDispose { LogUtil.d("RxJava 被解绑") }
+            .to(RxLife.bindLifecycle(mView))
+            .subscribe(object : RxObserver<GankBaseBean<List<GankImageBean>>>() {
+                override fun onSuccess(data: GankBaseBean<List<GankImageBean>>) {
+                    if (data.isSuccess) {
+                        mRequestImageListData.setValue(ResponseData.success(data.data))
                     }
+                }
 
-                    @Override
-                    public void onFailure(@NonNull ErrorType type, int code, String msg) {
-                        mRequestImageListData.setValue(ResponseData.error(type, code, msg));
-                    }
-                });
-        loadImage2();
+                override fun onFailure(type: ErrorType, code: Int, msg: String) {
+                    mRequestImageListData.setValue(ResponseData.error(type, code, msg))
+                }
+            })
+        loadImage2()
     }
 
-    public void loadImage2() {
+    fun loadImage2() {
         mModel.loadImage2()
-                .doOnDispose(() -> LogUtil.d("RxJava 被解绑"))
-                .to(RxLife.bindLifecycle(mView))
-                .subscribe(new RxObserver<Object>() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        mLiveData.setValue(data);
-                    }
+            .doOnDispose { LogUtil.d("RxJava 被解绑") }
+            .to(RxLife.bindLifecycle(mView))
+            .subscribe(object : RxObserver<Any>() {
+                override fun onSuccess(data: Any) {
+                    mLiveData.setValue(data)
+                }
 
-                    @Override
-                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
-                        mImageError.setValue(new ErrorBean(errorType, code, msg));
-                    }
-                });
+                override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
+                    mImageError.setValue(ErrorBean(errorType, code, msg))
+                }
+            })
     }
 
-    public void getData() {
-        mModel.loadData()
-                .doOnDispose(() -> LogUtil.d("RxJava 被解绑"))
+    //                        mError.setValue(e);
+    val data: Unit
+        get() {
+            mModel.loadData()
+                .doOnDispose { LogUtil.d("RxJava 被解绑") }
                 .to(RxLife.bindLifecycle(mView))
-                .subscribe(new RxObserver<Object>() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        mLiveData.setValue(data);
+                .subscribe(object : RxObserver<Any>() {
+                    override fun onSuccess(data: Any) {
+                        mLiveData.setValue(data)
                     }
 
-                    @Override
-                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
+                    override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
 
 
 //                        mError.setValue(e);
                     }
+                })
+        }
 
+    fun getPing(){
+        Observable.create<Boolean> { NetworkUtils.isAvailableByPing("baidu.com") }
+            .compose(RxScheduler.ioToMain())
+            .to(RxLife.bindLifecycle(mView))
+            .subscribe(object : RxObserver<Boolean>() {
+                override fun onSuccess(data: Boolean) {
+                    mPingResult.value = ResponseData.success(data)
+                }
 
-                });
+                override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
+                    mPingResult.value = ResponseData.error(errorType, code, msg)
+                }
+            })
     }
 }

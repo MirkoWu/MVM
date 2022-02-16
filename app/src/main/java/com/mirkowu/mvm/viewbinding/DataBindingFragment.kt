@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_camera.PreviewActivity
+import com.mirkowu.lib_network.state.observerRequest
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
@@ -53,7 +54,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 
     override fun getLayoutId() = R.layout.fragment_databinding
     override fun initialize() {
-        LogUtil.e("测试 fragment initialize"  )
+        LogUtil.e("测试 fragment initialize")
 //        BarUtils.transparentStatusBar(activity!!)
 //        BarUtils.setStatusBarLightMode(activity!!, true)
 //        BarUtils.setStatusBarColor(activity!!, Color.parseColor("#50000000"))
@@ -190,11 +191,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             throw RuntimeException("测试BUG")
         }
 
-
         var time = System.currentTimeMillis();
-        NetworkUtils.isAvailableByPingAsync("baidu.com") {
+        mMediator.mPingResult.observerRequest(this, onSuccess = {
             time = System.currentTimeMillis() - time
-            if (it) {
+            if (it!!) {
                 binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
                 binding.tvNetworkStatus.setTextColor(Color.GREEN)
 //                binding.tvNetworkStatus.visibility = View.GONE
@@ -203,7 +203,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                 binding.tvNetworkStatus.setTextColor(Color.RED)
                 binding.tvNetworkStatus.visibility = View.VISIBLE
             }
-        }
+        })
+        mMediator.getPing()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
