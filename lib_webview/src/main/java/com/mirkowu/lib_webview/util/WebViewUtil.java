@@ -12,7 +12,7 @@ import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.R;
-import com.mirkowu.lib_webview.service.EmptyService;
+import com.mirkowu.lib_webview.service.MultiProcessService;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.GeolocationPermissions;
@@ -118,13 +118,13 @@ public class WebViewUtil {
      */
     private static void startMultiProcess(Context context) {
         try {
-            Intent intent = new Intent(context, EmptyService.class);
+            Intent intent = new Intent(context, MultiProcessService.class);
             context.startService(intent);
         } catch (Throwable e) {
             LogUtil.e("startMultiProcess  retry", e);
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(new Intent(context, EmptyService.class));
+                    context.startForegroundService(new Intent(context, MultiProcessService.class));
                 }
             } catch (Throwable e1) {
                 LogUtil.e("startMultiProcess failed", e1);

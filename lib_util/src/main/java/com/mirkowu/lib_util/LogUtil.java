@@ -10,11 +10,15 @@ import com.orhanobut.logger.Logger;
 
 
 public class LogUtil {
-    public static final String TAG = "WM_LogUtils";
+    public static final String TAG = "MVMLog";
     private static boolean sIsDebug;
 
     public static void init(boolean isOpenDebug) {
         init(isOpenDebug, true);
+    }
+
+    public static boolean isDebug() {
+        return sIsDebug;
     }
 
     /**

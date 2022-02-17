@@ -26,7 +26,7 @@
             android:theme="@style/WebViewTheme" />
 
         <service
-            android:name=".service.EmptyService"
+            android:name=".service.MultiProcessService"
             android:process="@string/webview_process" />
 
         <!-- 该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。-->

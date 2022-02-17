@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 /**
- * 通用的WebView
+ * 通用的WebView 支持多进程
  * 1.支持X5
  * 2.支持JsBridge
  */

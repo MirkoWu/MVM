@@ -1,16 +1,15 @@
 package com.mirkowu.lib_webview.client;
 
 import android.annotation.TargetApi;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Message;
+import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.mirkowu.lib_util.IntentUtil;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
@@ -25,8 +24,6 @@ import com.tencent.smtt.sdk.WebViewClient;
 public class BaseWebViewClient extends WebViewClient {
 
     private static final String TAG = "XXWebviewCallBack";
-    public static final String SCHEME_SMS = "sms:";
-    public static final String SCHEME_WEIXIN = "weixin://";
     private IWebViewCallBack mWebViewCallBack;
     private CommonWebView mWebView;
 
@@ -59,26 +56,16 @@ public class BaseWebViewClient extends WebViewClient {
      * 支持电话、短信、邮件、地图跳转，跳转的都是手机系统自带的应用
      */
     private boolean handleLinked(String url) {
-        //先拦截
+        //自定义拦截
         if (mWebViewCallBack != null && mWebViewCallBack.shouldOverrideUrlLoading(mWebView, url)) {
             return true;
         }
 
-        if (url.startsWith(WebView.SCHEME_TEL)
-                || url.startsWith(SCHEME_SMS)
-                || url.startsWith(WebView.SCHEME_MAILTO)
-                || url.startsWith(WebView.SCHEME_GEO)
-                || url.startsWith(SCHEME_WEIXIN)) {
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                mWebView.getContext().startActivity(intent);
-                return true;
-            } catch (ActivityNotFoundException ignored) {
-                LogUtil.e(ignored.toString());
-                return false;
-            }
+        //无效Url 则通过Intent打开
+        if (!URLUtil.isValidUrl(url)) {
+            return IntentUtil.openScheme(mWebView.getContext(), url);
         }
+
         return false;
     }
 

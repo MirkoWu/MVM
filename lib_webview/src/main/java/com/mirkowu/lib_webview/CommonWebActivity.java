@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
 import com.mirkowu.lib_base.mediator.BaseMediator;
-import com.mirkowu.lib_util.IntentUtil;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_webview.callback.DefaultWebViewFileChooser;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
@@ -167,9 +165,6 @@ public class CommonWebActivity extends BaseMVMActivity {
 
                     @Override
                     public boolean shouldOverrideUrlLoading(CommonWebView webView, String url) {
-                        if (!URLUtil.isValidUrl(url)) {
-                            return IntentUtil.openScheme(getContext(), url);
-                        }
                         return false;
                     }
 
