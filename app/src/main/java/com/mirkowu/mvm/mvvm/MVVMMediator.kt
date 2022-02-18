@@ -20,8 +20,10 @@ import io.reactivex.rxjava3.core.Observable
 class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     var mLiveData = MutableLiveData<Any>()
     var mError = MutableLiveData<Throwable>()
+
     @JvmField
     var mRequestImageListData = MutableLiveData<ResponseData<List<GankImageBean>>>()
+
     @JvmField
     var mImageError = MutableLiveData<ErrorBean>()
 
@@ -80,8 +82,12 @@ class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
                 })
         }
 
-    fun getPing(){
-        Observable.create<Boolean> { NetworkUtils.isAvailableByPing("baidu.com") }
+    fun getPing() {
+        Observable.create<Boolean> {
+            val result = NetworkUtils.isAvailableByPing("baidu.com")
+            it.onNext(result)
+            it.onComplete()
+        }
             .compose(RxScheduler.ioToMain())
             .to(RxLife.bindLifecycle(mView))
             .subscribe(object : RxObserver<Boolean>() {
