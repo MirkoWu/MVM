@@ -5,6 +5,10 @@ import android.util.ArrayMap;
 
 import androidx.annotation.NonNull;
 
+/**
+ * 链式调用
+ * @param <T>
+ */
 public class InterceptChainManager<T> {
     private ArrayMap<String, InterceptChain<T>> mMap = new ArrayMap<>();
     private int mCurIndex = 0;

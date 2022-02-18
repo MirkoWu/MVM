@@ -11,16 +11,11 @@ public class MD5Util {
         throw new UnsupportedOperationException("u can't fuck me...");
     }
 
-    public static String encodePwd(String pstr, String salt) {
-        return pstr;
-        //return ToMD5(ToMD5(pstr, salt), salt);
-    }
-
     /**
      * 将字符串进行MD5加密
      *
-     * @param salt 密钥
      * @param pstr 被加密的字符串
+     * @param salt 密钥/盐
      * @return
      */
     public static String ToMD5(String pstr, String salt) {
@@ -52,7 +47,7 @@ public class MD5Util {
      * @param pstr
      * @return
      */
-    public static String ToMD5NOKey(String pstr) {
+    public static String ToMD5(String pstr) {
         return ToMD5(pstr, "");
     }
 

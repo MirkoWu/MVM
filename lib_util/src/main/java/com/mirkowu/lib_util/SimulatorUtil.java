@@ -3,6 +3,8 @@ package com.mirkowu.lib_util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -13,7 +15,11 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
+
+import com.mirkowu.lib_util.utilcode.util.ShellUtils;
+import com.mirkowu.lib_util.utilcode.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,8 +39,8 @@ import static android.Manifest.permission.INTERNET;
  * @date on 2019/8/5
  * @describe
  */
-public class DeviceUtil {
-    private static final String TAG = "DeviceUtil";
+public class SimulatorUtil {
+    private static final String TAG = SimulatorUtil.class.getSimpleName();
 
     private static String[] known_pipes = {
             "/dev/socket/qemud",
@@ -139,6 +145,17 @@ public class DeviceUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * Return whether device is tablet.
+     *
+     * @return {@code true}: yes<br>{@code false}: no
+     */
+    public static boolean isTablet() {
+        return (Resources.getSystem().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     /**
@@ -549,19 +566,26 @@ public class DeviceUtil {
         return (System.currentTimeMillis() - SystemClock.elapsedRealtime()) / 1000;
     }
 
+    /**
+     * Whether user has enabled development settings.
+     *
+     * @return whether user has enabled development settings.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static boolean isDevelopmentSettingsEnabled() {
+        return Settings.Global.getInt(
+                Utils.getApp().getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0
+        ) > 0;
+    }
 
     /**
      * @return 手机是否开启了开发者调试模式，如果获取不到，就返回false
      */
-    public static boolean isDeveloperDebugModelOpened(Context context) {
+    public static boolean isAdbEnabled() {
         try {
-            if (Build.VERSION.SDK_INT < 17) {
-                return Settings.Secure.getInt(context.getApplicationContext().getContentResolver(),
-                        Settings.Global.ADB_ENABLED, 0) > 0;
-            } else {
-                return Settings.Global.getInt(context.getApplicationContext().getContentResolver(),
-                        Settings.Global.ADB_ENABLED, 0) > 0;
-            }
+            return Settings.Global.getInt(Utils.getApp().getContentResolver(),
+                    Settings.Global.ADB_ENABLED, 0) > 0;
         } catch (Throwable e) {
             LogUtil.e(TAG, e.toString());
         }
