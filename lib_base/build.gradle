@@ -62,12 +62,10 @@ dependencies {
     api "com.uber.autodispose2:autodispose-androidx-lifecycle:$ext.autodispose_version"
 
     // SmartRefresh核心必须依赖 + 经典刷新头 + 经典加载
-    api "com.scwang.smart:refresh-layout-kernel:$ext.refresh_version"
-    api "com.scwang.smart:refresh-header-classics:$ext.refresh_version"
-    api "com.scwang.smart:refresh-footer-classics:$ext.refresh_version"
+    api "io.github.scwang90:refresh-layout-kernel:$ext.refresh_version"
+    api "io.github.scwang90:refresh-header-classics:$ext.refresh_version"
+    api "io.github.scwang90:refresh-footer-classics:$ext.refresh_version"
 
-    // 屏幕适配
-    //  api "me.jessyan:autosize:1.2.1"
 
 //    //eventBus
 //    api "org.greenrobot:eventbus:$rootProject.ext.third_party_key.eventbus"

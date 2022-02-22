@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PreviewActivity">
+    tools:context=".CameraActivity">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/mPreviewView"
@@ -15,16 +15,34 @@
         android:id="@+id/mFlashlight"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/camera_svg_flash_light" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:padding="4dp"
+        android:src="@drawable/camera_svg_flash_light_off"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/mTakePhoto"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="50dp"
-        android:src="@drawable/camera_svg_shot" />
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/camera_svg_shot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/mSwitchCamera"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/camera_svg_switch_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/mTakePhoto"
+        app:layout_constraintLeft_toRightOf="@+id/mTakePhoto"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mTakePhoto" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

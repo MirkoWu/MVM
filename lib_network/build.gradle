@@ -40,7 +40,7 @@ dependencies {
     implementation project(':lib_util')
 
     // okhttp
-    api 'com.squareup.okio:okio:2.2.2'
+    api "com.squareup.okio:okio:$ext.okio_version"
     api "com.squareup.okhttp3:okhttp:$ext.okhttp_version"
     api "com.squareup.okhttp3:logging-interceptor:$ext.okhttp_version"
 

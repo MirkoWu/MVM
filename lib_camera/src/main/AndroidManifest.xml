@@ -10,7 +10,7 @@
 
     <application>
         <activity
-            android:name=".PreviewActivity"
+            android:name=".CameraActivity"
             android:hardwareAccelerated="true"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>

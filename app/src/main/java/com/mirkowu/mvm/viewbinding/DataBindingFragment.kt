@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
-import com.mirkowu.lib_camera.PreviewActivity
+import com.mirkowu.lib_camera.CameraActivity
 import com.mirkowu.lib_network.state.observerRequest
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
@@ -21,7 +21,6 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
-import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
@@ -185,7 +184,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                 }.start(context)
         }
         binding.btnCamera.click {
-            startActivity(Intent(context, PreviewActivity::class.java))
+            startActivity(Intent(context, CameraActivity::class.java))
         }
         binding.btnCrash.click {
             throw RuntimeException("测试BUG")

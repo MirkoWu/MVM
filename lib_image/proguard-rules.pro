@@ -28,10 +28,13 @@
 
 # ==================glide start===================
 -keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
+}
+-keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
+  *** rewind();
 }
 #glide如果你的API级别<=Android API 27 则需要添加
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder

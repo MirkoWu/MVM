@@ -2,6 +2,8 @@ package com.mirkowu.lib_camera;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Rational;
+import android.util.Size;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -26,6 +28,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.mirkowu.lib_camera.manager.AmbientLightManager;
+import com.mirkowu.lib_camera.util.CameraUtils;
+import com.mirkowu.lib_util.LogUtil;
 
 import java.io.File;
 
@@ -33,7 +37,7 @@ import java.io.File;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class DefaultCameraScan extends CameraScan {
-
+    public static final String TAG = DefaultCameraScan.class.getSimpleName();
     /**
      * Defines the maximum duration in milliseconds between a touch pad
      * touch and release for a given touch to be considered a tap (click) as
@@ -57,7 +61,7 @@ public class DefaultCameraScan extends CameraScan {
     private Camera mCamera;
     private ImageCapture mImageCapture;
 
-    private CameraConfig mCameraConfig;
+//    private CameraConfig mCameraConfig;
 //    private Analyzer mAnalyzer;
 
     /**
@@ -128,14 +132,16 @@ public class DefaultCameraScan extends CameraScan {
 //        });
 
         mOrientation = mContext.getResources().getConfiguration().orientation;
-
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
-        mPreviewView.setOnTouchListener((v, event) -> {
-            handlePreviewViewClickTap(event);
-            if (isNeedTouchZoom()) {
-                return scaleGestureDetector.onTouchEvent(event);
+        mPreviewView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                handlePreviewViewClickTap(event);
+                if (isNeedTouchZoom()) {
+                    return scaleGestureDetector.onTouchEvent(event);
+                }
+                return false;
             }
-            return false;
         });
 
         DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
@@ -163,6 +169,8 @@ public class DefaultCameraScan extends CameraScan {
                 }
             });
         }
+
+        mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
     }
 
     private void handlePreviewViewClickTap(MotionEvent event) {
@@ -200,60 +208,77 @@ public class DefaultCameraScan extends CameraScan {
     }
 
 
-    private void initConfig() {
-        if (mCameraConfig == null) {
-            mCameraConfig = new CameraConfig();
-        }
-//        if(mAnalyzer == null){
-//            mAnalyzer = new MultiFormatAnalyzer();
-//        }
+    @Override
+    public void setFlashMode(@ImageCapture.FlashMode int flashMode) {
+        mFlashMode = flashMode;
     }
 
+    @Override
+    public void setCaptureMode(@ImageCapture.CaptureMode int captureMode) {
+        mCaptureMode = captureMode;
+        setUpCamera();
+    }
 
     @Override
-    public CameraScan setCameraConfig(CameraConfig cameraConfig) {
-        if (cameraConfig != null) {
-            this.mCameraConfig = cameraConfig;
-        }
-        return this;
+    public void setCameraId(@CameraSelector.LensFacing int lensFacing) {
+        mLensFacing = lensFacing;
+        setUpCamera();
+    }
+
+//    @Override
+//    public void setAspectRatio(@AspectRatio.Ratio int aspectRatio) {
+//        mAspectRatio = aspectRatio;
+//        setUpCamera();
+//    }
+
+
+
+//    @AspectRatio.Ratio
+//    public int getAspectRatio() {
+//        return mAspectRatio;
+//    }
+
+    private void setUpCamera() {
+        LogUtil.e(TAG, "setUpCamera");
+        mCameraProviderFuture.addListener(() -> {
+            LogUtil.e(TAG, "setUpCamera   addListener----");
+            try {
+                //设置SurfaceProvider
+                Preview preview = new Preview.Builder()
+//                        .setTargetAspectRatio(getAspectRatio())
+                        // .setTargetResolution(new Size(mScreenWidth,mScreenHeight))
+                        .build();
+
+//                mHdrPreviewExtender = HdrPreviewExtender.create(previewBuilder);
+
+                preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
+
+                //相机选择器
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(getCameraId())
+                        .build();
+
+                //拍照 构建图像捕获用例
+                mImageCapture = new ImageCapture.Builder()
+//                        .setTargetResolution(size)
+//                         .setTargetAspectRatio(getAspectRatio())
+                        .setCaptureMode(getCaptureMode())
+                        .build();
+
+                ProcessCameraProvider cameraProvider = mCameraProviderFuture.get();
+                if (mCamera != null) {
+                    cameraProvider.unbindAll();
+                }
+                //绑定到生命周期
+                mCamera = cameraProvider.bindToLifecycle(mLifecycleOwner, cameraSelector, preview, mImageCapture);
+            } catch (Exception e) {
+            }
+        }, ContextCompat.getMainExecutor(mContext));
     }
 
     @Override
     public void startCamera() {
-        initConfig();
-        mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
-        mCameraProviderFuture.addListener(() -> {
-
-            try {
-                Preview preview = mCameraConfig.options(new Preview.Builder());
-
-                //相机选择器
-                CameraSelector cameraSelector = mCameraConfig.options(new CameraSelector.Builder());
-                //设置SurfaceProvider
-                preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
-
-                //拍照
-                mImageCapture = new ImageCapture.Builder().build();
-
-//                //图像分析
-//                ImageAnalysis imageAnalysis = mCameraConfig.options(new ImageAnalysis.Builder()
-//                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
-//                imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
-//                    if(isAnalyze && !isAnalyzeResult && mAnalyzer != null){
-//                        Result result = mAnalyzer.analyze(image,mOrientation);
-//                        mResultLiveData.postValue(result);
-//                    }
-//                    image.close();
-//                });
-                if (mCamera != null) {
-                    mCameraProviderFuture.get().unbindAll();
-                }
-                //绑定到生命周期
-                mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, mImageCapture);
-            } catch (Exception e) {
-            }
-
-        }, ContextCompat.getMainExecutor(mContext));
+        setUpCamera();
     }
 //
 //    /**
@@ -346,6 +371,10 @@ public class DefaultCameraScan extends CameraScan {
     public void takePhoto(File file, ImageCapture.OnImageSavedCallback callBack) {
         if (mImageCapture != null) {
             ImageCapture.OutputFileOptions options = new ImageCapture.OutputFileOptions.Builder(file).build();
+            Size size = CameraUtils.getBestMatchingSize(mPreviewView.getWidth(), mPreviewView.getHeight());
+            LogUtil.e(TAG, "getBestMatchingSize: 选择的分辨率宽度=" + size.getWidth() + " x " + size.getHeight());
+            mImageCapture.setCropAspectRatio(new Rational(size.getWidth(), size.getHeight()));
+            mImageCapture.setFlashMode(getFlashMode());
             mImageCapture.takePicture(options, ContextCompat.getMainExecutor(mContext), callBack);
         }
     }
@@ -503,5 +532,4 @@ public class DefaultCameraScan extends CameraScan {
         }
         return this;
     }
-
 }

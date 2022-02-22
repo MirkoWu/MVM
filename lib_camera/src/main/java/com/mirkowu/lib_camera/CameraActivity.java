@@ -1,35 +1,35 @@
 package com.mirkowu.lib_camera;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.view.PreviewView;
 
-import com.mirkowu.lib_camera.util.PermissionUtils;
 import com.mirkowu.lib_util.FileUtil;
+import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
 import java.io.File;
 
-public class PreviewActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 0X86;
-    public static final String TAG = "BasePreviewActivity";
+    public static final String TAG = CameraActivity.class.getSimpleName();
     protected PreviewView mPreviewView;
     protected CameraScan mCameraScan;
-    protected View mTakePhoto;
-    protected View mFlashlight;
+    protected ImageView mTakePhoto;
+    protected ImageView mFlashlight;
 
 
     @Override
@@ -50,7 +50,12 @@ public class PreviewActivity extends AppCompatActivity {
      * 初始化
      */
     public void initUI() {
+        BarUtils.transparentStatusBar(this);
+
         mPreviewView = findViewById(R.id.mPreviewView);
+        ImageView mSwitchCamera = findViewById(R.id.mSwitchCamera);
+        mSwitchCamera.setOnClickListener(v -> switchCamera());
+
         int takePhotoId = getTakePhotoId();
         if (takePhotoId != 0) {
             mTakePhoto = findViewById(takePhotoId);
@@ -67,6 +72,7 @@ public class PreviewActivity extends AppCompatActivity {
         }
     }
 
+
     private void checkPermission() {
         PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
                 new PermissionsUtil.OnPermissionsListener() {
@@ -77,13 +83,13 @@ public class PreviewActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(PreviewActivity.this)
+                        new AlertDialog.Builder(CameraActivity.this)
                                 .setTitle(R.string.camera_permission_dialog_title)
                                 .setMessage(R.string.camera_permission_rationale_camera)
                                 .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        checkPermission(); //如果想继续同意权限 就重新调用改方法
+                                        checkPermission(); //如果想继续同意权限 就重新调用该方法
                                     }
                                 })
                                 .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
@@ -92,13 +98,13 @@ public class PreviewActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(PreviewActivity.this)
+                        new AlertDialog.Builder(CameraActivity.this)
                                 .setTitle(R.string.camera_error_no_permission)
                                 .setMessage(R.string.camera_lack_camera_permission)
                                 .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(PreviewActivity.this);
+                                        PermissionsUtil.startAppSettingForResult(CameraActivity.this);
                                     }
                                 })
                                 .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
@@ -127,7 +133,7 @@ public class PreviewActivity extends AppCompatActivity {
      * 点击手电筒
      */
     public void onClickFlashlight() {
-        toggleTorchState();
+        toggleFlashMode();
     }
 
     /**
@@ -138,34 +144,30 @@ public class PreviewActivity extends AppCompatActivity {
 //        mCameraScan.setOnScanResultCallback(this);
     }
 
-    public void takePhoto() {
-        File photo = new File(getExternalCacheDir() + "/" + System.currentTimeMillis() + ".jpg");
-        mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
-            @Override
-            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                Uri uri = outputFileResults.getSavedUri();
-                boolean result = FileUtil.addGraphToGallery(PreviewActivity.this, uri);
-                Log.e("TAG", "onImageSaved : " + result);
-            }
-
-            @Override
-            public void onError(@NonNull ImageCaptureException exception) {
-                Log.e("TAG", "ImageCaptureException " + exception.toString());
-            }
-        });
-    }
-
     /**
      * 启动相机预览
      */
     public void startCamera() {
         if (mCameraScan != null) {
-            if (PermissionUtils.checkPermission(this, Manifest.permission.CAMERA)) {
-                mCameraScan.startCamera();
-            } else {
-                PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
-            }
+            mCameraScan.startCamera();
         }
+    }
+
+    public void takePhoto() {
+        File photo = new File(FileUtil.getDiskExternalPath("Mirko") + "/" + System.currentTimeMillis() + ".jpg");
+        mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
+            @Override
+            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+//                Uri uri = outputFileResults.getSavedUri();
+                boolean result = FileUtil.addGraphToGallery(CameraActivity.this, photo);
+                LogUtil.e(TAG, "onImageSaved : " + result);
+            }
+
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                LogUtil.e(TAG, "ImageCaptureException " + exception.toString());
+            }
+        });
     }
 
 
@@ -185,11 +187,50 @@ public class PreviewActivity extends AppCompatActivity {
         if (mCameraScan != null) {
             boolean isTorch = mCameraScan.isTorchEnabled();
             mCameraScan.enableTorch(!isTorch);
-            if (mFlashlight != null) {
-                mFlashlight.setSelected(!isTorch);
+//            if (mFlashlight != null) {
+//                mFlashlight.setSelected(!isTorch);
+//            }
+        }
+    }
+
+    /**
+     * 切换闪光灯状态（开启/关闭）
+     */
+    public void toggleFlashMode() {
+        if (mCameraScan != null) {
+            if (mCameraScan instanceof DefaultCameraScan) {
+                int mode = mCameraScan.getFlashMode();
+                if (mode == ImageCapture.FLASH_MODE_OFF) {
+                    mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_ON);
+                    updateFlashlightUI(R.drawable.camera_svg_flash_light_on);
+                } else if (mode == ImageCapture.FLASH_MODE_ON) {
+                    mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_AUTO);
+                    updateFlashlightUI(R.drawable.camera_svg_flash_light_auto);
+                } else {
+                    mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_OFF);
+                    updateFlashlightUI(R.drawable.camera_svg_flash_light_off);
+                }
             }
         }
     }
+
+    private void updateFlashlightUI(@DrawableRes int res) {
+        if (mFlashlight != null) {
+            mFlashlight.setImageResource(res);
+        }
+    }
+
+    public void switchCamera() {
+        if (mCameraScan != null) {
+            int cameraId = mCameraScan.getCameraId();
+            if (cameraId == CameraSelector.LENS_FACING_BACK) {
+                mCameraScan.setCameraId(CameraSelector.LENS_FACING_FRONT);
+            } else {
+                mCameraScan.setCameraId(CameraSelector.LENS_FACING_BACK);
+            }
+        }
+    }
+
 //
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -14,10 +14,13 @@ import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
 import com.mirkowu.mvm.bean.GankImageBean
+import com.mirkowu.mvm.bean.RandomImageBean
 import com.mirkowu.mvm.network.RxObserver
 import io.reactivex.rxjava3.core.Observable
 
-class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
+open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
+    @JvmField
+    val mImageData = ResponseLiveData<List<RandomImageBean>>()
     var mLiveData = MutableLiveData<Any>()
     var mError = MutableLiveData<Throwable>()
 
@@ -52,13 +55,13 @@ class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
         mModel.loadImage2()
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
             .to(RxLife.bindLifecycle(mView))
-            .subscribe(object : RxObserver<Any>() {
-                override fun onSuccess(data: Any) {
-                    mLiveData.setValue(data)
+            .subscribe(object : RxObserver<List<RandomImageBean>>() {
+                override fun onSuccess(data: List<RandomImageBean>) {
+                    mImageData.setValue(ResponseData.success(data))
                 }
 
                 override fun onFailure(errorType: ErrorType, code: Int, msg: String) {
-                    mImageError.setValue(ErrorBean(errorType, code, msg))
+                    mImageData.setValue(ResponseData.error(errorType, code, msg))
                 }
             })
     }

@@ -1,6 +1,7 @@
 package com.mirkowu.lib_camera;
 
 import androidx.annotation.FloatRange;
+import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 
 import java.io.File;
@@ -68,4 +69,19 @@ public interface ICameraControl {
      * @return
      */
     boolean hasFlashUnit();
+
+    void setFlashMode(@ImageCapture.FlashMode int flashMode);
+
+    @ImageCapture.FlashMode
+    int getFlashMode();
+
+
+    @CameraSelector.LensFacing
+    int getCameraId();
+
+    void setCameraId(@CameraSelector.LensFacing int lensFacing);
+
+    //    void setAspectRatio(@AspectRatio.Ratio int aspectRatio);
+    void setCaptureMode(@ImageCapture.CaptureMode int captureMode);
+
 }

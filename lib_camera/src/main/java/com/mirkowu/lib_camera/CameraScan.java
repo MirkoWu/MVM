@@ -4,21 +4,36 @@ import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
-
+import androidx.camera.core.ImageCapture;
 
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public abstract class CameraScan implements ICamera,ICameraControl {
+public abstract class CameraScan implements ICamera, ICameraControl {
 
     public static String SCAN_RESULT = "SCAN_RESULT";
 
-    /** A camera on the device facing the same direction as the device's screen. */
+    /**
+     * A camera on the device facing the same direction as the device's screen.
+     */
     public static int LENS_FACING_FRONT = CameraSelector.LENS_FACING_FRONT;
-    /** A camera on the device facing the opposite direction as the device's screen. */
+    /**
+     * A camera on the device facing the opposite direction as the device's screen.
+     */
     public static int LENS_FACING_BACK = CameraSelector.LENS_FACING_BACK;
+
+
+    /**
+     * 摄像头Id 默认背面摄像头
+     */
+
+    protected int mFlashMode = ImageCapture.FLASH_MODE_AUTO;
+    protected int mCaptureMode = ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY;
+    protected int mLensFacing = CameraSelector.LENS_FACING_BACK;
+    protected int mAspectRatio = AspectRatio.RATIO_4_3;
 
 
     /**
@@ -33,6 +48,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 是否需要支持触摸缩放
+     *
      * @return
      */
     protected boolean isNeedTouchZoom() {
@@ -42,6 +58,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 设置是否需要支持触摸缩放
+     *
      * @param needTouchZoom
      * @return
      */
@@ -52,6 +69,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 是否需要支持自动缩放
+     *
      * @return
      */
     protected boolean isNeedAutoZoom() {
@@ -60,6 +78,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 设置是否需要支持自动缩放
+     *
      * @param needAutoZoom
      * @return
      */
@@ -68,21 +87,17 @@ public abstract class CameraScan implements ICamera,ICameraControl {
         return this;
     }
 
-    /**
-     * 设置相机配置，请在{@link #startCamera()}之前调用
-     * @param cameraConfig
-     */
-    public abstract CameraScan setCameraConfig(CameraConfig cameraConfig);
 
     /**
      * 设置是否分析图像，通过此方法可以动态控制是否分析图像，常用于中断扫码识别。如：连扫时，扫到结果，然后停止分析图像
-     *
+     * <p>
      * 1. 因为分析图像默认为true，如果想支持连扫，在{@link OnScanResultCallback#onScanResultCallback(Result)}返回true拦截即可。
      * 当连扫的处理逻辑比较复杂时，请在处理逻辑前通过调用setAnalyzeImage(false)来停止分析图像，
      * 等逻辑处理完后再调用getCameraScan().setAnalyzeImage(true)来继续分析图像。
-     *
+     * <p>
      * 2. 如果只是想拦截扫码结果回调自己处理逻辑，但并不想继续分析图像（即不想连扫），可通过
      * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
+     *
      * @param analyze
      */
     public abstract CameraScan setAnalyzeImage(boolean analyze);
@@ -105,41 +120,47 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 设置是否震动
+     *
      * @param vibrate
      */
     public abstract CameraScan setVibrate(boolean vibrate);
 
     /**
      * 设置是否播放提示音
+     *
      * @param playBeep
      */
     public abstract CameraScan setPlayBeep(boolean playBeep);
 
     /**
      * 设置扫码结果回调
+     *
      * @param callback
      */
     public abstract CameraScan setOnScanResultCallback(OnScanResultCallback callback);
 
     /**
      * 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒
+     *
      * @param v
      */
     public abstract CameraScan bindFlashlightView(@Nullable View v);
 
     /**
      * 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     *
      * @param lightLux
      */
     public abstract CameraScan setDarkLightLux(float lightLux);
 
     /**
      * 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     *
      * @param lightLux
      */
     public abstract CameraScan setBrightLightLux(float lightLux);
 
-    public interface OnScanResultCallback{
+    public interface OnScanResultCallback {
         /**
          * 扫码结果回调
          * @param result
@@ -155,7 +176,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
         /**
          * 扫码结果识别失败时触发此回调方法
          */
-        default void onScanResultFailure(){
+        default void onScanResultFailure() {
 
         }
 
@@ -163,15 +184,31 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 解析扫码结果
+     *
      * @param data
      * @return
      */
     @Nullable
-    public static String parseScanResult(Intent data){
-        if(data != null){
+    public static String parseScanResult(Intent data) {
+        if (data != null) {
             return data.getStringExtra(SCAN_RESULT);
         }
         return null;
     }
 
+
+    @ImageCapture.FlashMode
+    public int getFlashMode() {
+        return mFlashMode;
+    }
+
+    @ImageCapture.CaptureMode
+    public int getCaptureMode() {
+        return mCaptureMode;
+    }
+
+    @CameraSelector.LensFacing
+    public int getCameraId() {
+        return mLensFacing;
+    }
 }

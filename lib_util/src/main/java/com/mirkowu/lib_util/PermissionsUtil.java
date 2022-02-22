@@ -235,7 +235,7 @@ public class PermissionsUtil {
 //        return false;
 //    }
 
-    public static boolean hasPermissions(Context context, String[] permissions) {
+    public static boolean hasPermissions(Context context, @NonNull String... permissions) {
         for (String perms : permissions) {
             if (ContextCompat.checkSelfPermission(context, perms)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -245,7 +245,7 @@ public class PermissionsUtil {
         return true;
     }
 
-    public static boolean shouldRationale(Activity activity, String[] permissions) {
+    public static boolean shouldRationale(Activity activity, @NonNull String... permissions) {
         for (String perms : permissions) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, perms)) {
                 return true;
@@ -254,7 +254,7 @@ public class PermissionsUtil {
         return false;
     }
 
-    public static boolean shouldRationale(Fragment fragment, String[] permissions) {
+    public static boolean shouldRationale(Fragment fragment, @NonNull String... permissions) {
         for (String perms : permissions) {
             if (fragment.shouldShowRequestPermissionRationale(perms)) {
                 return true;

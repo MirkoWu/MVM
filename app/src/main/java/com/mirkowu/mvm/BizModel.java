@@ -5,8 +5,9 @@ import com.mirkowu.lib_base.model.BaseModel;
 import com.mirkowu.lib_base.util.RxScheduler;
 import com.mirkowu.mvm.bean.GankBaseBean;
 import com.mirkowu.mvm.bean.GankImageBean;
-import com.mirkowu.mvm.network.ImageClient;
+import com.mirkowu.mvm.bean.RandomImageBean;
 import com.mirkowu.mvm.network.GankClient;
+import com.mirkowu.mvm.network.ImageClient;
 
 import java.util.Calendar;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BizModel extends BaseModel {
                 .compose(RxScheduler.ioToMain());
     }
 
-    public Observable<Object> loadImage2() {
+    public Observable<List<RandomImageBean>> loadImage2() {
         return ImageClient.getImageApi()
                 .getRandomImage()
                 .compose(RxScheduler.ioToMain());

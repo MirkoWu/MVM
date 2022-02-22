@@ -10,11 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mirkowu.lib_base.widget.RefreshHelper;
 import com.mirkowu.lib_network.ErrorBean;
+import com.mirkowu.lib_network.state.ResponseData;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
+import com.mirkowu.mvm.bean.GankImageBean;
+import com.mirkowu.mvm.bean.RandomImageBean;
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshHelper.OnRefreshListener {
 
@@ -41,11 +47,11 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
 
     @Override
     protected void initialize() {
-        refreshHelper = new RefreshHelper(binding.mRefresh, binding.rvImage, this);
+        refreshHelper = new RefreshHelper(binding.mRefresh, binding.mRecyclerView, this);
 
         imageAdapter = new ImageAdapter();
-        binding.rvImage.setAdapter(imageAdapter);
-        binding.rvImage.setLayoutManager(new LinearLayoutManager(this));
+        binding.mRecyclerView.setAdapter(imageAdapter);
+        binding.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         imageAdapter.setOnItemClickListener((view, item, position) -> LogUtil.i("TAG", "onItemClick: " + position));
         imageAdapter.setOnItemChildClickListener((view, item, position) -> LogUtil.i("TAG", "onItemChildClick: " + position));
         imageAdapter.setOnItemChildLongClickListener(new BaseRVAdapter.OnItemChildLongClickListener() {
@@ -63,7 +69,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
 //                    return null;
 //                }, errorBean -> {
 //                    if (errorBean.isNetError()) {
-//                        binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+//                        binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
 //                    } else if (errorBean.isApiError()) {
 //                        Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
 //                    } else {
@@ -79,7 +85,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
                 refreshHelper.finishLoad();
                 ErrorBean errorBean = responseData.error;
                 if (errorBean.isNetError() && refreshHelper.isFirstPage()) {
-                    binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                  //  binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
                 } else if (errorBean.isApiError()) {
                     Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
                 } else {
@@ -92,21 +98,40 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
             public void onChanged(ErrorBean errorBean) {
                 hideLoadingDialog();
                 refreshHelper.finishLoad();
-                binding.stateview.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
             }
         });
 
-        binding.stateview.setLoadingState(getString(R.string.widget_loading));
-        //binding.stateview.setLoadingState(R.mipmap.ic_launcher, getString(R.string.widget_loading));
-        binding.stateview.setOnRefreshListener(() -> refreshHelper.autoRefresh());
+        mMediator.mImageData.observe(this, new Observer<ResponseData<List<RandomImageBean>>>() {
+            @Override
+            public void onChanged(ResponseData<List<RandomImageBean>> data) {
+                if (data.isSuccess()) {
+                    if (data.data != null && !data.data.isEmpty()) {
+                        String imgUrl = data.data.get(0).imgurl;
+                        GankImageBean bean = new GankImageBean();
+                        bean.url = imgUrl;
+                         List<GankImageBean> list=new ArrayList<>();
+                         list.add(bean);
 
+                        refreshHelper.finishLoad();
+                        refreshHelper.setLoadMore(imageAdapter,list);
+                    }
+                }
+            }
+        });
+
+        binding.mStateView.setLoadingState(getString(R.string.widget_loading));
+        //binding.stateview.setLoadingState(R.mipmap.ic_launcher, getString(R.string.widget_loading));
+        binding.mStateView.setOnRefreshListener(() -> refreshHelper.autoRefresh());
+
+        refreshHelper.setPageCount(1);
         refreshHelper.refresh();
     }
 
     @Override
     public void onLoadData(int page) {
         showLoadingDialog();
-//        binding.stateview.setGoneState();
+//        binding.mStateView.setGoneState();
         mMediator.loadImage(page, refreshHelper.getPageCount());
     }
 
@@ -118,9 +143,9 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
     @Override
     public void onEmptyChange(boolean isEmpty) {
         if (isEmpty) {
-            binding.stateview.setShowState(R.mipmap.ic_launcher, "暂无数据");
+            binding.mStateView.setShowState(R.mipmap.ic_launcher, "暂无数据");
         } else {
-            binding.stateview.setGoneState();
+            binding.mStateView.setGoneState();
         }
     }
 }

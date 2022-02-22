@@ -91,7 +91,7 @@ public class FileUtil {
                 return file.getAbsolutePath(); // /mnt/sdcard/path...
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         }
         return "";
     }
@@ -120,7 +120,7 @@ public class FileUtil {
                 return file;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         }
         return null;
     }
@@ -150,51 +150,39 @@ public class FileUtil {
      * @return
      */
     public static boolean addGraphToGallery(Context context, Bitmap bmp, File file) {
-        boolean result = false;
         try {
             saveBitmapToJPEG(bmp, file);
 
-            //刷新相册
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri contentUri = Uri.fromFile(file);
-            mediaScanIntent.setData(contentUri);
-            context.sendBroadcast(mediaScanIntent);
-            result = true;
+            return addGraphToGallery(context, contentUri);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         }
-        return result;
+        return false;
     }
 
     public static boolean addGraphToGallery(Context context, File file) {
-        boolean result = false;
         try {
-
-            //刷新相册
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri contentUri = Uri.fromFile(file);
-            mediaScanIntent.setData(contentUri);
-            context.sendBroadcast(mediaScanIntent);
-            result = true;
+            return addGraphToGallery(context, contentUri);
         } catch (Throwable e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         }
-        return result;
+        return false;
     }
 
     public static boolean addGraphToGallery(Context context, Uri uri) {
-        boolean result = false;
+        if (uri == null) return false;
         try {
-
             //刷新相册
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             mediaScanIntent.setData(uri);
             context.sendBroadcast(mediaScanIntent);
-            result = true;
+            return true;
         } catch (Throwable e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         }
-        return result;
+        return false;
     }
 
 
@@ -205,16 +193,16 @@ public class FileUtil {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         } finally {
             try {
                 if (fos != null) {
                     fos.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.e(e.toString());
             }
         }
     }
@@ -238,7 +226,7 @@ public class FileUtil {
             }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(e.toString());
         } finally {
             try {
                 if (fis != null) {
@@ -248,7 +236,7 @@ public class FileUtil {
                     fos.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.e(e.toString());
             }
         }
         return false;
@@ -285,7 +273,7 @@ public class FileUtil {
 //                }
 //            }
 //        } catch (Exception e) {
-//            e.printStackTrace();
+//             LogUtil.e(e.toString());
 //        } finally {
 //            try {
 //                if (fos != null) {
@@ -293,7 +281,7 @@ public class FileUtil {
 //                    fos.close();
 //                }
 //            } catch (IOException e) {
-//                e.printStackTrace();
+//                 LogUtil.e(e.toString());
 //            }
 //        }
 //        return false;
@@ -320,7 +308,7 @@ public class FileUtil {
             try {
                 type = Files.probeContentType(path);
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.e(e.toString());
             }
         }
         return type;
