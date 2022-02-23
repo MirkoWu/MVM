@@ -85,7 +85,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
                 refreshHelper.finishLoad();
                 ErrorBean errorBean = responseData.error;
                 if (errorBean.isNetError() && refreshHelper.isFirstPage()) {
-                  //  binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                    //  binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
                 } else if (errorBean.isApiError()) {
                     Toast.makeText(MVVMActivity.this, errorBean.code() + ":" + errorBean.msg(), Toast.LENGTH_SHORT).show();
                 } else {
@@ -105,21 +105,22 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
         mMediator.mImageData.observe(this, new Observer<ResponseData<List<RandomImageBean>>>() {
             @Override
             public void onChanged(ResponseData<List<RandomImageBean>> data) {
+                refreshHelper.finishLoad();
                 if (data.isSuccess()) {
                     if (data.data != null && !data.data.isEmpty()) {
                         String imgUrl = data.data.get(0).imgurl;
                         GankImageBean bean = new GankImageBean();
                         bean.url = imgUrl;
-                         List<GankImageBean> list=new ArrayList<>();
-                         list.add(bean);
+                        List<GankImageBean> list = new ArrayList<>();
+                        list.add(bean);
 
-                        refreshHelper.finishLoad();
-                        refreshHelper.setLoadMore(imageAdapter,list);
+                        refreshHelper.setLoadMore(imageAdapter, list);
                     }
+                } else {
+                    binding.mStateView.setShowState(R.drawable.widget_svg_network_error, data.error.msg(), true);
                 }
             }
         });
-
         binding.mStateView.setLoadingState(getString(R.string.widget_loading));
         //binding.stateview.setLoadingState(R.mipmap.ic_launcher, getString(R.string.widget_loading));
         binding.mStateView.setOnRefreshListener(() -> refreshHelper.autoRefresh());
