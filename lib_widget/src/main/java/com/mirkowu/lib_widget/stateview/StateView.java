@@ -16,24 +16,28 @@ import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_widget.R;
 
+/**
+ * 状态View
+ * 可用于加载中，空状态，加载失败
+ */
 public class StateView extends LinearLayout {
 
-    private View rootView;
-    private ImageView ivLoading;
-    private ImageView ivHint;
-    private TextView tvHint;
-    private Button btnRefresh;
+    private View mRootView;
+    private ImageView mIvLoading;
+    private ImageView mIvHint;
+    private TextView mTvHint;
+    private Button mBtnRefresh;
     private int mState = ViewState.LOADING;
-    private OnRefreshListener onRefreshListener;
+    private OnRefreshListener mOnRefreshListener;
 
-    private CharSequence loadingText;
-    private CharSequence showText;
-    private CharSequence refreshText;
-    private Integer hintImgResId;
-    private Integer loadingImgResId;
-    private Integer refreshBackgroundId;
-    private boolean isShowRefresh;
-    private AnimationDrawable animationDrawable;
+    private CharSequence mLoadingText;
+    private CharSequence mShowText;
+    private CharSequence mRefreshText;
+    private Integer mShowIconResId;
+    private Integer mLoadingImgResId;
+    private Integer mRefreshBackgroundId;
+    private boolean mIsShowRefresh;
+    private AnimationDrawable mAnimationDrawable;
 
     public StateView(Context context) {
         this(context, null);
@@ -51,28 +55,28 @@ public class StateView extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StateView);
-        loadingImgResId = ta.getResourceId(R.styleable.StateView_sv_loadingIcon, 0);
+        mLoadingImgResId = ta.getResourceId(R.styleable.StateView_sv_loadingIcon, 0);
         int loadingAnimResId = ta.getResourceId(R.styleable.StateView_sv_loadingAnim, 0);
-        hintImgResId = ta.getResourceId(R.styleable.StateView_sv_showIcon, 0);
-        loadingText = ta.getString(R.styleable.StateView_sv_loadingText);
-        showText = ta.getString(R.styleable.StateView_sv_showText);
-        boolean defaultLoading = ta.getBoolean(R.styleable.StateView_sv_defaultLoading, false);
-        refreshText = ta.getString(R.styleable.StateView_sv_refreshText);
-        refreshBackgroundId = ta.getResourceId(R.styleable.StateView_sv_refreshBackground, 0);
+        mShowIconResId = ta.getResourceId(R.styleable.StateView_sv_showIcon, 0);
+        mLoadingText = ta.getString(R.styleable.StateView_sv_loadingText);
+        mShowText = ta.getString(R.styleable.StateView_sv_showText);
+        boolean defaultLoading = ta.getBoolean(R.styleable.StateView_sv_defaultLoading, true);
+        mRefreshText = ta.getString(R.styleable.StateView_sv_refreshText);
+        mRefreshBackgroundId = ta.getResourceId(R.styleable.StateView_sv_refreshBackground, 0);
         ta.recycle();
 
-        rootView = inflate(context, R.layout.widget_layout_state_view, this);
-        ivLoading = rootView.findViewById(R.id.ivLoading);
-        ivHint = rootView.findViewById(R.id.ivHint);
-        tvHint = rootView.findViewById(R.id.tvHint);
-        btnRefresh = rootView.findViewById(R.id.btnRefresh);
+        mRootView = inflate(context, R.layout.widget_layout_state_view, this);
+        mIvLoading = mRootView.findViewById(R.id.ivLoading);
+        mIvHint = mRootView.findViewById(R.id.ivHint);
+        mTvHint = mRootView.findViewById(R.id.tvHint);
+        mBtnRefresh = mRootView.findViewById(R.id.btnRefresh);
 
-        btnRefresh.setOnClickListener(new OnClickListener() {
+        mBtnRefresh.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isShowRefresh && mState == ViewState.SHOW) {
-                    if (onRefreshListener != null) {
-                        onRefreshListener.onRefresh();
+                if (mIsShowRefresh && mState == ViewState.SHOW) {
+                    if (mOnRefreshListener != null) {
+                        mOnRefreshListener.onRefresh();
                     }
                 }
             }
@@ -85,14 +89,17 @@ public class StateView extends LinearLayout {
         });
 
         if (loadingAnimResId != 0) {
-            ivLoading.setBackgroundResource(loadingAnimResId);
-            if (ivLoading.getBackground() instanceof AnimationDrawable) {
-                animationDrawable = (AnimationDrawable) ivLoading.getBackground();
+            mIvLoading.setBackgroundResource(loadingAnimResId);
+            if (mIvLoading.getBackground() instanceof AnimationDrawable) {
+                mAnimationDrawable = (AnimationDrawable) mIvLoading.getBackground();
             }
         }
 
         //默认显示加载状态
         if (defaultLoading) {
+            if (mLoadingText == null) {
+                mLoadingText = context.getString(R.string.widget_loading);
+            }
             setLoadingState();
         }
     }
@@ -102,54 +109,54 @@ public class StateView extends LinearLayout {
     }
 
     public ImageView getLoadingView() {
-        return ivLoading;
+        return mIvLoading;
     }
 
     public Button getRefreshButton() {
-        return btnRefresh;
+        return mBtnRefresh;
     }
 
 
     private void setState(int state) {
         mState = state;
         setVisibility(VISIBLE);
-        ivLoading.setVisibility(GONE);
-        ivHint.setVisibility(GONE);
-        tvHint.setVisibility(GONE);
-        btnRefresh.setVisibility(GONE);
+        mIvLoading.setVisibility(GONE);
+        mIvHint.setVisibility(GONE);
+        mTvHint.setVisibility(GONE);
+        mBtnRefresh.setVisibility(GONE);
 
-        if (animationDrawable != null && animationDrawable.isRunning()) {
-            animationDrawable.stop();
+        if (mAnimationDrawable != null && mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.stop();
         }
 
         switch (state) {
             case ViewState.LOADING:
-                ivLoading.setImageResource(loadingImgResId);
-                ivLoading.setVisibility(VISIBLE);
+                mIvLoading.setImageResource(mLoadingImgResId);
+                mIvLoading.setVisibility(VISIBLE);
 
-                if (animationDrawable != null && !animationDrawable.isRunning()) {
-                    animationDrawable.start();
+                if (mAnimationDrawable != null && !mAnimationDrawable.isRunning()) {
+                    mAnimationDrawable.start();
                 }
-                if (!TextUtils.isEmpty(loadingText)) {
-                    tvHint.setVisibility(VISIBLE);
-                    tvHint.setText(loadingText);
+                if (!TextUtils.isEmpty(mLoadingText)) {
+                    mTvHint.setVisibility(VISIBLE);
+                    mTvHint.setText(mLoadingText);
                 }
                 break;
             case ViewState.SHOW:
-                tvHint.setText(showText);
-                tvHint.setVisibility(VISIBLE);
+                mTvHint.setText(mShowText);
+                mTvHint.setVisibility(VISIBLE);
 
-                if (hintImgResId != 0) {
-                    ivHint.setImageResource(hintImgResId);
-                    ivHint.setVisibility(VISIBLE);
+                if (mShowIconResId != 0) {
+                    mIvHint.setImageResource(mShowIconResId);
+                    mIvHint.setVisibility(VISIBLE);
                 }
 
-                btnRefresh.setVisibility(isShowRefresh ? VISIBLE : GONE);
-                if (!TextUtils.isEmpty(refreshText)) {
-                    btnRefresh.setText(refreshText);
+                mBtnRefresh.setVisibility(mIsShowRefresh ? VISIBLE : GONE);
+                if (!TextUtils.isEmpty(mRefreshText)) {
+                    mBtnRefresh.setText(mRefreshText);
                 }
-                if (refreshBackgroundId != 0) {
-                    btnRefresh.setBackgroundColor(refreshBackgroundId);
+                if (mRefreshBackgroundId != 0) {
+                    mBtnRefresh.setBackgroundColor(mRefreshBackgroundId);
                 }
                 break;
             case ViewState.GONE:
@@ -160,16 +167,16 @@ public class StateView extends LinearLayout {
     }
 
     public void setLoadingState() {
-        setLoadingState(loadingText);
+        setLoadingState(mLoadingText);
     }
 
     public void setLoadingState(CharSequence hint) {
-        setLoadingState(loadingImgResId, hint);
+        setLoadingState(mLoadingImgResId, hint);
     }
 
     public void setLoadingState(@DrawableRes Integer loadingResId, CharSequence hint) {
-        loadingImgResId = loadingResId;
-        loadingText = hint;
+        mLoadingImgResId = loadingResId;
+        mLoadingText = hint;
         setState(ViewState.LOADING);
     }
 
@@ -186,9 +193,9 @@ public class StateView extends LinearLayout {
     }
 
     public void setShowState(@DrawableRes Integer imgResId, CharSequence hint, boolean showRefresh) {
-        hintImgResId = imgResId;
-        showText = hint;
-        isShowRefresh = showRefresh;
+        mShowIconResId = imgResId;
+        mShowText = hint;
+        mIsShowRefresh = showRefresh;
         setState(ViewState.SHOW);
     }
 
@@ -206,14 +213,14 @@ public class StateView extends LinearLayout {
 //    }
 
     public void setOnRefreshListener(OnRefreshListener refreshListener) {
-        onRefreshListener = refreshListener;
+        mOnRefreshListener = refreshListener;
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (animationDrawable != null && animationDrawable.isRunning()) {
-            animationDrawable.stop();
+        if (mAnimationDrawable != null && mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.stop();
         }
     }
 }
