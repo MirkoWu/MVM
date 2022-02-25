@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="0"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="1440">
+
+    <!--innerRadiusRatio 内圆半径比 -->
+    <!--thicknessRatio 厚度比 -->
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:innerRadiusRatio="2.5"
+        android:shape="ring"
+        android:thicknessRatio="10"
+        android:useLevel="false">
+
+        <!-- 颜色渐变 sweep表示扫描-->
+        <gradient
+            android:centerColor="#88FFFFFF"
+            android:endColor="#00FFFFFF"
+            android:startColor="#000"
+            android:type="sweep"></gradient>
+    </shape>
+
+</rotate>

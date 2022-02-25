@@ -27,8 +27,7 @@
 
     <declare-styleable name="StateView">
         <attr name="sv_loadingText" format="string" />
-        <attr name="sv_loadingIcon" format="reference" />
-        <attr name="sv_loadingAnim" format="reference" />
+        <attr name="sv_loadingProgress" format="reference" />
         <attr name="sv_defaultLoading" format="boolean" />
         <attr name="sv_showText" format="string" />
         <attr name="sv_showIcon" format="reference" />

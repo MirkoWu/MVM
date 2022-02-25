@@ -98,13 +98,14 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
             public void onChanged(ErrorBean errorBean) {
                 hideLoadingDialog();
                 refreshHelper.finishLoad();
-                binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                binding.mStateView.setErrorState(errorBean.msg());
             }
         });
 
         mMediator.mImageData.observe(this, new Observer<ResponseData<List<RandomImageBean>>>() {
             @Override
             public void onChanged(ResponseData<List<RandomImageBean>> data) {
+                hideLoadingDialog();
                 refreshHelper.finishLoad();
                 if (data.isSuccess()) {
                     if (data.data != null && !data.data.isEmpty()) {
@@ -117,13 +118,26 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
                         refreshHelper.setLoadMore(imageAdapter, list);
                     }
                 } else {
-                    binding.mStateView.setShowState(R.drawable.widget_svg_network_error, data.error.msg(), true);
+                    binding.mStateView.setErrorState(data.error.msg());
                 }
             }
         });
-        binding.mStateView.setLoadingState(getString(R.string.widget_loading));
+        binding.mStateView.setLoadingState();
+//        binding.mStateView.setLoadingState("拼命加载中...");
+//        binding.mStateView.setLoadingState(getString(R.string.widget_loading));
+//        binding.mStateView.setEmptyState(getString(R.string.widget_loading));
+//        binding.mStateView.setErrorState("家再说吧");
         //binding.stateview.setLoadingState(R.mipmap.ic_launcher, getString(R.string.widget_loading));
-        binding.mStateView.setOnRefreshListener(() -> refreshHelper.autoRefresh());
+        binding.mStateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.mStateView.setErrorState("加载失败");
+            }
+        });
+        binding.mStateView.setOnRefreshListener(() ->{
+            binding.mStateView.setLoadingState(R.drawable.anim_loading,"sss");
+            refreshHelper.autoRefresh();
+        });
 
         refreshHelper.setPageCount(1);
         refreshHelper.refresh();
@@ -131,8 +145,7 @@ public class MVVMActivity extends BaseActivity<MVVMMediator> implements RefreshH
 
     @Override
     public void onLoadData(int page) {
-        showLoadingDialog();
-//        binding.mStateView.setGoneState();
+       // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.getPageCount());
     }
 

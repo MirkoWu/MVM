@@ -2,17 +2,19 @@ package com.mirkowu.lib_widget.stateview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.mirkowu.lib_widget.R;
 
@@ -23,10 +25,10 @@ import com.mirkowu.lib_widget.R;
 public class StateView extends LinearLayout {
 
     private View mRootView;
-    private ImageView mIvLoading;
-    private ImageView mIvHint;
+    private ImageView mIvImage;
     private TextView mTvHint;
     private Button mBtnRefresh;
+    private ProgressBar mProgressBar;
     private int mState = ViewState.LOADING;
     private OnRefreshListener mOnRefreshListener;
 
@@ -34,10 +36,8 @@ public class StateView extends LinearLayout {
     private CharSequence mShowText;
     private CharSequence mRefreshText;
     private Integer mShowIconResId;
-    private Integer mLoadingImgResId;
+    private Integer mLoadingProgressResId;
     private Integer mRefreshBackgroundId;
-    private boolean mIsShowRefresh;
-    private AnimationDrawable mAnimationDrawable;
 
     public StateView(Context context) {
         this(context, null);
@@ -55,10 +55,9 @@ public class StateView extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StateView);
-        mLoadingImgResId = ta.getResourceId(R.styleable.StateView_sv_loadingIcon, 0);
-        int loadingAnimResId = ta.getResourceId(R.styleable.StateView_sv_loadingAnim, 0);
-        mShowIconResId = ta.getResourceId(R.styleable.StateView_sv_showIcon, 0);
         mLoadingText = ta.getString(R.styleable.StateView_sv_loadingText);
+        mLoadingProgressResId = ta.getResourceId(R.styleable.StateView_sv_loadingProgress, R.drawable.widget_loading_progressbar);
+        mShowIconResId = ta.getResourceId(R.styleable.StateView_sv_showIcon, 0);
         mShowText = ta.getString(R.styleable.StateView_sv_showText);
         boolean defaultLoading = ta.getBoolean(R.styleable.StateView_sv_defaultLoading, true);
         mRefreshText = ta.getString(R.styleable.StateView_sv_refreshText);
@@ -66,15 +65,15 @@ public class StateView extends LinearLayout {
         ta.recycle();
 
         mRootView = inflate(context, R.layout.widget_layout_state_view, this);
-        mIvLoading = mRootView.findViewById(R.id.ivLoading);
-        mIvHint = mRootView.findViewById(R.id.ivHint);
+        mIvImage = mRootView.findViewById(R.id.ivImage);
         mTvHint = mRootView.findViewById(R.id.tvHint);
         mBtnRefresh = mRootView.findViewById(R.id.btnRefresh);
+        mProgressBar = mRootView.findViewById(R.id.mProgressBar);
 
         mBtnRefresh.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsShowRefresh && mState == ViewState.SHOW) {
+                if (mState == ViewState.SHOW) {
                     if (mOnRefreshListener != null) {
                         mOnRefreshListener.onRefresh();
                     }
@@ -88,71 +87,78 @@ public class StateView extends LinearLayout {
             }
         });
 
-        if (loadingAnimResId != 0) {
-            mIvLoading.setBackgroundResource(loadingAnimResId);
-            if (mIvLoading.getBackground() instanceof AnimationDrawable) {
-                mAnimationDrawable = (AnimationDrawable) mIvLoading.getBackground();
-            }
+        if (mLoadingProgressResId != 0) {
+            //setIndeterminateDrawable 时一定要同时setProgressDrawable 否则不生效，导致不显示
+            mProgressBar.setIndeterminateDrawable(ContextCompat.getDrawable(context, mLoadingProgressResId));
+            mProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, mLoadingProgressResId));
+        }
+
+        //设置默认值
+        if (TextUtils.isEmpty(mRefreshText)) {
+            mRefreshText = context.getString(R.string.widget_refresh);
+        }
+
+        if (mLoadingText == null) {
+            mLoadingText = context.getString(R.string.widget_loading);
         }
 
         //默认显示加载状态
         if (defaultLoading) {
-            if (mLoadingText == null) {
-                mLoadingText = context.getString(R.string.widget_loading);
-            }
             setLoadingState();
+        } else {
+            setGoneState();
         }
     }
 
-    public int getState() {
-        return mState;
+    public ProgressBar getProgressBar() {
+        return mProgressBar;
     }
 
-    public ImageView getLoadingView() {
-        return mIvLoading;
+    public ImageView getHintImageView() {
+        return mIvImage;
+    }
+
+    public TextView getHintTextView() {
+        return mTvHint;
     }
 
     public Button getRefreshButton() {
         return mBtnRefresh;
     }
 
+    public int getState() {
+        return mState;
+    }
 
     private void setState(int state) {
         mState = state;
         setVisibility(VISIBLE);
-        mIvLoading.setVisibility(GONE);
-        mIvHint.setVisibility(GONE);
+        mIvImage.setVisibility(GONE);
         mTvHint.setVisibility(GONE);
         mBtnRefresh.setVisibility(GONE);
-
-        if (mAnimationDrawable != null && mAnimationDrawable.isRunning()) {
-            mAnimationDrawable.stop();
-        }
+        mProgressBar.setVisibility(GONE);
 
         switch (state) {
             case ViewState.LOADING:
-                mIvLoading.setImageResource(mLoadingImgResId);
-                mIvLoading.setVisibility(VISIBLE);
-
-                if (mAnimationDrawable != null && !mAnimationDrawable.isRunning()) {
-                    mAnimationDrawable.start();
-                }
+                mProgressBar.setVisibility(VISIBLE);
                 if (!TextUtils.isEmpty(mLoadingText)) {
                     mTvHint.setVisibility(VISIBLE);
                     mTvHint.setText(mLoadingText);
                 }
                 break;
             case ViewState.SHOW:
-                mTvHint.setText(mShowText);
-                mTvHint.setVisibility(VISIBLE);
-
-                if (mShowIconResId != 0) {
-                    mIvHint.setImageResource(mShowIconResId);
-                    mIvHint.setVisibility(VISIBLE);
+                if (!TextUtils.isEmpty(mShowText)) {
+                    mTvHint.setVisibility(VISIBLE);
+                    mTvHint.setText(mShowText);
                 }
 
-                mBtnRefresh.setVisibility(mIsShowRefresh ? VISIBLE : GONE);
+                if (mShowIconResId != 0) {
+                    mIvImage.setVisibility(VISIBLE);
+                    mIvImage.setImageResource(mShowIconResId);
+                }
+
                 if (!TextUtils.isEmpty(mRefreshText)) {
+                    mBtnRefresh.setVisibility(VISIBLE);
                     mBtnRefresh.setText(mRefreshText);
                 }
                 if (mRefreshBackgroundId != 0) {
@@ -162,8 +168,11 @@ public class StateView extends LinearLayout {
             case ViewState.GONE:
                 setVisibility(GONE);
                 break;
-
         }
+    }
+
+    public void setGoneState() {
+        setState(ViewState.GONE);
     }
 
     public void setLoadingState() {
@@ -171,46 +180,47 @@ public class StateView extends LinearLayout {
     }
 
     public void setLoadingState(CharSequence hint) {
-        setLoadingState(mLoadingImgResId, hint);
+        setLoadingState(mLoadingProgressResId, hint);
     }
 
-    public void setLoadingState(@DrawableRes Integer loadingResId, CharSequence hint) {
-        mLoadingImgResId = loadingResId;
+    public void setLoadingState(@NonNull @DrawableRes Integer progressResId, CharSequence hint) {
+        //setIndeterminateDrawable 时一定要同时setProgressDrawable 否则不生效，导致不显示
+        mProgressBar.setIndeterminateDrawable(ContextCompat.getDrawable(getContext(), progressResId));
+        mProgressBar.setProgressDrawable(ContextCompat.getDrawable(getContext(), progressResId));
         mLoadingText = hint;
         setState(ViewState.LOADING);
     }
 
-    public void setGoneState() {
-        setState(ViewState.GONE);
+    public void setEmptyState(CharSequence emptyHint) {
+        setShowState(R.drawable.widget_svg_empty, emptyHint, null);
     }
 
-    public void setShowState() {
-        setState(ViewState.SHOW);
+    public void setErrorState(CharSequence errorHint) {
+        setErrorState(errorHint, mRefreshText);
+    }
+
+    public void setErrorState(CharSequence errorHint, CharSequence refreshText) {
+        setShowState(R.drawable.widget_svg_network_error, errorHint, refreshText);
     }
 
     public void setShowState(@DrawableRes Integer imgResId, CharSequence hint) {
-        setShowState(imgResId, hint, false);
+        setShowState(imgResId, hint, mRefreshText);
     }
 
-    public void setShowState(@DrawableRes Integer imgResId, CharSequence hint, boolean showRefresh) {
+    /**
+     * 设置展示状态
+     *
+     * @param imgResId    图片
+     * @param hintText    提示
+     * @param refreshText 刷新按钮 为空 则隐藏按钮
+     */
+    public void setShowState(@DrawableRes Integer imgResId, CharSequence hintText, CharSequence refreshText) {
         mShowIconResId = imgResId;
-        mShowText = hint;
-        mIsShowRefresh = showRefresh;
+        mShowText = hintText;
+        mRefreshText = refreshText;
         setState(ViewState.SHOW);
     }
 
-//    public void setEmpty() {
-//        setShowState(R.drawable.box, getContext().getString(R.string.common_nothing_text), false);
-//    }
-//
-//    public void setEmpty(CharSequence hint) {
-//        setShowState(R.drawable.box, hint, false);
-//    }
-//
-//
-//    public void setError() {
-//        setShowState(R.drawable.rockets, getContext().getString(R.string.hint_load_failed), true);
-//    }
 
     public void setOnRefreshListener(OnRefreshListener refreshListener) {
         mOnRefreshListener = refreshListener;
@@ -219,8 +229,5 @@ public class StateView extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAnimationDrawable != null && mAnimationDrawable.isRunning()) {
-            mAnimationDrawable.stop();
-        }
     }
 }

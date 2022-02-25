@@ -2,9 +2,6 @@
 <resources>
     <string name="widget_refresh">Click Refresh</string>
     <string name="widget_loading">Loading...</string>
-    <string name="widget_timer_hint_text">Get Captcha</string>
-    <string name="widget_timer_finish_text">Get Captcha</string>
-    <string name="widget_timer_count_format_text">Get Captcha(%d)</string>
     <string name="widget_btn_confirm">Confirm</string>
     <string name="widget_btn_cancel">Cancel</string>
 

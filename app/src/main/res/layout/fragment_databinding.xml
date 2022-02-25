@@ -122,42 +122,50 @@
                 app:layout_constraintVertical_bias="0.869" />
 
 
-            <com.mirkowu.lib_widget.BoldTextView
-                android:id="@+id/tv_bold_default"
+            <TextView
+                android:id="@+id/tv_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加粗字体"
+                android:text="正常字体"
                 android:textColor="#333333" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加粗字体加粗字体加粗字体加粗字体"
+                android:text="系统加粗字体"
                 android:textColor="#333333"
                 android:textStyle="bold" />
 
             <com.mirkowu.lib_widget.BoldTextView
-                android:id="@+id/tv_bold"
+                android:id="@+id/tv_bold_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加粗字体"
-                android:textColor="#333333"
-                app:boldStyle="bold" />
+                android:text="自定义默认加粗字体"
+                android:textColor="#333333" />
 
             <com.mirkowu.lib_widget.BoldTextView
                 android:id="@+id/tv_bold_mid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加粗字体"
+                android:text="自定义1.0加粗字体"
                 android:textColor="#333333"
                 app:boldStyle="medium" />
 
-            <TextView
-                android:id="@+id/tv_normal"
+            <com.mirkowu.lib_widget.BoldTextView
+                android:id="@+id/tv_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加粗字体"
-                android:textColor="#333333" />
+                android:text="自定义2.0加粗字体"
+                android:textColor="#333333"
+                app:boldStyle="bold" />
+
+            <com.mirkowu.lib_widget.BoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自定义3.0加粗字体"
+                android:textColor="#333333"
+                app:boldStyle="3.0" />
+
 
             <Button
                 android:id="@+id/btn_text"

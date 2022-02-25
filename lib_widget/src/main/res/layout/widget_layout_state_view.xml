@@ -6,32 +6,36 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/mProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/widget_loading_progressbar"
+        android:visibility="gone" />
+
     <ImageView
-        android:id="@+id/ivLoading"
+        android:id="@+id/ivImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:adjustViewBounds="true"
-        android:maxWidth="100dp"
+        android:maxWidth="260dp"
+        android:maxHeight="260dp"
         android:scaleType="fitCenter"
-        android:visibility="gone" />
-
-
-    <ImageView
-        android:id="@+id/ivHint"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="#B3B3B3"
-        android:textSize="13dp"
+        android:textSize="15dp"
         android:visibility="gone" />
 
 
@@ -39,7 +43,7 @@
         android:id="@+id/btnRefresh"
         android:layout_width="136dp"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/widget_refresh_bg"
         android:gravity="center"
         android:maxLength="18"
@@ -48,7 +52,7 @@
         android:text="@string/widget_refresh"
         android:textAllCaps="false"
         android:textColor="#ffffff"
-        android:textSize="14dp"
+        android:textSize="15dp"
         android:visibility="gone" />
 
 </LinearLayout>

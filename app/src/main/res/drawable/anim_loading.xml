@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/widget_ic_loading"
+        android:drawable="@drawable/widget_svg_loading"
         android:duration="200" />
     <item
         android:drawable="@drawable/ivp_camera"

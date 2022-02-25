@@ -12,7 +12,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:indeterminate="false"
+        android:indeterminate="true"
         android:indeterminateDrawable="@drawable/widget_loading_progressbar" />
 
     <TextView
