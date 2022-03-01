@@ -18,25 +18,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class AbsRetrofitClient extends AbsOkHttpClient {
     protected static Map<String, Retrofit> sRetrofitMap = new ArrayMap();
 
-    private boolean isCacheClient = true;
-
-    public boolean isCacheClient() {
-        return isCacheClient;
-    }
-
-    public AbsRetrofitClient setCacheClient(boolean cacheClient) {
-        isCacheClient = cacheClient;
-        return this;
-    }
-
     public abstract String getBaseUrl();
-
 
     public Retrofit getRetrofit() {
         final String baseUrl = getBaseUrl();
         Preconditions.checkArgument(!TextUtils.isEmpty(baseUrl),
                 "baseUrl can not be null or empty !");
-        if (isCacheClient()) {
             String key = String.format("%s@%s", getClass().getSimpleName(), baseUrl);
             if (sRetrofitMap.containsKey(key)) {
                 return sRetrofitMap.get(key);
@@ -45,9 +32,6 @@ public abstract class AbsRetrofitClient extends AbsOkHttpClient {
                 sRetrofitMap.put(key, retrofit);
                 return retrofit;
             }
-        } else {
-            return newRetrofit(baseUrl);
-        }
     }
 
     protected Retrofit newRetrofit(String baseUrl) {

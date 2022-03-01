@@ -100,7 +100,7 @@ public abstract class AbsOkHttpClient {
 
         //添加拦截器，eg.数据处理
         List<Interceptor> interceptors = getInterceptorList();
-        if (interceptors != null) {
+        if (interceptors != null && !interceptors.isEmpty()) {
             for (Interceptor interceptor : interceptors) {
                 if (interceptor != null) {
                     builder.addInterceptor(interceptor);
