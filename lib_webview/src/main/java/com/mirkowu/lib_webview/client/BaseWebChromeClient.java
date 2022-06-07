@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.mirkowu.lib_util.LogUtil;
@@ -22,6 +25,7 @@ import com.mirkowu.lib_webview.callback.IWebViewFileChooser;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
 import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
@@ -256,6 +260,38 @@ public class BaseWebChromeClient extends WebChromeClient {
         if (mWebViewCallBack != null) {
             mWebViewCallBack.onReceivedTitle((CommonWebView) webView, s);
         }
+    }
+
+    @Override
+    public boolean onCreateWindow(WebView webView, boolean b, boolean b1, Message message) {
+        //setSupportMultipleWindows(true)时必须重写
+        CommonWebView newWebView = new CommonWebView(mContext);
+        newWebView.setWebViewClient(new BaseWebViewClient(newWebView, mWebViewCallBack) {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (!super.shouldOverrideUrlLoading(view, request)) {
+                    //当前WebView重新加载
+                    webView.loadUrl(request.getUrl().toString());
+                }
+                return true;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (!super.shouldOverrideUrlLoading(view, url)) {
+                    //当前WebView重新加载
+                    webView.loadUrl(url);
+                }
+                return true;
+            }
+        });
+
+        WebView.WebViewTransport transport = (WebView.WebViewTransport) message.obj;
+        transport.setWebView(newWebView);
+        message.sendToTarget();
+
+        return true;
     }
 
     /**
