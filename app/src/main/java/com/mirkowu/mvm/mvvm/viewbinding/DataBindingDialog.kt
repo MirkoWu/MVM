@@ -1,4 +1,4 @@
-package com.mirkowu.mvm.viewbinding
+package com.mirkowu.mvm.mvvm.viewbinding
 
 import android.app.Dialog
 import android.content.Context

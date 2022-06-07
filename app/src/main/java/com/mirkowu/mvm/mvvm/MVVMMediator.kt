@@ -15,6 +15,7 @@ import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
 import com.mirkowu.mvm.bean.GankImageBean
 import com.mirkowu.mvm.bean.RandomImageBean
+import com.mirkowu.mvm.network.ImageClient
 import com.mirkowu.mvm.network.RxObserver
 import io.reactivex.rxjava3.core.Observable
 
@@ -52,7 +53,11 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     }
 
     fun loadImage2() {
-        mModel.loadImage2()
+        //todo  这里不用model层也是可以的，直接把api 放到mediator中
+        //mModel.loadImage2()
+          ImageClient.getImageApi()
+            .getRandomImage()
+            .compose(RxScheduler.ioToMain())
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
             .to(RxLife.bindLifecycle(mView))
             .subscribe(object : RxObserver<List<RandomImageBean>>() {

@@ -19,8 +19,8 @@ import com.mirkowu.mvm.mvc.MVCActivity
 import com.mirkowu.mvm.mvp.MVPActivity
 import com.mirkowu.mvm.mvvm.MVVMActivity
 import com.mirkowu.mvm.recycelerview.GridListActivity
-import com.mirkowu.mvm.viewbinding.DataBindingActivity
-import com.mirkowu.mvm.viewbinding.DataBindingFragment
+import com.mirkowu.mvm.mvvm.viewbinding.DataBindingActivity
+import com.mirkowu.mvm.mvvm.viewbinding.DataBindingFragment
 import com.mirkowu.mvm.webview.WebActivity
 
 class MainActivity : BaseActivity<EmptyMediator>() {

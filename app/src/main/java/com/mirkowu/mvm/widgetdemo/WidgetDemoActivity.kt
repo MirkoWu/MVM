@@ -20,7 +20,7 @@ import com.mirkowu.mvm.databinding.ActivityWidgetDemoBinding
 import com.mirkowu.mvm.interceptchain.FirstInterceptChain
 import com.mirkowu.mvm.interceptchain.SecondInterceptChain
 import com.mirkowu.mvm.interceptchain.ThirdInterceptChain
-import com.mirkowu.mvm.viewbinding.DataBindingDialog
+import com.mirkowu.mvm.mvvm.viewbinding.DataBindingDialog
 
 class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
     companion object {

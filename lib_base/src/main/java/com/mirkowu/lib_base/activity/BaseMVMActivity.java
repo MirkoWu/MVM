@@ -27,6 +27,8 @@ import java.lang.reflect.Method;
  * 更多可配置的
  */
 public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatActivity implements IBaseView {
+
+    @NonNull
     protected M mMediator;
     private LoadingDialog mLoadingDialog;
 

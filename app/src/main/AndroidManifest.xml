@@ -40,7 +40,7 @@
             android:theme="@style/WebViewTheme" />
         <activity android:name=".recycelerview.GridListActivity" />
         <activity android:name=".recycelerview.LinearListActivity" />
-        <activity android:name=".viewbinding.DataBindingActivity" />
+        <activity android:name=".mvvm.viewbinding.DataBindingActivity" />
         <activity android:name=".mvc.MVCActivity" />
         <activity android:name=".mvp.MVPActivity" />
         <activity android:name=".mvvm.MVVMActivity" />

@@ -1,4 +1,4 @@
-package com.mirkowu.mvm.viewbinding
+package com.mirkowu.mvm.mvvm.viewbinding
 
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_network.state.observerRequest
