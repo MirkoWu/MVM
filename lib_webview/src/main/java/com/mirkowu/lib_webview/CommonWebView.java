@@ -15,7 +15,7 @@ import com.mirkowu.lib_webview.dsbridge.DSBridgeImp;
 import com.mirkowu.lib_webview.dsbridge.IDSBridge;
 import com.mirkowu.lib_webview.dsbridge.JavascriptCloseWindowListener;
 import com.mirkowu.lib_webview.dsbridge.OnReturnValue;
-import com.mirkowu.lib_webview.setting.WebSettingUtil;
+import com.mirkowu.lib_webview.settings.WebSettingsUtil;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebView;
@@ -47,6 +47,7 @@ public class CommonWebView extends WebView implements IWebViewLifecycle, IDSBrid
 
     private void init(Context context) {
         mBridgeDelegate = new DSBridgeImp(this);
+        WebSettingsUtil.configDefaultSettings(this);
     }
 
     /**
@@ -243,7 +244,7 @@ public class CommonWebView extends WebView implements IWebViewLifecycle, IDSBrid
     @Override
     public void clearCache(boolean includeDiskFiles) {
         super.clearCache(includeDiskFiles);
-        WebSettingUtil.clearCache(includeDiskFiles);
+        WebSettingsUtil.clearCache(includeDiskFiles);
     }
 
     @Override

@@ -18,7 +18,7 @@ import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.client.BaseWebChromeClient;
 import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
-import com.mirkowu.lib_webview.setting.WebSettingUtil;
+import com.mirkowu.lib_webview.settings.WebSettingsUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.tencent.smtt.sdk.WebSettings;
 
@@ -108,7 +108,7 @@ public class CommonWebFragment extends BaseMVMFragment {
 
     protected void configWebSettings(@NonNull WebConfig webConfig) {
         mWebViewCallBack = webConfig.getWebViewCallBack();
-        WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
+        WebSettingsUtil.appendUserAgent(mWebView, webConfig.getUserAgent());
         mWebView.setHeaders(webConfig.getHeaders());
 
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));

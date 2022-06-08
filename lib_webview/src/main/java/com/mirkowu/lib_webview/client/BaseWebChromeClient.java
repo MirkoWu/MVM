@@ -286,12 +286,17 @@ public class BaseWebChromeClient extends WebChromeClient {
                 return true;
             }
         });
+        newWebView.setWebChromeClient(this);
 
         WebView.WebViewTransport transport = (WebView.WebViewTransport) message.obj;
         transport.setWebView(newWebView);
         message.sendToTarget();
-
         return true;
+    }
+
+    @Override
+    public void onCloseWindow(WebView webView) {
+        super.onCloseWindow(webView);
     }
 
     /**

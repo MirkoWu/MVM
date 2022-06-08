@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
     <!--require dsbridge init js-->
-    <script src="https://cdn.jsdelivr.net/npm/dsbridge/dist/dsbridge.js"> </script>
+    <script src="https://unpkg.zhimg.com/dsbridge/dist/dsbridge.js"> </script>
 </head>
 <body>
 <p><input type="button" id="text1" value="结果" /></p>
@@ -22,8 +22,8 @@
 <p><input type="button" id="enter27" value="callProgress" onclick="callProgress();"/></p>
 <p><input type="button" id="enter28" value="hasNativeMethod(testAsyn)" onclick="hasNativeMethod('testAsyn');"/></p>
 
-<p><input type="file" accept="image/*" value="选择图片"/></p>
-<p><input type="file" accept="video/*" value="选择视频"/></p>
+<p><input type="file" accept="image/*" value="选择图片"/>选择图片</p>
+<p><input type="file" accept="video/*" value="选择视频"/>选择视频</p>
 <p>
     <input type="file" value="打开文件"/>
 </p>
@@ -35,6 +35,12 @@
 </p>
 <p>
     <a href ="a文字">a://文字</a>
+</p>
+<p>
+    <a href="file:///android_asset/test.html" target="_blank">打开新窗口</a>
+</p>
+<p>
+    <a href="tel:15088134055" target="_blank">打开新窗口拦截</a>
 </p>
 <script>
 // 原生调用JS ---------------------

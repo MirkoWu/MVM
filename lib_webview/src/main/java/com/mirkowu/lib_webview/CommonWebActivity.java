@@ -18,7 +18,7 @@ import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.client.BaseWebChromeClient;
 import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
-import com.mirkowu.lib_webview.setting.WebSettingUtil;
+import com.mirkowu.lib_webview.settings.WebSettingsUtil;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.mirkowu.lib_widget.Toolbar;
 import com.tencent.smtt.sdk.WebSettings;
@@ -112,7 +112,7 @@ public class CommonWebActivity extends BaseMVMActivity {
 
     protected void configWebSettings(@NonNull WebConfig webConfig) {
         mWebView.setHeaders(webConfig.getHeaders());
-        WebSettingUtil.toSetting(mWebView, webConfig.getUserAgent());
+        WebSettingsUtil.appendUserAgent(mWebView, webConfig.getUserAgent());
 
         mWebViewCallBack = webConfig.getWebViewCallBack();
         mWebView.setWebViewClient(new BaseWebViewClient(mWebView, mWebViewCallBack));
