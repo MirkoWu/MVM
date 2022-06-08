@@ -61,6 +61,7 @@ public class CommonWebActivity extends BaseMVMActivity {
     protected ProgressBar mProgressBar;
     protected IWebViewCallBack mWebViewCallBack;
     protected DefaultWebViewFileChooser mFileChooser;
+    protected WebConfig mWebConfig;
 
     @Override
     protected BaseMediator initMediator() {
@@ -84,11 +85,11 @@ public class CommonWebActivity extends BaseMVMActivity {
 
         initView();
 
-        WebConfig webConfig = getWebConfig();
+        mWebConfig = getWebConfig();
 
-        configToolbar(title, webConfig);
+        configToolbar(title, mWebConfig);
 
-        configWebSettings(webConfig);
+        configWebSettings(mWebConfig);
 
         loadUrl(url);
     }
@@ -151,7 +152,9 @@ public class CommonWebActivity extends BaseMVMActivity {
 
                     @Override
                     public void onProgressChanged(CommonWebView webView, int newProgress) {
-                        BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                        if (mWebConfig.isShowProgress()) {
+                            BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                        }
                     }
 
                     @Override

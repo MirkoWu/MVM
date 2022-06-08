@@ -317,9 +317,10 @@ public class BaseWebChromeClient extends WebChromeClient {
     public static void updateProgress(ProgressBar mProgressBar, int newProgress) {
         if (mProgressBar != null) {
             if (newProgress < PROGRESS_LENGTH) {
-                if (mProgressBar.getVisibility() == View.VISIBLE) {
-                    mProgressBar.setProgress(newProgress);
+                if (mProgressBar.getVisibility() != View.VISIBLE) {
+                    mProgressBar.setVisibility(View.VISIBLE);
                 }
+                mProgressBar.setProgress(newProgress);
             } else {
                 if (mProgressBar.getVisibility() == View.VISIBLE) {
                     mProgressBar.setVisibility(View.GONE);

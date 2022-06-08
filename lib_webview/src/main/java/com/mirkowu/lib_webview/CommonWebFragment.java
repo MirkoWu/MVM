@@ -47,6 +47,7 @@ public class CommonWebFragment extends BaseMVMFragment {
     protected ProgressBar mProgressBar;
     protected IWebViewCallBack mWebViewCallBack;
     protected DefaultWebViewFileChooser mFileChooser;
+    private WebConfig mWebConfig;
 
     @Override
     protected BaseMediator initMediator() {
@@ -70,11 +71,11 @@ public class CommonWebFragment extends BaseMVMFragment {
 
         initView();
 
-        WebConfig webConfig = getWebConfig();
+        mWebConfig = getWebConfig();
 
-        configToolbar(title, webConfig);
+        configToolbar(title, mWebConfig);
 
-        configWebSettings(webConfig);
+        configWebSettings(mWebConfig);
 
         loadUrl(url);
 
@@ -137,7 +138,9 @@ public class CommonWebFragment extends BaseMVMFragment {
 
                     @Override
                     public void onProgressChanged(CommonWebView webView, int newProgress) {
-                        BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                        if (mWebConfig.isShowProgress()) {
+                            BaseWebChromeClient.updateProgress(mProgressBar, newProgress);
+                        }
                     }
 
                     @Override

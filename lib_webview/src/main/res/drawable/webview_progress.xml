@@ -3,14 +3,14 @@
     <!-- 设置背景色图像资源 -->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="2dp"/>
+            <corners android:radius="2dp" />
         </shape>
     </item>
     <!-- 设置第二级进度条颜色图像资源 -->
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <corners android:radius="2dp"/>
+                <corners android:radius="2dp" />
             </shape>
         </clip>
     </item>
@@ -18,8 +18,12 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <corners android:radius="2dp"/>
-                <solid android:color="#20B8FD"/>
+                <corners android:radius="2dp" />
+                <gradient
+                    android:angle="0"
+                    android:startColor="@color/webview_progressbar_start_color"
+                    android:centerColor="@color/webview_progressbar_center_color"
+                    android:endColor="@color/webview_progressbar_end_color" />
             </shape>
         </clip>
     </item>

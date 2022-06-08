@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="webview_progressbar_start_color">#8020B8FD</color>
+    <color name="webview_progressbar_center_color">#b020B8FD</color>
+    <color name="webview_progressbar_end_color">#20B8FD</color>
+</resources>
