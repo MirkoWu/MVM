@@ -45,7 +45,9 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
                         files.add(file)
                     }
                 }
-                SystemShareUtil.shareToWxCircle(this, "测试", files.last())
+                if (files.isNotEmpty()) {
+                    SystemShareUtil.shareToWxCircle(this, "测试", files.last())
+                }
             }
         }
 
