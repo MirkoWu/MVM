@@ -1,7 +1,9 @@
 package com.mirkowu.lib_util;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -28,7 +30,8 @@ import java.nio.file.Paths;
  */
 public class FileUtil {
     public static final String TAG = FileUtil.class.getName();
-//    public static final String FILE_NAME = "Mirko";
+    private static final String JPEG_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
 
     public static Uri createUri(Context context, File file) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -38,6 +41,45 @@ public class FileUtil {
             return Uri.fromFile(file);
         }
     }
+
+    public static File createCameraTmpFile(Context context) throws IOException {
+        File dir = null;
+        if (hasSDCard()) {
+            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+            if (!dir.exists()) {
+                dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera");
+                if (!dir.exists()) {
+                    dir = getAppCacheDir(context, true);
+                }
+            }
+        } else {
+            dir = getAppCacheDir(context, true);
+        }
+        return File.createTempFile(JPEG_FILE_PREFIX, JPEG_FILE_SUFFIX, dir);
+    }
+
+    public static File createCameraFile(Context context, String fileName) {
+        File dir = null;
+        if (hasSDCard()) {
+            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+            if (!dir.exists()) {
+                dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + File.separator + "Camera");
+                if (!dir.exists()) {
+                    dir = getAppCacheDir(context, true);
+                }
+            }
+        } else {
+            dir = getAppCacheDir(context, true);
+        }
+        return new File(dir, fileName);
+    }
+
+
+    private static boolean hasExternalStoragePermission(Context context) {
+        int perm = context.checkCallingOrSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return perm == PackageManager.PERMISSION_GRANTED;
+    }
+
 
     /**
      * 得到图片uri的实际地址
@@ -56,8 +98,15 @@ public class FileUtil {
      * @return
      */
     public static boolean hasSDCard() {
-        String status = Environment.getExternalStorageState();
-        return TextUtils.equals(status, Environment.MEDIA_MOUNTED);
+        String externalStorageState;
+        try {
+            externalStorageState = Environment.getExternalStorageState();
+        } catch (NullPointerException e) { // (sh)it happens (Issue #660)
+            externalStorageState = "";
+        } catch (IncompatibleClassChangeError e) { // (sh)it happens too (Issue #989)
+            externalStorageState = "";
+        }
+        return TextUtils.equals(externalStorageState, Environment.MEDIA_MOUNTED);
     }
 
 
@@ -67,31 +116,9 @@ public class FileUtil {
      * @return
      */
     public static String getDiskExternalPath(final String path) {
-        try {
-            //判断是否有SD卡
-            if (hasSDCard()) {
-                if (TextUtils.isEmpty(path)) {
-                    return Environment.getExternalStorageDirectory().getAbsolutePath();
-                } else {
-                    File rootDir = new File(Environment.getExternalStorageDirectory(), path);
-                    if (!rootDir.exists()) {
-                        rootDir.mkdirs();
-                    }
-                    return rootDir.getAbsolutePath(); // /mnt/sdcard/path...
-                }
-            } else {
-                if (TextUtils.isEmpty(path)) {
-                    return Utils.getApp().getExternalCacheDir().getAbsolutePath();
-                }
-
-                File file = new File(Utils.getApp().getExternalCacheDir().getAbsolutePath(), path);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                return file.getAbsolutePath(); // /mnt/sdcard/path...
-            }
-        } catch (Throwable e) {
-            LogUtil.e(e.toString());
+        File file = getDiskExternalFile(path);
+        if (file != null) {
+            return file.getAbsolutePath();
         }
         return "";
     }
@@ -113,7 +140,7 @@ public class FileUtil {
                 if (TextUtils.isEmpty(path)) {
                     return Utils.getApp().getExternalCacheDir();
                 }
-                File file = new File(Utils.getApp().getExternalCacheDir().getAbsolutePath(), path);
+                File file = new File(Utils.getApp().getExternalCacheDir(), path);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
@@ -133,10 +160,41 @@ public class FileUtil {
      * @return
      */
     public static String getAppCachePath(Context context) {
+        File appCacheDir = getAppCacheDir(context, false);
+        if (appCacheDir != null) {
+            return appCacheDir.getAbsolutePath();
+        }
+        return "";
+    }
+
+    /**
+     * @param context
+     * @param createNoMedia .nomedia文件作用：应用中的图片不被系统图库扫描
+     *                      nomedia是用来屏蔽媒体软件扫描的文件
+     *                      “.nomedia”文件放在任何一个文件夹下都会把该文件夹下所有媒体文件（图片，mp3,视频）隐藏起来不会在系统图库，铃声中出现。
+     * @return
+     */
+    public static File getAppCacheDir(Context context, boolean createNoMedia) {
         if (hasSDCard()) {
-            return context.getExternalCacheDir().getAbsolutePath(); // /mnt/sdcard/Android/data/com.my.app/cache
+            File appCacheDir = context.getExternalCacheDir(); // /mnt/sdcard/Android/data/com.my.app/cache
+            if (appCacheDir == null) {
+                File dataDir = new File(new File(Environment.getExternalStorageDirectory(), "Android"), "data");
+                appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
+            }
+            if (!appCacheDir.exists()) {
+                if (!appCacheDir.mkdirs()) {
+                    return null;
+                }
+                try {
+                    if (createNoMedia) {
+                        new File(appCacheDir, ".nomedia").createNewFile();
+                    }
+                } catch (IOException e) {
+                }
+            }
+            return appCacheDir;
         } else {
-            return context.getCacheDir().getAbsolutePath(); // /data/data/com.my.app/cache
+            return context.getCacheDir(); // /data/data/com.my.app/cache
         }
     }
 

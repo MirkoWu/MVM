@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.mirkowu.lib_photo.R;
+import com.mirkowu.lib_util.FileUtil;
 import com.mirkowu.lib_util.PermissionsUtil;
 
 import java.io.File;
@@ -123,7 +124,7 @@ public class CameraUtil {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             try {
-                sTmpFile = FileUtils.createTmpFile(context);
+                sTmpFile = FileUtil.createCameraTmpFile(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -3,6 +3,7 @@ package com.mirkowu.lib_camera;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.DrawableRes;
@@ -30,6 +31,7 @@ public class CameraActivity extends AppCompatActivity {
     protected CameraScan mCameraScan;
     protected ImageView mTakePhoto;
     protected ImageView mFlashlight;
+    protected View mBlackMask;
 
 
     @Override
@@ -53,6 +55,7 @@ public class CameraActivity extends AppCompatActivity {
         BarUtils.transparentStatusBar(this);
 
         mPreviewView = findViewById(R.id.mPreviewView);
+        mBlackMask = findViewById(R.id.mBlackMask);
         ImageView mSwitchCamera = findViewById(R.id.mSwitchCamera);
         mSwitchCamera.setOnClickListener(v -> switchCamera());
 
@@ -154,10 +157,14 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     public void takePhoto() {
-        File photo = new File(FileUtil.getDiskExternalPath("Mirko") + "/" + System.currentTimeMillis() + ".jpg");
+        shotAnim();
+        mTakePhoto.setEnabled(false);
+        File photo = FileUtil.createCameraFile(this,"IMG_" + System.currentTimeMillis() + ".jpg");
         mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                mTakePhoto.setEnabled(true);
+
 //                Uri uri = outputFileResults.getSavedUri();
                 boolean result = FileUtil.addGraphToGallery(CameraActivity.this, photo);
                 LogUtil.e(TAG, "onImageSaved : " + result);
@@ -166,6 +173,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
                 LogUtil.e(TAG, "ImageCaptureException " + exception.toString());
+                mTakePhoto.setEnabled(true);
             }
         });
     }
@@ -203,12 +211,16 @@ public class CameraActivity extends AppCompatActivity {
                 if (mode == ImageCapture.FLASH_MODE_OFF) {
                     mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_ON);
                     updateFlashlightUI(R.drawable.camera_svg_flash_light_on);
-                } else if (mode == ImageCapture.FLASH_MODE_ON) {
-                    mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_AUTO);
-                    updateFlashlightUI(R.drawable.camera_svg_flash_light_auto);
+                    mCameraScan.enableTorch(true);
                 } else {
-                    mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_OFF);
-                    updateFlashlightUI(R.drawable.camera_svg_flash_light_off);
+                    mCameraScan.enableTorch(false);
+                    if (mode == ImageCapture.FLASH_MODE_ON) {
+                        mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_AUTO);
+                        updateFlashlightUI(R.drawable.camera_svg_flash_light_auto);
+                    } else {
+                        mCameraScan.setFlashMode(ImageCapture.FLASH_MODE_OFF);
+                        updateFlashlightUI(R.drawable.camera_svg_flash_light_off);
+                    }
                 }
             }
         }
@@ -229,6 +241,21 @@ public class CameraActivity extends AppCompatActivity {
                 mCameraScan.setCameraId(CameraSelector.LENS_FACING_BACK);
             }
         }
+    }
+
+    /**
+     * 模拟快门动画
+     */
+    public void shotAnim() {
+        mBlackMask.setVisibility(View.VISIBLE);
+        mBlackMask.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mBlackMask != null) {
+                    mBlackMask.setVisibility(View.GONE);
+                }
+            }
+        }, 100);
     }
 
 //

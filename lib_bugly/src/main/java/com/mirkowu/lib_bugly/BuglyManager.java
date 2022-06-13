@@ -35,6 +35,7 @@ public class BuglyManager {
 
     public static void init(Context context, String appId, String channel, boolean isDebug) {
         //注意这些设置在bugly init之前
+        Beta.strToastYourAreTheLatestVersion = null; //取消 最新版本的提示
         Beta.upgradeDialogLayoutId = R.layout.up_dialog_upgrade;
         BuglyManager.setUpgradeListener(new UpgradeListener() {
             @Override
