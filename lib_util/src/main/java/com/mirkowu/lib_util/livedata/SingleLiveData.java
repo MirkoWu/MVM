@@ -1,4 +1,4 @@
-package com.mirkowu.lib_base.event;
+package com.mirkowu.lib_util.livedata;
 
 
 import android.util.Log;
@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SingleLiveEvent<T> extends MutableLiveData<T> {
+public class SingleLiveData<T> extends MutableLiveData<T> {
 
     private static final String TAG = "SingleLiveEvent";
 

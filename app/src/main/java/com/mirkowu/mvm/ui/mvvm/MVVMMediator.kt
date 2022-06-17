@@ -1,6 +1,5 @@
 package com.mirkowu.mvm.ui.mvvm
 
-import androidx.lifecycle.MutableLiveData
 import com.mirkowu.lib_base.mediator.BaseMediator
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.util.RxScheduler
@@ -10,6 +9,7 @@ import com.mirkowu.lib_network.ErrorType
 import com.mirkowu.lib_network.state.ResponseData
 import com.mirkowu.lib_network.state.ResponseLiveData
 import com.mirkowu.lib_util.LogUtil
+import com.mirkowu.lib_util.livedata.SingleLiveData
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
@@ -22,14 +22,14 @@ import io.reactivex.rxjava3.core.Observable
 open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     @JvmField
     val mImageData = ResponseLiveData<List<RandomImageBean>>()
-    var mLiveData = MutableLiveData<Any>()
-    var mError = MutableLiveData<Throwable>()
+    var mLiveData = SingleLiveData<Any>()
+    var mError = SingleLiveData<Throwable>()
 
     @JvmField
-    var mRequestImageListData = MutableLiveData<ResponseData<List<GankImageBean>>>()
+    var mRequestImageListData = SingleLiveData<ResponseData<List<GankImageBean>>>()
 
     @JvmField
-    var mImageError = MutableLiveData<ErrorBean>()
+    var mImageError = SingleLiveData<ErrorBean>()
 
     var mPingResult = ResponseLiveData<Boolean>()
 

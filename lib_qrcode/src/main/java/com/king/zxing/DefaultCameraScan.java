@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.zxing.BarcodeFormat;
@@ -38,6 +37,7 @@ import com.king.zxing.config.CameraConfig;
 import com.king.zxing.manager.AmbientLightManager;
 import com.king.zxing.manager.BeepManager;
 import com.king.zxing.util.QrLogUtils;
+import com.mirkowu.lib_util.livedata.SingleLiveData;
 
 import java.util.concurrent.Executors;
 
@@ -83,7 +83,7 @@ public class DefaultCameraScan extends CameraScan {
 
     private View flashlightView;
 
-    private MutableLiveData<Result> mResultLiveData;
+    private SingleLiveData<Result> mResultLiveData;
 
     private OnScanResultCallback mOnScanResultCallback;
 
@@ -129,7 +129,7 @@ public class DefaultCameraScan extends CameraScan {
     };
 
     private void initData(){
-        mResultLiveData = new MutableLiveData<>();
+        mResultLiveData = new SingleLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
             if(result != null){
                 handleAnalyzeResult(result);

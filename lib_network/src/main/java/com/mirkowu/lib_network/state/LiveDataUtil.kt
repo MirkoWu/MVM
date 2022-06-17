@@ -2,8 +2,8 @@ package com.mirkowu.lib_network.state
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.mirkowu.lib_network.ErrorBean
+import com.mirkowu.lib_util.livedata.SingleLiveData
 
 
 /**
@@ -29,4 +29,4 @@ inline fun <T> LiveData<ResponseData<T>>.observerRequest(owner: LifecycleOwner,
 /**
  * 提供类型别名,减少泛型嵌套
  */
-typealias ResponseLiveData<T> = MutableLiveData<ResponseData<T>>
+typealias ResponseLiveData<T> = SingleLiveData<ResponseData<T>>
