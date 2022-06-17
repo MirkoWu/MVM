@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recycelerview.LinearListActivity">
+    tools:context=".ui.recycelerview.LinearListActivity">
 
 
     <androidx.recyclerview.widget.RecyclerView

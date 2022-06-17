@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvvm.viewbinding.DataBindingActivity">
+    tools:context=".ui.mvvm.viewbinding.DataBindingActivity">
     <Button
         android:id="@+id/btn_test"
         android:layout_width="wrap_content"

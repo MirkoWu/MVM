@@ -27,23 +27,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".widgetdemo.WidgetDemoActivity"
+            android:name=".ui.widgetdemo.WidgetDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensor" />
-        <activity android:name=".download.DownloadActivity" />
-        <activity android:name=".imagepicker.ImagePickerActivity" />
+        <activity android:name=".ui.download.DownloadActivity" />
+        <activity android:name=".ui.imagepicker.ImagePickerActivity" />
         <activity
-            android:name=".webview.WebActivity"
+            android:name=".ui.webview.WebActivity"
             android:launchMode="singleTask"
             android:process="@string/webview_process"
             android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
-        <activity android:name=".recycelerview.GridListActivity" />
-        <activity android:name=".recycelerview.LinearListActivity" />
-        <activity android:name=".mvvm.viewbinding.DataBindingActivity" />
-        <activity android:name=".mvc.MVCActivity" />
-        <activity android:name=".mvp.MVPActivity" />
-        <activity android:name=".mvvm.MVVMActivity" />
+        <activity android:name=".ui.recycelerview.GridListActivity" />
+        <activity android:name=".ui.recycelerview.LinearListActivity" />
+        <activity android:name=".ui.mvvm.viewbinding.DataBindingActivity" />
+        <activity android:name=".ui.mvc.MVCActivity" />
+        <activity android:name=".ui.mvp.MVPActivity" />
+        <activity android:name=".ui.mvvm.MVVMActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

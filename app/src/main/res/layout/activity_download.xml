@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".download.DownloadActivity">
+    tools:context=".ui.download.DownloadActivity">
 
     <TextView
         android:id="@+id/tv_progress"

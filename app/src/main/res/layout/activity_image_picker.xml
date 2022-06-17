@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".imagepicker.ImagePickerActivity">
+    tools:context=".ui.imagepicker.ImagePickerActivity">
 
     <com.mirkowu.lib_widget.Toolbar
         android:id="@+id/mToolbar"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvvm.MVVMActivity">
+    tools:context=".ui.mvvm.MVVMActivity">
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/mRefresh"

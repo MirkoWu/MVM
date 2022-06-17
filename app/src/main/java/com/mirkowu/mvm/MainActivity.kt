@@ -15,13 +15,13 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.utilcode.util.BarUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
-import com.mirkowu.mvm.mvc.MVCActivity
-import com.mirkowu.mvm.mvp.MVPActivity
-import com.mirkowu.mvm.mvvm.MVVMActivity
-import com.mirkowu.mvm.recycelerview.GridListActivity
-import com.mirkowu.mvm.mvvm.viewbinding.DataBindingActivity
-import com.mirkowu.mvm.mvvm.viewbinding.DataBindingFragment
-import com.mirkowu.mvm.webview.WebActivity
+import com.mirkowu.mvm.ui.mvc.MVCActivity
+import com.mirkowu.mvm.ui.mvp.MVPActivity
+import com.mirkowu.mvm.ui.mvvm.MVVMActivity
+import com.mirkowu.mvm.ui.recycelerview.GridListActivity
+import com.mirkowu.mvm.ui.mvvm.viewbinding.DataBindingActivity
+import com.mirkowu.mvm.ui.mvvm.viewbinding.DataBindingFragment
+import com.mirkowu.mvm.ui.webview.WebActivity
 
 class MainActivity : BaseActivity<EmptyMediator>() {
     companion object {

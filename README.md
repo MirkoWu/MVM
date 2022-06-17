@@ -1,5 +1,6 @@
 # MVM
-[![](https://jitpack.io/v/mirkowu/mvm.svg)](https://jitpack.io/#mirkowu/mvm)
+mvm[![](https://jitpack.io/v/mirkowu/mvm.svg)](https://jitpack.io/#mirkowu/mvm)
+mvm-thirdparty[![](https://jitpack.io/v/mirkowu/mvm-thirdparty.svg)](https://jitpack.io/#mirkowu/mvm-thirdparty)
 -----------------------------------
 ### 前言
 M:Model 数据层
@@ -13,20 +14,21 @@ M:Mediator 中间层
 MVVM或衍生出来的变种其行为目的都是一致的。
 但由于数据的保存，处理方式，中间层的状态及更新UI方式的不同，才演化出这些架构。
 
-回顾我们所写过的MVP,MVVM等模式，我们会发现其相同之处，都是作为一个中间层来进行数据交互，而最根本的解构方面似乎还是
-很鸡肋，完全没达到传说中的高内聚低耦合，具体代码还要看个人水平。
-
 ### 使用
 依赖jitpack
 ```
 maven { url 'https://jitpack.io' }
 ```
 
+
+`从v1.1.0 起 mvm库把之前的lib_stat、lib_bugly、lib_crash 子库拆分到了mvm-thirdparty 仓库，mvm只保留开发常用的依赖库`
 //你可以直接使用
 ```
-        implementation("com.github.mirkowu:mvm:$ext.mvm_version") { //总仓库
-            exclude group: "com.github.mirkowu.mvm", module: "lib_bugly" //bugly 包含升级SDK 二选一
-            //exclude group: "com.github.mirkowu.mvm", module: "lib_crash" //bugly 不含升级SDK 二选一
+        implementation 'com.github.mirkowu:mvm:$ext.mvm_version' //mvm总仓库
+
+        implementation("com.github.mirkowu:mvm-thirdparty:$ext.mvm_thirdparty_version") { //mvm-thirdparty总仓库
+            exclude group: "com.github.mirkowu.mvm", module: "lib_crash" //bugly 不含升级SDK 二选一
+            //exclude group: "com.github.mirkowu.mvm", module: "lib_bugly" //bugly 包含升级SDK 二选一
         }
 
 ```
@@ -39,13 +41,14 @@ maven { url 'https://jitpack.io' }
     implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version" //图片加载库(默认glide)
     implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version" //X5 + JsBridge 的WebView
     implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version" //相册选择库
-    implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version" //二维码扫描
+    implementation "com.github.mirkowu.mvm:lib_qrcode:$ext.mvm_version" //二维码扫描
     implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version" //摄像头
     implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version" //版本更新(弹窗和下载安装功能)
-    implementation "com.github.mirkowu.mvm:lib_stat:$ext.mvm_version" //umeng统计
     implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version" //屏幕适配
-    implementation "com.github.mirkowu.mvm:lib_bugly:$ext.mvm_version" //bugly 包含升级SDK 二选一
-//    implementation "com.github.mirkowu.mvm:lib_crash:$ext.mvm_version" //bugly 不含升级SDK 二选一
+
+    implementation "com.github.mirkowu.mvm-thirdparty:lib_umeng:$ext.mvm_thirdparty_version" //umeng统计
+    implementation "com.github.mirkowu.mvm-thirdparty:lib_bugly:$ext.mvm_thirdparty_version" //bugly 包含升级SDK 二选一
+//        implementation "com.github.mirkowu.mvm-thirdparty:lib_crash:$ext.mvm_thirdparty_version" //bugly 不含升级SDK 二选一
 ```
 
 你可以在Application的onCreate()中进行对应的初始化
@@ -96,7 +99,7 @@ maven { url 'https://jitpack.io' }
 
 ### [Photo组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_photo)
 
-### [QR组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qr)
+### [QRCode组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_qrcode)
 
 ### [Camerax组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_camera)
 
@@ -104,11 +107,15 @@ maven { url 'https://jitpack.io' }
 
 ### [Screen组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_screen)
 
-### [Stat组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_stat)
+### [Umeng组件库功能](https://github.com/MirkoWu/MVM-ThirdParty/tree/master/lib_umeng)
 
-### [Bugly组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_bugly)
+### [Bugly组件库功能](https://github.com/MirkoWu/MVM-ThirdParty/tree/master/lib_bugly)
 
-### [Crash组件库功能](https://github.com/MirkoWu/MVM/tree/master/lib_crash)
+### [Crash组件库功能](https://github.com/MirkoWu/MVM-ThirdParty/tree/master/lib_crash)
 
 
-
+### 更新日志
+    2022-06-17 v1.1.0
+        1.将lib_qr 改名为lib_qrcode
+        2.将lib_stat 改名为lib_umeng
+        3.将lib_stat、lib_bugly、lib_crash 拆分到mvm-thirdparty 仓库
