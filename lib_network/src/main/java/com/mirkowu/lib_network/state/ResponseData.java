@@ -33,6 +33,14 @@ public class ResponseData<T> {
         return state == RequestState.FAILURE;
     }
 
+    public boolean isLoading() {
+        return state == RequestState.LOADING;
+    }
+
+    public boolean isFinish() {
+        return state == RequestState.FINISH;
+    }
+
     public static <T> ResponseData<T> loading() {
         return new ResponseData(RequestState.LOADING);
     }

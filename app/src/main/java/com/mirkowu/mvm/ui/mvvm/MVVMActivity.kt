@@ -137,7 +137,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                     list.add(bean)
                     refreshHelper.setLoadMore(imageAdapter, list)
                 }
-            } else {
+            } else if (data.isFailure) {
                 binding.mStateView.setErrorState(data.error.msg())
             }
         })
