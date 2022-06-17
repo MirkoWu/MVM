@@ -130,9 +130,7 @@ dependencies {
         implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm_thirdparty:lib_umeng:$ext.mvm_thirdparty_version"
-        implementation "com.github.mirkowu.mvm_thirdparty:lib_bugly:$ext.mvm_thirdparty_version" //bugly 包含升级SDK 二选一
-//        implementation "com.github.mirkowu.mvm_thirdparty:lib_crash:$ext.mvm_thirdparty_version" //bugly 不含升级SDK 二选一
+
     } else {
         implementation project(path: ':lib_base')
         implementation project(path: ':lib_util')
@@ -145,10 +143,17 @@ dependencies {
         implementation project(path: ':lib_camera')
         implementation project(path: ':lib_screen')
         implementation project(path: ':lib_upgrade')
-        implementation project(path: ':lib_stat')
-        implementation project(path: ':lib_bugly') //bugly 包含升级SDK 二选一
-//        implementation project(path: ':lib_crash') //bugly 不含升级SDK 二选一
     }
+
+    implementation ("com.github.mirkowu.mvm-thirdparty:lib_umeng:$ext.mvm_thirdparty_version")  {
+        exclude group: "com.github.mirkowu.mvm", module: "lib_util"  //bugly 不含升级SDK 二选一
+    }
+    implementation ("com.github.mirkowu.mvm-thirdparty:lib_bugly:$ext.mvm_thirdparty_version") {
+        exclude group: "com.github.mirkowu.mvm", module: "lib_upgrade"  //bugly 不含升级SDK 二选一
+        exclude group: "com.github.mirkowu.mvm", module: "lib_widget"  //bugly 不含升级SDK 二选一
+        exclude group: "com.github.mirkowu.mvm", module: "lib_util"  //bugly 不含升级SDK 二选一
+    } //bugly 包含升级SDK 二选一
+//        implementation "com.github.mirkowu.mvm_thirdparty:lib_crash:$ext.mvm_thirdparty_version" //bugly 不含升级SDK 二选一
 
 
     implementation "com.github.bumptech.glide:glide:$ext.glide_version"
