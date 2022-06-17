@@ -118,11 +118,7 @@ dependencies {
     //是否使用本地lib
     def useLocalModule = true
     if (!useLocalModule) {
-//        implementation("com.github.mirkowu:mvm:$ext.mvm_version") { //总仓库
-//            exclude group: "com.github.mirkowu.mvm", module: "lib_bugly"
-////            exclude group: "com.github.mirkowu.mvm", module: "lib_crash"
-//        }
-
+//        implementation 'com.github.mirkowu:mvm:$ext.mvm_version'   //总仓库
         implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
@@ -130,13 +126,13 @@ dependencies {
         implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_qr:$ext.mvm_version"
+        implementation "com.github.mirkowu.mvm:lib_qrcode:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_stat:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
         implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_bugly:$ext.mvm_version" //bugly 包含升级SDK 二选一
-//        implementation "com.github.mirkowu.mvm:lib_crash:$ext.mvm_version" //bugly 不含升级SDK 二选一
+        implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
+        implementation "com.github.mirkowu.mvm_thirdparty:lib_umeng:$ext.mvm_thirdparty_version"
+        implementation "com.github.mirkowu.mvm_thirdparty:lib_bugly:$ext.mvm_thirdparty_version" //bugly 包含升级SDK 二选一
+//        implementation "com.github.mirkowu.mvm_thirdparty:lib_crash:$ext.mvm_thirdparty_version" //bugly 不含升级SDK 二选一
     } else {
         implementation project(path: ':lib_base')
         implementation project(path: ':lib_util')
@@ -145,11 +141,11 @@ dependencies {
         implementation project(path: ':lib_webview')
         implementation project(path: ':lib_image')
         implementation project(path: ':lib_photo')
-        implementation project(path: ':lib_qr')
+        implementation project(path: ':lib_qrcode')
         implementation project(path: ':lib_camera')
-        implementation project(path: ':lib_stat')
-        implementation project(path: ':lib_upgrade')
         implementation project(path: ':lib_screen')
+        implementation project(path: ':lib_upgrade')
+        implementation project(path: ':lib_stat')
         implementation project(path: ':lib_bugly') //bugly 包含升级SDK 二选一
 //        implementation project(path: ':lib_crash') //bugly 不含升级SDK 二选一
     }
