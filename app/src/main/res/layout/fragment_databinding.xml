@@ -134,6 +134,12 @@
                 android:text="UI组件" />
 
             <Button
+                android:id="@+id/btn_bitmap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bitmap" />
+
+            <Button
                 android:id="@+id/btn_zh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

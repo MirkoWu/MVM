@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.ui.imagepicker
 
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import com.mirkowu.lib_base.mediator.EmptyMediator
@@ -13,10 +14,12 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.PermissionsUtil
 import com.mirkowu.lib_util.SystemShareUtil
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.utilcode.util.ScreenUtils
 import com.mirkowu.mvm.Constant
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityImagePickerBinding
+import com.mirkowu.mvm.ui.BitmapActivity
 import java.io.File
 
 class ImagePickerActivity : BaseActivity<EmptyMediator>() {
@@ -71,7 +74,26 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
                             )
                             .setOnPickResultListener {
                                 LogUtil.d("ImagePicker: $it")
-                                binding.rvPick.setData(ResultModel.getPaths(it))
+                               val list= ResultModel.getPaths(it)
+                                binding.rvPick.setData(list)
+
+
+                                val bitmap1 = BitmapFactory.decodeFile(list.get(list.size-1))
+                                val bitmap2 = BitmapFactory.decodeFile(list.get(list.size-1),
+                                    BitmapFactory.Options().apply { })
+
+                                val devDpi=  ScreenUtils.getScreenDensityDpi()
+
+                                //新图高度= 原图高度 *（设备dpi /目录对应dpi）
+                                Log.e(BitmapActivity.TAG, " densityDpi = " + devDpi)
+                                val scale = devDpi / 160f
+                                Log.e(BitmapActivity.TAG, " 原图 bitmap size = " + (1080 * 2160 * 4))
+                                Log.e(BitmapActivity.TAG, "100dp bitmap size = " + bitmap1.byteCount)
+                                Log.e(BitmapActivity.TAG, "200dp bitmap size = " + bitmap2.byteCount) //mdpi 685584 xxhdpi 43264
+
+                                binding.iv100.setImageBitmap(bitmap1)
+                                binding.iv200.setImageBitmap(bitmap1)
+
                             }.start(context)
                     } else {
                         ImagePicker.previewImageWithSave(
@@ -100,6 +122,9 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
             PermissionsUtil.getInstance()
                 .requestPermissions(this, PermissionsUtil.GROUP_CAMERA, 0, onPermissionsListener)
         }
+
+
+
 
     }
 

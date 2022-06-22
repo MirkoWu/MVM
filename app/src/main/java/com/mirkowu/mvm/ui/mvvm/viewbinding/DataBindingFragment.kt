@@ -25,6 +25,7 @@ import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
+import com.mirkowu.mvm.ui.BitmapActivity
 import com.mirkowu.mvm.ui.download.DownloadActivity
 import com.mirkowu.mvm.ui.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.ui.mvvm.MVVMMediator
@@ -201,6 +202,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             }
         })
         mMediator.getPing()
+
+        binding.btnBitmap.click {
+            BitmapActivity.start(context!!)
+        }
 
     }
 

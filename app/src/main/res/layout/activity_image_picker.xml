@@ -21,6 +21,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
+    <ImageView
+        android:id="@+id/iv_100"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <ImageView
+        android:id="@+id/iv_200"
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
+
     <Button
         android:id="@+id/btn_select"
         android:layout_width="wrap_content"

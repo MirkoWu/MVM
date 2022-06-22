@@ -1,8 +1,12 @@
 package com.mirkowu.mvm
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -15,13 +19,15 @@ import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.utilcode.util.BarUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
+import com.mirkowu.mvm.service.MyService
 import com.mirkowu.mvm.ui.mvc.MVCActivity
 import com.mirkowu.mvm.ui.mvp.MVPActivity
 import com.mirkowu.mvm.ui.mvvm.MVVMActivity
-import com.mirkowu.mvm.ui.recycelerview.GridListActivity
 import com.mirkowu.mvm.ui.mvvm.viewbinding.DataBindingActivity
 import com.mirkowu.mvm.ui.mvvm.viewbinding.DataBindingFragment
+import com.mirkowu.mvm.ui.recycelerview.GridListActivity
 import com.mirkowu.mvm.ui.webview.WebActivity
+
 
 class MainActivity : BaseActivity<EmptyMediator>() {
     companion object {
@@ -107,22 +113,70 @@ class MainActivity : BaseActivity<EmptyMediator>() {
     }
 
     fun mvvmClick(view: View?) {
-        MVVMActivity.start(this)
+       // MVVMActivity.start(this)
+        val intent=Intent(context, MVVMActivity::class.java)
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+         startActivityForResult(intent,1)
     }
 
+    override fun startActivity(intent: Intent?) {
+        super.startActivity(intent)
+    }
     fun bindingClick(view: View?) {
         startActivity(Intent(this, DataBindingActivity::class.java))
     }
 
+    val connection =object :ServiceConnection  {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            if (service is MyService.MyBinder) {
+                service.service
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+
+        }
+
+    }
     fun listClick(view: View?) {
 //        LinearListActivity.start(this)
         GridListActivity.start(this)
+
+        val intent=Intent(this,MyService::class.java)
+        bindService(intent,connection,Context.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
         pagerAdapter.clear()
         BuglyManager.removeUpgradeListener()
+        unbindService(connection)
         super.onDestroy()
     }
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("LifeTest", "MainActivity onRestart: ")
+    }
+    override fun onStart() {
+        super.onStart()
+        Log.d("LifeTest", "MainActivity onStart: taskId="+this.taskId)
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.d("LifeTest", "MainActivity onStop: ")
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d("LifeTest", "MainActivity onSaveInstanceState: ")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d("LifeTest", "MainActivity onRestoreInstanceState: ")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("LifeTest", "MainActivity onActivityResult: ")
+    }
 }

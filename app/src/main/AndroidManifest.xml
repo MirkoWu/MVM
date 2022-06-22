@@ -16,6 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.BitmapActivity"></activity>
+
+        <service
+            android:name=".service.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"
@@ -43,7 +50,9 @@
         <activity android:name=".ui.mvvm.viewbinding.DataBindingActivity" />
         <activity android:name=".ui.mvc.MVCActivity" />
         <activity android:name=".ui.mvp.MVPActivity" />
-        <activity android:name=".ui.mvvm.MVVMActivity" />
+        <activity
+            android:name=".ui.mvvm.MVVMActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

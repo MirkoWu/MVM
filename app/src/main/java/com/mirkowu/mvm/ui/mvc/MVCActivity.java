@@ -18,6 +18,7 @@ import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.network.RxObserver;
+import com.mirkowu.mvm.ui.mvvm.MVVMActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class MVCActivity extends BaseActivity {
             @Override
             public void onItemChildClick(View view, Object item, int position) {
                 ToastUtils.showShort("Item child点击");
-
+                MVVMActivity.start( MVCActivity.this);
             }
         });
         adapter.setOnItemChildLongClickListener(new BaseRVAdapter.OnItemChildLongClickListener() {

@@ -2,6 +2,7 @@ package com.mirkowu.mvm.ui.mvvm
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.bean.GankImageBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
+import com.mirkowu.mvm.ui.mvc.MVCActivity
 import java.util.*
 
 class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListener {
@@ -41,6 +43,9 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 )
             }
         imageAdapter.setOnItemChildClickListener { view: View?, item: GankImageBean?, position: Int ->
+            MVCActivity.start(MVVMActivity@this)
+//setResult(RESULT_OK)
+//            finish()
             LogUtil.i(
                 "TAG",
                 "onItemChildClick: $position"
@@ -171,10 +176,38 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
     }
 
     companion object {
+        @JvmStatic
         fun start(context: Context) {
             val starter = Intent(context, MVVMActivity::class.java)
             //    starter.putExtra();
             context.startActivity(starter)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("LifeTest", "MVVMActivity onNewIntent: ")
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("LifeTest", "MVVMActivity onRestart: ")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("LifeTest", "MVVMActivity onStart: taskId="+this.taskId)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("LifeTest", "MVVMActivity onResume: ")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.d("LifeTest", "MVVMActivity onPause: ")
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.d("LifeTest", "MVVMActivity onStop: ")
     }
 }
