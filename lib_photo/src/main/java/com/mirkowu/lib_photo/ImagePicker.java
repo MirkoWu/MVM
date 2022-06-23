@@ -126,7 +126,7 @@ public class ImagePicker {
     /**
      * 清除配置缓存
      */
-    public void clear() {
+    private void clear() {
         MediaModel.clear();
         ResultModel.clear();
         mPickerConfig = null;
