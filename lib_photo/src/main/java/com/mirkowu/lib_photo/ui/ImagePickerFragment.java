@@ -86,12 +86,6 @@ public class ImagePickerFragment extends Fragment {
     }
 
     @Override
-    public void setInitialSavedState(@Nullable @org.jetbrains.annotations.Nullable SavedState state) {
-        super.setInitialSavedState(state);
-    }
-
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mConfig = ImagePicker.getInstance().getPickerConfig();
@@ -404,17 +398,6 @@ public class ImagePickerFragment extends Fragment {
         }
         getActivity().finish();
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-    }
-
 
     @Override
     public void onDestroyView() {
