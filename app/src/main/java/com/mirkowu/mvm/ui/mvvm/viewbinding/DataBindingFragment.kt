@@ -26,6 +26,7 @@ import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.ui.BitmapActivity
+import com.mirkowu.mvm.ui.HandlerActivity
 import com.mirkowu.mvm.ui.download.DownloadActivity
 import com.mirkowu.mvm.ui.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.ui.mvvm.MVVMMediator
@@ -205,6 +206,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 
         binding.btnBitmap.click {
             BitmapActivity.start(context!!)
+        }
+        binding.btnHandler.click {
+            HandlerActivity.start(context!!)
         }
 
     }
