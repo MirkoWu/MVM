@@ -101,12 +101,13 @@ public class ImagePickerFragment extends Fragment {
 
         mLoaderCallback = new MediaCollectionLoader(getContext(), new ICollectionLoaderCallback() {
             @Override
-            public void onLoadFinish(List<FolderBean> folderList) {
+            public void onLoadFinish(List<MediaBean> allList) {
+                mImageAdapter.setData(allList);
+
+                List<FolderBean> folderList = mLoaderCallback.getFolderList(allList);
                 MediaModel.init(folderList);
                 mFolderAdapter.setData(folderList);
 
-                ArrayList<MediaBean> allList = MediaModel.getCurChildList();
-                mImageAdapter.setData(allList);
             }
         });
 
