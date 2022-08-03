@@ -23,6 +23,7 @@ import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
+import com.mirkowu.mvm.aidl.client.ClientActivity
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
 import com.mirkowu.mvm.ui.BitmapActivity
@@ -209,6 +210,9 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
         binding.btnHandler.click {
             HandlerActivity.start(context!!)
+        }
+        binding.btnAidl.click {
+            ClientActivity.start(context)
         }
 
     }

@@ -203,6 +203,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="测试Crash" />
+      <Button
+                android:id="@+id/btn_aidl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AIDL" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_list"

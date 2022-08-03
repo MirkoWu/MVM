@@ -16,7 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.HandlerActivity"></activity>
+        <activity android:name=".aidl.client.ClientActivity"></activity>
+
+        <service
+            android:name=".aidl.server.MyService"
+            android:enabled="true"
+            android:process=":remote"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.mirkowu.mvm.aidl.IMyAidlInterface" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".test.TestActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".ui.HandlerActivity" />
         <activity android:name=".ui.BitmapActivity" />
 
         <service
@@ -73,6 +92,9 @@
                 android:resource="@xml/file_paths"
                 tools:replace="resource" />
         </provider>
+
+        <service android:name=".viewbinding.RestartAppService" />
+        <service android:name=".service.MyIntentService" />
     </application>
 
 </manifest>

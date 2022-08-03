@@ -46,8 +46,8 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
@@ -119,17 +119,17 @@ dependencies {
     def useLocalModule = true
     if (!useLocalModule) {
 //        implementation 'com.github.mirkowu:mvm:$ext.mvm_version'   //可以直接依赖总仓库，也可以依赖指定库
-        implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_qrcode:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version"
-        implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version"
+        implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version" //基础库
+        implementation "com.github.mirkowu.mvm:lib_util:$ext.mvm_version" //工具库
+        implementation "com.github.mirkowu.mvm:lib_widget:$ext.mvm_version" //UI组件库
+        implementation "com.github.mirkowu.mvm:lib_network:$ext.mvm_version" //网络库
+        implementation "com.github.mirkowu.mvm:lib_webview:$ext.mvm_version" //WebView(X5 + JsBridge)
+        implementation "com.github.mirkowu.mvm:lib_image:$ext.mvm_version" //图片加载库(默认glide)
+        implementation "com.github.mirkowu.mvm:lib_photo:$ext.mvm_version" //相册选择库
+        implementation "com.github.mirkowu.mvm:lib_qrcode:$ext.mvm_version" //二维码扫描
+        implementation "com.github.mirkowu.mvm:lib_camera:$ext.mvm_version" //相机库
+        implementation "com.github.mirkowu.mvm:lib_screen:$ext.mvm_version" //屏幕适配
+        implementation "com.github.mirkowu.mvm:lib_upgrade:$ext.mvm_version" //版本更新(弹窗和下载安装功能)
 
         implementation "com.github.mirkowu.mvm-thirdparty:lib_umeng:$ext.mvm_thirdparty_version"
         implementation "com.github.mirkowu.mvm-thirdparty:lib_bugly:$ext.mvm_thirdparty_version" //bugly 包含升级SDK 二选一
