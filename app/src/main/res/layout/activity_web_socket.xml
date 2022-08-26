@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".ui.websocket.WebSocketActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="连接"
+        android:onClick="clickConnect"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:text="发送消息"
+        android:onClick="clickSendMessage"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

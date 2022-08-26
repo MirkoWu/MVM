@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TestKeepMethod {
     public TestKeepMethod() {
@@ -18,6 +19,8 @@ public class TestKeepMethod {
     public void testB() {
         System.out.println("testB");
         new InnerClass().testBBB();
+        ReentrantLock lock;
+//        lock.lockInterruptibly();
     }
 
     public class InnerClass{

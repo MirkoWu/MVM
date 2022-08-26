@@ -18,6 +18,7 @@ import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_bugly.UpgradeDialog
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.utilcode.util.BarUtils
+import com.mirkowu.lib_util.utilcode.util.ObjectUtils
 import com.mirkowu.lib_webview.CommonWebActivity
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.bean.Image
@@ -85,7 +86,6 @@ class MainActivity : BaseActivity<EmptyMediator>() {
 
         TestKeepMethod().testA()
         TestKeepMethod().testB()
-
 
     }
     private val projection = arrayOf(

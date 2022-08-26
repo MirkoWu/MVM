@@ -16,24 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".aidl.client.ClientActivity"></activity>
+        <activity android:name=".ui.websocket.WebSocketActivity"></activity>
+        <activity android:name=".aidl.client.ClientActivity" />
 
         <service
             android:name=".aidl.server.MyService"
             android:enabled="true"
-            android:process=":remote"
-            android:exported="true">
+            android:exported="true"
+            android:process=":remote">
             <intent-filter>
                 <action android:name="com.mirkowu.mvm.aidl.IMyAidlInterface" />
             </intent-filter>
         </service>
 
         <activity android:name=".test.TestActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".ui.HandlerActivity" />
         <activity android:name=".ui.BitmapActivity" />
