@@ -37,8 +37,8 @@ android {
 dependencies {
     compileOnly 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     //appcompat不能使用compileOnly依赖，否则打包缺少资源导致失败
-    implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
     compileOnly "com.google.android.material:material:$ext.material_version"
+    implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
     implementation 'com.orhanobut:logger:2.2.0'
 
     //gson

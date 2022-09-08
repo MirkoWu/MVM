@@ -41,11 +41,12 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-
     implementation project(':lib_util')
     implementation project(':lib_widget')
+
+    api "androidx.appcompat:appcompat:$ext.appcompat_version"
+
+    api "androidx.recyclerview:recyclerview:$ext.recyclerview_version"
 
     // ViewModel
     api "androidx.lifecycle:lifecycle-viewmodel:$ext.lifecycle_version"

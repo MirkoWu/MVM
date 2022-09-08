@@ -31,7 +31,7 @@ android {
 
 dependencies {
     compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "androidx.recyclerview:recyclerview:$ext.recyclerview_version"
 
     implementation "com.github.bumptech.glide:glide:$ext.glide_version"
     implementation project(':lib_util')
