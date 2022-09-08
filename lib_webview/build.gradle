@@ -30,10 +30,11 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
     implementation project(':lib_util')
     implementation project(':lib_base')
     implementation project(':lib_widget')
+
+    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
 
     //X5浏览器
 //    api 'com.tencent.tbs.tbssdk:sdk:43993'

@@ -35,14 +35,14 @@ android {
 }
 
 dependencies {
-    compileOnly 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     //appcompat不能使用compileOnly依赖，否则打包缺少资源导致失败
-    compileOnly "com.google.android.material:material:$ext.material_version"
     implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
-    implementation 'com.orhanobut:logger:2.2.0'
+    compileOnly "com.google.android.material:material:$ext.material_version"
+    compileOnly "androidx.coordinatorlayout:coordinatorlayout:$ext.coordinatorlayout_version"
 
     //gson
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation "com.google.code.gson:gson:$ext.gson_version"
+    implementation "com.orhanobut:logger:$ext.logger_version"
 
     //引用版本
     //api 'com.blankj:utilcodex:1.30.6'

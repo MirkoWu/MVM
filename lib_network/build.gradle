@@ -35,9 +35,9 @@ android {
 }
 
 dependencies {
-    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
-
     implementation project(':lib_util')
+
+    compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
 
     // okhttp
     api "com.squareup.okio:okio:$ext.okio_version"

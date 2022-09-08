@@ -45,7 +45,6 @@ dependencies {
     implementation project(':lib_widget')
 
     api "androidx.appcompat:appcompat:$ext.appcompat_version"
-
     api "androidx.recyclerview:recyclerview:$ext.recyclerview_version"
 
     // ViewModel

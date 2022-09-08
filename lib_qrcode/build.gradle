@@ -30,6 +30,10 @@ android {
 }
 
 dependencies {
+    implementation project(':lib_util')
+    implementation project(':lib_widget')
+    implementation project(':lib_photo')
+
     compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
 
     api "androidx.camera:camera-core:$ext.camerax_version"
@@ -39,9 +43,4 @@ dependencies {
     api 'com.google.zxing:core:3.3.3'
     //引用版本 AndroidX 版本
 //    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
-
-    implementation project(':lib_util')
-    implementation project(':lib_widget')
-    implementation project(':lib_photo')
-
 }

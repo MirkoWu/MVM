@@ -57,20 +57,30 @@ ext {
 
     mvm_version = 'latest.release'
     mvm_thirdparty_version = 'latest.release'
+
+    //google
     core_ktx_version = '1.6.0'
     appcompat_version = '1.3.1'
     material_version = '1.4.0'
     lifecycle_version = '2.3.1'
+    recyclerview_version = '1.2.1'
+    constraintlayout_version = '2.1.3'
+    coordinatorlayout_version = '1.2.0'
+
+    camerax_version = '1.0.2'
+    camerax_view_version = '1.0.0-alpha28' //大于alpha28则要求编译版本>=31且有bug，需谨慎
+
+    //other
     okio_version = '2.2.2'
     okhttp_version = '3.14.9'
     retrofit_version = '2.9.0'
     rxjava3_version = '3.1.3'
     rxandroid3_version = '3.0.0'
     autodispose_version = '2.0.0'
+
     refresh_version = '2.0.5'
     glide_version = '4.13.0'
-    camerax_version = '1.0.2'
-    camerax_view_version = '1.0.0-alpha28' //大于alpha28则要求编译版本>=31且有bug，需谨慎
-    recyclerview_version = '1.2.1'
-    constraintlayout_version = '2.1.3'
+    gson_version = '2.8.8'
+    logger_version = '2.2.0'
+
 }
