@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.util.bindingView
+import com.mirkowu.lib_network.ErrorBean
 import com.mirkowu.lib_network.ErrorType
 import com.mirkowu.lib_network.load.Downloader
 import com.mirkowu.lib_network.load.OnDownloadListener
@@ -156,8 +157,8 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
                         LogUtil.d("UploadFileClient", " onSuccess")
                     }
 
-                    override fun onFailure(type: ErrorType, code: Int, msg: String?) {
-                        super.onFailure(type, code, msg)
+                    override fun onFailure(error: ErrorBean) {
+                        super.onFailure(error)
                         LogUtil.d("UploadFileClient", " onFailure")
                     }
 
@@ -181,8 +182,8 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
                         LogUtil.d("UploadFileClient", " onSuccess")
                     }
 
-                    override fun onFailure(type: ErrorType, code: Int, msg: String?) {
-                        super.onFailure(type, code, msg)
+                    override fun onFailure(error: ErrorBean) {
+                        super.onFailure(error)
                         LogUtil.d("UploadFileClient", " onFailure")
                     }
 

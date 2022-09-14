@@ -4,15 +4,15 @@ public class ErrorBean {
     private final ErrorType type;
     private final int code;
     private final String msg;
+    private final Throwable throwable;
 
-
-    public ErrorBean(ErrorType type, int code, String msg) {
-
+    public ErrorBean(ErrorType type, int code, String msg, Throwable e) {
         this.type = type;
         this.code = code;
         this.msg = msg;
+        this.throwable = e;
     }
-//
+    //
 //    public ErrorBean(int code, String msg) {
 //        this.code = code;
 //        this.msg = msg;
@@ -28,6 +28,11 @@ public class ErrorBean {
 
     public String msg() {
         return msg;
+    }
+
+
+    public Throwable throwable() {
+        return throwable;
     }
 
     public boolean isNetError() {

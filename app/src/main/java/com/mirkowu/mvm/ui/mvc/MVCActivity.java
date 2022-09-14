@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.util.RxLife;
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_network.ErrorType;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
@@ -18,6 +19,8 @@ import com.mirkowu.mvm.BizModel;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.network.RxObserver;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,11 +99,9 @@ public class MVCActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull ErrorType errorType, int code, String msg) {
-
+                    public void onFailure(@NotNull ErrorBean bean) {
+                        super.onFailure(bean);
                     }
-
-
                 });
     }
 

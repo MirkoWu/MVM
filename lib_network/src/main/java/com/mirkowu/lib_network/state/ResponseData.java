@@ -41,6 +41,16 @@ public class ResponseData<T> {
         return state == RequestState.FINISH;
     }
 
+    public static <T> ResponseData<T> create(Object object) {
+        if (object instanceof RequestState) {
+            return new ResponseData((RequestState) object);
+        } else if (object instanceof ErrorBean) {
+            return new ResponseData((ErrorBean) object);
+        } else {
+            return new ResponseData(object);
+        }
+    }
+
     public static <T> ResponseData<T> loading() {
         return new ResponseData(RequestState.LOADING);
     }
@@ -57,7 +67,7 @@ public class ResponseData<T> {
         return new ResponseData(bean);
     }
 
-    public static <T> ResponseData<T> error(ErrorType type, int code, String msg) {
-        return new ResponseData(new ErrorBean(type, code, msg));
+    public static <T> ResponseData<T> error(ErrorType type, int code, String msg, Throwable e) {
+        return new ResponseData(new ErrorBean(type, code, msg, e));
     }
 }

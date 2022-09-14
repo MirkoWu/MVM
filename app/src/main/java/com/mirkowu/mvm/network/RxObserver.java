@@ -1,11 +1,13 @@
 package com.mirkowu.mvm.network;
 
-import androidx.annotation.NonNull;
-
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_network.AbsRxObserver;
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_network.ErrorType;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
+
+
+import io.reactivex.rxjava3.annotations.NonNull;
 
 public abstract class RxObserver<T> extends AbsRxObserver<T> {
     private IBaseView mIBaseView;
@@ -39,7 +41,8 @@ public abstract class RxObserver<T> extends AbsRxObserver<T> {
     }
 
     @Override
-    public void onFailure(@NonNull ErrorType type, int code, String msg) {
-        ToastUtils.showShort(code + ":" + msg);
+    public void onFailure(@NonNull ErrorBean error) {
+        ToastUtils.showShort(error.code() + ":" + error.msg());
     }
+
 }

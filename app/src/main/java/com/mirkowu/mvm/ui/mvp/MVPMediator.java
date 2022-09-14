@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.util.RxLife;
+import com.mirkowu.lib_network.ErrorBean;
 import com.mirkowu.lib_network.ErrorType;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.mvm.BizModel;
@@ -32,8 +33,8 @@ public class MVPMediator extends BaseMediator<IMVPView, BizModel> {
                     }
 
                     @Override
-                    public void onFailure(@NonNull @NotNull ErrorType errorType, int code, String msg) {
-
+                    public void onFailure(@NonNull @NotNull ErrorBean bean) {
+                        super.onFailure(bean);
                     }
                 });
     }

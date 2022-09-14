@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
-import com.mirkowu.lib_network.state.observerRequest
+import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.mvm.R
@@ -68,15 +68,14 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                });
 
         //todo 方式1：使用封装好的 observerRequest 方法，方便快捷
-        mMediator.mRequestImageListData.observerRequest(
-            this,
-            onFinish = {
+        mMediator.mRequestImageListData.observeRequest(this) {
+            onFinish {
                 hideLoadingDialog()
-            },
-            onSuccess = {
-                refreshHelper.setLoadMore(imageAdapter, it )
-            },
-            onFailure = {
+            }
+            onSuccess {
+                refreshHelper.setLoadMore(imageAdapter, it)
+            }
+            onFailure {
                 refreshHelper.finishLoad()
                 val errorBean = it
                 if (errorBean.isNetError && refreshHelper.isFirstPage) {
@@ -94,9 +93,9 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            },
-        )
-        //todo 方式2：使用原始的 observe 方法，方便快捷
+            }
+        }
+        //todo 方式2：使用原始的 observe 方法
         mMediator.mRequestImageListData.observe(this, { responseData ->
             if (responseData.isSuccess) {
                 refreshHelper.setLoadMore(imageAdapter, responseData.data)

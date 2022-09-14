@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_camera.CameraActivity
-import com.mirkowu.lib_network.state.observerRequest
+import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
@@ -188,19 +188,31 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
 
         var time = System.currentTimeMillis();
-        mMediator.mPingResult.observerRequest(this, onSuccess = {
-            time = System.currentTimeMillis() - time
-            if (it!!) {
-                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
-                binding.tvNetworkStatus.setTextColor(Color.GREEN)
+
+        //todo 方式1
+        mMediator.mPingResult.observeRequest(this) {
+            onSuccess {
+                time = System.currentTimeMillis() - time
+                if (it!!) {
+                    binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
+                    binding.tvNetworkStatus.setTextColor(Color.GREEN)
 //                binding.tvNetworkStatus.visibility = View.GONE
-            } else {
-                binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络不可用")
-                binding.tvNetworkStatus.setTextColor(Color.RED)
-                binding.tvNetworkStatus.visibility = View.VISIBLE
+                } else {
+                    binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络不可用")
+                    binding.tvNetworkStatus.setTextColor(Color.RED)
+                    binding.tvNetworkStatus.visibility = View.VISIBLE
+                }
             }
-        })
+        }
         mMediator.getPing()
+
+        //todo 方式2
+        mMediator.getPing2LiveData().observeRequest(this) {
+            onLoading { }
+            onSuccess { }
+            onFailure { }
+            onFinish { }
+        }
 
     }
 
