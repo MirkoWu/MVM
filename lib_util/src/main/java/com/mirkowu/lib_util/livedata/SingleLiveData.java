@@ -9,6 +9,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.mirkowu.lib_util.LogUtil;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SingleLiveData<T> extends MutableLiveData<T> {
@@ -21,7 +23,7 @@ public class SingleLiveData<T> extends MutableLiveData<T> {
     public void observe(LifecycleOwner owner, final Observer<? super T> observer) {
 
         if (hasActiveObservers()) {
-            Log.w(TAG, "Multiple observers registered but only one will be notified of changes.");
+            LogUtil.w(TAG, "Multiple observers registered but only one will be notified of changes.");
         }
 
         // Observe the internal MutableLiveData
@@ -36,9 +38,10 @@ public class SingleLiveData<T> extends MutableLiveData<T> {
     }
 
     /**
+     * 当 setValue时 mPending.set(true) compareAndSet(true,false)
+     * （true(set(true)后的“原值”) == true(except 值)）=true  -> mPending.set(false（update值）)
+     * 所以 再次 observer时 该值为false 所以不会执行 onChanged（t）方法
      *
-     *   当 setValue时 mPending.set(true) compareAndSet(true,false) （true(set(true)后的“原值”) == true(except 值)）=true  -> mPending.set(false（update值）)  所以 再次 observer
-     *   时 该值为false 所以不会执行 onChanged（t）方法
      * @param t
      */
     @MainThread

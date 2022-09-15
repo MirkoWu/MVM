@@ -17,7 +17,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
     }
 
     @Override
-    public void onNext(T o) {
+    public void onNext(@NonNull T o) {
         doOnSuccess(o);
     }
 
@@ -31,7 +31,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
             onFinish();
             onSuccess(o);
         } catch (Throwable t) {
-            LogUtil.e("onSuccess业务异常", t);
+            LogUtil.e("onSuccess 业务异常", t);
             onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage(), t));
         }
     }
@@ -48,13 +48,29 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      */
     public void doOnError(Throwable e) {
         onFinish();
-        if (!(e instanceof RxJava2NullException)) {
-            LogUtil.e("AbsRxObserver 网络请求Error", e.toString());
-        }
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);
         } else {
-            onFailure(newException(e));
+            LogUtil.e("onFailure 请求异常", e.toString());
+            onFailure(handleError(e));
+        }
+    }
+
+    protected ErrorBean handleError(Throwable e) {
+        if (e instanceof ApiException) { //Api异常
+            ApiException apiException = (ApiException) e;
+            return new ErrorBean(ErrorType.API, apiException.code(), apiException.msg(), e);
+        } else if (e instanceof HttpException) { //Http错误
+            HttpException httpException = (HttpException) e;
+            return new ErrorBean(ErrorType.NET, httpException.code(), httpException.getMessage(), e);
+        } else if (e instanceof ConnectException) {
+            return new ErrorBean(ErrorType.NET, ErrorCode.NET_CONNECT, StringUtils.getString(R.string.network_connect_failed_please_check), e);
+        } else if (e instanceof UnknownHostException) {
+            return new ErrorBean(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_connect_failed_please_check), e);
+        } else if (e instanceof SocketTimeoutException) {
+            return new ErrorBean(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry), e);
+        } else {
+            return new ErrorBean(ErrorType.UNKNOWN, ErrorCode.UNKNOWN, StringUtils.getString(R.string.network_request_failed_) + e.getMessage(), e);
         }
     }
 
@@ -79,23 +95,5 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      */
     public abstract void onFailure(@NonNull ErrorBean error);
 
-    public ErrorBean newException(Throwable e) {
-        if (e instanceof ApiException) {
-            //api异常
-            ApiException apiException = (ApiException) e;
-            return new ErrorBean(ErrorType.API, apiException.code(), apiException.msg(), e);
-        } else if (e instanceof HttpException) {
-            //网络错误
-            HttpException httpException = (HttpException) e;
-            return new ErrorBean(ErrorType.NET, httpException.code(), httpException.getMessage(), e);
-        } else if (e instanceof ConnectException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_CONNECT, StringUtils.getString(R.string.network_connect_failed_please_check), e);
-        } else if (e instanceof UnknownHostException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_connect_failed_please_check), e);
-        } else if (e instanceof SocketTimeoutException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry), e);
-        } else {
-            return new ErrorBean(ErrorType.UNKNOWN, ErrorCode.UNKNOWN, StringUtils.getString(R.string.network_request_failed_) + e.getMessage(), e);
-        }
-    }
+
 }

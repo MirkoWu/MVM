@@ -1,16 +1,14 @@
 package com.mirkowu.mvm.ui.mvvm
 
-import androidx.lifecycle.LiveData
 import com.mirkowu.lib_base.mediator.BaseMediator
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.view.IBaseView
 import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_network.ErrorType
 import com.mirkowu.lib_network.state.ResponseData
 import com.mirkowu.lib_network.state.ResponseLiveData
-import com.mirkowu.lib_network.util.asResponseLiveData
-import com.mirkowu.lib_network.util.subscribe
+import com.mirkowu.lib_network.state.observeRequest
+import com.mirkowu.lib_network.util.*
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.livedata.SingleLiveData
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
@@ -29,7 +27,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     var mError = SingleLiveData<Throwable>()
 
     @JvmField
-    var mRequestImageListData = SingleLiveData<ResponseData<List<GankImageBean>>>()
+    var mRequestImageListData = ResponseLiveData<List<GankImageBean>>()
+
+    @JvmField
+    var gankImageBean = ResponseLiveData<GankBaseBean<List<GankImageBean>>>()
 
     @JvmField
     var mImageError = SingleLiveData<ErrorBean>()
@@ -52,6 +53,27 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
                     mRequestImageListData.setValue(ResponseData.error(bean))
                 }
             })
+        loadImage2()
+    }
+
+    fun loadImageAsLiveData(
+        page: Int,
+        pageSize: Int
+    ) /*:ResponseLiveData<GankBaseBean<List<GankImageBean>>>*/ {
+        mModel.loadImage(page, pageSize)
+            .doOnDispose { LogUtil.d("RxJava 被解绑") }
+            .to(RxLife.bindLifecycle(mView))
+//            .subscribeRequest {
+//                onSuccess{ }
+//                onFailure {  }
+//            }
+//            .asLiveData()
+            .asResponseLiveData(gankImageBean)
+            .observeRequest(mView.lifecycleOwner) {
+                onLoading { LogUtil.e("asResponseLiveData onLoading") }
+                onFinish { LogUtil.e("asResponseLiveData onFinish") }
+            }
+
         loadImage2()
     }
 

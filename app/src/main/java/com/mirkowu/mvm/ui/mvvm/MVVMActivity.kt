@@ -158,6 +158,11 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
     override fun onLoadData(page: Int) {
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
+        mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)
+        mMediator.getPing2LiveData().observeRequest(this){
+            onSuccess {  }
+            onFailure {  }
+        }
     }
 
     override fun onLoadNoMore() {}
