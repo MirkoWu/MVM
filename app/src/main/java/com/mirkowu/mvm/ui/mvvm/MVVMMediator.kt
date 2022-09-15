@@ -59,8 +59,8 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     fun loadImageAsLiveData(
         page: Int,
         pageSize: Int
-    ) /*:ResponseLiveData<GankBaseBean<List<GankImageBean>>>*/ {
-        mModel.loadImage(page, pageSize)
+    ) :ResponseLiveData<GankBaseBean<List<GankImageBean>>> {
+      return  mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
             .to(RxLife.bindLifecycle(mView))
 //            .subscribeRequest {
@@ -69,12 +69,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
 //            }
 //            .asLiveData()
             .asResponseLiveData(gankImageBean)
-            .observeRequest(mView.lifecycleOwner) {
-                onLoading { LogUtil.e("asResponseLiveData onLoading") }
-                onFinish { LogUtil.e("asResponseLiveData onFinish") }
-            }
-
-        loadImage2()
+//            .observeRequest(mView.lifecycleOwner) {
+//                onLoading { LogUtil.e("asResponseLiveData onLoading") }
+//                onFinish { LogUtil.e("asResponseLiveData onFinish") }
+//            }
     }
 
     fun loadImage2() {
