@@ -67,6 +67,12 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                    return null;
 //                });
 
+        mMediator.gankImageBean.observeRequest(this){
+            onLoading { LogUtil.d("onLoading") }
+            onFinish { LogUtil.d("onFinish") }
+            onSuccess { LogUtil.d("onSuccess") }
+            onFailure { LogUtil.d("onFailure $it") }
+        }
         //todo 方式1：使用封装好的 observerRequest 方法，方便快捷
         mMediator.mRequestImageListData.observeRequest(this) {
             onFinish {
@@ -96,7 +102,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             }
         }
         //todo 方式2：使用原始的 observe 方法
-        mMediator.mRequestImageListData.observe(this, { responseData ->
+        mMediator.mRequestImageListData.observe(this) { responseData ->
             if (responseData.isSuccess) {
                 refreshHelper.setLoadMore(imageAdapter, responseData.data)
             } else if (responseData.isFailure) {
@@ -118,13 +124,13 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                     ).show()
                 }
             }
-        })
-        mMediator.mImageError.observe(this, { errorBean ->
+        }
+        mMediator.mImageError.observe(this) { errorBean ->
             hideLoadingDialog()
             refreshHelper.finishLoad()
             binding.mStateView.setErrorState(errorBean.msg())
-        })
-        mMediator.mImageData.observe(this, { data ->
+        }
+        mMediator.mImageData.observe(this) { data ->
             hideLoadingDialog()
             refreshHelper.finishLoad()
             if (data.isSuccess) {
@@ -139,7 +145,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             } else if (data.isFailure) {
                 binding.mStateView.setErrorState(data.error.msg())
             }
-        })
+        }
         binding.mStateView.setLoadingState()
         //        binding.mStateView.setLoadingState("拼命加载中...");
 //        binding.mStateView.setLoadingState(getString(R.string.widget_loading));
@@ -158,12 +164,13 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
     override fun onLoadData(page: Int) {
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
-        mMediator.loadImageAsLiveData(page, refreshHelper.pageCount).observeRequest(this){
-            onSuccess { it?.data }
+        mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)
+            .observeRequest(this) {
+            onSuccess { it }
         }
-        mMediator.getPing2LiveData().observeRequest(this){
-            onSuccess {  }
-            onFailure {  }
+        mMediator.getPing2LiveData().observeRequest(this) {
+            onSuccess { }
+            onFailure { }
         }
     }
 

@@ -5,9 +5,9 @@ import java.security.MessageDigest;
 /**
  * 类描述：MD5加密工具类
  */
-public class MD5Util {
+public class MD5Utils {
 
-    private MD5Util() {
+    private MD5Utils() {
         throw new UnsupportedOperationException("u can't fuck me...");
     }
 

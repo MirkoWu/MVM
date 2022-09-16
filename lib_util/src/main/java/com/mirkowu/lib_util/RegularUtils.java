@@ -18,13 +18,13 @@ import static com.mirkowu.lib_util.RegularCons.REGEX_URL;
  * Created by MirkoWu on 2017/4/20 0020.
  */
 
-public class RegularUtil {
+public class RegularUtils {
 
     /**
      * If u want more please visit http://toutiao.com/i6231678548520731137/
      */
 
-    private RegularUtil() {
+    private RegularUtils() {
         throw new UnsupportedOperationException("u can't fuck me...");
     }
 

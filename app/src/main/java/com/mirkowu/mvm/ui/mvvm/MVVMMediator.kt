@@ -18,6 +18,7 @@ import com.mirkowu.mvm.bean.GankImageBean
 import com.mirkowu.mvm.bean.RandomImageBean
 import com.mirkowu.mvm.network.ImageClient
 import com.mirkowu.mvm.network.RxObserver
+import com.mirkowu.mvm.network.asResponseLiveData
 import io.reactivex.rxjava3.core.Observable
 
 open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
@@ -30,7 +31,7 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     var mRequestImageListData = ResponseLiveData<List<GankImageBean>>()
 
     @JvmField
-    var gankImageBean = ResponseLiveData<GankBaseBean<List<GankImageBean>>>()
+    var gankImageBean = ResponseLiveData< List<GankImageBean>>()
 
     @JvmField
     var mImageError = SingleLiveData<ErrorBean>()
@@ -59,7 +60,7 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     fun loadImageAsLiveData(
         page: Int,
         pageSize: Int
-    ) :ResponseLiveData<GankBaseBean<List<GankImageBean>>> {
+    ) :ResponseLiveData<List<GankImageBean>> {
       return  mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
             .to(RxLife.bindLifecycle(mView))
@@ -68,6 +69,7 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
 //                onFailure {  }
 //            }
 //            .asLiveData()
+//            .asResponseLiveData(gankImageBean)
             .asResponseLiveData(gankImageBean)
 //            .observeRequest(mView.lifecycleOwner) {
 //                onLoading { LogUtil.e("asResponseLiveData onLoading") }

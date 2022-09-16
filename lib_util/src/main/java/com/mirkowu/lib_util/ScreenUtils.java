@@ -21,9 +21,9 @@ import java.lang.reflect.Method;
 /**
  * desc  : 屏幕相关工具类
  */
-public class ScreenUtil {
+public class ScreenUtils {
 
-    private ScreenUtil() {
+    private ScreenUtils() {
         throw new UnsupportedOperationException("u can't fuck me...");
     }
 

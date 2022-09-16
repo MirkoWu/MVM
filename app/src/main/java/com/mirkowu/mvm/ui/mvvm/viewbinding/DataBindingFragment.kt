@@ -18,7 +18,7 @@ import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtil
+import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
@@ -92,8 +92,8 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 //                    startActivityForResult(intent, REQUEST_CODE)
 //                }
 //            }
-            PermissionsUtil.getInstance().requestStorageManage(this,
-                object : PermissionsUtil.OnPermissionsListener {
+            PermissionsUtils.getInstance().requestStorageManage(this,
+                object : PermissionsUtils.OnPermissionsListener {
                     override fun onPermissionGranted(requestCode: Int) {
                         ToastUtils.showShort("已授权------")
                     }

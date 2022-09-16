@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 使用的系统 分享 和自己的账号没关系
  */
-public class SystemShareUtil {
+public class SystemShareUtils {
 
 
     /**
@@ -26,7 +26,7 @@ public class SystemShareUtil {
 
     public static boolean shareToWxCircle(@NonNull Context context, String content, @NonNull File file) {
         try {
-            Uri uri = FileUtil.createUri(context, file);
+            Uri uri = FileUtils.createUri(context, file);
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -37,7 +37,7 @@ public class SystemShareUtil {
             context.startActivity(Intent.createChooser(intent, "选择要分享的应用"));
             return true;
         } catch (Throwable e) {
-            LogUtil.e("分享失败", e);
+            LogUtil.e("分享失败", e.toString());
         }
         return false;
     }
@@ -53,14 +53,14 @@ public class SystemShareUtil {
             context.startActivity(Intent.createChooser(intent, "选择要分享的应用"));
             return true;
         } catch (Throwable e) {
-            LogUtil.e("分享失败", e);
+            LogUtil.e("分享失败", e.toString());
         }
         return false;
     }
 
     public static boolean shareImage(@NonNull Context context, @NonNull File file) {
         try {
-            Uri uri = FileUtil.createUri(context, file);
+            Uri uri = FileUtils.createUri(context, file);
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -70,7 +70,7 @@ public class SystemShareUtil {
             context.startActivity(Intent.createChooser(intent, "选择要分享的应用"));
             return true;
         } catch (Throwable e) {
-            LogUtil.e("分享失败", e);
+            LogUtil.e("分享失败", e.toString());
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class SystemShareUtil {
             intent.setAction(Intent.ACTION_SEND_MULTIPLE);
             ArrayList<Uri> imageUris = new ArrayList<Uri>();
             for (File file : files) {
-                Uri uri = FileUtil.createUri(context, file);
+                Uri uri = FileUtils.createUri(context, file);
                 imageUris.add(uri);
             }
             intent.setType("image/*");
@@ -91,7 +91,7 @@ public class SystemShareUtil {
             context.startActivity(Intent.createChooser(intent, "选择要分享的应用"));
             return true;
         } catch (Throwable e) {
-            LogUtil.e("分享失败", e);
+            LogUtil.e("分享失败", e.toString());
         }
         return false;
     }

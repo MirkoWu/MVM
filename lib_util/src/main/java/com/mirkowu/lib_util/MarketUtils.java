@@ -12,7 +12,7 @@ import java.util.HashMap;
  * @date on 2020/5/17
  * @describe
  */
-public class MarketUtil {
+public class MarketUtils {
 
 //    腾讯应用宝 com.tencent.android.qqdownloader
 //    360手机助手 com.qihoo.appstore
@@ -88,7 +88,7 @@ public class MarketUtil {
     public static boolean startMarketDetailByChannel(Context context, String channel, String appPkg) {
         if (channelMarket.containsKey(channel)) {
             String marketPkg = channelMarket.get(channel);
-            if (AppInfoUtil.isInstallApp(context, marketPkg)) {
+            if (AppInfoUtils.isInstallApp(context, marketPkg)) {
                 return startMarketDetail(context, marketPkg, appPkg);
             }
         }

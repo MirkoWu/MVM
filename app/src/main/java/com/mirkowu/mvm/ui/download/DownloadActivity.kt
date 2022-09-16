@@ -5,13 +5,12 @@ import com.mirkowu.lib_base.mediator.EmptyMediator
 import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_network.ErrorType
 import com.mirkowu.lib_network.load.Downloader
 import com.mirkowu.lib_network.load.OnDownloadListener
 import com.mirkowu.lib_network.load.OnProgressListener
-import com.mirkowu.lib_util.FileUtil
+import com.mirkowu.lib_util.FileUtils
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtil
+import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
@@ -43,10 +42,10 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
     @SuppressLint("AutoDispose")
     override fun initialize() {
 
-        PermissionsUtil.getInstance().requestPermissions(
+        PermissionsUtils.getInstance().requestPermissions(
             this,
-            PermissionsUtil.GROUP_STORAGE,
-            object : PermissionsUtil.OnPermissionsListener {
+            PermissionsUtils.GROUP_STORAGE,
+            object : PermissionsUtils.OnPermissionsListener {
                 override fun onPermissionGranted(requestCode: Int) {
 
                 }
@@ -71,7 +70,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
             //外部存储
 //            val filePath = FileUtil.getDiskExternalPath("DCIM") + "/IMG_YYY" + System.currentTimeMillis() + ".jpg"
             val filePath =
-                FileUtil.getDiskExternalPath("Download") + "/test/IMG_YYY" + System.currentTimeMillis() + ".jpg"
+                FileUtils.getDiskExternalPath("Download") + "/test/IMG_YYY" + System.currentTimeMillis() + ".jpg"
             //内部存储
 //            val filePath = FileUtil.getAppCachePath(context) + "/" + System.currentTimeMillis() + ".jpg"
             //公共存储
@@ -104,7 +103,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         binding.btnDown2.click {
             //外部存储
             filePath =
-                FileUtil.getDiskExternalPath(Constant.FILE_SAVE_DIR) + "/" + System.currentTimeMillis() + ".jpg"
+                FileUtils.getDiskExternalPath(Constant.FILE_SAVE_DIR) + "/" + System.currentTimeMillis() + ".jpg"
             id2 = Downloader.create(url2)
                 .setUrl(url2)
                 .setFilePath(filePath)

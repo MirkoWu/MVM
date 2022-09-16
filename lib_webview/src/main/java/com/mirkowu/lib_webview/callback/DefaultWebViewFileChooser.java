@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
-import com.mirkowu.lib_util.FileUtil;
+import com.mirkowu.lib_util.FileUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.R;
 import com.mirkowu.lib_widget.dialog.PromptDialog;
@@ -63,7 +63,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
             case REQ_FILES:
                 Uri uri = data.getData();
                 if (uri != null) {
-                    String absolutePath = FileUtil.getRealFilePath(uri);
+                    String absolutePath = FileUtils.getRealFilePath(uri);
                     if (absolutePath != null) {
                         File file = new File(absolutePath);
                         onReceiveValue(file);
@@ -109,8 +109,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     }
 
     private void checkCameraPermission(FragmentActivity activity, String acceptType) {
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.GROUP_CAMERA,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_CAMERA,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         openCamera(activity, acceptType);
@@ -142,7 +142,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
                                 .setNegativeButton(R.string.webview_cancel)
                                 .setOnButtonClickListener((dialog, isPositiveClick) -> {
                                     if (isPositiveClick) {
-                                        PermissionsUtil.startAppSettingNoResult(activity);
+                                        PermissionsUtils.startAppSettingNoResult(activity);
                                     }
                                     onReceiveValue(null);
                                 })
@@ -152,8 +152,8 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     }
 
     private void checkStoragePermission(FragmentActivity activity, String acceptType) {
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.GROUP_STORAGE,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_STORAGE,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         selectAlbum(activity, acceptType);
@@ -185,7 +185,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
                                 .setNegativeButton(R.string.webview_cancel)
                                 .setOnButtonClickListener((dialog, isPositiveClick) -> {
                                     if (isPositiveClick) {
-                                        PermissionsUtil.startAppSettingNoResult(activity);
+                                        PermissionsUtils.startAppSettingNoResult(activity);
                                     }
                                     onReceiveValue(null);
                                 })
@@ -220,7 +220,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         if (!file.exists()) {
             file.mkdirs();
         }
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtil.createUri(activity, mTempFle));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.createUri(activity, mTempFle));
         activity.startActivityForResult(intent, REQ_CAMERA);
     }
 
@@ -236,7 +236,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
         if (!file.exists()) {
             file.mkdirs();
         }
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtil.createUri(activity, mTempFle));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.createUri(activity, mTempFle));
         activity.startActivityForResult(intent, REQ_CAMERA);
     }
 
@@ -244,7 +244,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
      * 选择图片/视频
      */
     void selectAlbum(Activity activity, String type) {
-        if (!FileUtil.hasSDCard()) {
+        if (!FileUtils.hasSDCard()) {
             onReceiveValue(null);
             return;
         }
@@ -260,7 +260,7 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
      * 为空的时候就 就统一选择文件
      */
     void selectFiles(Activity activity, int requestCode) {
-        if (!FileUtil.hasSDCard()) {
+        if (!FileUtils.hasSDCard()) {
             onReceiveValue(null);
             return;
         }

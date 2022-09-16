@@ -17,9 +17,9 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.view.PreviewView;
 
-import com.mirkowu.lib_util.FileUtil;
+import com.mirkowu.lib_util.FileUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
 import java.io.File;
@@ -77,8 +77,8 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void checkPermission() {
-        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_CAMERA,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         startCamera();
@@ -107,7 +107,7 @@ public class CameraActivity extends AppCompatActivity {
                                 .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(CameraActivity.this);
+                                        PermissionsUtils.startAppSettingForResult(CameraActivity.this);
                                     }
                                 })
                                 .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
@@ -119,13 +119,13 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     public void onClickTakePhoto() {
@@ -159,14 +159,14 @@ public class CameraActivity extends AppCompatActivity {
     public void takePhoto() {
         shotAnim();
         mTakePhoto.setEnabled(false);
-        File photo = FileUtil.createCameraFile(this,"IMG_" + System.currentTimeMillis() + ".jpg");
+        File photo = FileUtils.createCameraFile(this,"IMG_" + System.currentTimeMillis() + ".jpg");
         mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 mTakePhoto.setEnabled(true);
 
 //                Uri uri = outputFileResults.getSavedUri();
-                boolean result = FileUtil.addGraphToGallery(CameraActivity.this, photo);
+                boolean result = FileUtils.addGraphToGallery(CameraActivity.this, photo);
                 LogUtil.e(TAG, "onImageSaved : " + result);
             }
 

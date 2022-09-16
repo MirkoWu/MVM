@@ -13,11 +13,11 @@ import androidx.fragment.app.FragmentManager;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadSampleListener;
 import com.liulishuo.filedownloader.FileDownloader;
-import com.mirkowu.lib_util.FileUtil;
-import com.mirkowu.lib_util.HtmlUtil;
-import com.mirkowu.lib_util.IntentUtil;
+import com.mirkowu.lib_util.FileUtils;
+import com.mirkowu.lib_util.HtmlUtils;
+import com.mirkowu.lib_util.IntentUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
@@ -92,7 +92,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         } else {
             tvTitle.setText(upgradeInfo.getTitle());
         }
-        HtmlUtil.setTextViewHtml(tvContent, upgradeInfo.getContent()); //支持html
+        HtmlUtils.setTextViewHtml(tvContent, upgradeInfo.getContent()); //支持html
 
         tvNegative.setVisibility(upgradeInfo.isForceUpgrade() == 1 ? GONE : VISIBLE);
         tvNegative.setText(R.string.up_next_time);
@@ -120,9 +120,9 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
                 listener.onButtonClick(this, true);
             }
             if (apkFile != null) {
-                IntentUtil.startInstall(getContext(), apkFile);
+                IntentUtils.startInstall(getContext(), apkFile);
             } else {
-                if (PermissionsUtil.hasPermissions(getContext(), PermissionsUtil.GROUP_STORAGE)) {
+                if (PermissionsUtils.hasPermissions(getContext(), PermissionsUtils.GROUP_STORAGE)) {
                     startDownloadTask();
                 } else {
                     LogUtil.e("没有存储权限");
@@ -189,7 +189,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
 
         String path = upgradeInfo.getSavePath();
         if (TextUtils.isEmpty(path)) {
-            path = FileUtil.getAppCachePath(getContext()) + File.separator
+            path = FileUtils.getAppCachePath(getContext()) + File.separator
                     + "download" + File.separator + upgradeInfo.getVersionName() + ".apk";
         }
         startTask(path);
@@ -223,7 +223,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
                         tvPositive.setText(R.string.up_click_install);
 
                         apkFile = new File(path);
-                        IntentUtil.startInstall(getContext(), apkFile);
+                        IntentUtils.startInstall(getContext(), apkFile);
                     }
 
                     @Override

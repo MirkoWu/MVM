@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
  * @author: mirko
  * @date: 20-3-31
  */
-public class KeyBoardUtil {
+public class KeyBoardUtils {
 
     /**
      * 软键盘是否显示

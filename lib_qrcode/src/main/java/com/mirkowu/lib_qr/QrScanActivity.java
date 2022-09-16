@@ -19,7 +19,7 @@ import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.callback.OnPickResultListener;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_widget.Toolbar;
 
@@ -62,8 +62,8 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
     }
 
     private void checkPermission() {
-        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_CAMERA,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         startCamera();
@@ -92,7 +92,7 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
                                 .setPositiveButton(R.string.qr_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(QrScanActivity.this);
+                                        PermissionsUtils.startAppSettingForResult(QrScanActivity.this);
                                     }
                                 })
                                 .setNegativeButton(R.string.qr_permission_dialog_cancel, null)
@@ -104,13 +104,13 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

@@ -39,8 +39,8 @@ import static android.Manifest.permission.INTERNET;
  * @date on 2019/8/5
  * @describe
  */
-public class SimulatorUtil {
-    private static final String TAG = SimulatorUtil.class.getSimpleName();
+public class SimulatorUtils {
+    private static final String TAG = SimulatorUtils.class.getSimpleName();
 
     private static String[] known_pipes = {
             "/dev/socket/qemud",

@@ -21,7 +21,7 @@ import java.util.List;
  * @date on 2019/8/17
  * @describe
  */
-public class SimCardUtil {
+public class SimCardUtils {
     public static final String TAG = "SimCardUtil";
 
     /**

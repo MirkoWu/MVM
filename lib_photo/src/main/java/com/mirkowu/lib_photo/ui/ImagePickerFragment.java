@@ -39,11 +39,10 @@ import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_photo.utils.CameraUtil;
 import com.mirkowu.lib_photo.view.MediaGridDivider;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -115,8 +114,8 @@ public class ImagePickerFragment extends Fragment {
     }
 
     private void checkPermission() {
-        PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_STORAGE,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_STORAGE,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         /*** 加载图片数据 */
@@ -146,7 +145,7 @@ public class ImagePickerFragment extends Fragment {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(ImagePickerFragment.this);
+                                        PermissionsUtils.startAppSettingForResult(ImagePickerFragment.this);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -309,13 +308,13 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == AlbumPreviewActivity.REQUEST_CODE_PREVIEW) {
                 boolean submit = data.getBooleanExtra(AlbumPreviewActivity.KEY_SUBMIT, false);
@@ -405,7 +404,7 @@ public class ImagePickerFragment extends Fragment {
         if (mRvMedia != null) {
             mRvMedia.removeOnScrollListener(mOnScrollListener);
         }
-        PermissionsUtil.getInstance().removeListener();
+        PermissionsUtils.getInstance().removeListener();
         super.onDestroyView();
     }
 

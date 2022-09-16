@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.mirkowu.lib_base.fragment.BaseMVMFragment;
 import com.mirkowu.lib_base.mediator.BaseMediator;
-import com.mirkowu.lib_util.IntentUtil;
+import com.mirkowu.lib_util.IntentUtils;
 import com.mirkowu.lib_webview.callback.DefaultWebViewFileChooser;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
 import com.mirkowu.lib_webview.client.BaseWebChromeClient;
@@ -155,7 +155,7 @@ public class CommonWebFragment extends BaseMVMFragment {
                     @Override
                     public boolean shouldOverrideUrlLoading(CommonWebView webView, String url) {
                         if (!URLUtil.isValidUrl(url)) {
-                            return IntentUtil.openScheme(getContext(), url);
+                            return IntentUtils.openScheme(getContext(), url);
                         }
                         return false;
                     }

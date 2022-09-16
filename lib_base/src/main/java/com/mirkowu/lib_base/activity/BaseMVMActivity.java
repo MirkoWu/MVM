@@ -18,7 +18,7 @@ import com.mirkowu.lib_base.R;
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_widget.dialog.LoadingDialog;
 
 import java.lang.reflect.Method;
@@ -130,13 +130,13 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

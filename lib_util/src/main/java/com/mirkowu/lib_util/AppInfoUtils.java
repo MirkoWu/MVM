@@ -11,7 +11,7 @@ import android.text.TextUtils;
  * @date on 2019/8/24
  * @describe
  */
-public class AppInfoUtil {
+public class AppInfoUtils {
     /**
      * 获取版本号
      *

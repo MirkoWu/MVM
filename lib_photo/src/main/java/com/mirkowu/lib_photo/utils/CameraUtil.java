@@ -12,8 +12,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.mirkowu.lib_photo.R;
-import com.mirkowu.lib_util.FileUtil;
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.FileUtils;
+import com.mirkowu.lib_util.PermissionsUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +31,8 @@ public class CameraUtil {
 
 
     public static void startCameraAction(final Activity activity) {
-        PermissionsUtil.getInstance().requestPermissions(activity, PermissionsUtil.GROUP_CAMERA,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_CAMERA,
+                new PermissionsUtils.OnPermissionsListener() {
                     @Override
                     public void onPermissionGranted(int requestCode) {
                         Intent intent = createCameraIntent(activity);
@@ -64,7 +64,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(activity);
+                                        PermissionsUtils.startAppSettingForResult(activity);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -75,8 +75,8 @@ public class CameraUtil {
 
     public static void startCameraAction(final Fragment fragment) {
         final Context context = fragment.getContext();
-        PermissionsUtil.getInstance().requestPermissions(fragment, PermissionsUtil.GROUP_CAMERA,
-                new PermissionsUtil.OnPermissionsListener() {
+        PermissionsUtils.getInstance().requestPermissions(fragment, PermissionsUtils.GROUP_CAMERA,
+                new PermissionsUtils.OnPermissionsListener() {
 
                     @Override
                     public void onPermissionGranted(int requestCode) {
@@ -109,7 +109,7 @@ public class CameraUtil {
                                 .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtil.startAppSettingForResult(fragment);
+                                        PermissionsUtils.startAppSettingForResult(fragment);
                                     }
                                 })
                                 .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
@@ -124,12 +124,12 @@ public class CameraUtil {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             try {
-                sTmpFile = FileUtil.createCameraTmpFile(context);
+                sTmpFile = FileUtils.createCameraTmpFile(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             if (sTmpFile != null && sTmpFile.exists()) {
-                Uri imgUri = FileUtils.createFileUri(context, sTmpFile);
+                Uri imgUri = com.mirkowu.lib_photo.utils.FileUtils.createFileUri(context, sTmpFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
                 return intent;
             } else {

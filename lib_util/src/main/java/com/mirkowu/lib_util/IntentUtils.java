@@ -12,7 +12,7 @@ import java.io.File;
  * @author: mirko
  * @date: 20-3-31
  */
-public class IntentUtil {
+public class IntentUtils {
     /**
      * 打开Scheme意图
      *
@@ -85,7 +85,7 @@ public class IntentUtil {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(FileUtil.createUri(context, apkFile), "application/vnd.android.package-archive");
+            intent.setDataAndType(FileUtils.createUri(context, apkFile), "application/vnd.android.package-archive");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }

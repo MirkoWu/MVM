@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.mirkowu.lib_util.PermissionsUtil;
+import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_widget.R;
@@ -287,13 +287,13 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtil.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtil.getInstance().onActivityResult(this, requestCode, resultCode, data);
+        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

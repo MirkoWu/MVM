@@ -8,7 +8,7 @@ import android.widget.TextView;
  * @author: mirko
  * @date: 20-3-31
  */
-public class HtmlUtil {
+public class HtmlUtils {
     /**
      * TextView 设置Html文本 支持html格式文本
      *

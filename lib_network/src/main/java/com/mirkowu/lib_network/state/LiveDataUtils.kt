@@ -32,11 +32,11 @@ typealias ResponseLiveData<T> = SingleLiveData<ResponseData<T>>
 //    })
 //}
 
-fun <T> LiveData<ResponseData<T>>.observeRequest(
+fun <T> ResponseLiveData<T>.observeRequest(
     owner: LifecycleOwner,
     callback: RequestCallback<T>.() -> Unit
 ) {
-    observe(owner, {
+    observe(owner) {
         RequestCallback<T>().apply(callback).apply {
             when (it.state) {
                 RequestState.LOADING -> onLoading?.invoke()
@@ -47,7 +47,7 @@ fun <T> LiveData<ResponseData<T>>.observeRequest(
 
         }
 
-    })
+    }
 }
 
 class RequestCallback<T> {

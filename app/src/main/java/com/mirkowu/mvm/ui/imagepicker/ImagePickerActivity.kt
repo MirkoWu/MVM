@@ -8,10 +8,10 @@ import com.mirkowu.lib_photo.ImagePicker
 import com.mirkowu.lib_photo.PickerConfig
 import com.mirkowu.lib_photo.mediaLoader.ResultModel
 import com.mirkowu.lib_photo.view.ImagePickerRecyclerView
-import com.mirkowu.lib_util.FileUtil
+import com.mirkowu.lib_util.FileUtils
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtil
-import com.mirkowu.lib_util.SystemShareUtil
+import com.mirkowu.lib_util.PermissionsUtils
+import com.mirkowu.lib_util.SystemShareUtils
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.mvm.Constant
 import com.mirkowu.mvm.R
@@ -46,7 +46,7 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
                     }
                 }
                 if (files.isNotEmpty()) {
-                    SystemShareUtil.shareToWxCircle(this, "测试", files.last())
+                    SystemShareUtils.shareToWxCircle(this, "测试", files.last())
                 }
             }
         }
@@ -76,7 +76,7 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
                     } else {
                         ImagePicker.previewImageWithSave(
                             context,
-                            FileUtil.getDiskExternalPath(Constant.FILE_SAVE_DIR),
+                            FileUtils.getDiskExternalPath(Constant.FILE_SAVE_DIR),
                             binding.rvPick.data,
                             position
                         )
@@ -97,13 +97,13 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 //                        LogUtil.d("ImagePicker: $it")
 //                        binding.rvPick.setData(ResultModel.getPaths(it))
 //                    }.start(this)
-            PermissionsUtil.getInstance()
-                .requestPermissions(this, PermissionsUtil.GROUP_CAMERA, 0, onPermissionsListener)
+            PermissionsUtils.getInstance()
+                .requestPermissions(this, PermissionsUtils.GROUP_CAMERA, 0, onPermissionsListener)
         }
 
     }
 
-    var onPermissionsListener = object : PermissionsUtil.OnPermissionsListener {
+    var onPermissionsListener = object : PermissionsUtils.OnPermissionsListener {
         override fun onPermissionGranted(requestCode: Int) {
             Log.d("TAG", "onPermissionGranted: ")
         }

@@ -21,17 +21,17 @@ import androidx.fragment.app.Fragment;
  * @date on 2019/10/19
  * @describe
  */
-public class PermissionsUtil {
+public class PermissionsUtils {
 
     private static class Singleton {
-        private static final PermissionsUtil INSTANCE = new PermissionsUtil();
+        private static final PermissionsUtils INSTANCE = new PermissionsUtils();
     }
 
-    public static PermissionsUtil getInstance() {
-        return PermissionsUtil.Singleton.INSTANCE;
+    public static PermissionsUtils getInstance() {
+        return PermissionsUtils.Singleton.INSTANCE;
     }
 
-    private PermissionsUtil() {
+    private PermissionsUtils() {
     }
 
     /**
@@ -378,7 +378,7 @@ public class PermissionsUtil {
      * @param context
      */
     public static void startAppSettingNoResult(Context context) {
-        AppSettingUtil.startAppSettingNoResult(context);
+        AppSettingUtils.startAppSettingNoResult(context);
     }
 
     /**
@@ -389,10 +389,10 @@ public class PermissionsUtil {
      * @return
      */
     public static boolean startAppSettingForResult(Activity activity) {
-        return AppSettingUtil.startAppSettingForResult(activity, REQUEST_CODE_DETAIL_SETTING);
+        return AppSettingUtils.startAppSettingForResult(activity, REQUEST_CODE_DETAIL_SETTING);
     }
 
     public static boolean startAppSettingForResult(Fragment fragment) {
-        return AppSettingUtil.startAppSettingForResult(fragment, REQUEST_CODE_DETAIL_SETTING);
+        return AppSettingUtils.startAppSettingForResult(fragment, REQUEST_CODE_DETAIL_SETTING);
     }
 }

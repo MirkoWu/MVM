@@ -11,14 +11,14 @@ import com.orhanobut.logger.Logger;
 
 public class LogUtil {
     public static final String TAG = "MVMLog";
-    private static boolean sIsDebug;
-
-    public static void init(boolean isOpenDebug) {
-        init(isOpenDebug, true);
-    }
+    private static volatile boolean sIsDebug;
 
     public static boolean isDebug() {
         return sIsDebug;
+    }
+
+    public static void init(boolean isOpenDebug) {
+        init(isOpenDebug, true);
     }
 
     /**
@@ -31,6 +31,7 @@ public class LogUtil {
         sIsDebug = isOpenDebug;
         //设置打印适配器，保证只有一个
         Logger.clearLogAdapters();
+        Logger.t(TAG);
         Logger.addLogAdapter(new AndroidLogAdapter());
 
         //本地Crash日志
@@ -80,9 +81,9 @@ public class LogUtil {
         }
     }
 
-    public static void e(@NonNull String msg, Throwable t) {
+    public static void e(@NonNull String msg, Throwable e) {
         if (sIsDebug) {
-            Logger.e(t, msg);
+            Logger.e(e, msg);
         }
     }
 

@@ -9,7 +9,7 @@ import android.webkit.URLUtil;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.mirkowu.lib_util.IntentUtil;
+import com.mirkowu.lib_util.IntentUtils;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.callback.IWebViewCallBack;
@@ -17,7 +17,6 @@ import com.tencent.smtt.export.external.interfaces.HttpAuthHandler;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
-import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -63,7 +62,7 @@ public class BaseWebViewClient extends WebViewClient {
 
         //无效Url 则通过Intent打开
         if (!URLUtil.isValidUrl(url)) {
-            return IntentUtil.openScheme(mWebView.getContext(), url);
+            return IntentUtils.openScheme(mWebView.getContext(), url);
         }
 
         return false;

@@ -18,6 +18,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onNext(@NonNull T o) {
+        onFinish();
         doOnSuccess(o);
     }
 
@@ -28,16 +29,20 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      */
     public void doOnSuccess(T o) {
         try {
-            onFinish();
             onSuccess(o);
-        } catch (Throwable t) {
-            LogUtil.e("onSuccess 业务异常", t);
-            onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, t.getMessage(), t));
+        } catch (Throwable e) {
+            LogUtil.e("onSuccess 业务异常", e.toString());
+            if (LogUtil.isDebug()) {
+                throw e;
+            } else {
+                onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
+            }
         }
     }
 
     @Override
     public void onError(@NonNull Throwable e) {
+        onFinish();
         doOnError(e);
     }
 
@@ -47,7 +52,6 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      * @param e
      */
     public void doOnError(Throwable e) {
-        onFinish();
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);
         } else {
@@ -80,7 +84,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
 
 
     public void onFinish() {
-        //只可能来自doOnSuccess/onError二者之一
+        //只可能来自onNext/onError二者之一
     }
 
     /**

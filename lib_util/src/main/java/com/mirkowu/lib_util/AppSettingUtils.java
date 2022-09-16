@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
  * @date on 2019/8/24
  * @describe
  */
-public class AppSettingUtil {
+public class AppSettingUtils {
 
 
     public static void startNetworkSetting(Context context) {
@@ -28,7 +28,7 @@ public class AppSettingUtil {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } catch (Exception e1) {
-                LogUtil.e("startNetworkSetting", e);
+                LogUtil.e("startNetworkSetting", e1.toString());
             }
         }
     }
@@ -43,8 +43,7 @@ public class AppSettingUtil {
             context.startActivity(intent);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            LogUtil.e("startAppSettingNoResult", e);
+            LogUtil.e("startAppSettingNoResult", e.toString());
         }
         return false;
     }
@@ -58,8 +57,7 @@ public class AppSettingUtil {
             activity.startActivityForResult(intent, requestCode);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            LogUtil.e("Activity startAppSettingForResult", e);
+            LogUtil.e("Activity startAppSettingForResult", e.toString());
         }
         return false;
     }
@@ -74,7 +72,7 @@ public class AppSettingUtil {
             fragment.startActivityForResult(intent, requestCode);
             return true;
         } catch (Exception e) {
-            LogUtil.e("Fragment startAppSettingForResult", e);
+            LogUtil.e("Fragment startAppSettingForResult", e.toString());
         }
         return false;
     }
