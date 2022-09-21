@@ -21,6 +21,9 @@ import com.mirkowu.mvm.ui.mvvm.viewbinding.DataBindingDialog
 import com.mirkowu.mvm.ui.widgetdemo.interceptchain.FirstInterceptChain
 import com.mirkowu.mvm.ui.widgetdemo.interceptchain.SecondInterceptChain
 import com.mirkowu.mvm.ui.widgetdemo.interceptchain.ThirdInterceptChain
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
     companion object {
@@ -37,6 +40,12 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
     override fun initialize() {
         binding.btnLoading.click {
             showLoadingDialog("Toast测试")
+            GlobalScope.launch {
+                delay(2000)
+                showLoadingDialog("更新成功")
+                delay(1000)
+                hideLoadingDialog()
+            }
         }
         binding.btnPrompt.click {
             PromptDialog().setTitle("温馨提示")

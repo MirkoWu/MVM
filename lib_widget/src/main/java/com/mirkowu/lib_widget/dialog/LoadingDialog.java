@@ -6,13 +6,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
+import com.mirkowu.lib_util.livedata.SingleLiveData;
 import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
 
@@ -21,7 +19,7 @@ import com.mirkowu.lib_widget.R;
  * 加载弹窗
  */
 public class LoadingDialog extends BaseDialog {
-    protected CharSequence mMessage;
+    protected SingleLiveData<CharSequence> mMessage = new SingleLiveData<>();
 
     public LoadingDialog() {
         setDimAmount(0f);
@@ -47,12 +45,15 @@ public class LoadingDialog extends BaseDialog {
     @Override
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
         TextView mLoadingTextView = viewHolder.getView(R.id.mLoadingTextView);
-        if (!TextUtils.isEmpty(mMessage)) {
-            mLoadingTextView.setText(mMessage);
-            mLoadingTextView.setVisibility(View.VISIBLE);
-        } else {
-            mLoadingTextView.setVisibility(View.GONE);
-        }
+
+        mMessage.observe(this, message -> {
+            if (!TextUtils.isEmpty(message)) {
+                mLoadingTextView.setText(message);
+                mLoadingTextView.setVisibility(View.VISIBLE);
+            } else {
+                mLoadingTextView.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -68,7 +69,7 @@ public class LoadingDialog extends BaseDialog {
     }
 
     public LoadingDialog setMessage(CharSequence message) {
-        this.mMessage = message;
+        this.mMessage.setValue(message);
         return this;
     }
 
