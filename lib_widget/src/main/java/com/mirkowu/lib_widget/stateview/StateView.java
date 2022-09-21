@@ -2,6 +2,8 @@ package com.mirkowu.lib_widget.stateview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -36,7 +38,7 @@ public class StateView extends LinearLayout {
     private CharSequence mShowText;
     private CharSequence mRefreshText;
     private Integer mShowIconResId;
-    private Integer mLoadingProgressResId;
+    private Drawable mLoadingProgressDrawable;
     private Integer mRefreshBackgroundId;
 
     public StateView(Context context) {
@@ -56,7 +58,7 @@ public class StateView extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StateView);
         mLoadingText = ta.getString(R.styleable.StateView_sv_loadingText);
-        mLoadingProgressResId = ta.getResourceId(R.styleable.StateView_sv_loadingProgress, R.drawable.widget_loading_progressbar);
+        int mLoadingProgressResId = ta.getResourceId(R.styleable.StateView_sv_loadingProgress, 0);
         mShowIconResId = ta.getResourceId(R.styleable.StateView_sv_showIcon, 0);
         mShowText = ta.getString(R.styleable.StateView_sv_showText);
         boolean defaultLoading = ta.getBoolean(R.styleable.StateView_sv_defaultLoading, true);
@@ -87,13 +89,12 @@ public class StateView extends LinearLayout {
             }
         });
 
+        //设置默认值
+        mLoadingProgressDrawable = getDefaultLoadingDrawable();
         if (mLoadingProgressResId != 0) {
-            //setIndeterminateDrawable 时一定要同时setProgressDrawable 否则不生效，导致不显示
-            mProgressBar.setIndeterminateDrawable(ContextCompat.getDrawable(context, mLoadingProgressResId));
-            mProgressBar.setProgressDrawable(ContextCompat.getDrawable(context, mLoadingProgressResId));
+            mLoadingProgressDrawable = ContextCompat.getDrawable(context, mLoadingProgressResId);
         }
 
-        //设置默认值
         if (TextUtils.isEmpty(mRefreshText)) {
             mRefreshText = context.getString(R.string.widget_refresh);
         }
@@ -108,6 +109,13 @@ public class StateView extends LinearLayout {
         } else {
             setGoneState();
         }
+    }
+
+    protected Drawable getDefaultLoadingDrawable() {
+        LoadingDot drawable = new LoadingDot();
+//        drawable.setBounds(0, 0, 100, 100);
+        drawable.setColor(Color.parseColor("#F88E2C"));
+        return drawable;
     }
 
     public ProgressBar getProgressBar() {
@@ -180,13 +188,18 @@ public class StateView extends LinearLayout {
     }
 
     public void setLoadingState(CharSequence hint) {
-        setLoadingState(mLoadingProgressResId, hint);
+        setLoadingState(mLoadingProgressDrawable, hint);
     }
 
     public void setLoadingState(@NonNull @DrawableRes Integer progressResId, CharSequence hint) {
+        setLoadingState(ContextCompat.getDrawable(getContext(), progressResId), hint);
+    }
+
+    public void setLoadingState(Drawable drawable, CharSequence hint) {
+        mLoadingProgressDrawable = drawable;
         //setIndeterminateDrawable 时一定要同时setProgressDrawable 否则不生效，导致不显示
-        mProgressBar.setIndeterminateDrawable(ContextCompat.getDrawable(getContext(), progressResId));
-        mProgressBar.setProgressDrawable(ContextCompat.getDrawable(getContext(), progressResId));
+        mProgressBar.setIndeterminateDrawable(drawable);
+        mProgressBar.setProgressDrawable(drawable);
         mLoadingText = hint;
         setState(ViewState.LOADING);
     }

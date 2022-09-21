@@ -40,7 +40,7 @@ class DBMediator : BaseMediator<IBaseView?, BizModel?>() {
                 }
 
                 override fun onFailure(error: ErrorBean) {
-                    mImageListData.value = ResponseData.create(error)
+                    mImageListData.value = ResponseData.error(error)
                 }
             })
     }

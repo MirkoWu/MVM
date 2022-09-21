@@ -36,5 +36,6 @@ dependencies {
     compileOnly "androidx.appcompat:appcompat:$ext.appcompat_version"
     compileOnly "androidx.constraintlayout:constraintlayout:$ext.constraintlayout_version"
     implementation "androidx.recyclerview:recyclerview:$ext.recyclerview_version"
-
+    //动画
+    api 'com.github.ybq:Android-SpinKit:1.4.0'
 }

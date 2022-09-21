@@ -9,12 +9,11 @@
     <ProgressBar
         android:id="@+id/mProgressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="12dp"
         android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/widget_loading_progressbar"
         android:visibility="gone" />
 
     <ImageView
@@ -22,7 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="12dp"
         android:adjustViewBounds="true"
         android:maxWidth="260dp"
         android:maxHeight="260dp"
@@ -33,20 +33,21 @@
         android:id="@+id/tvHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:gravity="center"
         android:textColor="#B3B3B3"
         android:textSize="15dp"
         android:visibility="gone" />
 
-
     <Button
         android:id="@+id/btnRefresh"
-        android:layout_width="136dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/widget_refresh_bg"
         android:gravity="center"
         android:maxLength="18"
+        android:paddingHorizontal="24dp"
         android:singleLine="true"
         android:stateListAnimator="@null"
         android:text="@string/widget_refresh"

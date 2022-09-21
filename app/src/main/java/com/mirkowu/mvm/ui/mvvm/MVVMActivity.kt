@@ -2,19 +2,25 @@ package com.mirkowu.mvm.ui.mvvm
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.ybq.android.spinkit.style.Circle
+import com.github.ybq.android.spinkit.style.DoubleBounce
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
+import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.bean.GankImageBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
 import java.util.*
+
 
 class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListener {
     val binding by bindingView(ActivityMVVMBinding::inflate)
@@ -67,7 +73,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                    return null;
 //                });
 
-        mMediator.gankImageBean.observeRequest(this){
+        mMediator.gankImageBean.observeRequest(this) {
             onLoading { LogUtil.d("onLoading") }
             onFinish { LogUtil.d("onFinish") }
             onSuccess { LogUtil.d("onSuccess") }
@@ -79,9 +85,11 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 hideLoadingDialog()
             }
             onSuccess {
+                binding.mStateView.setGoneState()
                 refreshHelper.setLoadMore(imageAdapter, it)
             }
             onFailure {
+                binding.mStateView.setErrorState(it.msg())
                 refreshHelper.finishLoad()
                 val errorBean = it
                 if (errorBean.isNetError && refreshHelper.isFirstPage) {
@@ -146,15 +154,25 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 binding.mStateView.setErrorState(data.error.msg())
             }
         }
-        binding.mStateView.setLoadingState()
+//        binding.mStateView.setLoadingState()
+//        binding.mStateView.setLoadingState(ThreeBounce(),"拼命加载中...")
         //        binding.mStateView.setLoadingState("拼命加载中...");
 //        binding.mStateView.setLoadingState(getString(R.string.widget_loading));
 //        binding.mStateView.setEmptyState(getString(R.string.widget_loading));
 //        binding.mStateView.setErrorState("家再说吧");
         //binding.stateview.setLoadingState(R.mipmap.ic_launcher, getString(R.string.widget_loading));
-        binding.mStateView.setOnClickListener { binding.mStateView.setErrorState("加载失败") }
+//        binding.mStateView.setOnClickListener { binding.mStateView.setErrorState("加载失败") }
         binding.mStateView.setOnRefreshListener {
-            binding.mStateView.setLoadingState(R.drawable.anim_loading, "sss")
+            val drawable = LoadingDot()
+//            val drawable = Circle()
+//            val drawable = DoubleBounce()
+            drawable.setDrawBounds(0, 0, 540, 540)
+            drawable.color = Color.RED
+//            binding.mStateView.setLoadingState(drawable, "加载中")
+//            binding.mStateView.setLoadingState(R.drawable.anim_loading, "加载中")
+//            binding.mStateView.setLoadingState(R.drawable.widget_svg_loading, "加载中")
+            binding.mStateView.setLoadingState()
+
             refreshHelper.autoRefresh()
         }
         refreshHelper.pageCount = 1
@@ -166,8 +184,8 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         mMediator.loadImage(page, refreshHelper.pageCount)
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)
             .observeRequest(this) {
-            onSuccess { it }
-        }
+                onSuccess { it }
+            }
         mMediator.getPing2LiveData().observeRequest(this) {
             onSuccess { }
             onFailure { }
@@ -176,10 +194,8 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 
     override fun onLoadNoMore() {}
     override fun onEmptyChange(isEmpty: Boolean) {
-        if (isEmpty) {
-            binding.mStateView.setShowState(R.mipmap.ic_launcher, "暂无数据")
-        } else {
-            binding.mStateView.setGoneState()
+        binding.mStateView.apply {
+            if (isEmpty) setEmptyState("暂无数据") else setGoneState()
         }
     }
 
