@@ -168,15 +168,16 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //            binding.mStateView.setLoadingState(drawable, "加载中")
 //            binding.mStateView.setLoadingState(R.drawable.anim_loading, "加载中")
 //            binding.mStateView.setLoadingState(R.drawable.widget_svg_loading, "加载中")
-            binding.mStateView.setLoadingState()
 
-            refreshHelper.autoRefresh()
+
+            refreshHelper.refresh()
         }
         refreshHelper.pageCount = 1
         refreshHelper.refresh()
     }
 
     override fun onLoadData(page: Int) {
+        binding.mStateView.setLoadingState()
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)

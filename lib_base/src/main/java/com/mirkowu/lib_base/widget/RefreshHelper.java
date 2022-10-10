@@ -185,7 +185,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
             }
         }
         if (mRefreshLayout != null && !mRefreshLayout.isRefreshing()) {
-            mRefreshLayout.autoRefresh();
+            mRefreshLayout.autoRefresh(0);
         }
     }
 

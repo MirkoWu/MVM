@@ -19,7 +19,7 @@ public class GankClient extends AbsRetrofitClient {
 
     private GankClient() {
         setDebug(HostUrl.isDebug);
-        setIgnoreSSLVerifier(true);
+        setIgnoreSSLVerifier(false);
     }
 
 

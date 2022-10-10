@@ -116,7 +116,7 @@ dependencies {
 
 
     //是否使用本地lib
-    def useLocalModule = false
+    def useLocalModule = true
     if (!useLocalModule) {
 //        implementation 'com.github.mirkowu:mvm:$ext.mvm_version'   //可以直接依赖总仓库，也可以依赖指定库
         implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
