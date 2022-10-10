@@ -4,7 +4,8 @@ package com.mirkowu.mvm;
 import com.mirkowu.lib_base.model.BaseModel;
 import com.mirkowu.lib_base.util.RxScheduler;
 import com.mirkowu.mvm.bean.GankBaseBean;
-import com.mirkowu.mvm.bean.GankImageBean;
+import com.mirkowu.mvm.bean.ImageBean;
+import com.mirkowu.mvm.bean.ImageListBean;
 import com.mirkowu.mvm.bean.RandomImageBean;
 import com.mirkowu.mvm.network.GankClient;
 import com.mirkowu.mvm.network.ImageClient;
@@ -20,9 +21,9 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
 public class BizModel extends BaseModel {
 
-    public Observable<GankBaseBean<List<GankImageBean>>> loadImage(int page, int pageSize) {
+    public Observable<GankBaseBean<ImageListBean>> loadImage(int page, int pageSize) {
         return GankClient.getGankApi()
-                .loadImage(page, pageSize)
+                .loadImage("beauty",page, pageSize)
                 .compose(RxScheduler.ioToMain());
     }
 

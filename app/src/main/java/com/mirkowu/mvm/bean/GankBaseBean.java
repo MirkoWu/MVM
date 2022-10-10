@@ -9,12 +9,14 @@ public class GankBaseBean<T> {
      * results :   }
      */
 
-    @SerializedName("status")
-    public int status;
-    @SerializedName("data")
+    @SerializedName("code")
+    public int code;
+    @SerializedName("message")
+    public String message;
+    @SerializedName("result")
     public T data;
 
     public boolean isSuccess() {
-        return status == 100;
+        return code == 200;
     }
 }

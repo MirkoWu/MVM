@@ -30,9 +30,9 @@ fun <T> ObservableSubscribeProxy<GankBaseBean<T>>.asResponseLiveData(liveData: R
                     } else {
                         ResponseData.error(
                             ErrorType.API,
-                            it.status,
+                            it.code,
                             "",
-                            ApiException(it.status, "")
+                            ApiException(it.code, "")
                         )
                     }
                 }

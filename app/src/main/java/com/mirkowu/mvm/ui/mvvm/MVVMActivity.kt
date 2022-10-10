@@ -6,9 +6,6 @@ import android.graphics.Color
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.ybq.android.spinkit.style.Circle
-import com.github.ybq.android.spinkit.style.DoubleBounce
-import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.state.observeRequest
@@ -17,7 +14,7 @@ import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
-import com.mirkowu.mvm.bean.GankImageBean
+import com.mirkowu.mvm.bean.ImageBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
 import java.util.*
 
@@ -40,13 +37,13 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         binding.mRecyclerView.adapter = imageAdapter
         binding.mRecyclerView.layoutManager = LinearLayoutManager(this)
         imageAdapter.onItemClickListener =
-            BaseRVAdapter.OnItemClickListener { view: View?, item: GankImageBean?, position: Int ->
+            BaseRVAdapter.OnItemClickListener { view: View?, item: ImageBean?, position: Int ->
                 LogUtil.i(
                     "TAG",
                     "onItemClick: $position"
                 )
             }
-        imageAdapter.setOnItemChildClickListener { view: View?, item: GankImageBean?, position: Int ->
+        imageAdapter.setOnItemChildClickListener { view: View?, item: ImageBean?, position: Int ->
             LogUtil.i(
                 "TAG",
                 "onItemChildClick: $position"
@@ -73,7 +70,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                    return null;
 //                });
 
-        mMediator.gankImageBean.observeRequest(this) {
+        mMediator.imageBean.observeRequest(this) {
             onLoading { LogUtil.d("onLoading") }
             onFinish { LogUtil.d("onFinish") }
             onSuccess { LogUtil.d("onSuccess") }
@@ -144,9 +141,9 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             if (data.isSuccess) {
                 if (data.data != null && !data.data.isEmpty()) {
                     val imgUrl = data.data[0].imgurl
-                    val bean = GankImageBean()
+                    val bean = ImageBean()
                     bean.url = imgUrl
-                    val list: MutableList<GankImageBean?> = ArrayList()
+                    val list: MutableList<ImageBean?> = ArrayList()
                     list.add(bean)
                     refreshHelper.setLoadMore(imageAdapter, list)
                 }

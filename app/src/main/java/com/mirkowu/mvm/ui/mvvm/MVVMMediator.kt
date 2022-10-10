@@ -7,14 +7,14 @@ import com.mirkowu.lib_base.view.IBaseView
 import com.mirkowu.lib_network.ErrorBean
 import com.mirkowu.lib_network.state.ResponseData
 import com.mirkowu.lib_network.state.ResponseLiveData
-import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_network.util.*
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.livedata.SingleLiveData
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
-import com.mirkowu.mvm.bean.GankImageBean
+import com.mirkowu.mvm.bean.ImageBean
+import com.mirkowu.mvm.bean.ImageListBean
 import com.mirkowu.mvm.bean.RandomImageBean
 import com.mirkowu.mvm.network.ImageClient
 import com.mirkowu.mvm.network.RxObserver
@@ -28,10 +28,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     var mError = SingleLiveData<Throwable>()
 
     @JvmField
-    var mRequestImageListData = ResponseLiveData<List<GankImageBean>>()
+    var mRequestImageListData = ResponseLiveData<List<ImageBean>>()
 
     @JvmField
-    var gankImageBean = ResponseLiveData< List<GankImageBean>>()
+    var imageBean = ResponseLiveData< ImageListBean>()
 
     @JvmField
     var mImageError = SingleLiveData<ErrorBean>()
@@ -43,10 +43,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
         mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
             .to(RxLife.bindLifecycle(mView))
-            .subscribe(object : RxObserver<GankBaseBean<List<GankImageBean>>>() {
-                override fun onSuccess(data: GankBaseBean<List<GankImageBean>>) {
+            .subscribe(object : RxObserver<GankBaseBean<ImageListBean>>() {
+                override fun onSuccess(data: GankBaseBean<ImageListBean>) {
                     if (data.isSuccess) {
-                        mRequestImageListData.setValue(ResponseData.success(data.data))
+                        mRequestImageListData.setValue(ResponseData.success(data.data.list))
                     }
                 }
 
@@ -60,9 +60,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     fun loadImageAsLiveData(
         page: Int,
         pageSize: Int
-    ) :ResponseLiveData<List<GankImageBean>> {
+    ) :ResponseLiveData<ImageListBean> {
       return  mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
+
             .to(RxLife.bindLifecycle(mView))
 //            .subscribeRequest {
 //                onSuccess{ }
@@ -70,7 +71,8 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
 //            }
 //            .asLiveData()
 //            .asResponseLiveData(gankImageBean)
-            .asResponseLiveData(gankImageBean)
+
+            .asResponseLiveData(imageBean)
 //            .observeRequest(mView.lifecycleOwner) {
 //                onLoading { LogUtil.e("asResponseLiveData onLoading") }
 //                onFinish { LogUtil.e("asResponseLiveData onFinish") }

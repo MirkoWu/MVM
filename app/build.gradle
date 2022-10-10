@@ -1,12 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-apply plugin: 'bugly'
-
-bugly {
-    appId = "3e2cd9bf87"
-    appKey = "1b977565-a3ce-4188-9eea-255729b7ddc8"
-}
+//bugly {
+//    appId = "3e2cd9bf87"
+//    appKey = "1b977565-a3ce-4188-9eea-255729b7ddc8"
+//}
 
 static def getDate() {
     def date = new Date()
@@ -118,7 +116,7 @@ dependencies {
 
 
     //是否使用本地lib
-    def useLocalModule = true
+    def useLocalModule = false
     if (!useLocalModule) {
 //        implementation 'com.github.mirkowu:mvm:$ext.mvm_version'   //可以直接依赖总仓库，也可以依赖指定库
         implementation "com.github.mirkowu.mvm:lib_base:$ext.mvm_version"
