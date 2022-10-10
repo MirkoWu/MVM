@@ -54,7 +54,7 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
                     mRequestImageListData.setValue(ResponseData.error(bean))
                 }
             })
-        loadImage2()
+      //  loadImage2()
     }
 
     fun loadImageAsLiveData(
