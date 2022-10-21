@@ -54,7 +54,7 @@ ext {
     minSdkVersion = 21
 
     mvm_version = 'latest.release'
-    mvm_thirdparty_version = 'latest.release'
+    mvm_thirdparty_version = '1.0.2'
 
     //google
     core_ktx_version = '1.6.0'

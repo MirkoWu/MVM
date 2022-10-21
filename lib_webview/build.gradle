@@ -38,7 +38,7 @@ dependencies {
 
     //X5浏览器
 //    api 'com.tencent.tbs.tbssdk:sdk:43993'
-    api 'com.tencent.tbs:tbssdk:44153'
+    api 'com.tencent.tbs:tbssdk:44226'
     //https://github.com/wendux/DSBridge-Android 3.0-x5版本
 
 }
