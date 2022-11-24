@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import android.util.Rational;
 import android.util.Size;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
@@ -83,6 +84,8 @@ public class DefaultCameraScan extends CameraScan {
 //    private BeepManager mBeepManager;
     private AmbientLightManager mAmbientLightManager;
 
+    private OrientationEventListener mOrientationEventListener;
+
     private int mOrientation;
     private int mScreenWidth;
     private int mScreenHeight;
@@ -131,6 +134,28 @@ public class DefaultCameraScan extends CameraScan {
 //            }
 //        });
 
+//        mOrientationEventListener = new OrientationEventListener(mFragmentActivity) {
+//            @Override
+//            public void onOrientationChanged(int orientation) {
+//                // i的范围是0～359
+//                // 屏幕左边在顶部的时候 i = 90;
+//                // 屏幕顶部在底部的时候 i = 180;
+//                // 屏幕右边在底部的时候 i = 270;
+//                // 正常情况默认i = 0;
+//
+//                if (45 <= orientation && orientation < 135) {
+//                    mOrientation = 180;
+//                } else if (135 <= orientation && orientation < 225) {
+//                    mOrientation = 270;
+//                } else if (225 <= orientation && orientation < 315) {
+//                    mOrientation = 0;
+//                } else {
+//                    mOrientation =90;
+//                }
+//            }
+//        };
+//        mOrientationEventListener.enable();
+
         mOrientation = mContext.getResources().getConfiguration().orientation;
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
         mPreviewView.setOnTouchListener(new View.OnTouchListener() {
@@ -165,7 +190,6 @@ public class DefaultCameraScan extends CameraScan {
                         flashlightView.setVisibility(View.INVISIBLE);
                         flashlightView.setSelected(false);
                     }
-
                 }
             });
         }
@@ -232,7 +256,6 @@ public class DefaultCameraScan extends CameraScan {
 //    }
 
 
-
 //    @AspectRatio.Ratio
 //    public int getAspectRatio() {
 //        return mAspectRatio;
@@ -245,6 +268,7 @@ public class DefaultCameraScan extends CameraScan {
             try {
                 //设置SurfaceProvider
                 Preview preview = new Preview.Builder()
+//                        .setTargetRotation(mOrientation)
 //                        .setTargetAspectRatio(getAspectRatio())
                         // .setTargetResolution(new Size(mScreenWidth,mScreenHeight))
                         .build();
@@ -374,6 +398,7 @@ public class DefaultCameraScan extends CameraScan {
             Size size = CameraUtils.getBestMatchingSize(mPreviewView.getWidth(), mPreviewView.getHeight());
             LogUtil.e(TAG, "getBestMatchingSize: 选择的分辨率宽度=" + size.getWidth() + " x " + size.getHeight());
             mImageCapture.setCropAspectRatio(new Rational(size.getWidth(), size.getHeight()));
+            mImageCapture.setTargetRotation((int) mPreviewView.getDisplay().getRotation());
             mImageCapture.setFlashMode(getFlashMode());
             mImageCapture.takePicture(options, ContextCompat.getMainExecutor(mContext), callBack);
         }
