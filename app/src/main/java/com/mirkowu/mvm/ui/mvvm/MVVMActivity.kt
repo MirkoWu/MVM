@@ -3,12 +3,16 @@ package com.mirkowu.mvm.ui.mvvm
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.state.observeRequest
+import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
@@ -31,6 +35,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         setContentView(binding.root)
     }
 
+    var isGrayMode=false
     override fun initialize() {
         refreshHelper = RefreshHelper(binding.mRefresh, binding.mRecyclerView, this)
         imageAdapter = ImageAdapter()
@@ -48,6 +53,12 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 "TAG",
                 "onItemChildClick: $position"
             )
+            isGrayMode=!isGrayMode
+            if (isGrayMode){
+                ColorFilterUtils.setGrayFilter(activity)
+            }else{
+                ColorFilterUtils.removeFilter(activity)
+            }
         }
         imageAdapter.setOnItemChildLongClickListener { view, item, position ->
             LogUtil.i("TAG", "onItemChildLongClick: $position")
