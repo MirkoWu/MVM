@@ -19,6 +19,14 @@ public class SingleLiveData<T> extends MutableLiveData<T> {
 
     private final AtomicBoolean mPending = new AtomicBoolean(false);
 
+    public SingleLiveData() {
+        super();
+    }
+
+    public SingleLiveData(T value) {
+        super(value);
+    }
+
     @MainThread
     public void observe(LifecycleOwner owner, final Observer<? super T> observer) {
 

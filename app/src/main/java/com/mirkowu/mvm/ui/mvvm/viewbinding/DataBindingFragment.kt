@@ -233,10 +233,10 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 
         //todo 方式2
         mMediator.getPing2LiveData().observeRequest(this) {
-            onLoading { }
+            onLoading {showLoadingDialog("")}
             onSuccess { }
             onFailure { }
-            onFinish { }
+            onFinish { hideLoadingDialog()}
         }
 
     }

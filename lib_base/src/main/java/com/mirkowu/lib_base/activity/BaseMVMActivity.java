@@ -22,6 +22,7 @@ import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_widget.dialog.LoadingDialog;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 更多可配置的
@@ -31,6 +32,8 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     @NonNull
     protected M mMediator;
     private LoadingDialog mLoadingDialog;
+
+    private AtomicInteger mLoading = new AtomicInteger(0);
 
 
     @Override
@@ -95,12 +98,13 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
+                if (mLoading.getAndIncrement() != 0 && mLoadingDialog != null) {
                     mLoadingDialog.setMessage(msg);
                     return;
                 }
-                mLoadingDialog = new LoadingDialog(msg);
-                if (!isFinishing() && !mLoadingDialog.isVisible()) {
+
+                if (!isFinishing()) {
+                    mLoadingDialog = new LoadingDialog(msg);
                     mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
                 }
             }
@@ -112,7 +116,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mLoadingDialog != null) {
+                if (mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
                     mLoadingDialog.dismissAllowingStateLoss();
                     mLoadingDialog = null;
                 }
