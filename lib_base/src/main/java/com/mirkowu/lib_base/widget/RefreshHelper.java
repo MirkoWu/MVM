@@ -147,6 +147,9 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
         }
     }
 
+    /**
+     * 加载数据，用于首页
+     */
     public void refresh() {
         onRefresh(mRefreshLayout);
     }
@@ -165,7 +168,7 @@ public class RefreshHelper implements OnRefreshListener, OnRefreshLoadMoreListen
     }
 
     /**
-     * 加载数据用于 首次加载
+     * 加载数据用于 刷新当前页
      */
     public void loadData() {
         if (mOnRefreshListener != null) {

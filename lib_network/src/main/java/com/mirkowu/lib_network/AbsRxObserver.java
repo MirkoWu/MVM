@@ -31,11 +31,10 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         try {
             onSuccess(o);
         } catch (Throwable e) {
+            onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
             LogUtil.e("onSuccess 业务异常", e.toString());
             if (LogUtil.isDebug()) {
                 throw e;
-            } else {
-                onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
             }
         }
     }
