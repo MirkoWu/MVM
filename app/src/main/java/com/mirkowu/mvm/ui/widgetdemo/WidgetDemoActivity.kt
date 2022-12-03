@@ -46,6 +46,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
                 delay(1000)
                 hideLoadingDialog()
                 hideLoadingDialog()
+                hideLoadingDialog()
             }
         }
         binding.btnPrompt.click {

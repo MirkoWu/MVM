@@ -116,7 +116,7 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
+                if (mLoading.get() > 0 && mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
                     mLoadingDialog.dismissAllowingStateLoss();
                     mLoadingDialog = null;
                 }
