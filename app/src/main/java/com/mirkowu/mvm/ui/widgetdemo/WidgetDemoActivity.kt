@@ -45,6 +45,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
                 showLoadingDialog("更新成功")
                 delay(1000)
                 hideLoadingDialog()
+                hideLoadingDialog()
             }
         }
         binding.btnPrompt.click {
