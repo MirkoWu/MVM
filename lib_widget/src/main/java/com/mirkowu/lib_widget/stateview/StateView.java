@@ -310,10 +310,10 @@ public class StateView extends LinearLayout {
                     mBtnCheckNetwork.setText(mCheckNetworkText);
                 }
                 if (mRefreshBackgroundId != 0) {
-                    mBtnRefresh.setBackgroundColor(mRefreshBackgroundId);
+                    mBtnRefresh.setBackgroundResource(mRefreshBackgroundId);
                 }
                 if (mCheckNetworkBackgroundId != 0) {
-                    mBtnCheckNetwork.setBackgroundColor(mCheckNetworkBackgroundId);
+                    mBtnCheckNetwork.setBackgroundResource(mCheckNetworkBackgroundId);
                 }
                 break;
             case SHOW:
@@ -337,10 +337,10 @@ public class StateView extends LinearLayout {
                 }
 
                 if (mRefreshBackgroundId != 0) {
-                    mBtnRefresh.setBackgroundColor(mRefreshBackgroundId);
+                    mBtnRefresh.setBackgroundResource(mRefreshBackgroundId);
                 }
                 if (mCheckNetworkBackgroundId != 0) {
-                    mBtnCheckNetwork.setBackgroundColor(mCheckNetworkBackgroundId);
+                    mBtnCheckNetwork.setBackgroundResource(mCheckNetworkBackgroundId);
                 }
                 break;
             case GONE:

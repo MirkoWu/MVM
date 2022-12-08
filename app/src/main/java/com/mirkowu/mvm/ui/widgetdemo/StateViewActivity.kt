@@ -60,7 +60,7 @@ class StateViewActivity : BaseActivity<EmptyMediator>() {
             binding.mStateView.setShowState(R.drawable.widget_svg_empty, "空空如也", "刷新", "看看别的")
         }
         binding.mStateView.setOnRefreshListener {
-            binding.btnLoading.performClick()
+            binding.btnLoading2.performClick()
         }
         binding.mStateView.setOnCheckNetworkListener {
             binding.mStateView.apply {
