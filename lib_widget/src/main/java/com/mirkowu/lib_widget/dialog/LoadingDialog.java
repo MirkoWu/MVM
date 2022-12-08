@@ -10,7 +10,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.mirkowu.lib_util.livedata.SingleLiveData;
+import com.mirkowu.lib_util.livedata.FixedLiveData;
 import com.mirkowu.lib_util.utilcode.util.StringUtils;
 import com.mirkowu.lib_widget.R;
 
@@ -19,7 +19,7 @@ import com.mirkowu.lib_widget.R;
  * 加载弹窗
  */
 public class LoadingDialog extends BaseDialog {
-    protected SingleLiveData<CharSequence> mMessage = new SingleLiveData<>();
+    protected FixedLiveData<CharSequence> mMessage = new FixedLiveData<>();
 
     public LoadingDialog() {
         setDimAmount(0f);
@@ -46,7 +46,7 @@ public class LoadingDialog extends BaseDialog {
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
         TextView mLoadingTextView = viewHolder.getView(R.id.mLoadingTextView);
 
-        mMessage.observe(this, message -> {
+        mMessage.observeSticky(this, message -> {
             if (!TextUtils.isEmpty(message)) {
                 mLoadingTextView.setText(message);
                 mLoadingTextView.setVisibility(View.VISIBLE);

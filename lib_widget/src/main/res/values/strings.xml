@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_refresh">Click Refresh</string>
+    <string name="widget_check_network">Check Network</string>
     <string name="widget_loading">Loading...</string>
     <string name="widget_btn_confirm">Confirm</string>
     <string name="widget_btn_cancel">Cancel</string>

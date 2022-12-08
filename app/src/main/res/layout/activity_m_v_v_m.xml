@@ -31,6 +31,6 @@
         android:background="#FFFFFF"
         android:layout_height="match_parent"
          />
-<!--    app:sv_loadingProgress="@drawable/shape_progress2"-->
-<!--    app:sv_loadingProgress="@drawable/anim_loading"-->
+<!--    app:sv_loadingSrc="@drawable/shape_progress2"-->
+<!--    app:sv_loadingSrc="@drawable/anim_loading"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -14,7 +16,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="12dp"
         android:indeterminate="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/ivImage"
@@ -36,24 +39,45 @@
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
         android:textColor="#B3B3B3"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:visibility="gone" />
 
     <Button
         android:id="@+id/btnRefresh"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/widget_refresh_bg"
         android:gravity="center"
-        android:maxLength="18"
-        android:paddingHorizontal="24dp"
+        android:minWidth="150dp"
+        android:paddingHorizontal="16dp"
         android:singleLine="true"
         android:stateListAnimator="@null"
         android:text="@string/widget_refresh"
         android:textAllCaps="false"
         android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:visibility="gone" />
+        android:textSize="15sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/btnCheckNetwork"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/widget_refresh_bg"
+        android:gravity="center"
+        android:minWidth="150dp"
+        android:paddingHorizontal="16dp"
+        android:singleLine="true"
+        android:stateListAnimator="@null"
+        android:text="@string/widget_check_network"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </LinearLayout>

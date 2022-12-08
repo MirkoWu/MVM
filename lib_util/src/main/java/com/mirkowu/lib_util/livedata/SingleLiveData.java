@@ -1,7 +1,6 @@
 package com.mirkowu.lib_util.livedata;
 
 
-import android.util.Log;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
@@ -13,6 +12,12 @@ import com.mirkowu.lib_util.LogUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * use
+ * @see FixedLiveData
+ * @param <T>
+ */
+@Deprecated
 public class SingleLiveData<T> extends MutableLiveData<T> {
 
     private static final String TAG = "SingleLiveEvent";

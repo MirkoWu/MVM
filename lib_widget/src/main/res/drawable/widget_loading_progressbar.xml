@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rotate xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 进度提示（转圈圈） 最外层要是 rotate-->
-    <rotate
-        android:drawable="@drawable/widget_svg_loading"
-        android:duration="200"
-        android:interpolator="@android:anim/linear_interpolator"
-        android:pivotX="50%"
-        android:pivotY="50%" />
-</rotate>
+<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/widget_svg_loading"
+    android:duration="200"
+    android:fromDegrees="0"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="360">
+    <!-- 进度提示（转圈圈）  -->
+
+    <!--    另一种，最外层要是 rotate 会整体旋转-->
+
+</animated-rotate>

@@ -110,7 +110,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.core:core-ktx:$ext.core_ktx_version"
-    //implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
+    implementation "androidx.appcompat:appcompat:$ext.appcompat_version"
 //    implementation "com.google.android.material:material:$ext.material_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 

@@ -27,5 +27,6 @@ class DataBindingActivity : BaseActivity<DBMediator>() {
             onFinish { }
         }
         mMediator.loadImage(1, 10)
+        binding.mStateView.setEmptyState("无数据")
     }
 }

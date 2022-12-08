@@ -87,7 +87,6 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         }
     }
 
-
     @Override
     public void showLoadingDialog() {
         showLoadingDialog(getString(R.string.widget_loading));
@@ -95,31 +94,29 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     @Override
     public void showLoadingDialog(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mLoading.getAndIncrement() != 0 && mLoadingDialog != null) {
-                    mLoadingDialog.setMessage(msg);
-                    return;
-                }
+        runOnUiThread(() -> {
+            if (mLoading.getAndIncrement() != 0 && mLoadingDialog != null) {
+                mLoadingDialog.setMessage(msg);
+                return;
+            }
 
-                if (!isFinishing()) {
-                    mLoadingDialog = new LoadingDialog(msg);
-                    mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
-                }
+            if (!isFinishing()) {
+                mLoadingDialog = new LoadingDialog(msg);
+                mLoadingDialog.setOnDismissListener(dialog -> {
+                    hideLoadingDialog();
+                });
+                mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
             }
         });
     }
 
     @Override
     public void hideLoadingDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mLoading.get() > 0 && mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
-                    mLoadingDialog.dismissAllowingStateLoss();
-                    mLoadingDialog = null;
-                }
+        runOnUiThread(() -> {
+            if (mLoading.get() > 0 && mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
+                mLoadingDialog.setOnDismissListener(null);
+                mLoadingDialog.dismissAllowingStateLoss();
+                mLoadingDialog = null;
             }
         });
     }

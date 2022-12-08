@@ -1,15 +1,14 @@
 package com.mirkowu.lib_network.state
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_util.livedata.SingleLiveData
+import com.mirkowu.lib_util.livedata.FixedLiveData
 
 
 /**
  * 提供类型别名,减少泛型嵌套
  */
-typealias ResponseLiveData<T> = SingleLiveData<ResponseData<T>>
+typealias ResponseLiveData<T> = FixedLiveData<ResponseData<T>>
 
 /**
  * 简化 LiveData.observe(LifecycleOwner owner,  Observer observer)

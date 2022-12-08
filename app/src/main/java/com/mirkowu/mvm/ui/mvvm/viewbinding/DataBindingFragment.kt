@@ -182,7 +182,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                 .subscribe(object : RxObserver<UpgradeBean>() {
                     override fun onSuccess(data: UpgradeBean) {
                         data?.let {
-                            it.apkUrl=url
+                            it.apkUrl = url
                             com.mirkowu.lib_upgrade.UpgradeDialog.show(childFragmentManager, it)
                         }
                     }
@@ -228,15 +228,21 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     binding.tvNetworkStatus.visibility = View.VISIBLE
                 }
             }
+            onLoading {
+                showLoadingDialog("")
+            }
+            onFinish {
+                hideLoadingDialog()
+            }
         }
         mMediator.getPing()
 
         //todo 方式2
         mMediator.getPing2LiveData().observeRequest(this) {
-            onLoading {showLoadingDialog("")}
+            onLoading { showLoadingDialog("") }
             onSuccess { }
             onFailure { }
-            onFinish { hideLoadingDialog()}
+            onFinish { hideLoadingDialog() }
         }
 
     }
