@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MVM组件库</string>
+    <string name="permission_granted">已授权------</string>
 </resources>

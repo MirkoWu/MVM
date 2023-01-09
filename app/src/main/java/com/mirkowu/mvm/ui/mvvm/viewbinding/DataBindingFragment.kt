@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.util.RxScheduler
@@ -25,6 +26,7 @@ import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
+import com.mirkowu.lib_util.utilcode.util.Utils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.bean.UpgradeBean
@@ -102,7 +104,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             PermissionsUtils.getInstance().requestStorageManage(this,
                 object : PermissionsUtils.OnPermissionsListener {
                     override fun onPermissionGranted(requestCode: Int) {
-                        ToastUtils.showShort("已授权------")
+                        ToastUtils.showShort(R.string.permission_granted)
                     }
 
                     override fun onPermissionShowRationale(
