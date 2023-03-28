@@ -94,7 +94,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         }
         HtmlUtils.setTextViewHtml(tvContent, upgradeInfo.getContent()); //支持html
 
-        tvNegative.setVisibility(upgradeInfo.isForceUpgrade() == 1 ? GONE : VISIBLE);
+        tvNegative.setVisibility(upgradeInfo.isForceUpgrade() ? GONE : VISIBLE);
         tvNegative.setText(R.string.up_next_time);
         tvPositive.setVisibility(VISIBLE);
         tvPositive.setText(R.string.up_upgrade);
@@ -172,7 +172,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
         llProgress.setVisibility(VISIBLE);
         tvPositive.setVisibility(GONE);
         tvNegative.setVisibility(VISIBLE);
-        if (upgradeInfo.isForceUpgrade() == 1) {
+        if (upgradeInfo.isForceUpgrade()) {
             tvNegative.setText(R.string.up_downloading);
             tvNegative.setEnabled(false);
         } else {

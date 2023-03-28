@@ -57,7 +57,7 @@ public class TimerTextView extends TextView {
     }
 
     private void createTimer() {
-        Preconditions.checkArgument(formatText != null && formatText.contains("%d"), "formatText must contains '%d' !");
+        Preconditions.checkArgument(formatText == null || !formatText.contains("%d"), "formatText must contains '%d' !");
         mDownTimer = new CountDownTimer(mDuration, mInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -96,7 +96,7 @@ public class TimerTextView extends TextView {
      * @param formatText 不能为空NUll
      */
     public void setTimerFormatText(@NonNull String formatText) {
-        Preconditions.checkArgument(formatText != null && formatText.contains("%d"), "formatText must contains %%d !");
+        Preconditions.checkArgument(formatText == null || !formatText.contains("%d"), "formatText must contains %%d !");
 
         this.formatText = formatText;
     }

@@ -23,7 +23,7 @@ public abstract class AbsRetrofitClient extends AbsOkHttpClient {
     @NonNull
     public Retrofit getRetrofit() {
         final String baseUrl = getBaseUrl();
-        Preconditions.checkArgument(!TextUtils.isEmpty(baseUrl),
+        Preconditions.checkArgument(TextUtils.isEmpty(baseUrl),
                 "baseUrl can not be null or empty !");
         String key = String.format("%s@%s", getClass().getSimpleName(), baseUrl);
 

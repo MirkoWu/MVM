@@ -37,7 +37,7 @@ import com.king.zxing.config.CameraConfig;
 import com.king.zxing.manager.AmbientLightManager;
 import com.king.zxing.manager.BeepManager;
 import com.king.zxing.util.QrLogUtils;
-import com.mirkowu.lib_util.livedata.SingleLiveData;
+import com.mirkowu.lib_util.livedata.FixedLiveData;
 
 import java.util.concurrent.Executors;
 
@@ -83,7 +83,7 @@ public class DefaultCameraScan extends CameraScan {
 
     private View flashlightView;
 
-    private SingleLiveData<Result> mResultLiveData;
+    private FixedLiveData<Result> mResultLiveData;
 
     private OnScanResultCallback mOnScanResultCallback;
 
@@ -129,7 +129,7 @@ public class DefaultCameraScan extends CameraScan {
     };
 
     private void initData(){
-        mResultLiveData = new SingleLiveData<>();
+        mResultLiveData = new FixedLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
             if(result != null){
                 handleAnalyzeResult(result);

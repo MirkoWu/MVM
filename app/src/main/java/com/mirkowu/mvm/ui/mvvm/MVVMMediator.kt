@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.ui.mvvm
 
+import android.util.Log
 import com.mirkowu.lib_base.mediator.BaseMediator
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.util.RxScheduler
@@ -9,7 +10,7 @@ import com.mirkowu.lib_network.state.ResponseData
 import com.mirkowu.lib_network.state.ResponseLiveData
 import com.mirkowu.lib_network.util.*
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.livedata.SingleLiveData
+import com.mirkowu.lib_util.livedata.FixedLiveData
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.mvm.BizModel
 import com.mirkowu.mvm.bean.GankBaseBean
@@ -24,17 +25,17 @@ import io.reactivex.rxjava3.core.Observable
 open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
     @JvmField
     val mImageData = ResponseLiveData<List<RandomImageBean>>()
-    var mLiveData = SingleLiveData<Any>()
-    var mError = SingleLiveData<Throwable>()
+    var mLiveData = FixedLiveData<Any>()
+    var mError = FixedLiveData<Throwable>()
 
     @JvmField
     var mRequestImageListData = ResponseLiveData<List<ImageBean>>()
 
     @JvmField
-    var imageBean = ResponseLiveData< ImageListBean>()
+    var imageBean = ResponseLiveData<ImageListBean>()
 
     @JvmField
-    var mImageError = SingleLiveData<ErrorBean>()
+    var mImageError = FixedLiveData<ErrorBean>()
 
     var mPingResult = ResponseLiveData<Boolean>()
 
@@ -54,14 +55,14 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
                     mRequestImageListData.setValue(ResponseData.error(bean))
                 }
             })
-      //  loadImage2()
+        //  loadImage2()
     }
 
     fun loadImageAsLiveData(
         page: Int,
         pageSize: Int
-    ) :ResponseLiveData<ImageListBean> {
-      return  mModel.loadImage(page, pageSize)
+    ): ResponseLiveData<ImageListBean> {
+        return mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
 
             .to(RxLife.bindLifecycle(mView))
@@ -134,6 +135,18 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
 //                    mPingResult.value = ResponseData.error(it)
 //                })
             .subscribe(object : RxObserver<Boolean>() {
+                override fun onStart() {
+                    super.onStart()
+                    mPingResult.value = ResponseData.loading()
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+                    Log.e("xxx", "set  -- onFinish hasActiveObservers="+ mPingResult.hasActiveObservers())
+                    mPingResult.value = ResponseData.finish()
+
+                }
+
                 override fun onSuccess(data: Boolean) {
                     mPingResult.value = ResponseData.success(data)
                 }

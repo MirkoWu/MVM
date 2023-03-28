@@ -1,7 +1,11 @@
 package com.mirkowu.mvm;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.mirkowu.lib_bugly.BuglyManager;
 import com.mirkowu.lib_crash.CrashManager;
@@ -10,6 +14,8 @@ import com.mirkowu.lib_stat.UmengManager;
 import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.util.WebViewUtil;
+import com.mirkowu.lib_widget.stateview.DefaultInitializer;
+import com.mirkowu.lib_widget.stateview.StateView;
 
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
@@ -51,6 +57,20 @@ public class MVMApplication extends Application {
                 LogUtil.e("RxJavaPlugins", throwable.toString());
                 CrashManager.reportError(throwable);
                 UmengManager.reportError(throwable);
+            }
+        });
+
+        StateView.setDefaultInitializer(new DefaultInitializer() {
+            @Override
+            public void init(@NonNull Context context, @NonNull StateView stateView) {
+                stateView
+//                        .setLoadingSrc(R.drawable.big_white)
+                        .setLoadingText("正在拼命加载～")
+                        .setEmptyText("暂无数据")
+                        .setEmptySrc(com.mirkowu.lib_widget.R.drawable.widget_svg_empty)
+                        .setErrorText("加载失败")
+                        .setRefreshBackgroundSrc(R.drawable.shape_stroke_1dp);
+                stateView.getRefreshButton().setTextColor(ContextCompat.getColor(context,R.color.colorAccent));
             }
         });
 

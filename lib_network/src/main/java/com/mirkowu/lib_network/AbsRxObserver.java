@@ -27,15 +27,14 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      *
      * @param o
      */
-    public void doOnSuccess(T o) {
+    protected void doOnSuccess(T o) {
         try {
             onSuccess(o);
         } catch (Throwable e) {
+            onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
             LogUtil.e("onSuccess 业务异常", e.toString());
             if (LogUtil.isDebug()) {
                 throw e;
-            } else {
-                onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
             }
         }
     }
@@ -51,7 +50,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
      *
      * @param e
      */
-    public void doOnError(Throwable e) {
+    protected void doOnError(Throwable e) {
         if (e instanceof RxJava2NullException) {
             doOnSuccess(null);
         } else {

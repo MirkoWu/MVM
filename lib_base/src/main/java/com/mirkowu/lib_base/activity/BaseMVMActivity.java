@@ -22,6 +22,7 @@ import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_widget.dialog.LoadingDialog;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 更多可配置的
@@ -31,6 +32,8 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     @NonNull
     protected M mMediator;
     private LoadingDialog mLoadingDialog;
+
+    private AtomicInteger mLoading = new AtomicInteger(0);
 
 
     @Override
@@ -84,7 +87,6 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         }
     }
 
-
     @Override
     public void showLoadingDialog() {
         showLoadingDialog(getString(R.string.widget_loading));
@@ -92,30 +94,29 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 
     @Override
     public void showLoadingDialog(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mLoadingDialog != null && mLoadingDialog.isVisible()) {
-                    mLoadingDialog.setMessage(msg);
-                    return;
-                }
+        runOnUiThread(() -> {
+            if (mLoading.getAndIncrement() != 0 && mLoadingDialog != null) {
+                mLoadingDialog.setMessage(msg);
+                return;
+            }
+
+            if (!isFinishing()) {
                 mLoadingDialog = new LoadingDialog(msg);
-                if (!isFinishing() && !mLoadingDialog.isVisible()) {
-                    mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
-                }
+                mLoadingDialog.setOnDismissListener(dialog -> {
+                    hideLoadingDialog();
+                });
+                mLoadingDialog.showAllowingStateLoss(getSupportFragmentManager());
             }
         });
     }
 
     @Override
     public void hideLoadingDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mLoadingDialog != null) {
-                    mLoadingDialog.dismissAllowingStateLoss();
-                    mLoadingDialog = null;
-                }
+        runOnUiThread(() -> {
+            if (mLoading.get() > 0 && mLoading.decrementAndGet() == 0 && mLoadingDialog != null) {
+                mLoadingDialog.setOnDismissListener(null);
+                mLoadingDialog.dismissAllowingStateLoss();
+                mLoadingDialog = null;
             }
         });
     }

@@ -11,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_base.util.RxLife
+import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_camera.CameraActivity
+import com.mirkowu.lib_network.ErrorBean
 import com.mirkowu.lib_network.state.observeRequest
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
@@ -24,7 +27,11 @@ import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
+import com.mirkowu.mvm.bean.UpgradeBean
 import com.mirkowu.mvm.databinding.FragmentDatabindingBinding
+import com.mirkowu.mvm.network.AppClient
+import com.mirkowu.mvm.network.RxObserver
+import com.mirkowu.mvm.network.UpgradeApi
 import com.mirkowu.mvm.ui.download.DownloadActivity
 import com.mirkowu.mvm.ui.imagepicker.ImagePickerActivity
 import com.mirkowu.mvm.ui.mvvm.MVVMMediator
@@ -151,21 +158,39 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     ToastUtils.showShort("当前已是最新版本!")
                 }
             }
+
+
         }
         binding.btnUpgrade.click {
             // BuglyManager.checkUpgrade(true, false)
             val url =
                 "https://outexp-beta.cdn.qq.com/outbeta/2021/06/18/commirkowumvm_1.0.1_56987f9a-fb39-56d5-9ac4-a4c055633672.apk"
-            BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
-                Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo  ")
+//            BuglyManager.checkUpgrade { hasNewVersion, upgradeInfo ->
+//                Log.e("BuglyManager", "setUpgradeListener:   upgradeInfo=$upgradeInfo  ")
+//
+//
+//                if (upgradeInfo != null) {
+//                    com.mirkowu.lib_bugly.UpgradeDialog.show(childFragmentManager, upgradeInfo)
+//                } else {
+//                    ToastUtils.showShort("当前已是最新版本!")
+//                }
+//            }
+            AppClient.getInstance().getService(UpgradeApi::class.java)
+                .getUpgradeInfo(UpgradeApi.UPGRADE_URL)
+                .compose(RxScheduler.ioToMain())
+                .to(RxLife.bindLifecycle(this))
+                .subscribe(object : RxObserver<UpgradeBean>() {
+                    override fun onSuccess(data: UpgradeBean) {
+                        data?.let {
+                            it.apkUrl = url
+                            com.mirkowu.lib_upgrade.UpgradeDialog.show(childFragmentManager, it)
+                        }
+                    }
 
+                    override fun onFailure(bean: ErrorBean) {
 
-                if (upgradeInfo != null) {
-                    com.mirkowu.lib_bugly.UpgradeDialog.show(childFragmentManager, upgradeInfo)
-                } else {
-                    ToastUtils.showShort("当前已是最新版本!")
-                }
-            }
+                    }
+                })
 
         }
         binding.btnQr.click {
@@ -203,15 +228,21 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     binding.tvNetworkStatus.visibility = View.VISIBLE
                 }
             }
+            onLoading {
+                showLoadingDialog("")
+            }
+            onFinish {
+                hideLoadingDialog()
+            }
         }
         mMediator.getPing()
 
         //todo 方式2
         mMediator.getPing2LiveData().observeRequest(this) {
-            onLoading { }
+            onLoading { showLoadingDialog("") }
             onSuccess { }
             onFailure { }
-            onFinish { }
+            onFinish { hideLoadingDialog() }
         }
 
     }

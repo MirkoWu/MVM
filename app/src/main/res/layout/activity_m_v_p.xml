@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        app:backIcon="@drawable/widget_ic_back_black"
         android:fitsSystemWindows="true"
+        app:backIcon="@drawable/widget_ic_back_black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:showLine="true"
@@ -31,8 +31,10 @@
         android:id="@+id/btn_statusbar_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:stateListAnimator="@null"
         android:text="FitSystemWindow设置状态栏"
         android:textAllCaps="false"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/tvTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +45,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="getTimeClick"
+        android:stateListAnimator="@null"
         android:text="获取时间"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+    <com.mirkowu.lib_widget.stateview.StateView
+        android:id="@+id/mStateView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

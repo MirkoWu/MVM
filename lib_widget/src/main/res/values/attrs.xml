@@ -26,13 +26,19 @@
     </declare-styleable>
 
     <declare-styleable name="StateView">
-        <attr name="sv_loadingText" format="string" />
-        <attr name="sv_loadingProgress" format="reference" />
+        <attr name="sv_loadingText" format="string|reference" />
+        <attr name="sv_loadingSrc" format="reference" />
         <attr name="sv_defaultLoading" format="boolean" />
-        <attr name="sv_showText" format="string" />
-        <attr name="sv_showIcon" format="reference" />
-        <attr name="sv_refreshText" format="string" />
+        <attr name="sv_showText" format="string|reference" />
+        <attr name="sv_emptyText" format="string|reference" />
+        <attr name="sv_errorText" format="string|reference" />
+        <attr name="sv_showSrc" format="reference" />
+        <attr name="sv_emptySrc" format="reference" />
+        <attr name="sv_errorSrc" format="reference" />
+        <attr name="sv_refreshText" format="string|reference" />
+        <attr name="sv_checkNetworkText" format="string|reference" />
         <attr name="sv_refreshBackground" format="reference" />
+        <attr name="sv_checkNetworkBackground" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="TimerTextView">

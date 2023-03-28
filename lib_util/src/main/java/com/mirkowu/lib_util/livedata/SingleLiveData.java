@@ -1,7 +1,6 @@
 package com.mirkowu.lib_util.livedata;
 
 
-import android.util.Log;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
@@ -13,11 +12,25 @@ import com.mirkowu.lib_util.LogUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * use
+ * @see FixedLiveData
+ * @param <T>
+ */
+@Deprecated
 public class SingleLiveData<T> extends MutableLiveData<T> {
 
     private static final String TAG = "SingleLiveEvent";
 
     private final AtomicBoolean mPending = new AtomicBoolean(false);
+
+    public SingleLiveData() {
+        super();
+    }
+
+    public SingleLiveData(T value) {
+        super(value);
+    }
 
     @MainThread
     public void observe(LifecycleOwner owner, final Observer<? super T> observer) {

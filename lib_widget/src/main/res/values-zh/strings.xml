@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_refresh">刷新一下</string>
+    <string name="widget_check_network">检查网络</string>
     <string name="widget_loading">加载中...</string>
     <string name="widget_btn_confirm">确定</string>
     <string name="widget_btn_cancel">取消</string>

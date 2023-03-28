@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
+import com.mirkowu.lib_widget.stateview.OnRefreshListener;
 import com.mirkowu.mvm.R;
 import com.mirkowu.mvm.base.BaseActivity;
 import com.mirkowu.mvm.databinding.ActivityMVPBinding;
@@ -45,6 +46,20 @@ public class MVPActivity extends BaseActivity<MVPMediator> implements IMVPView {
 
         });
         mMediator.getData();
+
+        binding.mStateView.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+
+        binding.mStateView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.mStateView.setGoneState();
+            }
+        },5500);
 
     }
 

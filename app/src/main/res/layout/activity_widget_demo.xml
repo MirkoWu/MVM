@@ -22,44 +22,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="提示框" />
+
         <Button
             android:id="@+id/btn_prompt2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退出" />
-    <Button
+
+        <Button
             android:id="@+id/btn_bottom_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="底部列表" />
-    <Button
+
+        <Button
             android:id="@+id/btn_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="输入框" />
 
-      <Button
+        <Button
             android:id="@+id/btn_binding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BindingFragment" />
 
-      <Button
+        <Button
             android:id="@+id/btn_toast_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Toast暗色" />
 
-      <Button
+        <Button
             android:id="@+id/btn_toast_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Toast亮色" />
-      <Button
+
+        <Button
             android:id="@+id/btn_intercept_chain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="责任链模式" />
+            android:text="链式弹窗" />
+
+        <Button
+            android:id="@+id/btn_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="状态布局" />
 
 
         <TextView
@@ -105,7 +115,6 @@
             android:text="自定义3.0加粗字体"
             android:textColor="#333333"
             app:boldStyle="3.0" />
-
 
 
     </LinearLayout>

@@ -39,11 +39,13 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
 
     override fun initialize() {
         binding.btnLoading.click {
-            showLoadingDialog("Toast测试")
+            showLoadingDialog("加载中...")
             GlobalScope.launch {
                 delay(2000)
                 showLoadingDialog("更新成功")
                 delay(1000)
+                hideLoadingDialog()
+                hideLoadingDialog()
                 hideLoadingDialog()
             }
         }
@@ -122,6 +124,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
         binding.tvBoldMid.setMediumStyle()
         binding.tvBoldDefault.setBoldWith(1.5f)
         binding.tvNormal.apply { paint.isFakeBoldText = true }
+        binding.btnState.click { StateViewActivity.start(this) }
     }
 
 

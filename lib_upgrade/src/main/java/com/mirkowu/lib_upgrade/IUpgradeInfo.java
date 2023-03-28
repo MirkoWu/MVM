@@ -19,5 +19,5 @@ public interface IUpgradeInfo {
 
     int getVersionCode();
 
-    int isForceUpgrade();
+    boolean isForceUpgrade();
 }
