@@ -1,5 +1,6 @@
 package com.mirkowu.lib_widget.dialog;
 
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -69,7 +70,11 @@ public class LoadingDialog extends BaseDialog {
     }
 
     public LoadingDialog setMessage(CharSequence message) {
-        this.mMessage.setValue(message);
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            this.mMessage.setValue(message);
+        } else {
+            this.mMessage.postValue(message);
+        }
         return this;
     }
 
