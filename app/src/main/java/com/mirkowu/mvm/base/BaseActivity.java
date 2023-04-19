@@ -3,6 +3,7 @@ package com.mirkowu.mvm.base;
 
 import android.content.res.Resources;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import com.mirkowu.lib_base.activity.BaseMVMActivity;
@@ -27,33 +28,30 @@ public abstract class BaseActivity<M extends BaseMediator> extends BaseMVMActivi
     protected void initStatusBar() {
         BarUtils.setStatusBarLightMode(this, true);
     }
-//    @Override
-//    public void showStateView(StateBean bean) {
-//
-//    }
-//
-//    @Override
-//    public void hideStateView() {
-//
-//    }
-//
-//    @Override
-//    public void onFailure() {
-//
-//    }
+
 
     /**
      * 也可以放在Base中
      */
-    //protected VB mBinding;
-//
+    @LayoutRes
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected void bindContentView() {
+        setContentView(getLayoutId());
+    }
+    //    protected VB mBinding;
+
 //    @Override
 //    protected void bindContentView() {
-////        super.bindContentView();
+//        super.bindContentView();
 //        this.mBinding = (VB) DataBindingUtil.setContentView(this,  getLayoutId());
 //        setContentView(mBinding.getRoot());
-//
 //    }
+
+
     @Override
     public Resources getResources() {
         //这个地方慎用，可能会导致在不恰当的时间 调用

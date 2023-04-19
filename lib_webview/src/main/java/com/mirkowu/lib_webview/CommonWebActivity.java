@@ -64,13 +64,13 @@ public class CommonWebActivity extends BaseMVMActivity {
     protected WebConfig mWebConfig;
 
     @Override
-    protected BaseMediator initMediator() {
-        return null;
+    protected void bindContentView() {
+        setContentView(R.layout.webview_layout_common_web_view);
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.webview_layout_common_web_view;
+    protected BaseMediator initMediator() {
+        return null;
     }
 
     @Override
