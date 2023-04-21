@@ -71,15 +71,14 @@ class FragmentBindingDelegate<VB : ViewBinding>(
 
     private var binding: VB? = null
 
-
-    override fun getValue(thisRef: Fragment, property: KProperty<*>): VB {
+    override fun getValue(fragment: Fragment, property: KProperty<*>): VB {
         if (binding == null) {
-            binding = bind(thisRef.requireView())/*.also {
+            binding = bind(fragment.requireView())/*.also {
                 if (it is ViewDataBinding) {
                     it.lifecycleOwner = thisRef.viewLifecycleOwner
                 }
             }*/
-            thisRef.viewLifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
+            fragment.viewLifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 fun onDestroyView() {
                     binding = null

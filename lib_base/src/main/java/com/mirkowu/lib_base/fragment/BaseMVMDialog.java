@@ -3,6 +3,7 @@ package com.mirkowu.lib_base.fragment;
 import android.view.View;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -104,7 +105,7 @@ public abstract class BaseMVMDialog<M extends BaseMediator> extends BaseDialog i
 //        // ft.addToBackStack(null)//不添加到回退栈
 //        super.show(manager, tag);
 //    }
-
+    @LayoutRes
     protected abstract int getLayoutId();
 
     protected abstract void initialize();
