@@ -79,6 +79,7 @@ public class Toolbar extends RelativeLayout {
         ivRight = view.findViewById(R.id.iv_right);
         vLine = view.findViewById(R.id.v_line);
 
+        setBackgroundColor(Color.WHITE);
         setTitle(title);
         setTitleColor(mTitleColorId);
         setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
