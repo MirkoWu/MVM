@@ -172,7 +172,7 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
     }
 
     protected void resetFirstLoad() {
-        isFirstLoad = false;
+        isFirstLoad = true;
     }
     /**
      * 懒加载 需要时可重写
