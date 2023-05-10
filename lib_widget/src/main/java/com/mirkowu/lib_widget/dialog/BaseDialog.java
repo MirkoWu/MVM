@@ -68,7 +68,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(mContext).inflate(getLayoutResId(), container, false);
+        View view = inflater.inflate(getLayoutResId(), container, false);
         ViewHolder viewHolder = new ViewHolder(view);
         convertView(viewHolder, this);
         return view;
@@ -317,7 +317,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     }
 
 
-    public class ViewHolder {
+    public static class ViewHolder {
         private SparseArray<View> mViews;
         private View mConvertView;
 
@@ -335,25 +335,25 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
             return (T) view;
         }
 
-        public ViewHolder setText(int viewId, String text) {
+        public ViewHolder setText(@IdRes int viewId, String text) {
             TextView textView = getView(viewId);
             textView.setText(text);
             return this;
         }
 
-        public ViewHolder setTextColor(int viewId, int colorId) {
+        public ViewHolder setTextColor(@IdRes int viewId, int colorId) {
             TextView textView = getView(viewId);
             textView.setTextColor(colorId);
             return this;
         }
 
-        public ViewHolder setBackgroundResource(int viewId, int resId) {
+        public ViewHolder setBackgroundResource(@IdRes int viewId, int resId) {
             View view = getView(viewId);
             view.setBackgroundResource(resId);
             return this;
         }
 
-        public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+        public ViewHolder setOnClickListener(@IdRes int viewId, View.OnClickListener listener) {
             getView(viewId).setOnClickListener(listener);
             return this;
         }

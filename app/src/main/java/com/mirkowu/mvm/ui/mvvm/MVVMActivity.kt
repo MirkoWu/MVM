@@ -27,15 +27,12 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
     val binding by bindingView(ActivityMVVMBinding::inflate)
     private lateinit var refreshHelper: RefreshHelper
     private lateinit var imageAdapter: ImageAdapter
-    override fun getLayoutId(): Int {
-        return R.layout.activity_m_v_v_m
-    }
 
     override fun bindContentView() {
         setContentView(binding.root)
     }
 
-    var isGrayMode=false
+    var isGrayMode = false
     override fun initialize() {
         refreshHelper = RefreshHelper(binding.mRefresh, binding.mRecyclerView, this)
         imageAdapter = ImageAdapter()
@@ -53,10 +50,10 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 "TAG",
                 "onItemChildClick: $position"
             )
-            isGrayMode=!isGrayMode
-            if (isGrayMode){
+            isGrayMode = !isGrayMode
+            if (isGrayMode) {
                 ColorFilterUtils.setGrayFilter(activity)
-            }else{
+            } else {
                 ColorFilterUtils.removeFilter(activity)
             }
         }

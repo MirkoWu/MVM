@@ -25,7 +25,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 更多可配置的
+ * MVM base 示例
+ * 可自行实现接口，重写
  */
 public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatActivity implements IBaseView {
 
@@ -51,13 +52,9 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         initialize();
     }
 
-    protected void initialize(@Nullable Bundle savedInstanceState) {
-    }
-
     /*** 绑定布局 */
-    protected void bindContentView() {
-        setContentView(getLayoutId());
-    }
+    protected abstract void bindContentView();
+
 
     /*** 初始化状态栏 setContentView 之前*/
     protected void initStatusBar() {
@@ -65,6 +62,9 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
 //        BarUtils.setStatusBarLightMode(this,true);
         //沉浸式状态栏
 //        BarUtils.transparentStatusBar(this);
+    }
+
+    protected void initialize(@Nullable Bundle savedInstanceState) {
     }
 
     /*** 绑定中间件 */
@@ -86,6 +86,14 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
             mMediator = null;
         }
     }
+
+
+    @Override
+    protected void onDestroy() {
+        detachMediator();
+        super.onDestroy();
+    }
+
 
     @Override
     public void showLoadingDialog() {
@@ -141,12 +149,6 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
     }
 
     @Override
-    protected void onDestroy() {
-        detachMediator();
-        super.onDestroy();
-    }
-
-    @Override
     public void setRequestedOrientation(int requestedOrientation) {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating()) {
             LogUtil.d("avoid calling setRequestedOrientation when Oreo.");
@@ -199,11 +201,8 @@ public abstract class BaseMVMActivity<M extends BaseMediator> extends AppCompatA
         return Lifecycle.Event.ON_DESTROY;
     }
 
-    protected abstract int getLayoutId();
-
     protected abstract void initialize();
 
     protected abstract M initMediator();
-
 
 }

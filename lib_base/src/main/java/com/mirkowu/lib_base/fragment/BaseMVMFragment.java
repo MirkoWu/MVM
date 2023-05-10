@@ -18,6 +18,8 @@ import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_util.PermissionsUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment implements IBaseView {
     protected M mMediator;
@@ -52,11 +54,10 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         return mView;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        resetFirstLoad();
         bindMediator();
         initialize();
     }
@@ -87,6 +88,7 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
             mMediator = null;
         }
         super.onDestroyView();
+        resetFirstLoad();
     }
 
     @Override
@@ -143,7 +145,7 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
 
     /*** >>>>>>>>>>>>>>>>>>>> 懒加载 >>>>>>>>>>>>>>>>>>>> */
 
-    protected boolean isFirstLoad = true; //是否第一次加载
+    protected boolean isFirstLoad = false; //是否第一次加载
     private boolean isSupportLazyLoad = true; //是否支持懒加载
 
     public boolean isSupportLazyLoad() {
@@ -169,6 +171,9 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         }
     }
 
+    protected void resetFirstLoad() {
+        isFirstLoad = true;
+    }
     /**
      * 懒加载 需要时可重写
      */

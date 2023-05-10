@@ -34,8 +34,8 @@ class WebActivity : CommonWebActivity() {
 
     }
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_web
+    override fun bindContentView() {
+        setContentView(R.layout.activity_web)
     }
 
     override fun getWebConfig(): WebConfig {
