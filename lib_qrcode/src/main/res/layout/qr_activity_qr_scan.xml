@@ -21,6 +21,7 @@
         app:backIcon="@drawable/widget_ic_back_white"
         app:showLine="false"
         app:showStatusBarHeight="true"
+        android:background="#00000000"
         app:title="@string/qr_scan"
         app:titleColor="#FFFFFF" />
 
