@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'org.jetbrains.dokka'
 //bugly {
 //    appId = "3e2cd9bf87"
 //    appKey = "1b977565-a3ce-4188-9eea-255729b7ddc8"
