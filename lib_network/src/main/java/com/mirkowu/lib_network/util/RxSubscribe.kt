@@ -33,7 +33,7 @@ fun <T> ObservableSubscribeProxy<T>.subscribeRequest(callback: RequestCallback<T
     }
 }
 
-fun <T> Observable<T>.subscribeRequest(callback: RequestCallback<T>.() -> Unit) {
+fun <T : Any> Observable<T>.subscribeRequest(callback: RequestCallback<T>.() -> Unit) {
     RequestCallback<T>().apply(callback).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {
@@ -82,7 +82,7 @@ fun <T> ObservableSubscribeProxy<T>.asResponseLiveData(liveData: ResponseLiveDat
     }
 }
 
-fun <T> Observable<T>.asResponseLiveData(liveData: ResponseLiveData<T>? = null): ResponseLiveData<T> {
+fun <T : Any> Observable<T>.asResponseLiveData(liveData: ResponseLiveData<T>? = null): ResponseLiveData<T> {
     return (liveData ?: ResponseLiveData<T>()).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {

@@ -15,14 +15,14 @@ import io.reactivex.rxjava3.core.Observable
  *
  */
 
-fun <R> Observable<R>.bindLifecycle(binder: ILifecycleBinder): ObservableSubscribeProxy<R> {
+fun <R : Any> Observable<R>.bindLifecycle(binder: ILifecycleBinder): ObservableSubscribeProxy<R> {
     return bindLifecycle(binder.lifecycleOwner, binder.bindLifecycleUntil())
 }
 
-fun <R> Observable<R>.bindLifecycle(owner: LifecycleOwner, untilEvent: Lifecycle.Event): ObservableSubscribeProxy<R> {
+fun <R : Any> Observable<R>.bindLifecycle(owner: LifecycleOwner, untilEvent: Lifecycle.Event): ObservableSubscribeProxy<R> {
     return to(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(owner, untilEvent)))
 }
 
-fun <R> Observable<R>.bindLifecycleAuto(owner: LifecycleOwner): ObservableSubscribeProxy<R> {
+fun <R : Any> Observable<R>.bindLifecycleAuto(owner: LifecycleOwner): ObservableSubscribeProxy<R> {
     return to(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(owner)))
 }
