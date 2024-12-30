@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from:"../publish.gradle"
 apply plugin: 'kotlin-android'
 
 def ext = rootProject.ext

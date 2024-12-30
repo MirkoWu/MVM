@@ -1,6 +1,6 @@
-plugins {
-    id 'com.android.library'
-}
+apply plugin: 'com.android.library'
+apply from:"../publish.gradle"
+
 def ext = rootProject.ext
 android {
     compileSdkVersion ext.compileSdkVersion
