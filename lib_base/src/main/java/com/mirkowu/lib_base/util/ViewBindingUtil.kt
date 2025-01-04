@@ -36,14 +36,15 @@ inline fun <VB : ViewBinding> ComponentActivity.bindingView(crossinline inflate:
  * 绑定Fragment  eg.
  * val binding by binding { FragmentHomeBinding.bind(view!!) }
  */
-fun <VB : ViewBinding> Fragment.bindingView(bind: (View) -> VB) =
-        FragmentBindingDelegate(bind)
+inline  fun <VB : ViewBinding> Fragment.bindingView(crossinline bind: (View) -> VB) = lazy {
+    bind(requireView())
+}
 
 /**
  * 绑定Dialog  eg.
  * val binding by binding(DialogHintBinding::inflate)
  */
-fun <VB : ViewBinding> Dialog.bindingView(inflate: (LayoutInflater) -> VB) = lazy {
+inline fun <VB : ViewBinding> Dialog.bindingView(crossinline inflate: (LayoutInflater) -> VB) = lazy {
     inflate(layoutInflater).also { setContentView(it.root) }
 }
 
@@ -66,7 +67,7 @@ fun <VB : ViewBinding> ViewGroup.bindingView(inflate: (LayoutInflater, ViewGroup
 //        customView?.let { bind(it).run(onBindView) }
 
 class FragmentBindingDelegate<VB : ViewBinding>(
-        private val bind: (View) -> VB
+    private val bind: (View) -> VB
 ) : ReadOnlyProperty<Fragment, VB> {
 
     private var binding: VB? = null

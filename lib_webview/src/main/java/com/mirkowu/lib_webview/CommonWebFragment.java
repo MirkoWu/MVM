@@ -3,7 +3,9 @@ package com.mirkowu.lib_webview;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.ProgressBar;
 
@@ -55,8 +57,8 @@ public class CommonWebFragment extends BaseMVMFragment {
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.webview_layout_common_web_view;
+    protected View bindContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        return inflater.inflate(R.layout.webview_layout_common_web_view, container, false);
     }
 
     @Override

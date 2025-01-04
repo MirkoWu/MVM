@@ -53,12 +53,8 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
             return fragment
         }
     }
-//    val binding  :FragmentDatabindingBinding  by binding()
 
-    val binding by bindingView { FragmentDatabindingBinding.bind(view!!) }
-
-//    var _binding: FragmentDatabindingBinding? = null
-//    val binding get() = _binding!!
+    val binding by bindingView(FragmentDatabindingBinding::bind)
 
     override fun getLayoutId() = R.layout.fragment_databinding
     override fun initialize() {
@@ -248,6 +244,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         }
 
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: $position")

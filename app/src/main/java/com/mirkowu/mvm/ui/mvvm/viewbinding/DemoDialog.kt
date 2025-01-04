@@ -7,8 +7,7 @@ import com.mirkowu.mvm.databinding.DialogDatabindingBinding
 
 class DemoDialog : BaseDialog() {
 
-    val binding by bindingView { DialogDatabindingBinding.bind(requireView()) }
-
+    val binding by bindingView(DialogDatabindingBinding::bind)
 
     override fun getLayoutResId() = R.layout.dialog_databinding
 }

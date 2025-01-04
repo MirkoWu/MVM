@@ -11,7 +11,7 @@ class DataBindingActivity : BaseActivity<DBMediator>() {
     val binding by bindingView(ActivityDataBindingBinding::inflate)
 
     override fun bindContentView() {
-        binding.root
+//        binding.root
     }
 
     override fun getLayoutId() = 0

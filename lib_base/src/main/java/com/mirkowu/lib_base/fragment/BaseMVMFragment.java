@@ -50,9 +50,10 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(getLayoutId(), container, false);
-        return mView;
+        return bindContentView(inflater, container);
     }
+
+    protected abstract View bindContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container);
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -61,8 +62,6 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         bindMediator();
         initialize();
     }
-
-    protected abstract int getLayoutId();
 
     protected abstract void initialize();
 
@@ -174,6 +173,7 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
     protected void resetFirstLoad() {
         isFirstLoad = true;
     }
+
     /**
      * 懒加载 需要时可重写
      */
