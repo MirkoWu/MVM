@@ -3,23 +3,25 @@ package com.mirkowu.mvm.ui.mvvm
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
-import android.graphics.Paint
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
-import com.mirkowu.lib_network.state.observeRequest
+import com.mirkowu.lib_network.request.flow.request
+import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
-import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.bean.ImageBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
+import com.mirkowu.mvm.network.GankClient
+import com.mirkowu.mvm.network.ImageApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -78,23 +80,23 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                    return null;
 //                });
 
-        mMediator.imageBean.observeRequest(this) {
-            onLoading { LogUtil.d("onLoading") }
-            onFinish { LogUtil.d("onFinish") }
-            onSuccess { LogUtil.d("onSuccess") }
-            onFailure { LogUtil.d("onFailure $it") }
+        mMediator.imageBean.request(this) {
+            loading { LogUtil.d("onLoading") }
+            finish { LogUtil.d("onFinish") }
+            success { LogUtil.d("onSuccess") }
+            fail { LogUtil.d("onFailure $it") }
         }
         //todo 方式1：使用封装好的 observerRequest 方法，方便快捷
-        mMediator.mRequestImageListData.observeRequest(this) {
-            onFinish {
+        mMediator.mRequestImageListData.request(this) {
+            finish {
                 hideLoadingDialog()
             }
-            onSuccess {
+            success {
                 binding.mStateView.setGoneState()
                 refreshHelper.setLoadMore(imageAdapter, it)
             }
-            onFailure {
-                binding.mStateView.setErrorState(it.msg())
+            fail {
+                binding.mStateView.setErrorState(it.msg)
                 refreshHelper.finishLoad()
                 val errorBean = it
                 if (errorBean.isNetError && refreshHelper.isFirstPage) {
@@ -102,13 +104,13 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 } else if (errorBean.isApiError) {
                     Toast.makeText(
                         this@MVVMActivity,
-                        errorBean.code().toString() + ":" + errorBean.msg(),
+                        errorBean.code.toString() + ":" + errorBean.msg,
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     Toast.makeText(
                         this@MVVMActivity,
-                        errorBean.code().toString() + ":" + errorBean.msg(),
+                        errorBean.code.toString() + ":" + errorBean.msg,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -121,34 +123,36 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             } else if (responseData.isFailure) {
                 refreshHelper.finishLoad()
                 val errorBean = responseData.error
-                if (errorBean.isNetError && refreshHelper.isFirstPage) {
-                    //  binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
-                } else if (errorBean.isApiError) {
-                    Toast.makeText(
-                        this@MVVMActivity,
-                        errorBean.code().toString() + ":" + errorBean.msg(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        this@MVVMActivity,
-                        errorBean.code().toString() + ":" + errorBean.msg(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (errorBean != null) {
+                    if (errorBean.isNetError && refreshHelper.isFirstPage) {
+                        //  binding.mStateView.setShowState(R.drawable.widget_svg_disconnect, errorBean.msg(), true);
+                    } else if (errorBean.isApiError) {
+                        Toast.makeText(
+                            this@MVVMActivity,
+                            errorBean.code.toString() + ":" + errorBean.msg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@MVVMActivity,
+                            errorBean.code.toString() + ":" + errorBean.msg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
         mMediator.mImageError.observe(this) { errorBean ->
             hideLoadingDialog()
             refreshHelper.finishLoad()
-            binding.mStateView.setErrorState(errorBean.msg())
+            binding.mStateView.setErrorState(errorBean.msg)
         }
         mMediator.mImageData.observe(this) { data ->
             hideLoadingDialog()
             refreshHelper.finishLoad()
             if (data.isSuccess) {
-                if (data.data != null && !data.data.isEmpty()) {
-                    val imgUrl = data.data[0].imgurl
+                if (data.data != null && !data!!.data!!.isEmpty()) {
+                    val imgUrl = data.data!!.get(0)!!.imgurl
                     val bean = ImageBean()
                     bean.url = imgUrl
                     val list: MutableList<ImageBean?> = ArrayList()
@@ -156,7 +160,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                     refreshHelper.setLoadMore(imageAdapter, list)
                 }
             } else if (data.isFailure) {
-                binding.mStateView.setErrorState(data.error.msg())
+                binding.mStateView.setErrorState(data.error?.msg)
             }
         }
 //        binding.mStateView.setLoadingState()
@@ -188,13 +192,30 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         binding.mStateView.setLoadingState()
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
+        lifecycleScope.launch {
+            GankClient.getInstance().getService<ImageApi>(ImageApi::class.java)
+                .loadImage("", 1, 1)
+                .map {
+//                if(it.isSuccess){
+                    it.data
+//                }else {
+//                    null
+//                }
+
+                }
+                .request {
+                    success { it!!.list }
+                    fail { }
+                }
+        }
+
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)
-            .observeRequest(this) {
-                onSuccess { it }
+            .request(this) {
+                success { it }
             }
-        mMediator.getPing2LiveData().observeRequest(this) {
-            onSuccess { }
-            onFailure { }
+        mMediator.getPing2LiveData().request(this) {
+            success { }
+            fail { }
         }
     }
 

@@ -2,44 +2,47 @@
 
 import autodispose2.ObservableSubscribeProxy
 import com.mirkowu.lib_network.AbsRxObserver
-import com.mirkowu.lib_network.ApiException
-import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_network.ErrorType
-import com.mirkowu.lib_network.state.ResponseData
-import com.mirkowu.lib_network.state.ResponseLiveData
+import com.mirkowu.lib_network.request.ApiException
+import com.mirkowu.lib_network.request.ErrorData
+import com.mirkowu.lib_network.request.ErrorType
+import com.mirkowu.lib_network.request.RequestData
+import com.mirkowu.lib_network.request.RequestLiveData
 import com.mirkowu.mvm.bean.GankBaseBean
 
 
-fun <T> ObservableSubscribeProxy<GankBaseBean<T>>.asResponseLiveData(liveData: ResponseLiveData<T>? = null): ResponseLiveData<T> {
-    return (liveData ?: ResponseLiveData<T>()).apply {
+fun <T> ObservableSubscribeProxy<GankBaseBean<T>>.asResponseLiveData(liveData: RequestLiveData<T>? = null): RequestLiveData<T> {
+    return (liveData ?: RequestLiveData<T>()).apply {
         subscribe(object : AbsRxObserver<GankBaseBean<T>>() {
             override fun onStart() {
                 super.onStart()
-                value = ResponseData.loading()
+                value = RequestData.loading()
             }
 
             override fun onFinish() {
                 super.onFinish()
-                value = ResponseData.finish()
+                value = RequestData.finish()
             }
 
             override fun onSuccess(data: GankBaseBean<T>?) {
                 data?.let { it ->
                     value = if (it.isSuccess) {
-                        ResponseData.success(it.data)
+                        RequestData.success(it.data)
                     } else {
-                        ResponseData.error(
+                        RequestData.failure(
                             ErrorType.API,
-                            it.code,
+                            it.code.toString(),
                             "",
-                            ApiException(it.code, "")
+                            ApiException(
+                                it.code.toString(),
+                                ""
+                            )
                         )
                     }
                 }
             }
 
-            override fun onFailure(bean: ErrorBean) {
-                value = ResponseData.error(bean)
+            override fun onFailure(bean: ErrorData) {
+                value = RequestData.failure(bean)
             }
         })
     }

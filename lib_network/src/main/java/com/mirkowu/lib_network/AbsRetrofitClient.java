@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import androidx.annotation.NonNull;
 
 import com.mirkowu.lib_util.Preconditions;
+import com.mirkowu.lib_network.flowcall.FlowCallAdapterFactory;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
@@ -44,6 +45,7 @@ public abstract class AbsRetrofitClient extends AbsOkHttpClient {
                 .client(getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .addCallAdapterFactory(FlowCallAdapterFactory.create())
                 .build();
     }
 

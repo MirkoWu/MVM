@@ -1,15 +1,14 @@
-package com.mirkowu.lib_network.util
+package com.mirkowu.lib_network.request.rxjava
 
 import autodispose2.ObservableSubscribeProxy
 import com.mirkowu.lib_network.AbsRxObserver
-import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_network.state.RequestCallback
-import com.mirkowu.lib_network.state.ResponseData
-import com.mirkowu.lib_network.state.ResponseLiveData
+import com.mirkowu.lib_network.request.ErrorData
+import com.mirkowu.lib_network.request.RequestCallback
+import com.mirkowu.lib_network.request.RequestData
+import com.mirkowu.lib_network.request.RequestLiveData
 import io.reactivex.rxjava3.core.Observable
 
-
-fun <T> ObservableSubscribeProxy<T>.subscribeRequest(callback: RequestCallback<T>.() -> Unit) {
+fun <T> ObservableSubscribeProxy<T>.request(callback: RequestCallback<T>.() -> Unit) {
     RequestCallback<T>().apply(callback).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {
@@ -26,14 +25,14 @@ fun <T> ObservableSubscribeProxy<T>.subscribeRequest(callback: RequestCallback<T
                 onSuccess?.invoke(data)
             }
 
-            override fun onFailure(bean: ErrorBean) {
+            override fun onFailure(bean: ErrorData) {
                 onFailure?.invoke(bean)
             }
         })
     }
 }
 
-fun <T : Any> Observable<T>.subscribeRequest(callback: RequestCallback<T>.() -> Unit) {
+fun <T : Any> Observable<T>.request(callback: RequestCallback<T>.() -> Unit) {
     RequestCallback<T>().apply(callback).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {
@@ -50,7 +49,7 @@ fun <T : Any> Observable<T>.subscribeRequest(callback: RequestCallback<T>.() -> 
                 onSuccess?.invoke(data)
             }
 
-            override fun onFailure(bean: ErrorBean) {
+            override fun onFailure(bean: ErrorData) {
                 onFailure?.invoke(bean)
             }
         })
@@ -58,49 +57,49 @@ fun <T : Any> Observable<T>.subscribeRequest(callback: RequestCallback<T>.() -> 
 }
 
 
-fun <T> ObservableSubscribeProxy<T>.asResponseLiveData(liveData: ResponseLiveData<T>? = null): ResponseLiveData<T> {
-    return (liveData ?: ResponseLiveData<T>()).apply {
+fun <T> ObservableSubscribeProxy<T>.asRequestLiveData(liveData: RequestLiveData<T>? = null): RequestLiveData<T> {
+    return (liveData ?: RequestLiveData<T>()).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {
                 super.onStart()
-                value = ResponseData.loading()
+                value = RequestData.loading()
             }
 
             override fun onFinish() {
                 super.onFinish()
-                value = ResponseData.finish()
+                value = RequestData.finish()
             }
 
             override fun onSuccess(data: T?) {
-                value = ResponseData.success(data)
+                value = RequestData.success(data)
             }
 
-            override fun onFailure(bean: ErrorBean) {
-                value = ResponseData.error(bean)
+            override fun onFailure(bean: ErrorData) {
+                value = RequestData.failure(bean)
             }
         })
     }
 }
 
-fun <T : Any> Observable<T>.asResponseLiveData(liveData: ResponseLiveData<T>? = null): ResponseLiveData<T> {
-    return (liveData ?: ResponseLiveData<T>()).apply {
+fun <T : Any> Observable<T>.asRequestLiveData(liveData: RequestLiveData<T>? = null): RequestLiveData<T> {
+    return (liveData ?: RequestLiveData<T>()).apply {
         subscribe(object : AbsRxObserver<T>() {
             override fun onStart() {
                 super.onStart()
-                value = ResponseData.loading()
+                value = RequestData.loading()
             }
 
             override fun onFinish() {
                 super.onFinish()
-                value = ResponseData.finish()
+                value = RequestData.finish()
             }
 
             override fun onSuccess(data: T?) {
-                value = ResponseData.success(data)
+                value = RequestData.success(data)
             }
 
-            override fun onFailure(bean: ErrorBean) {
-                value = ResponseData.error(bean)
+            override fun onFailure(bean: ErrorData) {
+                value = RequestData.failure(bean)
             }
         })
     }

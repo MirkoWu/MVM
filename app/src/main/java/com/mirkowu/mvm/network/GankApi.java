@@ -16,4 +16,5 @@ public interface GankApi {
     Observable<GankBaseBean<ImageListBean>> loadImage(@Query("type") String type,
                                                                  @Query("page") int page,
                                                                  @Query("pageSize") int pageSize);
+
 }

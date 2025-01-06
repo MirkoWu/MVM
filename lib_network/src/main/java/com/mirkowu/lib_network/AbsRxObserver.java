@@ -1,15 +1,12 @@
 package com.mirkowu.lib_network;
 
+import com.mirkowu.lib_network.request.ErrorData;
+import com.mirkowu.lib_network.request.ErrorCode;
+import com.mirkowu.lib_network.request.ErrorType;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.utilcode.util.StringUtils;
-
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.observers.DisposableObserver;
-import retrofit2.HttpException;
 
 public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
     @Override
@@ -31,7 +28,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
         try {
             onSuccess(o);
         } catch (Throwable e) {
-            onFailure(new ErrorBean(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
+            onFailure(new ErrorData(ErrorType.API, ErrorCode.ERROR_BIZ, e.getMessage(), e));
             LogUtil.e("onSuccess 业务异常", e.toString());
             if (LogUtil.isDebug()) {
                 throw e;
@@ -55,25 +52,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
             doOnSuccess(null);
         } else {
             LogUtil.e("onFailure 请求异常", e.toString());
-            onFailure(handleError(e));
-        }
-    }
-
-    protected ErrorBean handleError(Throwable e) {
-        if (e instanceof ApiException) { //Api异常
-            ApiException apiException = (ApiException) e;
-            return new ErrorBean(ErrorType.API, apiException.code(), apiException.msg(), e);
-        } else if (e instanceof HttpException) { //Http错误
-            HttpException httpException = (HttpException) e;
-            return new ErrorBean(ErrorType.NET, httpException.code(), httpException.getMessage(), e);
-        } else if (e instanceof ConnectException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_CONNECT, StringUtils.getString(R.string.network_connect_failed_please_check), e);
-        } else if (e instanceof UnknownHostException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_UNKNOWN_HOST, StringUtils.getString(R.string.network_connect_failed_please_check), e);
-        } else if (e instanceof SocketTimeoutException) {
-            return new ErrorBean(ErrorType.NET, ErrorCode.NET_TIMEOUT, StringUtils.getString(R.string.network_request_timeout_please_retry), e);
-        } else {
-            return new ErrorBean(ErrorType.UNKNOWN, ErrorCode.UNKNOWN, StringUtils.getString(R.string.network_request_failed_) + e.getMessage(), e);
+            onFailure(ErrorData.create(e));
         }
     }
 
@@ -96,7 +75,7 @@ public abstract class AbsRxObserver<T> extends DisposableObserver<T> {
     /**
      * 请求失败
      */
-    public abstract void onFailure(@NonNull ErrorBean error);
+    public abstract void onFailure(@NonNull ErrorData error);
 
 
 }

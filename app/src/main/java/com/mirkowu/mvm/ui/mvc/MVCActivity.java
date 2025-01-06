@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirkowu.lib_base.mediator.BaseMediator;
 import com.mirkowu.lib_base.util.RxLife;
-import com.mirkowu.lib_network.ErrorBean;
-import com.mirkowu.lib_network.ErrorType;
+import com.mirkowu.lib_network.request.ErrorData;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter;
 import com.mirkowu.mvm.BizModel;
@@ -99,7 +97,7 @@ public class MVCActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(@NotNull ErrorBean bean) {
+                    public void onFailure(@NotNull ErrorData bean) {
                         super.onFailure(bean);
                     }
                 });

@@ -10,15 +10,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.RxLife
 import com.mirkowu.lib_base.util.RxScheduler
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_camera.CameraActivity
-import com.mirkowu.lib_network.ErrorBean
-import com.mirkowu.lib_network.state.observeRequest
+import com.mirkowu.lib_network.request.ErrorData
+import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
@@ -26,7 +25,6 @@ import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
-import com.mirkowu.lib_util.utilcode.util.Utils
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseFragment
 import com.mirkowu.mvm.bean.UpgradeBean
@@ -185,7 +183,7 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                         }
                     }
 
-                    override fun onFailure(bean: ErrorBean) {
+                    override fun onFailure(bean: ErrorData) {
 
                     }
                 })
@@ -213,8 +211,8 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
         var time = System.currentTimeMillis();
 
         //todo 方式1
-        mMediator.mPingResult.observeRequest(this) {
-            onSuccess {
+        mMediator.mPingResult.request(this) {
+            success {
                 time = System.currentTimeMillis() - time
                 if (it!!) {
                     binding.tvNetworkStatus.setText("检测耗时${time}ms, 网络OK")
@@ -226,21 +224,21 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
                     binding.tvNetworkStatus.visibility = View.VISIBLE
                 }
             }
-            onLoading {
+            loading {
                 showLoadingDialog("")
             }
-            onFinish {
+            finish {
                 hideLoadingDialog()
             }
         }
         mMediator.getPing()
 
         //todo 方式2
-        mMediator.getPing2LiveData().observeRequest(this) {
-            onLoading { showLoadingDialog("") }
-            onSuccess { }
-            onFailure { }
-            onFinish { hideLoadingDialog() }
+        mMediator.getPing2LiveData().request(this) {
+            loading { showLoadingDialog("") }
+            success { }
+            fail { }
+            finish { hideLoadingDialog() }
         }
 
     }

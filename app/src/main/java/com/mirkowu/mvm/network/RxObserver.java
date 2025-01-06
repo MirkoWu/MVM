@@ -2,8 +2,7 @@ package com.mirkowu.mvm.network;
 
 import com.mirkowu.lib_base.view.IBaseView;
 import com.mirkowu.lib_network.AbsRxObserver;
-import com.mirkowu.lib_network.ErrorBean;
-import com.mirkowu.lib_network.ErrorType;
+import com.mirkowu.lib_network.request.ErrorData;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 
 
@@ -36,8 +35,8 @@ public abstract class RxObserver<T> extends AbsRxObserver<T> {
     }
 
     @Override
-    public void onFailure(@NonNull ErrorBean error) {
-        ToastUtils.showShort(error.code() + ":" + error.msg());
+    public void onFailure(@NonNull ErrorData error) {
+        ToastUtils.showShort(error.getCode() + ":" + error.getCode());
     }
 
 }
