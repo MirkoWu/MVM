@@ -13,7 +13,7 @@ afterEvaluate {
                 from components.release
                 groupId = "com.github.mirkowu.mvm"
                 artifactId = project.name
-                version = "1.2.2"
+                version = "1.2.3"
             }
         }
 

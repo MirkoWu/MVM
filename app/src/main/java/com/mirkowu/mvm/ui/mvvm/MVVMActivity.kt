@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
+import com.mirkowu.lib_network.request.flow.asRequestLiveData
 import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
@@ -198,7 +199,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 .map {
 //                if(it.isSuccess){
                     it.data
-//                }else {
+//                } else {
 //                    null
 //                }
 
@@ -208,6 +209,22 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                     fail { }
                 }
         }
+        GankClient.getInstance()
+            .getService<ImageApi>(ImageApi::class.java)
+            .loadImage("", 1, 1)
+            .map {
+//                if(it.isSuccess){
+                it.data
+//                } else {
+//                    null
+//                }
+
+            }
+            .asRequestLiveData()
+            .request(this@MVVMActivity) {
+                success { it!!.list }
+                fail { }
+            }
 
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)
             .request(this) {

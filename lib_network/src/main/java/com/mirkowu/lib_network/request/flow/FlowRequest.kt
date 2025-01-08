@@ -80,7 +80,7 @@ fun <T> RequestLiveData<T?>.requestObserveForever(
 fun <T> Flow<T>.asRequestLiveData(
     owner: LifecycleOwner? = null,
     context: CoroutineContext = Dispatchers.IO
-): LiveData<RequestData<T>> {
+): RequestLiveData<T> {
     return liveData(owner?.lifecycleScope?.coroutineContext ?: context, DEFAULT_TIMEOUT) {
         onStart {
             emit(RequestData.loading<T>())
@@ -93,7 +93,7 @@ fun <T> Flow<T>.asRequestLiveData(
 //            }
             .flowOn(context)
             .collect { emit(RequestData.success(it)) }
-    }
+    } as RequestLiveData<T>
 }
 
 /**
