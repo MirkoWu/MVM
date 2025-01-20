@@ -16,22 +16,26 @@
         <activity
             android:name=".CommonWebActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
         <activity
             android:name=".CommonWebMultiProcessActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
             android:process="@string/webview_process"
             android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
 
         <service
             android:name=".service.MultiProcessService"
+            android:exported="false"
             android:process="@string/webview_process" />
 
         <!-- 该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。-->
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:exported="false"
             android:label="dexopt"
             android:process=":dexopt" />
 

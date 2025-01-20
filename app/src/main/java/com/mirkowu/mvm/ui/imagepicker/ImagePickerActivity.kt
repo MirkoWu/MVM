@@ -10,9 +10,11 @@ import com.mirkowu.lib_photo.mediaLoader.ResultModel
 import com.mirkowu.lib_photo.view.ImagePickerRecyclerView
 import com.mirkowu.lib_util.FileUtils
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.SystemShareUtils
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.permission.PermissionCallback
+import com.mirkowu.lib_util.permission.Permissions
+import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.mvm.Constant
 import com.mirkowu.mvm.R
 import com.mirkowu.mvm.base.BaseActivity
@@ -97,25 +99,20 @@ class ImagePickerActivity : BaseActivity<EmptyMediator>() {
 //                        LogUtil.d("ImagePicker: $it")
 //                        binding.rvPick.setData(ResultModel.getPaths(it))
 //                    }.start(this)
-            PermissionsUtils.getInstance()
-                .requestPermissions(this, PermissionsUtils.GROUP_CAMERA, 0, onPermissionsListener)
-        }
+            SmartPermissions.with(Permissions.GROUP_CAMERA).requestAuto(this,
+                object : PermissionCallback {
+                    override fun onGranted(permissions: List<String>) {
+                        Log.d("TAG", "onPermissionGranted: ")
+                    }
 
-    }
+                    override fun onDenied(
+                        permissions: List<String>,
+                        foreverDenied: Boolean
+                    ) {
+                        Log.d("TAG", "onPermissionDenied: ")
+                    }
 
-    var onPermissionsListener = object : PermissionsUtils.OnPermissionsListener {
-        override fun onPermissionGranted(requestCode: Int) {
-            Log.d("TAG", "onPermissionGranted: ")
-        }
-
-        override fun onPermissionShowRationale(requestCode: Int, permissions: Array<out String>) {
-            Log.d("TAG", "onPermissionShowRationale: ")
-
-        }
-
-        override fun onPermissionDenied(requestCode: Int) {
-            Log.d("TAG", "onPermissionDenied: ")
-
+                })
         }
     }
 

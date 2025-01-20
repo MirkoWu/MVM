@@ -1,5 +1,6 @@
 package com.mirkowu.mvm.ui.mvvm
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -14,6 +15,8 @@ import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
+import com.mirkowu.lib_util.permission.PermissionCallback
+import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.base.BaseActivity
@@ -187,6 +190,23 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         }
         refreshHelper.pageCount = 1
         refreshHelper.refresh()
+
+
+        SmartPermissions.with(arrayListOf(Manifest.permission.SYSTEM_ALERT_WINDOW))
+            .request(this, object :
+                PermissionCallback {
+                override fun onGranted(permissions: List<String>) {
+
+                }
+
+                override fun onDenied(
+                    permissions: List<String>,
+                    hasPermissionForeverDenied: Boolean
+                ) {
+
+                }
+
+            })
     }
 
     override fun onLoadData(page: Int) {
@@ -206,7 +226,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 }
                 .request {
                     success { it!!.list }
-                    fail { }
+                    fail { it.code }
                 }
         }
         GankClient.getInstance()
@@ -223,7 +243,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             .asRequestLiveData()
             .request(this@MVVMActivity) {
                 success { it!!.list }
-                fail { }
+                fail { it.code }
             }
 
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)

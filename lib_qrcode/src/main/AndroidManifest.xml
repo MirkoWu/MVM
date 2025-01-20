@@ -12,6 +12,7 @@
     <application>
         <activity
             android:name=".QrScanActivity"
+            android:exported="false"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>

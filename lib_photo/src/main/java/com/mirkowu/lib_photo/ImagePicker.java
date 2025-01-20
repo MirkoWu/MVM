@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.mirkowu.lib_photo.callback.OnPickResultListener;
 import com.mirkowu.lib_photo.engine.GlideLoader;
@@ -170,7 +171,7 @@ public class ImagePicker {
      *
      * @param activity
      */
-    public void startCamera(Activity activity) {
+    public void startCamera(FragmentActivity activity) {
         CameraUtil.startCameraAction(activity);
     }
 

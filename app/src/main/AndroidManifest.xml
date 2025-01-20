@@ -21,6 +21,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -41,13 +42,27 @@
             android:process="@string/webview_process"
             android:screenOrientation="portrait"
             android:theme="@style/WebViewTheme" />
-        <activity android:name=".ui.recycelerview.GridListActivity" />
-        <activity android:name=".ui.recycelerview.LinearListActivity" />
-        <activity android:name=".ui.mvvm.viewbinding.DataBindingActivity" />
-        <activity android:name=".ui.mvc.MVCActivity" />
-        <activity android:name=".ui.mvp.MVPActivity" />
-        <activity android:name=".ui.mvvm.MVVMActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".ui.recycelerview.GridListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.recycelerview.LinearListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mvvm.viewbinding.DataBindingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mvc.MVCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mvp.MVPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.mvvm.MVVMActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

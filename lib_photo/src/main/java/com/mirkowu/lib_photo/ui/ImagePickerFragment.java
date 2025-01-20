@@ -1,6 +1,5 @@
 package com.mirkowu.lib_photo.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -39,7 +37,9 @@ import com.mirkowu.lib_photo.mediaLoader.ResultModel;
 import com.mirkowu.lib_photo.utils.CameraUtil;
 import com.mirkowu.lib_photo.view.MediaGridDivider;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.PermissionCallback;
+import com.mirkowu.lib_util.permission.Permissions;
+import com.mirkowu.lib_util.permission.SmartPermissions;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 
 import java.io.File;
@@ -114,44 +114,18 @@ public class ImagePickerFragment extends Fragment {
     }
 
     private void checkPermission() {
-        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_STORAGE,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        /*** 加载图片数据 */
-                        startLoadImagesTask(false, null);
-                    }
+        SmartPermissions.with(Permissions.getGROUP_STORAGE()).requestAuto(getActivity(), new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                /*** 加载图片数据 */
+                startLoadImagesTask(false, null);
+            }
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(R.string.ivp_permission_dialog_title)
-                                .setMessage(R.string.ivp_permission_rationale_storage_for_photo)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkPermission(); //如果想继续同意权限 就重新调用改方法
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_lack_storage_permission)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtils.startAppSettingForResult(ImagePickerFragment.this);
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-                });
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
+                getActivity().finish();
+            }
+        });
     }
 
     private void initView(View view) {
@@ -297,24 +271,9 @@ public class ImagePickerFragment extends Fragment {
         }
     }
 
-
-    /**
-     * 权限回调
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == AlbumPreviewActivity.REQUEST_CODE_PREVIEW) {
                 boolean submit = data.getBooleanExtra(AlbumPreviewActivity.KEY_SUBMIT, false);
@@ -404,7 +363,6 @@ public class ImagePickerFragment extends Fragment {
         if (mRvMedia != null) {
             mRvMedia.removeOnScrollListener(mOnScrollListener);
         }
-        PermissionsUtils.getInstance().removeListener();
         super.onDestroyView();
     }
 

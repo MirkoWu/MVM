@@ -11,8 +11,9 @@
     <application>
         <activity
             android:name=".CameraActivity"
-            android:hardwareAccelerated="true"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:hardwareAccelerated="true" />
     </application>
 
 </manifest>

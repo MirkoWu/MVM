@@ -8,15 +8,19 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.mirkowu.lib_photo.R;
 import com.mirkowu.lib_util.FileUtils;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.PermissionCallback;
+import com.mirkowu.lib_util.permission.Permissions;
+import com.mirkowu.lib_util.permission.SmartPermissions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -30,93 +34,39 @@ public class CameraUtil {
     public static final int REQUEST_CAMERA = 0x3230;
 
 
-    public static void startCameraAction(final Activity activity) {
-        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_CAMERA,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        Intent intent = createCameraIntent(activity);
-                        if (intent != null) {
-                            activity.startActivityForResult(intent, REQUEST_CAMERA);
-                        }
-                    }
+    public static void startCameraAction(final FragmentActivity activity) {
+        SmartPermissions.with(Permissions.getGROUP_CAMERA()).requestAuto(activity, new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                Intent intent = createCameraIntent(activity);
+                if (intent != null) {
+                    activity.startActivityForResult(intent, REQUEST_CAMERA);
+                }
+            }
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(activity)
-                                .setTitle(R.string.ivp_permission_dialog_title)
-                                .setMessage(R.string.ivp_permission_rationale_camera)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        startCameraAction(activity); //如果想继续同意权限 就重新调用改方法
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
 
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(activity)
-                                .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_lack_camera_permission)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtils.startAppSettingForResult(activity);
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-                });
+            }
+        });
     }
 
     public static void startCameraAction(final Fragment fragment) {
         final Context context = fragment.getContext();
-        PermissionsUtils.getInstance().requestPermissions(fragment, PermissionsUtils.GROUP_CAMERA,
-                new PermissionsUtils.OnPermissionsListener() {
+        SmartPermissions.with(Permissions.getGROUP_CAMERA()).requestAuto(fragment.getActivity(), new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                Intent intent = createCameraIntent(context);
+                if (intent != null) {
+                    fragment.startActivityForResult(intent, REQUEST_CAMERA);
+                }
+            }
 
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        Intent intent = createCameraIntent(context);
-                        if (intent != null) {
-                            fragment.startActivityForResult(intent, REQUEST_CAMERA);
-                        }
-                    }
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(context)
-                                .setTitle(R.string.ivp_permission_dialog_title)
-                                .setMessage(R.string.ivp_permission_rationale_camera)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        startCameraAction(fragment); //如果想继续同意权限 就重新调用改方法
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(context)
-                                .setTitle(R.string.ivp_error_no_permission)
-                                .setMessage(R.string.ivp_lack_camera_permission)
-                                .setPositiveButton(R.string.ivp_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtils.startAppSettingForResult(fragment);
-                                    }
-                                })
-                                .setNegativeButton(R.string.ivp_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-                });
-
+            }
+        });
     }
 
 

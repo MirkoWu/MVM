@@ -17,7 +17,8 @@ import com.mirkowu.lib_util.FileUtils;
 import com.mirkowu.lib_util.HtmlUtils;
 import com.mirkowu.lib_util.IntentUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.PermissionUtils;
+import com.mirkowu.lib_util.permission.Permissions;
 import com.mirkowu.lib_util.utilcode.util.ToastUtils;
 import com.mirkowu.lib_util.utilcode.util.Utils;
 import com.mirkowu.lib_widget.dialog.BaseDialog;
@@ -122,7 +123,7 @@ public class UpgradeDialog extends BaseDialog implements View.OnClickListener {
             if (apkFile != null) {
                 IntentUtils.startInstall(getContext(), apkFile);
             } else {
-                if (PermissionsUtils.hasPermissions(getContext(), PermissionsUtils.GROUP_STORAGE)) {
+                if (PermissionUtils.hasPermissions(getContext(), Permissions.getGROUP_STORAGE())) {
                     startDownloadTask();
                 } else {
                     LogUtil.e("没有存储权限");

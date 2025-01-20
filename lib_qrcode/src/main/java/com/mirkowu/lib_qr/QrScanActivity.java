@@ -1,7 +1,6 @@
 package com.mirkowu.lib_qr;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,8 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
@@ -19,11 +16,14 @@ import com.mirkowu.lib_photo.ImagePicker;
 import com.mirkowu.lib_photo.PickerConfig;
 import com.mirkowu.lib_photo.bean.MediaBean;
 import com.mirkowu.lib_photo.callback.OnPickResultListener;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.PermissionCallback;
+import com.mirkowu.lib_util.permission.Permissions;
+import com.mirkowu.lib_util.permission.SmartPermissions;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 import com.mirkowu.lib_widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class QrScanActivity extends CaptureActivity implements View.OnClickListener {
 
@@ -62,55 +62,18 @@ public class QrScanActivity extends CaptureActivity implements View.OnClickListe
     }
 
     private void checkPermission() {
-        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_CAMERA,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        startCamera();
-                    }
+        SmartPermissions.with(Permissions.getGROUP_CAMERA()).requestAuto(this, new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                startCamera();
+            }
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(QrScanActivity.this)
-                                .setTitle(R.string.qr_permission_dialog_title)
-                                .setMessage(R.string.qr_permission_rationale_storage_for_photo)
-                                .setPositiveButton(R.string.qr_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkPermission(); //如果想继续同意权限 就重新调用改方法
-                                    }
-                                })
-                                .setNegativeButton(R.string.qr_permission_dialog_cancel, null)
-                                .create().show();
-                    }
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
+                finish();
+            }
+        });
 
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(QrScanActivity.this)
-                                .setTitle(R.string.qr_error_no_permission)
-                                .setMessage(R.string.qr_lack_storage_permission)
-                                .setPositiveButton(R.string.qr_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtils.startAppSettingForResult(QrScanActivity.this);
-                                    }
-                                })
-                                .setNegativeButton(R.string.qr_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-                });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

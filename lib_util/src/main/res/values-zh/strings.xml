@@ -1,0 +1,7 @@
+<resources>
+    <string name="util_permission_dialog_title">无权限</string>
+    <string name="util_permission_dialog_content">应用缺少“%s”，该功能暂时无法使用。如若需要，请点击【确定】按钮前往设置页面进行权限授权。</string>
+    <string name="util_permission_dialog_ok">确定</string>
+    <string name="util_permission_dialog_cancel">拒绝</string>
+
+</resources>

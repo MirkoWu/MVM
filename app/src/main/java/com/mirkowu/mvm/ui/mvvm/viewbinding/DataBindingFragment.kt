@@ -21,8 +21,10 @@ import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.permission.PermissionCallback
+import com.mirkowu.lib_util.permission.Permissions
+import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.lib_util.utilcode.util.LanguageUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.R
@@ -95,24 +97,18 @@ class DataBindingFragment : BaseFragment<MVVMMediator>() {
 //                    startActivityForResult(intent, REQUEST_CODE)
 //                }
 //            }
-            PermissionsUtils.getInstance().requestStorageManage(this,
-                object : PermissionsUtils.OnPermissionsListener {
-                    override fun onPermissionGranted(requestCode: Int) {
-                        ToastUtils.showShort(R.string.permission_granted)
-                    }
+            SmartPermissions.with(Permissions.GROUP_STORAGE).requestAuto(requireActivity(),object :PermissionCallback{
+                override fun onGranted(permissions: MutableList<String>) {
+                    ToastUtils.showShort(R.string.permission_granted)
+                }
 
-                    override fun onPermissionShowRationale(
-                        requestCode: Int,
-                        permissions: Array<out String>
-                    ) {
-                        ToastUtils.showShort("询问")
-                    }
-
-                    override fun onPermissionDenied(requestCode: Int) {
-                        ToastUtils.showShort("已拒绝")
-                    }
-
-                })
+                override fun onDenied(
+                    permissions: MutableList<String>,
+                    hasPermissionForeverDenied: Boolean
+                ) {
+                    ToastUtils.showShort("已拒绝")
+                }
+            })
 
 //            PermissionsUtil.getInstance().requestPermissions(this, PermissionsUtil.GROUP_CAMERA,
 //                object : PermissionsUtil.OnPermissionsListener {

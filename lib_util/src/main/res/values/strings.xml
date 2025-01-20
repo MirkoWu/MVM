@@ -1,0 +1,6 @@
+<resources>
+    <string name="util_permission_dialog_title">No Permissions</string>
+    <string name="util_permission_dialog_content">The app lacks "%s", which is temporarily unavailable. If necessary, click ok to go to the Settings center for authorization.  </string>
+    <string name="util_permission_dialog_ok">OK</string>
+    <string name="util_permission_dialog_cancel">Cancel</string>
+</resources>

@@ -10,8 +10,10 @@ import com.mirkowu.lib_network.load.OnDownloadListener
 import com.mirkowu.lib_network.load.OnProgressListener
 import com.mirkowu.lib_util.FileUtils
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.PermissionsUtils
 import com.mirkowu.lib_util.ktxutil.click
+import com.mirkowu.lib_util.permission.PermissionCallback
+import com.mirkowu.lib_util.permission.Permissions
+import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.mvm.Constant
@@ -41,27 +43,20 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
 
     @SuppressLint("AutoDispose")
     override fun initialize() {
-
-        PermissionsUtils.getInstance().requestPermissions(
-            this,
-            PermissionsUtils.GROUP_STORAGE,
-            object : PermissionsUtils.OnPermissionsListener {
-                override fun onPermissionGranted(requestCode: Int) {
+        SmartPermissions.with(Permissions.GROUP_STORAGE).requestAuto(this,
+            object : PermissionCallback {
+                override fun onGranted(permissions: MutableList<String>) {
 
                 }
 
-                override fun onPermissionShowRationale(
-                    requestCode: Int,
-                    permissions: Array<out String>
+                override fun onDenied(
+                    permissions: MutableList<String>,
+                    hasPermissionForeverDenied: Boolean
                 ) {
-
-                }
-
-                override fun onPermissionDenied(requestCode: Int) {
-
                 }
 
             })
+
 
         val url =
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.jj20.com%2Fup%2Fallimg%2F1114%2F0FR0104017%2F200FQ04017-6-1200.jpg&refer=http%3A%2F%2Fpic.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625987715&t=6b9300c42b95e879ae1c41387cdb33bc"

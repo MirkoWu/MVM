@@ -1,7 +1,5 @@
 package com.mirkowu.lib_camera;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +8,6 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -19,10 +16,13 @@ import androidx.camera.view.PreviewView;
 
 import com.mirkowu.lib_util.FileUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.Permissions;
+import com.mirkowu.lib_util.permission.SmartPermissions;
+import com.mirkowu.lib_util.permission.PermissionCallback;
 import com.mirkowu.lib_util.utilcode.util.BarUtils;
 
 import java.io.File;
+import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 0X86;
@@ -77,55 +77,18 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void checkPermission() {
-        PermissionsUtils.getInstance().requestPermissions(this, PermissionsUtils.GROUP_CAMERA,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        startCamera();
-                    }
+        SmartPermissions.with(Permissions.getGROUP_CAMERA()).requestAuto(this, new PermissionCallback() {
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new AlertDialog.Builder(CameraActivity.this)
-                                .setTitle(R.string.camera_permission_dialog_title)
-                                .setMessage(R.string.camera_permission_rationale_camera)
-                                .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkPermission(); //如果想继续同意权限 就重新调用该方法
-                                    }
-                                })
-                                .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
-                                .create().show();
-                    }
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                startCamera();
+            }
 
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new AlertDialog.Builder(CameraActivity.this)
-                                .setTitle(R.string.camera_error_no_permission)
-                                .setMessage(R.string.camera_lack_camera_permission)
-                                .setPositiveButton(R.string.camera_permission_dialog_ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PermissionsUtils.startAppSettingForResult(CameraActivity.this);
-                                    }
-                                })
-                                .setNegativeButton(R.string.camera_permission_dialog_cancel, null)
-                                .create().show();
-                    }
-                });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
+                finish();
+            }
+        });
     }
 
     public void onClickTakePhoto() {
@@ -159,7 +122,7 @@ public class CameraActivity extends AppCompatActivity {
     public void takePhoto() {
         shotAnim();
         mTakePhoto.setEnabled(false);
-        File photo = FileUtils.createCameraFile(this,"IMG_" + System.currentTimeMillis() + ".jpg");
+        File photo = FileUtils.createCameraFile(this, "IMG_" + System.currentTimeMillis() + ".jpg");
         mCameraScan.takePhoto(photo, new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
@@ -257,29 +220,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         }, 100);
     }
-
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-//            requestCameraPermissionResult(permissions, grantResults);
-//        }
-//    }
-//
-//    /**
-//     * 请求Camera权限回调结果
-//     *
-//     * @param permissions
-//     * @param grantResults
-//     */
-//    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
-//            startCamera();
-//        } else {
-//            finish();
-//        }
-//    }
 
     @Override
     protected void onDestroy() {

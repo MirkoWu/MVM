@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
  * @date on 2019/10/19
  * @describe
  */
+@Deprecated()
 public class PermissionsUtils {
 
     private static class Singleton {

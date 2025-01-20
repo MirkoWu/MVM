@@ -2,7 +2,6 @@ package com.mirkowu.lib_widget.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.mirkowu.lib_util.PermissionsUtils;
 import com.mirkowu.lib_util.utilcode.util.ConvertUtils;
 import com.mirkowu.lib_util.utilcode.util.ScreenUtils;
 import com.mirkowu.lib_widget.R;
@@ -275,25 +273,6 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
 
     protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
 
-    }
-
-    /**
-     * 权限回调
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsUtils.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        PermissionsUtils.getInstance().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

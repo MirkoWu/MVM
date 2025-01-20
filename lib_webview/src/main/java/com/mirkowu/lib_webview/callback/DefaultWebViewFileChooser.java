@@ -6,13 +6,17 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.mirkowu.lib_util.FileUtils;
 import com.mirkowu.lib_util.LogUtil;
-import com.mirkowu.lib_util.PermissionsUtils;
+import com.mirkowu.lib_util.permission.PermissionCallback;
+import com.mirkowu.lib_util.permission.PermissionUtils;
+import com.mirkowu.lib_util.permission.Permissions;
+import com.mirkowu.lib_util.permission.SmartPermissions;
 import com.mirkowu.lib_webview.CommonWebView;
 import com.mirkowu.lib_webview.R;
 import com.mirkowu.lib_widget.dialog.PromptDialog;
@@ -21,6 +25,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     private static final String TAG = DefaultWebViewFileChooser.class.getSimpleName();
@@ -109,89 +114,58 @@ public class DefaultWebViewFileChooser implements IWebViewFileChooser {
     }
 
     private void checkCameraPermission(FragmentActivity activity, String acceptType) {
-        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_CAMERA,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        openCamera(activity, acceptType);
-                    }
+        SmartPermissions.with(Permissions.getGROUP_CAMERA()).request(activity, new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                openCamera(activity, acceptType);
+            }
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new PromptDialog()
-                                .setTitle(R.string.webview_no_permission)
-                                .setContent(R.string.webview_permission_rationale_camera)
-                                .setPositiveButton(R.string.webview_ok)
-                                .setNegativeButton(R.string.webview_refuse)
-                                .setOnButtonClickListener((dialog, isPositiveClick) -> {
-                                    if (isPositiveClick) {
-                                        checkCameraPermission(activity, acceptType); //如果想继续同意权限 就重新调用该方法
-                                    } else {
-                                        onReceiveValue(null);
-                                    }
-                                })
-                                .show(activity);
-                    }
-
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new PromptDialog()
-                                .setTitle(R.string.webview_permission_dialog_title)
-                                .setContent(R.string.webview_lack_camera_permission)
-                                .setPositiveButton(R.string.webview_ok)
-                                .setNegativeButton(R.string.webview_cancel)
-                                .setOnButtonClickListener((dialog, isPositiveClick) -> {
-                                    if (isPositiveClick) {
-                                        PermissionsUtils.startAppSettingNoResult(activity);
-                                    }
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
+                if (hasPermissionForeverDenied) {
+                    new PromptDialog()
+                            .setTitle(R.string.webview_permission_dialog_title)
+                            .setContent(R.string.webview_lack_camera_permission)
+                            .setPositiveButton(R.string.webview_ok)
+                            .setNegativeButton(R.string.webview_cancel)
+                            .setOnButtonClickListener((dialog, isPositiveClick) -> {
+                                if (isPositiveClick) {
+                                    PermissionUtils.smartGotoAppSettingPage(activity, permissions);
+                                }
+                                onReceiveValue(null);
+                            })
+                            .show(activity);
+                } else {
+                    new PromptDialog()
+                            .setTitle(R.string.webview_no_permission)
+                            .setContent(R.string.webview_permission_rationale_camera)
+                            .setPositiveButton(R.string.webview_ok)
+                            .setNegativeButton(R.string.webview_refuse)
+                            .setOnButtonClickListener((dialog, isPositiveClick) -> {
+                                if (isPositiveClick) {
+                                    checkCameraPermission(activity, acceptType); //如果想继续同意权限 就重新调用该方法
+                                } else {
                                     onReceiveValue(null);
-                                })
-                                .show(activity);
-                    }
-                });
+                                }
+                            })
+                            .show(activity);
+                }
+            }
+        });
     }
 
     private void checkStoragePermission(FragmentActivity activity, String acceptType) {
-        PermissionsUtils.getInstance().requestPermissions(activity, PermissionsUtils.GROUP_STORAGE,
-                new PermissionsUtils.OnPermissionsListener() {
-                    @Override
-                    public void onPermissionGranted(int requestCode) {
-                        selectAlbum(activity, acceptType);
-                    }
+        SmartPermissions.with(Permissions.getGROUP_STORAGE()).requestAuto(activity, new PermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions) {
+                selectAlbum(activity, acceptType);
+            }
 
-                    @Override
-                    public void onPermissionShowRationale(int requestCode, String[] permissions) {
-                        new PromptDialog()
-                                .setTitle(R.string.webview_no_permission)
-                                .setContent(R.string.webview_permission_rationale_storage)
-                                .setPositiveButton(R.string.webview_ok)
-                                .setNegativeButton(R.string.webview_refuse)
-                                .setOnButtonClickListener((dialog, isPositiveClick) -> {
-                                    if (isPositiveClick) {
-                                        checkCameraPermission(activity, acceptType); //如果想继续同意权限 就重新调用该方法
-                                    } else {
-                                        onReceiveValue(null);
-                                    }
-                                })
-                                .show(activity);
-                    }
-
-                    @Override
-                    public void onPermissionDenied(int requestCode) {
-                        new PromptDialog()
-                                .setTitle(R.string.webview_permission_dialog_title)
-                                .setContent(R.string.webview_lack_storage_permission)
-                                .setPositiveButton(R.string.webview_ok)
-                                .setNegativeButton(R.string.webview_cancel)
-                                .setOnButtonClickListener((dialog, isPositiveClick) -> {
-                                    if (isPositiveClick) {
-                                        PermissionsUtils.startAppSettingNoResult(activity);
-                                    }
-                                    onReceiveValue(null);
-                                })
-                                .show(activity);
-                    }
-                });
+            @Override
+            public void onDenied(@NonNull List<String> permissions, boolean hasPermissionForeverDenied) {
+                onReceiveValue(null);
+            }
+        });
     }
 
     private void openCamera(Activity activity, String type) {
