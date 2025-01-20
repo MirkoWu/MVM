@@ -16,7 +16,7 @@ internal fun <T> RequestData<T>.invoke(callbackFun: RequestCallback<T>.() -> Uni
             RequestState.LOADING -> onLoading?.invoke()
             RequestState.SUCCESS -> {
                 onFinish?.invoke()
-                onSuccess?.invoke(data)
+                onSuccess?.invoke(data as T)
             }
 
             RequestState.FAILURE -> {
@@ -38,7 +38,7 @@ internal fun <T> RequestData<T>.invoke(callbackFun: RequestCallback<T>.() -> Uni
  */
 class RequestCallback<T> {
     internal var onLoading: (() -> Unit)? = null
-    internal var onSuccess: ((T?) -> Unit)? = null
+    internal var onSuccess: ((T) -> Unit)? = null
     internal var onFailure: ((ErrorData) -> Unit)? = null
     internal var onFinish: (() -> Unit)? = null
 
@@ -53,7 +53,7 @@ class RequestCallback<T> {
         onFinish = call
     }
 
-    fun success(call: ((T?) -> Unit)?) {
+    fun success(call: ((T) -> Unit)?) {
         onSuccess = call
     }
 

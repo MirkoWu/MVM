@@ -20,10 +20,15 @@ import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.base.BaseActivity
+import com.mirkowu.mvm.bean.BaseResp
+import com.mirkowu.mvm.bean.DataBean
+import com.mirkowu.mvm.bean.GankBaseBean
 import com.mirkowu.mvm.bean.ImageBean
+import com.mirkowu.mvm.bean.ImageListBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
 import com.mirkowu.mvm.network.GankClient
 import com.mirkowu.mvm.network.ImageApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
@@ -192,21 +197,21 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         refreshHelper.refresh()
 
 
-        SmartPermissions.with(arrayListOf(Manifest.permission.SYSTEM_ALERT_WINDOW))
-            .request(this, object :
-                PermissionCallback {
-                override fun onGranted(permissions: List<String>) {
-
-                }
-
-                override fun onDenied(
-                    permissions: List<String>,
-                    hasPermissionForeverDenied: Boolean
-                ) {
-
-                }
-
-            })
+//        SmartPermissions.with(arrayListOf(Manifest.permission.SYSTEM_ALERT_WINDOW))
+//            .request(this, object :
+//                PermissionCallback {
+//                override fun onGranted(permissions: List<String>) {
+//
+//                }
+//
+//                override fun onDenied(
+//                    permissions: List<String>,
+//                    hasPermissionForeverDenied: Boolean
+//                ) {
+//
+//                }
+//
+//            })
     }
 
     override fun onLoadData(page: Int) {
@@ -225,13 +230,17 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 
                 }
                 .request {
-                    success { it!!.list }
+                    success { it.list }
                     fail { it.code }
                 }
         }
-        GankClient.getInstance()
-            .getService<ImageApi>(ImageApi::class.java)
-            .loadImage("", 1, 1)
+        flow {
+            emit(GankBaseBean<ImageListBean?>().apply { data = null })
+//            emit(BaseResp<DataBean>().apply { data = null })
+        }
+//        GankClient.getInstance()
+//            .getService<ImageApi>(ImageApi::class.java)
+//            .loadImage("", 1, 1)
             .map {
 //                if(it.isSuccess){
                 it.data
@@ -242,8 +251,12 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             }
             .asRequestLiveData()
             .request(this@MVVMActivity) {
-                success { it!!.list }
-                fail { it.code }
+                success {
+                    it!!.list.size
+                }
+                fail {
+                    it.code
+                }
             }
 
         mMediator.loadImageAsLiveData(page, refreshHelper.pageCount)

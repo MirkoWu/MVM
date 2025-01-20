@@ -70,7 +70,7 @@ fun <T> ObservableSubscribeProxy<T>.asRequestLiveData(liveData: RequestLiveData<
                 value = RequestData.finish()
             }
 
-            override fun onSuccess(data: T?) {
+            override fun onSuccess(data: T) {
                 value = RequestData.success(data)
             }
 
@@ -94,7 +94,7 @@ fun <T : Any> Observable<T>.asRequestLiveData(liveData: RequestLiveData<T>? = nu
                 value = RequestData.finish()
             }
 
-            override fun onSuccess(data: T?) {
+            override fun onSuccess(data: T) {
                 value = RequestData.success(data)
             }
 

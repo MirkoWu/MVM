@@ -38,7 +38,7 @@ data class RequestData<T> @JvmOverloads private constructor(
             return RequestData(RequestState.FINISH)
         }
 
-        fun <T> success(data: T?): RequestData<T> {
+        fun <T> success(data: T): RequestData<T> {
             return RequestData(RequestState.SUCCESS, data)
         }
 

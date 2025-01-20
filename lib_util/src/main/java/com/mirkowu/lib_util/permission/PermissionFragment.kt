@@ -109,58 +109,64 @@ class PermissionFragment : Fragment() {
         if (PermissionUtils.isSpecialPermission(list)) {
             Manifest.permission.MANAGE_EXTERNAL_STORAGE.let {
                 if (list.contains(it) && !PermissionUtils.isGrantedInstallPermission(activity)) {
-                    PermissionUtils.smartGotoAppSettingPageForResult(
-                        this,
-                        requestCode,
-                        listOf(it)
-                    )
+                    gotoAppSettingPage(requestCode, listOf(it))
                     return
                 }
             }
             Manifest.permission.REQUEST_INSTALL_PACKAGES.let {
                 if (list.contains(it) && !PermissionUtils.isGrantedInstallPermission(activity)) {
-                    PermissionUtils.smartGotoAppSettingPageForResult(
-                        this,
-                        requestCode,
-                        listOf(it)
-                    )
+                    gotoAppSettingPage(requestCode, listOf(it))
                     return
                 }
             }
             Manifest.permission.SYSTEM_ALERT_WINDOW.let {
                 if (list.contains(it) && !PermissionUtils.isGrantedWindowPermission(activity)) {
-                    PermissionUtils.smartGotoAppSettingPageForResult(
-                        this,
-                        requestCode,
-                        listOf(it)
-                    )
+                    gotoAppSettingPage(requestCode, listOf(it))
                     return
                 }
             }
             Manifest.permission.WRITE_SETTINGS.let {
                 if (list.contains(it) && !PermissionUtils.isGrantedSettingPermission(activity)) {
-                    PermissionUtils.smartGotoAppSettingPageForResult(
-                        this,
-                        requestCode,
-                        listOf(it)
-                    )
+                    gotoAppSettingPage(requestCode, listOf(it))
                     return
                 }
             }
 
             Permissions.NOTIFICATION_SERVICE.let {
                 if (list.contains(it) && !PermissionUtils.isGrantedNotifyPermission(activity)) {
-                    PermissionUtils.smartGotoAppSettingPageForResult(
-                        this,
-                        requestCode,
-                        listOf(it)
-                    )
+                    gotoAppSettingPage(requestCode, listOf(it))
                     return
                 }
             }
         }
 
         requestDangerousPermission(list, requestCode)
+    }
+
+    private fun gotoAppSettingPage(
+        requestCode: Int,
+        permissions: List<String>
+    ) {
+        AlertDialog.Builder(requireActivity())
+            .setTitle(getString(R.string.util_permission_dialog_title))
+            .setMessage(
+                getString(
+                    R.string.util_permission_dialog_content,
+                    Permissions.getDeniedPermissionName(permissions)
+                )
+            )
+            .setPositiveButton(R.string.util_permission_dialog_ok) { dialog, which ->
+                PermissionUtils.smartGotoAppSettingPageForResult(
+                    this@PermissionFragment,
+                    requestCode,
+                    permissions
+                )
+            }
+            .setNegativeButton(R.string.util_permission_dialog_cancel) { dialog, which ->
+                onDeniedCallback(permissions, true)
+            }
+            .setCancelable(false)
+            .create().show()
     }
 
     private fun requestDangerousPermission(list: ArrayList<String>, requestCode: Int) {
