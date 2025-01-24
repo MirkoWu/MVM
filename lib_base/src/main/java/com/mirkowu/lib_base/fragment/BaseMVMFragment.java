@@ -56,7 +56,11 @@ public abstract class BaseMVMFragment<M extends BaseMediator> extends Fragment i
         super.onActivityCreated(savedInstanceState);
         resetFirstLoad();
         bindMediator();
+        initialize(savedInstanceState);
         initialize();
+    }
+
+    protected void initialize(Bundle savedInstanceState) {
     }
 
     protected abstract void initialize();
