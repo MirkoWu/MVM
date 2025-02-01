@@ -20,15 +20,10 @@ public abstract class BaseMVMDialog<M extends BaseMediator> extends BaseDialog i
         return getView().findViewById(id);
     }
 
-    @Override
-    public int getLayoutResId() {
-        return getLayoutId();
-    }
-
-    @Override
-    protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
-        initialize();
-    }
+//    @Override
+//    protected void convertView(ViewHolder viewHolder, BaseDialog baseDialog) {
+//        initialize();
+//    }
 
 
     protected abstract M initMediator();
@@ -95,7 +90,7 @@ public abstract class BaseMVMDialog<M extends BaseMediator> extends BaseDialog i
         return this;
     }
 
-//    public void show(FragmentManager manager, String tag) {
+    //    public void show(FragmentManager manager, String tag) {
 //        Fragment prev = manager.findFragmentByTag(tag);
 //        FragmentTransaction ft = manager.beginTransaction();
 //        if (prev != null) {
@@ -105,8 +100,5 @@ public abstract class BaseMVMDialog<M extends BaseMediator> extends BaseDialog i
 //        // ft.addToBackStack(null)//不添加到回退栈
 //        super.show(manager, tag);
 //    }
-    @LayoutRes
-    protected abstract int getLayoutId();
-
     protected abstract void initialize();
 }

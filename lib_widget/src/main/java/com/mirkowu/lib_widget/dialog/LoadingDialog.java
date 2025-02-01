@@ -39,7 +39,7 @@ public class LoadingDialog extends BaseDialog {
     }
 
     @Override
-    public int getLayoutResId() {
+    public int getLayoutId() {
         return R.layout.widget_dialog_loading;
     }
 

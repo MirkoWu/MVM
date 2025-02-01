@@ -66,10 +66,25 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutResId(), container, false);
+        View view = inflater.inflate(getLayoutId(), container, false);
         ViewHolder viewHolder = new ViewHolder(view);
         convertView(viewHolder, this);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initialize(savedInstanceState);
+        initialize();
+    }
+
+    protected void initialize(Bundle savedInstanceState) {
+
+    }
+
+    protected void initialize() {
+
     }
 
     @Override
@@ -128,7 +143,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     }
 
     @LayoutRes
-    public abstract int getLayoutResId();
+    public abstract int getLayoutId();
 
     /**
      * 设置背景昏暗度

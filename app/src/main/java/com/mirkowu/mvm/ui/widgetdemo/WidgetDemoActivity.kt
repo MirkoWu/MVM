@@ -81,7 +81,7 @@ class WidgetDemoActivity : BaseActivity<EmptyMediator>(), CustomAdapt {
                 .show(supportFragmentManager)
         }
         binding.btnBinding.click {
-            DataBindingDialog(context!!).show()
+            DataBindingDialog().show(supportFragmentManager)
         }
         binding.btnToastDark.click {
             ToastUtils.make()

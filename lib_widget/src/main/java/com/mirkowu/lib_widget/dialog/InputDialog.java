@@ -47,7 +47,7 @@ public class InputDialog extends BaseDialog implements View.OnClickListener {
     }
 
     @Override
-    public int getLayoutResId() {
+    public int getLayoutId() {
         return R.layout.widget_dialog_input;
     }
 
