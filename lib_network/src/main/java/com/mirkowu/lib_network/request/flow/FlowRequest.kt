@@ -103,13 +103,18 @@ suspend fun <T> Flow<T>.request(
     context: CoroutineContext = Dispatchers.IO,
     callbackFun: (RequestCallback<T>.() -> Unit) = {}
 ) {
-    request2NoCollect(context)
+    asRequestData()
+        .flowOn(context)
         .collect {
             it.invoke(callbackFun)
         }
 }
 
-internal fun <T> Flow<T>.request2NoCollect(context: CoroutineContext = Dispatchers.IO): Flow<RequestData<T>> {
+/**
+ * 转换为RequestData
+ */
+
+internal fun <T> Flow<T>.asRequestData(): Flow<RequestData<T>> {
     return map { RequestData.success(it) }
         .onStart {
             emit(RequestData.loading<T>())
@@ -120,7 +125,32 @@ internal fun <T> Flow<T>.request2NoCollect(context: CoroutineContext = Dispatche
 //        .onCompletion { //catch之后再onCompletion，二者都会调用
 //            emit(RequestData.finish<T>())
 //        }
-        .flowOn(context)
 }
+
+fun <T> Flow<T>.event(
+    context: CoroutineContext? = null,
+    callbackFun: (RequestCallback<T>.() -> Unit) = {}
+): Flow<T> {
+    val callback = RequestCallback<T>().apply(callbackFun)
+    val flow = map {
+        callback.onFinish?.invoke()
+        callback.onSuccess?.invoke(it)
+        it
+    }
+        .onStart {
+            callback.onLoading?.invoke()
+        }
+        .catch { e: Throwable ->
+            callback.onFinish?.invoke()
+            callback.onFailure?.invoke(ErrorData.create(e))
+            throw e
+        }
+//        .onCompletion { //catch之后再onCompletion，二者都会调用
+//            emit(RequestData.finish<T>())
+//        }
+    return context?.let { flow.flowOn(context) } ?: flow
+
+}
+
 
 

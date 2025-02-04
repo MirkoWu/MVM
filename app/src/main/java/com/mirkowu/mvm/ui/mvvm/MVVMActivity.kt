@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.request.flow.asRequestLiveData
+import com.mirkowu.lib_network.request.flow.event
 import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
-import com.mirkowu.lib_util.permission.PermissionCallback
-import com.mirkowu.lib_util.permission.SmartPermissions
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.base.BaseActivity
@@ -28,8 +27,10 @@ import com.mirkowu.mvm.bean.ImageListBean
 import com.mirkowu.mvm.databinding.ActivityMVVMBinding
 import com.mirkowu.mvm.network.GankClient
 import com.mirkowu.mvm.network.ImageApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -215,6 +216,24 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
     }
 
     override fun onLoadData(page: Int) {
+        lifecycleScope.launch {
+            flow<String> {
+                delay(5000)
+                emit("")
+            }.event {
+                loading {
+                    LogUtil.d("test event onLoading" + Thread.currentThread().name)
+                }
+                finish {
+                    LogUtil.d("test event onFinish" + Thread.currentThread().name)
+                }
+            }
+
+                .request {
+                    loading { LogUtil.d("test request onLoading" + Thread.currentThread().name) }
+                    finish { LogUtil.d("test request onFinish" + Thread.currentThread().name) }
+                }
+        }
         binding.mStateView.setLoadingState()
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
@@ -229,7 +248,17 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                }
 
                 }
+                .event {
+//                    loading {
+//                        LogUtil.d("test event onLoading" + Thread.currentThread().name)
+//                    }
+//                    finish {
+//                        LogUtil.d("test event onFinish" + Thread.currentThread().name)
+//                    }
+                }
                 .request {
+//                    loading { LogUtil.d("test request onLoading" + Thread.currentThread().name) }
+//                    finish { LogUtil.d("test request onFinish" + Thread.currentThread().name) }
                     success { it.list }
                     fail { it.code }
                 }
@@ -252,7 +281,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
             .asRequestLiveData()
             .request(this@MVVMActivity) {
                 success {
-                    it!!.list.size
+                    it?.list?.size
                 }
                 fail {
                     it.code
