@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation project(':lib_util')
     implementation project(':lib_widget')
+    implementation project(':lib_network')
 
     api "androidx.appcompat:appcompat:$ext.appcompat_version"
     api "androidx.recyclerview:recyclerview:$ext.recyclerview_version"

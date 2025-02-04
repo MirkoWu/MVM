@@ -22,7 +22,7 @@ import com.mirkowu.mvm.network.RxObserver
 import com.mirkowu.mvm.network.asResponseLiveData
 import io.reactivex.rxjava3.core.Observable
 
-open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
+open class MVVMMediator : BaseMediator<IBaseView, BizModel>() {
     @JvmField
     val mImageData = RequestLiveData<List<RandomImageBean>?>()
     var mLiveData = FixedLiveData<Any>()
@@ -142,7 +142,10 @@ open class MVVMMediator : BaseMediator<IBaseView?, BizModel?>() {
 
                 override fun onFinish() {
                     super.onFinish()
-                    Log.e("xxx", "set  -- onFinish hasActiveObservers="+ mPingResult.hasActiveObservers())
+                    Log.e(
+                        "xxx",
+                        "set  -- onFinish hasActiveObservers=" + mPingResult.hasActiveObservers()
+                    )
                     mPingResult.value = RequestData.finish()
 
                 }

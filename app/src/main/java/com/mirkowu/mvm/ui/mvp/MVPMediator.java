@@ -15,7 +15,6 @@ import io.reactivex.rxjava3.functions.Action;
 
 public class MVPMediator extends BaseMediator<IMVPView, BizModel> {
 
-
     public void getData() {
         mModel.loadData()
                 .doOnDispose(new Action() {

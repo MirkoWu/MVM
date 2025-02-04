@@ -1,135 +1,95 @@
-package com.mirkowu.lib_base.mediator;
+package com.mirkowu.lib_base.mediator
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import com.mirkowu.lib_base.model.IBaseModel
+import com.mirkowu.lib_base.util.InstanceFactory
+import com.mirkowu.lib_base.view.IBaseView
+import com.mirkowu.lib_network.request.flow.event
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
-import com.mirkowu.lib_base.model.IBaseModel;
-import com.mirkowu.lib_base.util.InstanceFactory;
-import com.mirkowu.lib_base.view.IBaseView;
+open class BaseMediator<V : IBaseView, M : IBaseModel> : ViewModel(), IMediator<V> {
+    @JvmField
+    protected val mModel: M = initModel()
 
+    @JvmField
+    protected var mView: V? = null
 
-public class BaseMediator<V extends IBaseView, M extends IBaseModel> extends ViewModel implements IMediator<V> {
-    public static final String TAG = BaseMediator.class.getSimpleName();
-    @NonNull
-    protected M mModel;
-    @NonNull
-    protected V mView;
-
-    public BaseMediator() {
-        initModel();
+    override fun onCleared() {
+        super.onCleared()
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
+    protected fun initModel(): M {
+        return InstanceFactory.newModel(javaClass)
     }
 
-    protected void initModel() {
-        mModel = InstanceFactory.newModel(getClass());
-    }
-
-
-    @Override
-    public void attachView(V baseView) {
-        mView = baseView;
+    override fun attachView(baseView: V) {
+        mView = baseView
         //绑定view时也注册事件
         //  getUiEventChangeLiveData().registerEvent(mView.getLifecycleOwner(), mView);
     }
 
-    @Override
-    public void detachView() {
-        mView = null;
+    override fun detachView() {
+        mView = null
     }
 
-    public void showLoadingDialog() {
-        if (mView != null) {
-            mView.showLoadingDialog();
+    fun showLoadingDialog() {
+        mView?.showLoadingDialog()
+    }
+
+    fun showLoadingDialog(msg: String?) {
+        mView?.showLoadingDialog(msg)
+    }
+
+    fun hideLoadingDialog() {
+        mView?.hideLoadingDialog()
+    }
+
+    fun <T> Flow<T>.autoLoading(): Flow<T> {
+        return event(Dispatchers.Main) {
+            loading { showLoadingDialog() }
+            finish { hideLoadingDialog() }
         }
     }
 
-    public void showLoadingDialog(String msg) {
-        if (mView != null) {
-            mView.showLoadingDialog(msg);
-        }
-    }
-
-    public void hideLoadingDialog() {
-        if (mView != null) {
-            mView.hideLoadingDialog();
-        }
-    }
-
-//    private UiChangeEvent mUiStatusChangeLiveData;
-//
-//    public UiChangeEvent getUiEventChangeLiveData() {
-//        if (this.mUiStatusChangeLiveData == null) {
-//            this.mUiStatusChangeLiveData = new UiChangeEvent();
-//        }
-//
-//        return this.mUiStatusChangeLiveData;
-//    }
-
-//    public void showLoadingDialog() {
-//        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(true);
-//    }
-//
-//    public void hideLoadingDialog() {
-//        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
-//    }
-
-//    public void jumpPage(@NonNull String path) {
-//        if (!TextUtils.isEmpty(path)) {
-//            this.mUiStatusChangeLiveData.getJumpPagePathEvent().setValue(path);
-//        }
-//
-//    }
-
-    @Override
-    public void onAny(LifecycleOwner owner, Lifecycle.Event event) {
+    //    private UiChangeEvent mUiStatusChangeLiveData;
+    //
+    //    public UiChangeEvent getUiEventChangeLiveData() {
+    //        if (this.mUiStatusChangeLiveData == null) {
+    //            this.mUiStatusChangeLiveData = new UiChangeEvent();
+    //        }
+    //
+    //        return this.mUiStatusChangeLiveData;
+    //    }
+    //    public void showLoadingDialog() {
+    //        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(true);
+    //    }
+    //
+    //    public void hideLoadingDialog() {
+    //        this.mUiStatusChangeLiveData.getShowLoadingDialogEvent().setValue(false);
+    //    }
+    //    public void jumpPage(@NonNull String path) {
+    //        if (!TextUtils.isEmpty(path)) {
+    //            this.mUiStatusChangeLiveData.getJumpPagePathEvent().setValue(path);
+    //        }
+    //
+    //    }
+    override fun onAny(owner: LifecycleOwner, event: Lifecycle.Event) {
 //        LogUtils.d(TAG, "LifecycleOwner = " + owner + " event " + event.name());
     }
 
-    @Override
-    public void onCreate() {
+    override fun onCreate() {}
+    override fun onStart() {}
+    override fun onResume() {}
+    override fun onPause() {}
+    override fun onStop() {}
+    override fun onDestroy() {}
+    override fun registerEventBus() {}
+    override fun unregisterEventBus() {}
 
+    companion object {
+        val TAG = BaseMediator::class.java.simpleName
     }
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onResume() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
-    public void registerEventBus() {
-
-    }
-
-    @Override
-    public void unregisterEventBus() {
-
-    }
-
-
 }

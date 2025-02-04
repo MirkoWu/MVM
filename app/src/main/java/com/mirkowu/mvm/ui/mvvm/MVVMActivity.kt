@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mirkowu.lib_base.util.autoLoading
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.request.flow.asRequestLiveData
@@ -56,6 +57,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                     "TAG",
                     "onItemClick: $position"
                 )
+                onItemClick()
             }
         imageAdapter.setOnItemChildClickListener { view: View?, item: ImageBean?, position: Int ->
             LogUtil.i(
@@ -215,25 +217,30 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //            })
     }
 
-    override fun onLoadData(page: Int) {
+    private fun onItemClick() {
         lifecycleScope.launch {
             flow<String> {
                 delay(5000)
                 emit("")
-            }.event {
-                loading {
-                    LogUtil.d("test event onLoading" + Thread.currentThread().name)
-                }
-                finish {
-                    LogUtil.d("test event onFinish" + Thread.currentThread().name)
-                }
-            }
+            }.autoLoading(this@MVVMActivity)
+//                .event {
+//                loading {
+//                    LogUtil.d("test event onLoading" + Thread.currentThread().name)
+//                }
+//                finish {
+//                    LogUtil.d("test event onFinish" + Thread.currentThread().name)
+//                }
+//            }
 
                 .request {
                     loading { LogUtil.d("test request onLoading" + Thread.currentThread().name) }
                     finish { LogUtil.d("test request onFinish" + Thread.currentThread().name) }
                 }
         }
+    }
+
+    override fun onLoadData(page: Int) {
+
         binding.mStateView.setLoadingState()
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
@@ -248,14 +255,14 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                }
 
                 }
-                .event {
+//                .event {
 //                    loading {
 //                        LogUtil.d("test event onLoading" + Thread.currentThread().name)
 //                    }
 //                    finish {
 //                        LogUtil.d("test event onFinish" + Thread.currentThread().name)
 //                    }
-                }
+//                }
                 .request {
 //                    loading { LogUtil.d("test request onLoading" + Thread.currentThread().name) }
 //                    finish { LogUtil.d("test request onFinish" + Thread.currentThread().name) }

@@ -13,7 +13,7 @@ import com.mirkowu.mvm.bean.ImageBean
 import com.mirkowu.mvm.bean.ImageListBean
 import com.mirkowu.mvm.network.RxObserver
 
-class DBMediator : BaseMediator<IBaseView?, BizModel?>() {
+class DBMediator : BaseMediator<IBaseView, BizModel>() {
     var mImageListData = RequestLiveData<List<ImageBean?>?>()
 
     fun loadImage(page: Int, pageSize: Int) {
