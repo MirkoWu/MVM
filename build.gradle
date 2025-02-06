@@ -51,7 +51,7 @@ task clean(type: Delete) {
 ext {
     //编译版本不能大于30 否则要Java8以上才能支持，导致jitpack打包失败
     compileSdkVersion = 33
-    targetSdkVersion = 29
+    targetSdkVersion = 33
     minSdkVersion = 21
 
     mvm_version = 'latest.release'

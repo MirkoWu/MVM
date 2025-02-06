@@ -1,6 +1,7 @@
 package com.mirkowu.lib_util.permission
 
 import android.Manifest
+import android.os.Build
 
 object Permissions {
     /**
@@ -24,20 +25,40 @@ object Permissions {
      * 摄像头，文件存储
      */
     @JvmStatic
-    val GROUP_CAMERA = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+    val GROUP_CAMERA =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+
 
     /**
      * 文件存储
      */
     @JvmStatic
-    val GROUP_STORAGE = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+    val GROUP_STORAGE =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+
+
     @JvmStatic
     val MANAGE_EXTERNAL_STORAGE = arrayOf(
         Manifest.permission.MANAGE_EXTERNAL_STORAGE
@@ -70,9 +91,13 @@ object Permissions {
     val GROUP_PHONE = arrayOf(
         Manifest.permission.READ_PHONE_STATE
     )
+
     @JvmStatic
-   private val PERMISSION_NAME = mapOf(
+    private val PERMISSION_NAME = mapOf(
         Manifest.permission.MANAGE_EXTERNAL_STORAGE to "文件管理权限",
+        Manifest.permission.READ_MEDIA_IMAGES to "文件管理权限",
+        Manifest.permission.READ_MEDIA_VIDEO to "文件管理权限",
+        Manifest.permission.READ_MEDIA_AUDIO to "文件管理权限",
         Manifest.permission.REQUEST_INSTALL_PACKAGES to "安装应用权限",
         Manifest.permission.SYSTEM_ALERT_WINDOW to "悬浮窗权限",
         Manifest.permission.WRITE_SETTINGS to "修改系统设置权限",
@@ -85,6 +110,7 @@ object Permissions {
         Manifest.permission.ACCESS_FINE_LOCATION to "定位权限",
         Manifest.permission.READ_PHONE_STATE to "获取手机信息权限",
     )
+
     @JvmStatic
     fun getDeniedPermissionName(list: List<String>): String {
         return PERMISSION_NAME.filter { list.contains(it.key) }.values.toSet().joinToString("、")
