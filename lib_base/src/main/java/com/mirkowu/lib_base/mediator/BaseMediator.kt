@@ -7,6 +7,7 @@ import com.mirkowu.lib_base.model.IBaseModel
 import com.mirkowu.lib_base.util.InstanceFactory
 import com.mirkowu.lib_base.view.IBaseView
 import com.mirkowu.lib_network.request.flow.event
+import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
@@ -47,9 +48,10 @@ open class BaseMediator<V : IBaseView, M : IBaseModel> : ViewModel(), IMediator<
         mView?.hideLoadingDialog()
     }
 
-    fun <T> Flow<T>.autoLoading(): Flow<T> {
+    fun <T> Flow<T>.autoLoading(toastOnFail: Boolean = false): Flow<T> {
         return event(Dispatchers.Main) {
             loading { showLoadingDialog() }
+            fail { if (toastOnFail) ToastUtils.showShort(it.displayMsg) }
             finish { hideLoadingDialog() }
         }
     }
