@@ -1,6 +1,5 @@
 package com.mirkowu.mvm.ui.mvvm
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -12,16 +11,14 @@ import com.mirkowu.lib_base.util.autoLoading
 import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.request.flow.asRequestLiveData
-import com.mirkowu.lib_network.request.flow.event
 import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
+import com.mirkowu.lib_util.MmkvStorage
 import com.mirkowu.lib_widget.adapter.BaseRVAdapter
 import com.mirkowu.lib_widget.stateview.LoadingDot
 import com.mirkowu.mvm.base.BaseActivity
-import com.mirkowu.mvm.bean.BaseResp
-import com.mirkowu.mvm.bean.DataBean
 import com.mirkowu.mvm.bean.GankBaseBean
 import com.mirkowu.mvm.bean.ImageBean
 import com.mirkowu.mvm.bean.ImageListBean
@@ -31,7 +28,6 @@ import com.mirkowu.mvm.network.ImageApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -215,6 +211,8 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                }
 //
 //            })
+
+        MmkvStorage( "" )
     }
 
     private fun onItemClick() {

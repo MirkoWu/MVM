@@ -47,4 +47,7 @@ dependencies {
 
     //引用版本
     //api 'com.blankj:utilcodex:1.30.6'
+
+    //mmkv
+    implementation "com.tencent:mmkv:1.3.2"
 }

@@ -10,6 +10,7 @@ import com.mirkowu.lib_network.request.rxjava.asRequestLiveData
 import com.mirkowu.lib_network.request.RequestData
 import com.mirkowu.lib_network.request.RequestLiveData
 import com.mirkowu.lib_util.LogUtil
+import com.mirkowu.lib_util.MmkvStorage
 import com.mirkowu.lib_util.livedata.FixedLiveData
 import com.mirkowu.lib_util.utilcode.util.NetworkUtils
 import com.mirkowu.mvm.BizModel
@@ -39,7 +40,7 @@ open class MVVMMediator : BaseMediator<IBaseView, BizModel>() {
 
     var mPingResult = RequestLiveData<Boolean>()
 
-
+    val ssp by lazy { MmkvStorage("sss") }
     fun loadImage(page: Int, pageSize: Int) {
         mModel.loadImage(page, pageSize)
             .doOnDispose { LogUtil.d("RxJava 被解绑") }
