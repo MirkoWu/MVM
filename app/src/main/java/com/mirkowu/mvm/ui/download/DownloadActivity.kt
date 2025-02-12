@@ -23,6 +23,7 @@ import com.mirkowu.mvm.network.FileClient
 import com.mirkowu.mvm.network.RxObserver
 import com.mirkowu.mvm.network.UploadFileClient
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -137,7 +138,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
                     binding.pbUpload.progress = progress
                 }
             val file = RequestBody.create(
-                MediaType.parse("*/*"),
+                 "*/*".toMediaTypeOrNull(),
                 File(filePath)
             )
             val body = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -162,7 +163,7 @@ class DownloadActivity : BaseActivity<EmptyMediator>() {
         binding.btnUpload2.click {
 
             val file = RequestBody.create(
-                MediaType.parse("*/*"),
+                "*/*".toMediaTypeOrNull(),
                 File("/storage/emulated/0/Download/test/IMG_YYY1628780542488.jpg")
             )
             val body = MultipartBody.Builder().setType(MultipartBody.FORM)
