@@ -22,6 +22,8 @@ class DataBindingDialog : BaseMVMDialog<EmptyMediator>() {
                 this@DataBindingDialog.dismiss()
             }
         }
+        mMediator.showLoadingDialog()
+        mMediator.hideLoadingDialog()
     }
 
     override fun getLayoutId() = R.layout.dialog_databinding

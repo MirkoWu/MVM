@@ -75,8 +75,13 @@ public abstract class BaseDialog extends DialogFragment implements DialogInterfa
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        afterActivityCreated(savedInstanceState);
         initialize(savedInstanceState);
         initialize();
+    }
+
+    protected void afterActivityCreated(Bundle savedInstanceState) {
+
     }
 
     protected void initialize(Bundle savedInstanceState) {

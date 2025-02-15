@@ -1,5 +1,6 @@
 package com.mirkowu.lib_base.fragment;
 
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.IdRes;
@@ -25,6 +26,12 @@ public abstract class BaseMVMDialog<M extends BaseMediator> extends BaseDialog i
 //        initialize();
 //    }
 
+
+    @Override
+    protected void afterActivityCreated(Bundle savedInstanceState) {
+        super.afterActivityCreated(savedInstanceState);
+        bindMediator();
+    }
 
     protected abstract M initMediator();
 
