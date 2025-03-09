@@ -5,14 +5,14 @@ import android.view.View
 /**
  * 点击事件
  */
-inline fun View.click(crossinline block: (view: View) -> Unit) {
+inline fun <T : View> T.click(crossinline block: (view: T) -> Unit) {
     setOnClickListener { block(this) }
 }
 
 /**
  * 防止重复点击
  */
-fun <T : View> T.clickFilter(delay: Long = 500, block: (view: View) -> Unit) {
+fun <T : View> T.clickFilter(delay: Long = 500, block: (view: T) -> Unit) {
     setOnClickListener {
         if (clickDelayEnable(delay)) {
             block(this)
