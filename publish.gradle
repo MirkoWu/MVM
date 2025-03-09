@@ -13,7 +13,7 @@ afterEvaluate {
                 from components.release
                 groupId = "com.github.mirkowu.mvm"
                 artifactId = project.name
-                version = "1.2.17"
+                version = "1.3.0-SNAPSHOT" //snapshot要手动带后缀，release不用
             }
         }
 
@@ -21,7 +21,7 @@ afterEvaluate {
             maven {
                 allowInsecureProtocol true
 //                name = "nexus" //可选
-                url = 'https://packages.aliyun.com/67715113c37b195b1a8c0676/maven/2511830-release-kyejsn'
+                url = 'https://packages.aliyun.com/67715113c37b195b1a8c0676/maven/repo'
                 credentials {
                     username = maven_username
                     password = maven_password
