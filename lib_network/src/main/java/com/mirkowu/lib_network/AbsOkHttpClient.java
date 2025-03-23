@@ -95,7 +95,7 @@ public abstract class AbsOkHttpClient {
                 .writeTimeout(getWriteTimeout(), TimeUnit.SECONDS)
                 .readTimeout(getReadTimeout(), TimeUnit.SECONDS)
                 //错误重连
-                .retryOnConnectionFailure(false);
+                .retryOnConnectionFailure(true);
 
 
         //添加拦截器，eg.数据处理
