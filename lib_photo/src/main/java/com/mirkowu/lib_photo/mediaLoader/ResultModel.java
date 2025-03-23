@@ -67,7 +67,7 @@ public class ResultModel {
      */
     public static void addList(List<MediaBean> list) {
         int pickCount = ImagePicker.getInstance().getPickerConfig().getMaxPickCount();
-        if (list != null && list.size() <= pickCount) {
+        if (list != null && !list.isEmpty() && list.size() <= pickCount) {
             if (pickCount > 1) {
                 for (MediaBean bean : list) {
                     addMulti(bean);
