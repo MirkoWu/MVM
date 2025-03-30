@@ -110,10 +110,10 @@ public abstract class AbsOkHttpClient {
 
         if (isDebug()) {
             builder.addInterceptor(sLoggingInterceptor);
-        } else {
+        }/* else {
             //禁用代理,防抓包
             builder.proxy(Proxy.NO_PROXY);
-        }
+        }*/
         OkHttpClient client = builder.build();
 
         //解决https认证
