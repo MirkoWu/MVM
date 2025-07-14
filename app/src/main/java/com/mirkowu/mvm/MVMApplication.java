@@ -15,6 +15,7 @@ import com.mirkowu.lib_util.LogUtil;
 import com.mirkowu.lib_util.utilcode.util.ProcessUtils;
 import com.mirkowu.lib_webview.util.WebViewUtil;
 import com.mirkowu.lib_widget.stateview.DefaultInitializer;
+import com.mirkowu.lib_widget.stateview.LoadingTowDot;
 import com.mirkowu.lib_widget.stateview.StateView;
 
 import io.reactivex.rxjava3.functions.Consumer;
@@ -29,7 +30,7 @@ public class MVMApplication extends Application {
         LogUtil.d("点击 跳过 Application onCreate");
 
         //WebView初始化多进程 耗时200ms左右,建议延迟初始化
-        WebViewUtil.init(this, true);
+        WebViewUtil.init(this, false);
         LogUtil.d("点击 跳过 WebViewUtil");
         //换成你自己的bugly账号
         BuglyManager.init(this, "3e2cd9bf87", BuildConfig.DEBUG);
@@ -63,8 +64,11 @@ public class MVMApplication extends Application {
         StateView.setDefaultInitializer(new DefaultInitializer() {
             @Override
             public void init(@NonNull Context context, @NonNull StateView stateView) {
+//                LoadingTowDot drawable=  new LoadingTowDot();
+//                drawable.setColor(R.color.colorAccent);
                 stateView
 //                        .setLoadingSrc(R.drawable.big_white)
+//                        .setLoadingDrawable(drawable)
                         .setLoadingText("正在拼命加载～")
                         .setEmptyText("暂无数据")
                         .setEmptySrc(com.mirkowu.lib_widget.R.drawable.widget_svg_empty)

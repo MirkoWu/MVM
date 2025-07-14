@@ -73,11 +73,11 @@ public class StateView extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs) {
         mRootView = inflate(context, R.layout.widget_layout_state_view, this);
-        mIvImage = mRootView.findViewById(R.id.ivImage);
-        mTvHint = mRootView.findViewById(R.id.tvHint);
-        mBtnRefresh = mRootView.findViewById(R.id.btnRefresh);
-        mBtnCheckNetwork = mRootView.findViewById(R.id.btnCheckNetwork);
-        mProgressBar = mRootView.findViewById(R.id.mProgressBar);
+        mIvImage = mRootView.findViewById(R.id.stateIvImage);
+        mTvHint = mRootView.findViewById(R.id.stateTvHint);
+        mBtnRefresh = mRootView.findViewById(R.id.stateBtnRefresh);
+        mBtnCheckNetwork = mRootView.findViewById(R.id.stateBtnCheckNetwork);
+        mProgressBar = mRootView.findViewById(R.id.stateProgressBar);
 
 
         //设置默认值

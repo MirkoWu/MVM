@@ -8,7 +8,7 @@
     tools:context=".ui.webview.WebActivity">
 
     <include
-        layout="@layout/webview_layout_common_web_view"
+        layout="@layout/webview_layout_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

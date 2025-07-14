@@ -12,6 +12,7 @@ public class WebConfig {
     public static final String DEFAULT_JS_OBJECT_NAME = "JsBridge";
     //    private String mTitleText; //标题文案
     private boolean mShowToolbar; //设置是否需要标题栏，true表示需要，false表示不需要
+    private boolean mShowStatusBar; //设置是否需要状态栏，true表示需要，false表示不需要
     private boolean mShowBack; //设置是否需要返回键，true表示需要，false表示不需要
     private boolean mShowClose; //设置是否需要关闭键，true表示需要，false表示不需要
     private boolean mShowProgress; //设置是否需要进度条，true表示需要，false表示不需要
@@ -30,11 +31,19 @@ public class WebConfig {
 //    }
 
     /**
-     * @param showToolbar 左上角是否需要标题栏，true表示需要，false表示不需要
+     * @param showToolbar 是否需要标题栏，true表示需要，false表示不需要
      * @return
      */
     public WebConfig setShowToolbar(boolean showToolbar) {
         mShowToolbar = showToolbar;
+        return this;
+    }
+    /**
+     * @param showStatusBar 是否需要状态栏，true表示需要，false表示不需要
+     * @return
+     */
+    public WebConfig setShowStatusBar(boolean showStatusBar) {
+        mShowStatusBar = showStatusBar;
         return this;
     }
 
@@ -115,6 +124,9 @@ public class WebConfig {
 
     public boolean isShowToolbar() {
         return mShowToolbar;
+    }
+    public boolean isShowStatusBar() {
+        return mShowStatusBar;
     }
 
     public boolean isShowBack() {

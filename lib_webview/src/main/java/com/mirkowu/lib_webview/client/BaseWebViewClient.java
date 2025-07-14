@@ -62,7 +62,8 @@ public class BaseWebViewClient extends WebViewClient {
 
         //无效Url 则通过Intent打开
         if (!URLUtil.isValidUrl(url)) {
-            return IntentUtils.openScheme(mWebView.getContext(), url);
+            IntentUtils.openScheme(mWebView.getContext(), url);
+            return true;
         }
 
         return false;

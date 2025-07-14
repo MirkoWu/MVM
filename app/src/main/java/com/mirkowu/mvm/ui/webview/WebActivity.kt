@@ -9,6 +9,8 @@ import android.webkit.JavascriptInterface
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.utilcode.util.ToastUtils
 import com.mirkowu.lib_webview.CommonWebActivity
+import com.mirkowu.lib_webview.CommonWebFragment
+import com.mirkowu.lib_webview.CommonWebView
 import com.mirkowu.lib_webview.config.WebConfig
 import com.mirkowu.lib_webview.dsbridge.CompletionHandler
 import com.mirkowu.lib_webview.dsbridge.OnReturnValue
@@ -27,6 +29,7 @@ class WebActivity : CommonWebActivity() {
         }
     }
 
+    var webView: CommonWebView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,52 +41,55 @@ class WebActivity : CommonWebActivity() {
         setContentView(R.layout.activity_web)
     }
 
-    override fun getWebConfig(): WebConfig {
-        return super.getWebConfig()
-    }
-
     override fun initialize() {
         super.initialize()
         Log.d("WebActivity", "onCreate: ")
-//        supportFragmentManager.beginTransaction()
-//                .replace(R.id.fl_container,
-////                        CommonWebFragment.newInstance("", "http://www.baidu.com/"))
-//                        CommonWebFragment.newInstance("", "file:///android_asset/test.html"))
-//                .commitAllowingStateLoss()
+        webFragment.setOnWebInitListener(object : CommonWebFragment.OnWebInitListener {
+            override fun onWebInitCompleted(webView: CommonWebView) {
+                this@WebActivity.webView = webView
 
-        mWebView.addJavascriptObject(JsObject())
-        mWebView.addJavascriptObject(JsObject(), "echo")
-//        mWebView.settings.useWideViewPort=true
-//        mWebView.settings.loadWithOverviewMode=true
+//                webView.addJavascriptObject(JsObject())
+//                webView.addJavascriptObject(JsObject(), "echo")
+//                webView.settings.useWideViewPort = true
+//                webView.settings.loadWithOverviewMode = true
+            }
+
+            override fun onWebConfigInit(
+                webView: CommonWebView,
+                webConfig: WebConfig
+            ): WebConfig {
+                return webConfig
+            }
+        })
+
     }
 
-
     fun startTimer(view: android.view.View) {
-        mWebView.callHandler("startTimer", OnReturnValue<Int?> { retValue ->
+        webView?.callHandler("startTimer", OnReturnValue<Int?> { retValue ->
             ToastUtils.showShort("返回 = $retValue")
         })
     }
 
     fun isRegisterXX(view: android.view.View) {
-        mWebView.hasJavascriptMethod("XX", OnReturnValue<Boolean?> { retValue ->
+        webView?.hasJavascriptMethod("XX", OnReturnValue<Boolean?> { retValue ->
             ToastUtils.showShort("返回 = $retValue")
         })
     }
 
     fun isRegisterAysnFun(view: android.view.View) {
-        mWebView.hasJavascriptMethod("asynCall", OnReturnValue<Boolean?> { retValue ->
+        webView?.hasJavascriptMethod("asynCall", OnReturnValue<Boolean?> { retValue ->
             ToastUtils.showShort("返回 = $retValue")
         })
     }
 
     fun isRegisterSynFun(view: android.view.View) {
-        mWebView.hasJavascriptMethod("synCall", OnReturnValue<Boolean?> { retValue ->
+        webView?.hasJavascriptMethod("synCall", OnReturnValue<Boolean?> { retValue ->
             ToastUtils.showShort("返回 = $retValue")
         })
     }
 
     fun asynCall(view: android.view.View) {
-        mWebView.callHandler(
+        webView?.callHandler(
             "asynCall",
             arrayOf<Any>("3", "4", "5"),
             OnReturnValue<Int?> { retValue ->
@@ -92,11 +98,11 @@ class WebActivity : CommonWebActivity() {
     }
 
     fun synCallNoResult(view: android.view.View) {
-        mWebView.callHandler("synCallNoResult", arrayOf<Any>())
+        webView?.callHandler("synCallNoResult", arrayOf<Any>())
     }
 
     fun synCall(view: android.view.View) {
-        mWebView.callHandler("synCall", arrayOf<Any>(3, 4), OnReturnValue<Int?> { retValue ->
+        webView?.callHandler("synCall", arrayOf<Any>(3, 4), OnReturnValue<Int?> { retValue ->
             ToastUtils.showShort("返回 = $retValue")
         })
     }
@@ -109,7 +115,7 @@ class WebActivity : CommonWebActivity() {
         @JavascriptInterface
         fun testSyn(msg: Any): String? {
             i++
-            LogUtil.e("TAG","testSyn 次数= $i")
+            LogUtil.e("TAG", "testSyn 次数= $i")
             return "$msg［syn call］"
         }
 
@@ -117,13 +123,13 @@ class WebActivity : CommonWebActivity() {
         fun testAsyn(msg: Any, handler: CompletionHandler<String>) {
             handler.complete("$msg [ asyn call]")
             i2++
-            LogUtil.e("TAG","testAsyn 次数= $i2")
+            LogUtil.e("TAG", "testAsyn 次数= $i2")
         }
 
         @JavascriptInterface
         @Throws(JSONException::class)
         fun testNoArgSyn(arg: Any?): String? {
-            LogUtil.e("TAG","无参的调用"+arg)
+            LogUtil.e("TAG", "无参的调用" + arg)
             return "testNoArgSyn called [ syn call]"
         }
 //       @JavascriptInterface

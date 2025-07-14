@@ -1,12 +1,10 @@
 package com.mirkowu.lib_widget.stateview;
 
 import android.animation.ValueAnimator;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.github.ybq.android.spinkit.animation.SpriteAnimatorBuilder;
-import com.github.ybq.android.spinkit.sprite.ShapeSprite;
+import com.github.ybq.android.spinkit.sprite.CircleSprite;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.sprite.SpriteContainer;
 
@@ -48,7 +46,7 @@ public class LoadingTowDot extends SpriteContainer {
         }
     }
 
-    private class Dot extends ShapeSprite {
+    private class Dot extends CircleSprite {
         int index;
 
         Dot(int index) {
@@ -67,16 +65,6 @@ public class LoadingTowDot extends SpriteContainer {
                 builder.translateXPercentage(fractions, 0f, -0.70f, 0f);
             }
             return builder.build();
-        }
-
-        @Override
-        public void drawShape(Canvas canvas, Paint paint) {
-            if (getDrawBounds() != null) {
-                int radius = Math.min(getDrawBounds().width(), getDrawBounds().height()) / 2;
-                canvas.drawCircle(getDrawBounds().centerX(),
-                        getDrawBounds().centerY(),
-                        radius, paint);
-            }
         }
     }
 }

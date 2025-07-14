@@ -307,7 +307,7 @@ public class BaseWebChromeClient extends WebChromeClient {
      */
     @Override
     public void onProgressChanged(WebView webView, int newProgress) {
-        LogUtil.e(TAG, "newProgress---------=" + newProgress + ",thread=" + Thread.currentThread().getName());
+//        LogUtil.e(TAG, "newProgress---------=" + newProgress + ",thread=" + Thread.currentThread().getName());
         if (mWebViewCallBack != null) {
             mWebViewCallBack.onProgressChanged((CommonWebView) webView, newProgress);
         }

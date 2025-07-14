@@ -22,7 +22,10 @@ import com.mirkowu.lib_webview.client.BaseWebViewClient;
 import com.mirkowu.lib_webview.config.WebConfig;
 import com.mirkowu.lib_webview.settings.WebSettingsUtil;
 import com.mirkowu.lib_widget.Toolbar;
+import com.mirkowu.lib_widget.stateview.StateView;
 import com.tencent.smtt.sdk.WebSettings;
+
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -46,10 +49,12 @@ public class CommonWebFragment extends BaseMVMFragment {
 
     protected Toolbar mToolbar;
     protected CommonWebView mWebView;
+    protected StateView mStateView;
     protected ProgressBar mProgressBar;
     protected IWebViewCallBack mWebViewCallBack;
     protected DefaultWebViewFileChooser mFileChooser;
     private WebConfig mWebConfig;
+    private boolean isPageError = false;
 
     @Override
     protected BaseMediator initMediator() {
@@ -75,12 +80,19 @@ public class CommonWebFragment extends BaseMVMFragment {
 
         mWebConfig = getWebConfig();
 
+        if (mOnWebInitListener != null) {
+            mWebConfig = mOnWebInitListener.onWebConfigInit(mWebView, mWebConfig);
+        }
+
         configToolbar(title, mWebConfig);
 
         configWebSettings(mWebConfig);
 
-        loadUrl(url);
+        if (mOnWebInitListener != null) {
+            mOnWebInitListener.onWebInitCompleted(mWebView);
+        }
 
+        loadUrl(url);
     }
 
 
@@ -88,14 +100,18 @@ public class CommonWebFragment extends BaseMVMFragment {
         mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mProgressBar = (ProgressBar) findViewById(R.id.mProgressBar);
         mWebView = (CommonWebView) findViewById(R.id.mWebView);
+        mStateView = (StateView) findViewById(R.id.mStateView);
         getLifecycle().addObserver(mWebView);
+        mStateView.setOnRefreshListener(() -> {
+            mWebView.reload();
+        });
     }
 
     protected void configToolbar(String title, @NonNull WebConfig webConfig) {
         mToolbar.setTitle(title);
         mToolbar.setShowBackIcon(webConfig.isShowBack());
         mToolbar.setVisibility(webConfig.isShowToolbar() ? View.VISIBLE : View.GONE);
-        mToolbar.setShowStatusBarHeight(webConfig.isShowToolbar());
+        mToolbar.setShowStatusBarHeight(webConfig.isShowStatusBar());
         mProgressBar.setVisibility(webConfig.isShowProgress() ? View.VISIBLE : View.GONE);
     }
 
@@ -126,16 +142,21 @@ public class CommonWebFragment extends BaseMVMFragment {
                 .setShowBack(true)
                 .setShowClose(showClose)
                 .setShowToolbar(true)
+                .setShowStatusBar(false)
                 .setShowProgress(true)
                 .setCallBack(new IWebViewCallBack() {
                     @Override
                     public void pageStarted(CommonWebView webView, String url) {
+                        isPageError = false;
                     }
 
                     @Override
                     public void pageFinished(CommonWebView webView, String url) {
                         //显示关闭按钮
                         mToolbar.setShowCloseIcon(webView.canGoBack() && showClose);
+                        if (!isPageError) {
+                            mStateView.setGoneState();
+                        }
                     }
 
                     @Override
@@ -152,6 +173,8 @@ public class CommonWebFragment extends BaseMVMFragment {
 
                     @Override
                     public void onReceivedError(CommonWebView webView, int errorCode, String description, String failingUrl) {
+                        isPageError = true;
+                        mStateView.setErrorState(description);
                     }
 
                     @Override
@@ -220,6 +243,19 @@ public class CommonWebFragment extends BaseMVMFragment {
 
 
         mWebView.loadDataWithBaseURL(null, sb.toString(), "text/html", "utf-8", null);
+    }
+
+    private OnWebInitListener mOnWebInitListener;
+
+    public void setOnWebInitListener(OnWebInitListener onWebInitListener) {
+        mOnWebInitListener = onWebInitListener;
+    }
+
+    public interface OnWebInitListener {
+        WebConfig onWebConfigInit(@NotNull CommonWebView webView, @NotNull WebConfig webConfig);
+
+        void onWebInitCompleted(@NotNull CommonWebView webView);
+
     }
 
 }
