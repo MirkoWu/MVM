@@ -12,7 +12,6 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_base.widget.RefreshHelper
 import com.mirkowu.lib_network.request.flow.asRequestLiveData
 import com.mirkowu.lib_network.request.flow.request
-import com.mirkowu.lib_network.request.request
 import com.mirkowu.lib_util.ColorFilterUtils
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.lib_util.MmkvStorage
@@ -242,6 +241,11 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         binding.mStateView.setLoadingState()
         // showLoadingDialog();
         mMediator.loadImage(page, refreshHelper.pageCount)
+
+        mMediator.loadImage2(page, refreshHelper.pageCount).request(this) {
+            success {  }
+        }
+
         lifecycleScope.launch {
             GankClient.getInstance().getService<ImageApi>(ImageApi::class.java)
                 .loadImage("", 1, 1)
@@ -283,7 +287,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
 //                }
 
             }
-            .asRequestLiveData()
+//            .asRequestLiveData()
             .request(this@MVVMActivity) {
                 success {
                     it?.list?.size

@@ -1,36 +1,5 @@
 package com.mirkowu.lib_network.request
 
-import androidx.lifecycle.LifecycleOwner
-
-
-fun <T> RequestLiveData<T>.request(
-    owner: LifecycleOwner,
-    callback: RequestCallback<T>.() -> Unit
-) {
-    observe(owner) { it.invoke(callback) }
-}
-
-internal fun <T> RequestData<T>.invoke(callbackFun: RequestCallback<T>.() -> Unit) {
-    RequestCallback<T>().apply(callbackFun).apply {
-        when (state) {
-            RequestState.LOADING -> onLoading?.invoke()
-            RequestState.SUCCESS -> {
-                onFinish?.invoke()
-                onSuccess?.invoke(data as T)
-            }
-
-            RequestState.FAILURE -> {
-                onFinish?.invoke()
-                error?.let {
-                    onFailure?.invoke(it)
-                }
-            }
-
-            //finish要放在success和fail前，这里的不会再调用
-            RequestState.FINISH -> onFinish?.invoke()
-        }
-    }
-}
 
 /**
  * 回调顺序 loading -> finish -> success/fail

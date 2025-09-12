@@ -1,7 +1,7 @@
 package com.mirkowu.mvm.ui.mvvm.viewbinding
 
 import com.mirkowu.lib_base.util.bindingView
-import com.mirkowu.lib_network.request.request
+import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_util.LogUtil
 import com.mirkowu.mvm.base.BaseActivity
 import com.mirkowu.mvm.databinding.ActivityDataBindingBinding

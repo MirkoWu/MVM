@@ -1,14 +1,13 @@
 package com.mirkowu.lib_network.request.flow
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
 import com.mirkowu.lib_network.request.ErrorData
 import com.mirkowu.lib_network.request.RequestCallback
 import com.mirkowu.lib_network.request.RequestData
 import com.mirkowu.lib_network.request.RequestLiveData
-import com.mirkowu.lib_network.request.invoke
+import com.mirkowu.lib_network.request.RequestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
@@ -27,7 +26,7 @@ internal const val DEFAULT_TIMEOUT = 5000L
  * 一步到位，不需要单独写在协程内部
  *
  */
-fun <T> Flow<T?>.requestObserve(
+fun <T> Flow<T?>.request(
     owner: LifecycleOwner,
     context: CoroutineContext = Dispatchers.IO,
     callbackFun: RequestCallback<T?>.() -> Unit
@@ -39,7 +38,7 @@ fun <T> Flow<T?>.requestObserve(
 }
 
 /**
- * 适用于Flow,ObserveForever,记得removeObserver
+ * 适用于Flow,ObserveForever
  * 一步到位，不需要单独写在协程内部
  */
 fun <T> Flow<T?>.requestObserveForever(
@@ -55,12 +54,13 @@ fun <T> Flow<T?>.requestObserveForever(
 /**
  * 适用于LiveData ,绑定LifecycleOwner
  */
-fun <T> RequestLiveData<T?>.requestObserve(
+fun <T> RequestLiveData<T>.request(
     owner: LifecycleOwner,
-    callbackFun: RequestCallback<T?>.() -> Unit
+    callback: RequestCallback<T>.() -> Unit
 ) {
-    observe(owner) { it.invoke(callbackFun) }
+    observe(owner) { it.invoke(callback) }
 }
+
 
 /**
  * 适用于LiveData ,ObserveForever,记得removeObserver
@@ -126,6 +126,29 @@ internal fun <T> Flow<T>.asRequestData(): Flow<RequestData<T>> {
 //            emit(RequestData.finish<T>())
 //        }
 }
+
+internal fun <T> RequestData<T>.invoke(callbackFun: RequestCallback<T>.() -> Unit) {
+    RequestCallback<T>().apply(callbackFun).apply {
+        when (state) {
+            RequestState.LOADING -> onLoading?.invoke()
+            RequestState.SUCCESS -> {
+                onFinish?.invoke()
+                onSuccess?.invoke(data as T)
+            }
+
+            RequestState.FAILURE -> {
+                onFinish?.invoke()
+                error?.let {
+                    onFailure?.invoke(it)
+                }
+            }
+
+            //finish要放在success和fail前，这里的不会再调用
+            RequestState.FINISH -> onFinish?.invoke()
+        }
+    }
+}
+
 
 fun <T> Flow<T>.event(
     context: CoroutineContext? = null,

@@ -22,6 +22,7 @@ import com.mirkowu.mvm.network.ImageClient
 import com.mirkowu.mvm.network.RxObserver
 import com.mirkowu.mvm.network.asResponseLiveData
 import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.flow.Flow
 
 open class MVVMMediator : BaseMediator<IBaseView, BizModel>() {
     @JvmField
@@ -57,6 +58,15 @@ open class MVVMMediator : BaseMediator<IBaseView, BizModel>() {
                 }
             })
         //  loadImage2()
+    }
+
+    fun loadImage2(
+        page: Int,
+        pageSize: Int
+    ): Flow<GankBaseBean<ImageListBean>> {
+        return flow {
+            emit(GankBaseBean<ImageListBean>())
+        }
     }
 
     fun loadImageAsLiveData(

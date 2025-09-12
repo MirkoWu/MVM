@@ -17,7 +17,7 @@ import com.mirkowu.lib_base.util.bindingView
 import com.mirkowu.lib_bugly.BuglyManager
 import com.mirkowu.lib_camera.CameraActivity
 import com.mirkowu.lib_network.request.ErrorData
-import com.mirkowu.lib_network.request.request
+import com.mirkowu.lib_network.request.flow.request
 import com.mirkowu.lib_qr.QRScanner
 import com.mirkowu.lib_qr.ScanConfig
 import com.mirkowu.lib_util.LogUtil
