@@ -23,6 +23,7 @@ import com.mirkowu.mvm.network.RxObserver
 import com.mirkowu.mvm.network.asResponseLiveData
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 open class MVVMMediator : BaseMediator<IBaseView, BizModel>() {
     @JvmField

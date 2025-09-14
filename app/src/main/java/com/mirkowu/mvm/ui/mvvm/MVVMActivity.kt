@@ -90,7 +90,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
         mMediator.imageBean.request(this) {
             loading { LogUtil.d("onLoading") }
             finish { LogUtil.d("onFinish") }
-            success { LogUtil.d("onSuccess") }
+            success { LogUtil.d("onSuccess"+it) }
             fail { LogUtil.d("onFailure $it") }
         }
         //todo 方式1：使用封装好的 observerRequest 方法，方便快捷
@@ -273,7 +273,7 @@ class MVVMActivity : BaseActivity<MVVMMediator?>(), RefreshHelper.OnRefreshListe
                 }
         }
         flow {
-            emit(GankBaseBean<ImageListBean?>().apply { data = null })
+            emit(GankBaseBean<ImageListBean>().apply { data = null })
 //            emit(BaseResp<DataBean>().apply { data = null })
         }
 //        GankClient.getInstance()

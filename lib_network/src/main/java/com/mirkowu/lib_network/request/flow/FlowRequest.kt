@@ -26,10 +26,10 @@ internal const val DEFAULT_TIMEOUT = 5000L
  * 一步到位，不需要单独写在协程内部
  *
  */
-fun <T> Flow<T?>.request(
+fun <T> Flow<T>.request(
     owner: LifecycleOwner,
     context: CoroutineContext = Dispatchers.IO,
-    callbackFun: RequestCallback<T?>.() -> Unit
+    callbackFun: RequestCallback<T>.() -> Unit
 ) {
     asRequestLiveData(null, context)
         .observe(owner) {
@@ -41,9 +41,9 @@ fun <T> Flow<T?>.request(
  * 适用于Flow,ObserveForever
  * 一步到位，不需要单独写在协程内部
  */
-fun <T> Flow<T?>.requestObserveForever(
+fun <T> Flow<T>.requestObserveForever(
     context: CoroutineContext = Dispatchers.IO,
-    callbackFun: RequestCallback<T?>.() -> Unit
+    callbackFun: RequestCallback<T>.() -> Unit
 ) {
     asRequestLiveData(null, context)
         .observeForever {
@@ -65,8 +65,8 @@ fun <T> RequestLiveData<T>.request(
 /**
  * 适用于LiveData ,ObserveForever,记得removeObserver
  */
-fun <T> RequestLiveData<T?>.requestObserveForever(
-    callbackFun: RequestCallback<T?>.() -> Unit
+fun <T> RequestLiveData<T>.requestObserveForever(
+    callbackFun: RequestCallback<T>.() -> Unit
 ) {
     observeForever { it.invoke(callbackFun) }
 }
